@@ -10,4 +10,4 @@ pluginManagement {
     }
 }
 
-rootProject.name = "flexwork"
+rootProject.name = "flexwork-app"

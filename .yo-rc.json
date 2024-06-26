@@ -2,7 +2,7 @@
   "generator-jhipster": {
     "applicationType": "monolith",
     "authenticationType": "oauth2",
-    "baseName": "flexwork",
+    "baseName": "flexwork-app",
     "buildTool": "gradle",
     "cacheProvider": "no",
     "clientFramework": "react",
