@@ -20,7 +20,7 @@
     "entities": [],
     "feignClient": null,
     "gradleEnterpriseHost": null,
-    "jhipsterVersion": "8.5.0",
+    "jhipsterVersion": "8.6.0",
     "languages": ["en"],
     "messageBroker": false,
     "microfrontend": null,
