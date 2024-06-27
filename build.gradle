@@ -164,6 +164,7 @@ dependencies {
     testImplementation "org.testcontainers:jdbc"
     testImplementation "org.testcontainers:junit-jupiter"
     testImplementation "org.testcontainers:testcontainers"
+    implementation 'org.flowable:flowable-spring-boot-starter:7.0.1'
     // jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
 }
 
