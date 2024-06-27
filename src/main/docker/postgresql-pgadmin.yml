@@ -2,7 +2,7 @@
 name: flexwork
 services:
   postgresql-admin:
-    image: dpage/pgadmin4
+    image: dpage/pgadmin4:8.9
     # volumes:
     #   - ~/volumes/jhipster/flexwork/postgresql/:/var/lib/postgresql/data/
     environment:
