@@ -13,7 +13,7 @@ jib {
         }
     }
     to {
-        image = "flexwork:latest"
+        image = "flexwork-app:latest"
     }
     container {
         entrypoint = ["bash", "-c", "/entrypoint.sh"]

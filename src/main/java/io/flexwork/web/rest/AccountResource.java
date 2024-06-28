@@ -3,8 +3,6 @@ package io.flexwork.web.rest;
 import io.flexwork.service.UserService;
 import io.flexwork.service.dto.AdminUserDTO;
 import jakarta.servlet.http.HttpServletRequest;
-
-import java.io.Serial;
 import java.security.Principal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +20,6 @@ public class AccountResource {
 
     private static class AccountResourceException extends RuntimeException {
 
-        @Serial
         private static final long serialVersionUID = 1L;
 
         private AccountResourceException(String message) {

@@ -1,6 +1,6 @@
 {
-  "name": "Flexwork",
-  "short_name": "Flexwork",
+  "name": "FlexworkApp",
+  "short_name": "FlexworkApp",
   "icons": [
     {
       "src": "./content/images/jhipster_family_member_2_head-192.png",

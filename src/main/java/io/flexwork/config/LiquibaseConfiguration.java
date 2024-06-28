@@ -1,7 +1,6 @@
 package io.flexwork.config;
 
 import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 import javax.sql.DataSource;
 import liquibase.integration.spring.SpringLiquibase;
 import org.slf4j.Logger;
@@ -30,7 +29,7 @@ public class LiquibaseConfiguration {
         this.env = env;
     }
 
-    @Value("${application.liquibase.async-start:false}")
+    @Value("${application.liquibase.async-start:true}")
     private Boolean asyncStart;
 
     @Bean
@@ -77,7 +76,6 @@ public class LiquibaseConfiguration {
             liquibase.setShouldRun(liquibaseProperties.isEnabled());
             log.debug("Configuring Liquibase");
         }
-        Executors.newFixedThreadPool(12)
         return liquibase;
     }
 }

@@ -1,8 +1,8 @@
 {
-  "name": "flexwork",
+  "name": "flexwork-app",
   "version": "0.0.1-SNAPSHOT",
   "private": true,
-  "description": "Flexwork the universal workflow for enterprise",
+  "description": "Description for Flexwork App",
   "license": "UNLICENSED",
   "scripts": {
     "app:start": "./gradlew",

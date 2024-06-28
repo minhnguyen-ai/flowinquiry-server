@@ -15,7 +15,7 @@
 
 logging:
   level:
-    ROOT: INFO
+    ROOT: DEBUG
     tech.jhipster: DEBUG
     org.hibernate.SQL: DEBUG
     io.flexwork: DEBUG
@@ -32,16 +32,15 @@ spring:
       indent-output: true
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:postgresql://localhost:5432/flexwork
-    username: flexwork
-    password: flexwork_db_123
+    url: jdbc:postgresql://localhost:5432/flexwork-app
+    username: flexwork-app
+    password:
     hikari:
       poolName: Hikari
       auto-commit: false
   liquibase:
     # Remove 'faker' if you do not want the sample data to be loaded automatically
-    contexts: dev
-    enabled: true
+    contexts: dev, faker
   messages:
     cache-duration: PT1S # 1 second, see the ISO 8601 standard
   thymeleaf:

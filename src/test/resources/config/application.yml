@@ -15,7 +15,7 @@
 
 spring:
   application:
-    name: flexwork
+    name: flexwork-app
   # Replace by 'prod, faker' to add the faker context and have sample data loaded in production
   liquibase:
     contexts: test
@@ -39,13 +39,13 @@ spring:
           principal-claim-name: preferred_username
   task:
     execution:
-      thread-name-prefix: flexwork-task-
+      thread-name-prefix: flexwork-app-task-
       pool:
         core-size: 1
         max-size: 50
         queue-capacity: 10000
     scheduling:
-      thread-name-prefix: flexwork-scheduling-
+      thread-name-prefix: flexwork-app-scheduling-
       pool:
         size: 20
   thymeleaf:
@@ -64,7 +64,7 @@ jhipster:
   clientApp:
     name: 'flexworkApp'
   mail:
-    from: flexwork@localhost.com
+    from: flexwork-app@localhost.com
     base-url: http://127.0.0.1:8080
   logging:
     # To test json console appender
