@@ -9,12 +9,17 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
+import org.flowable.engine.RepositoryService;
+import org.flowable.engine.RuntimeService;
+import org.flowable.engine.TaskService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
 import tech.jhipster.config.DefaultProfileUtil;
 import tech.jhipster.config.JHipsterConstants;
@@ -104,5 +109,22 @@ public class FlexworkApp {
             contextPath,
             env.getActiveProfiles().length == 0 ? env.getDefaultProfiles() : env.getActiveProfiles()
         );
+    }
+
+    @Bean
+    public CommandLineRunner init(
+        final RepositoryService repositoryService,
+        final RuntimeService runtimeService,
+        final TaskService taskService
+    ) {
+        return new CommandLineRunner() {
+            @Override
+            public void run(String... strings) throws Exception {
+                log.info("Number of process definitions : " + repositoryService.createProcessDefinitionQuery().count());
+                log.info("Number of tasks : " + taskService.createTaskQuery().count());
+                runtimeService.startProcessInstanceByKey("oneTaskProcess");
+                log.info("Number of tasks after process start: " + taskService.createTaskQuery().count());
+            }
+        };
     }
 }

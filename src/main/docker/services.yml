@@ -1,11 +1,18 @@
 # This configuration is intended for development purpose, it's **your** responsibility to harden it for production
-name: flexwork-app
+name: flexwork
 services:
   postgresql:
     extends:
       file: ./postgresql.yml
       service: postgresql
+  postgresql-admin:
+    extends:
+      file: ./postgresql-pgadmin.yml
+      service: postgresql-admin
   keycloak:
     extends:
       file: ./keycloak.yml
       service: keycloak
+networks:
+  theflexwork_nw:
+    driver: bridge
