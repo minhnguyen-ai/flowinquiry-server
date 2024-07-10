@@ -62,14 +62,6 @@ management:
   health:
     mail:
       enabled: false # When using the MailService, configure an SMTP server and set this to true
-  prometheus:
-    metrics:
-      export:
-        enabled: true
-        step: 60
-  observations:
-    key-values:
-      application: ${spring.application.name}
   metrics:
     enable:
       http: true

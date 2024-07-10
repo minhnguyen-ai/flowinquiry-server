@@ -66,14 +66,6 @@ jhipster:
   mail:
     from: flexwork-app@localhost.com
     base-url: http://127.0.0.1:8080
-  logging:
-    # To test json console appender
-    use-json-format: false
-    logstash:
-      enabled: false
-      host: localhost
-      port: 5000
-      ring-buffer-size: 512
 
 # ===================================================================
 # Application specific properties

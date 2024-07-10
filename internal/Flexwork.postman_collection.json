@@ -1,0 +1,18 @@
+{
+  "info": {
+    "_postman_id": "be4531cb-4d2e-4fb5-959d-334fff0939ca",
+    "name": "Flexwork",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "31068466"
+  },
+  "item": [
+    {
+      "name": "Get user",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": []
+    }
+  ]
+}

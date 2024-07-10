@@ -2,6 +2,7 @@ package io.flexwork.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.flexwork.config.Constants;
+import io.flexwork.stateMacine.signup.SignupStates;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -11,6 +12,8 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
+import lombok.Builder;
+import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.BatchSize;
 
@@ -19,6 +22,7 @@ import org.hibernate.annotations.BatchSize;
  */
 @Entity
 @Table(name = "jhi_user")
+@Data
 public class User extends AbstractAuditingEntity<String> implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -44,6 +48,11 @@ public class User extends AbstractAuditingEntity<String> implements Serializable
     @Size(min = 5, max = 254)
     @Column(length = 254, unique = true)
     private String email;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20, name = "state", unique = true)
+    private SignupStates signupState;
 
     @NotNull
     @Column(nullable = false)
