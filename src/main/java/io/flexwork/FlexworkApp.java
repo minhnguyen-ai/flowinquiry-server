@@ -1,7 +1,6 @@
 package io.flexwork;
 
 import io.flexwork.config.ApplicationProperties;
-import io.flexwork.config.CRLFLogConverter;
 import jakarta.annotation.PostConstruct;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -84,25 +83,10 @@ public class FlexworkApp {
         } catch (UnknownHostException e) {
             log.warn("The host name could not be determined, using `localhost` as fallback");
         }
-        log.info(
-            CRLFLogConverter.CRLF_SAFE_MARKER,
-            """
-
-            ----------------------------------------------------------
-            \tApplication '{}' is running! Access URLs:
-            \tLocal: \t\t{}://localhost:{}{}
-            \tExternal: \t{}://{}:{}{}
-            \tProfile(s): \t{}
-            ----------------------------------------------------------""",
-            applicationName,
-            protocol,
-            serverPort,
-            contextPath,
-            protocol,
-            hostAddress,
-            serverPort,
-            contextPath,
-            env.getActiveProfiles().length == 0 ? env.getDefaultProfiles() : env.getActiveProfiles()
-        );
+        log.info("----------------------------------------------------------");
+        log.info("\tApplication '{}' is running! Access URLs:", applicationName);
+        log.info("\tLocal: \t\t{}://localhost:{}{}", protocol, serverPort, contextPath);
+        log.info("\tExternal: \t{}://{}:{}{}", protocol, hostAddress, serverPort, contextPath);
+        log.info("\tProfile(s): \t{}", env.getActiveProfiles().length == 0 ? env.getDefaultProfiles() : env.getActiveProfiles());
     }
 }
