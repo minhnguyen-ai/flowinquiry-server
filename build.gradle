@@ -189,5 +189,7 @@ spotless {
         formatAnnotations()
     }
 
-
+    kotlin {
+        ktfmt()
+    }
 }
