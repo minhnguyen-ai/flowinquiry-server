@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.config.StateMachineFactory;
+import org.springframework.statemachine.service.StateMachineService;
 import org.springframework.statemachine.state.State;
 
 @IntegrationTest
@@ -20,7 +21,7 @@ public class SignupServiceTest {
     private SignupService signupService;
 
     @Autowired
-    private StateMachineFactory<SignupStates, SignupEvents> stateMachineFactory;
+    private StateMachineService<SignupStates, SignupEvents> stateMachineService;
 
     @Test
     void signup() {
@@ -32,7 +33,7 @@ public class SignupServiceTest {
         signupService.signup(user);
 
         assertThat(user.getSignupState()).isEqualTo(NEW_SIGNUP_USER);
-        StateMachine<SignupStates, SignupEvents> state = stateMachineFactory.getStateMachine("111");
+        StateMachine<SignupStates, SignupEvents> state = stateMachineService.acquireStateMachine("signup-" + user.getId());
         System.out.println("He " + state);
     }
 }
