@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.annotation.WithStateMachine;
-import org.springframework.statemachine.config.StateMachineFactory;
 import org.springframework.statemachine.service.StateMachineService;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
@@ -37,7 +36,7 @@ public class SignupService {
             throw new IllegalArgumentException("User " + user.getId() + " existed");
         } else {
             userRepository.save(user);
-            StateMachine<SignupStates, SignupEvents> stateMachine = stateMachineService.acquireStateMachine("signup-" + user.getId());
+            StateMachine<SignupStates, SignupEvents> stateMachine = stateMachineService.acquireStateMachine("signup-" + user.getId(), true);
 
             stateMachine
                 .sendEvent(Mono.just(MessageBuilder.withPayload(SignupEvents.NEW_SIGNUP).build()))

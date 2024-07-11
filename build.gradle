@@ -9,7 +9,7 @@ plugins {
     id "jhipster.code-quality-conventions"
     id "jhipster.node-gradle-conventions"
     id "org.liquibase.gradle"
-    // jhipster-needle-gradle-plugins - JHipster will add additional gradle plugins here
+    id "org.jetbrains.kotlin.jvm"
 }
 
 group = "io.flexwork"
@@ -57,16 +57,6 @@ if (project.hasProperty("war")) {
 idea {
     module {
         excludeDirs += files("node_modules")
-    }
-}
-
-eclipse {
-    sourceSets {
-        main {
-            java {
-                srcDirs += ["build/generated/sources/annotationProcessor/java/main"]
-            }
-        }
     }
 }
 
@@ -172,11 +162,11 @@ dependencies {
     compileOnly "org.projectlombok:lombok:${lombokVersion}"
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 
-    testCompileOnly 'org.projectlombok:lombok:1.18.34'
-    testAnnotationProcessor 'org.projectlombok:lombok:1.18.34'
+    testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
+    testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 
 
-    // jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
+    testImplementation 'org.jetbrains.kotlin:kotlin-test'
 }
 
 task cleanResources(type: Delete) {
