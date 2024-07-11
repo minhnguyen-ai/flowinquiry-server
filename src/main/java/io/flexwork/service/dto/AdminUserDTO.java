@@ -9,9 +9,7 @@ import java.time.Instant;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-/**
- * A DTO representing a user, with his authorities.
- */
+/** A DTO representing a user, with his authorities. */
 public class AdminUserDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -176,21 +174,40 @@ public class AdminUserDTO implements Serializable {
     }
 
     // prettier-ignore
-    @Override
-    public String toString() {
-        return "AdminUserDTO{" +
-            "login='" + login + '\'' +
-            ", firstName='" + firstName + '\'' +
-            ", lastName='" + lastName + '\'' +
-            ", email='" + email + '\'' +
-            ", imageUrl='" + imageUrl + '\'' +
-            ", activated=" + activated +
-            ", langKey='" + langKey + '\'' +
-            ", createdBy=" + createdBy +
-            ", createdDate=" + createdDate +
-            ", lastModifiedBy='" + lastModifiedBy + '\'' +
-            ", lastModifiedDate=" + lastModifiedDate +
-            ", authorities=" + authorities +
-            "}";
-    }
+  @Override
+  public String toString() {
+    return "AdminUserDTO{"
+        + "login='"
+        + login
+        + '\''
+        + ", firstName='"
+        + firstName
+        + '\''
+        + ", lastName='"
+        + lastName
+        + '\''
+        + ", email='"
+        + email
+        + '\''
+        + ", imageUrl='"
+        + imageUrl
+        + '\''
+        + ", activated="
+        + activated
+        + ", langKey='"
+        + langKey
+        + '\''
+        + ", createdBy="
+        + createdBy
+        + ", createdDate="
+        + createdDate
+        + ", lastModifiedBy='"
+        + lastModifiedBy
+        + '\''
+        + ", lastModifiedDate="
+        + lastModifiedDate
+        + ", authorities="
+        + authorities
+        + "}";
+  }
 }

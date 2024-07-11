@@ -1,4 +1,2 @@
-/**
- * Application root.
- */
+/** Application root. */
 package io.flexwork;

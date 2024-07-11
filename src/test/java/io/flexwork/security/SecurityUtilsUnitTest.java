@@ -18,9 +18,7 @@ import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 
-/**
- * Test class for the {@link SecurityUtils} utility class.
- */
+/** Test class for the {@link SecurityUtils} utility class. */
 class SecurityUtilsUnitTest {
 
     @BeforeEach

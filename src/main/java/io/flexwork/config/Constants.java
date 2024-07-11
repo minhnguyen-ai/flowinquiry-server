@@ -1,8 +1,6 @@
 package io.flexwork.config;
 
-/**
- * Application constants.
- */
+/** Application constants. */
 public final class Constants {
 
     // Regex for acceptable logins

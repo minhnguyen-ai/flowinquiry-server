@@ -1,4 +1,2 @@
-/**
- * Rest layer.
- */
+/** Rest layer. */
 package io.flexwork.web.rest;

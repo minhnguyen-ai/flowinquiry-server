@@ -4,9 +4,7 @@ import io.flexwork.domain.User;
 import java.io.Serializable;
 import java.util.Objects;
 
-/**
- * A DTO representing a user, with only the public attributes.
- */
+/** A DTO representing a user, with only the public attributes. */
 public class UserDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -64,11 +62,8 @@ public class UserDTO implements Serializable {
     }
 
     // prettier-ignore
-    @Override
-    public String toString() {
-        return "UserDTO{" +
-            "id='" + id + '\'' +
-            ", login='" + login + '\'' +
-            "}";
-    }
+  @Override
+  public String toString() {
+    return "UserDTO{" + "id='" + id + '\'' + ", login='" + login + '\'' + "}";
+  }
 }

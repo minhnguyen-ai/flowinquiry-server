@@ -16,9 +16,7 @@ import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.BatchSize;
 
-/**
- * A user.
- */
+/** A user. */
 @Entity
 @Table(name = "jhi_user")
 @Data
@@ -161,21 +159,36 @@ public class User extends AbstractAuditingEntity<String> implements Serializable
 
     @Override
     public int hashCode() {
-        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        // see
+        // https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
         return getClass().hashCode();
     }
 
     // prettier-ignore
-    @Override
-    public String toString() {
-        return "User{" +
-            "login='" + login + '\'' +
-            ", firstName='" + firstName + '\'' +
-            ", lastName='" + lastName + '\'' +
-            ", email='" + email + '\'' +
-            ", imageUrl='" + imageUrl + '\'' +
-            ", activated='" + activated + '\'' +
-            ", langKey='" + langKey + '\'' +
-            "}";
-    }
+  @Override
+  public String toString() {
+    return "User{"
+        + "login='"
+        + login
+        + '\''
+        + ", firstName='"
+        + firstName
+        + '\''
+        + ", lastName='"
+        + lastName
+        + '\''
+        + ", email='"
+        + email
+        + '\''
+        + ", imageUrl='"
+        + imageUrl
+        + '\''
+        + ", activated='"
+        + activated
+        + '\''
+        + ", langKey='"
+        + langKey
+        + '\''
+        + "}";
+  }
 }

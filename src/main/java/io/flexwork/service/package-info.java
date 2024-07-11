@@ -1,4 +1,2 @@
-/**
- * Service layer.
- */
+/** Service layer. */
 package io.flexwork.service;

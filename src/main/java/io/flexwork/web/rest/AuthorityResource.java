@@ -18,9 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
-/**
- * REST controller for managing {@link io.flexwork.domain.Authority}.
- */
+/** REST controller for managing {@link io.flexwork.domain.Authority}. */
 @RestController
 @RequestMapping("/api/authorities")
 @Transactional
@@ -40,10 +38,11 @@ public class AuthorityResource {
     }
 
     /**
-     * {@code POST  /authorities} : Create a new authority.
+     * {@code POST /authorities} : Create a new authority.
      *
      * @param authority the authority to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new authority, or with status {@code 400 (Bad Request)} if the authority has already an ID.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new
+     *     authority, or with status {@code 400 (Bad Request)} if the authority has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
@@ -60,9 +59,10 @@ public class AuthorityResource {
     }
 
     /**
-     * {@code GET  /authorities} : get all the authorities.
+     * {@code GET /authorities} : get all the authorities.
      *
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of authorities in body.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of authorities in
+     *     body.
      */
     @GetMapping("")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
@@ -72,10 +72,11 @@ public class AuthorityResource {
     }
 
     /**
-     * {@code GET  /authorities/:id} : get the "id" authority.
+     * {@code GET /authorities/:id} : get the "id" authority.
      *
      * @param id the id of the authority to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the authority, or with status {@code 404 (Not Found)}.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the authority, or
+     *     with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
@@ -86,7 +87,7 @@ public class AuthorityResource {
     }
 
     /**
-     * {@code DELETE  /authorities/:id} : delete the "id" authority.
+     * {@code DELETE /authorities/:id} : delete the "id" authority.
      *
      * @param id the id of the authority to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.

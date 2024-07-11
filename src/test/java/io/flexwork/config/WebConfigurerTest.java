@@ -23,9 +23,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import tech.jhipster.config.JHipsterConstants;
 import tech.jhipster.config.JHipsterProperties;
 
-/**
- * Unit tests for the {@link WebConfigurer} class.
- */
+/** Unit tests for the {@link WebConfigurer} class. */
 class WebConfigurerTest {
 
     private WebConfigurer webConfigurer;

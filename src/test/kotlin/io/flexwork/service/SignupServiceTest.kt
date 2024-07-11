@@ -4,19 +4,22 @@ import io.flexwork.IntegrationTest
 import io.flexwork.domain.User
 import io.flexwork.stateMacine.signup.SignupEvents
 import io.flexwork.stateMacine.signup.SignupStates
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.statemachine.config.StateMachineFactory
 import org.springframework.statemachine.service.StateMachineService
 import kotlin.test.Test
 
 @IntegrationTest
 class SignupServiceTest {
-    
-    @Autowired
-    private val signupService: SignupService? = null
 
     @Autowired
-    private val stateMachineService: StateMachineService<SignupStates, SignupEvents>? = null
+    private lateinit var signupService: SignupService
+
+    @Autowired
+    private lateinit var stateMachineService: StateMachineService<SignupStates, SignupEvents>
+
+    private lateinit var stateMachineFactory: StateMachineFactory<SignupStates, SignupEvents>
 
     @Test
     fun signup() {
@@ -25,10 +28,11 @@ class SignupServiceTest {
         user.login = "hainguyenLogin"
         user.signupState = SignupStates.NEW_SIGNUP_USER
         user.email = "test@test.com"
-        signupService!!.signup(user)
+        signupService.signup(user)
 
-        Assertions.assertThat(user.signupState).isEqualTo(SignupStates.NEW_SIGNUP_USER)
-        val state = stateMachineService!!.acquireStateMachine("signu11233p-" + user.id)
+        assertThat(user.signupState).isEqualTo(SignupStates.NEW_SIGNUP_USER)
+
+        val state = stateMachineService.acquireStateMachine("signu11233p-" + user.id)
         println("He " + state.state)
     }
 }

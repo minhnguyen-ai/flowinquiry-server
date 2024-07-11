@@ -22,9 +22,7 @@ import org.springframework.format.datetime.standard.DateTimeFormatterRegistrar;
 import org.springframework.format.support.DefaultFormattingConversionService;
 import org.springframework.format.support.FormattingConversionService;
 
-/**
- * Utility class for testing REST controllers.
- */
+/** Utility class for testing REST controllers. */
 public final class TestUtil {
 
     /**
@@ -43,7 +41,8 @@ public final class TestUtil {
     }
 
     /**
-     * A matcher that tests that the examined string represents the same instant as the reference datetime.
+     * A matcher that tests that the examined string represents the same instant as the reference
+     * datetime.
      */
     public static class ZonedDateTimeMatcher extends TypeSafeDiagnosingMatcher<String> {
 
@@ -74,7 +73,8 @@ public final class TestUtil {
     }
 
     /**
-     * Creates a matcher that matches when the examined string represents the same instant as the reference datetime.
+     * Creates a matcher that matches when the examined string represents the same instant as the
+     * reference datetime.
      *
      * @param date the reference datetime against which the examined string is checked.
      */
@@ -83,7 +83,8 @@ public final class TestUtil {
     }
 
     /**
-     * A matcher that tests that the examined number represents the same value - it can be Long, Double, etc - as the reference BigDecimal.
+     * A matcher that tests that the examined number represents the same value - it can be Long,
+     * Double, etc - as the reference BigDecimal.
      */
     public static class NumberMatcher extends TypeSafeMatcher<Number> {
 
@@ -125,7 +126,8 @@ public final class TestUtil {
     }
 
     /**
-     * Creates a matcher that matches when the examined number represents the same value as the reference BigDecimal.
+     * Creates a matcher that matches when the examined number represents the same value as the
+     * reference BigDecimal.
      *
      * @param number the reference BigDecimal against which the examined number is checked.
      */
@@ -133,9 +135,7 @@ public final class TestUtil {
         return new NumberMatcher(number);
     }
 
-    /**
-     * Verifies the equals/hashcode contract on the domain object.
-     */
+    /** Verifies the equals/hashcode contract on the domain object. */
     public static <T> void equalsVerifier(Class<T> clazz) throws Exception {
         T domainObject1 = clazz.getConstructor().newInstance();
         assertThat(domainObject1.toString()).isNotNull();
@@ -153,7 +153,9 @@ public final class TestUtil {
     }
 
     /**
-     * Create a {@link FormattingConversionService} which use ISO date format, instead of the localized one.
+     * Create a {@link FormattingConversionService} which use ISO date format, instead of the
+     * localized one.
+     *
      * @return the {@link FormattingConversionService}.
      */
     public static FormattingConversionService createFormattingConversionService() {
@@ -166,6 +168,7 @@ public final class TestUtil {
 
     /**
      * Executes a query on the EntityManager finding all stored objects.
+     *
      * @param <T> The type of objects to be searched
      * @param em The instance of the EntityManager
      * @param clazz The class type to be searched

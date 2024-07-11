@@ -22,9 +22,7 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * Service class for managing users.
- */
+/** Service class for managing users. */
 @Service
 @Transactional
 public class UserService {
@@ -44,10 +42,10 @@ public class UserService {
      * Update basic information (first name, last name, email, language) for the current user.
      *
      * @param firstName first name of user.
-     * @param lastName  last name of user.
-     * @param email     email id of user.
-     * @param langKey   language key.
-     * @param imageUrl  image URL of user.
+     * @param lastName last name of user.
+     * @param email email id of user.
+     * @param langKey language key.
+     * @param imageUrl image URL of user.
      */
     public void updateUser(String firstName, String lastName, String email, String langKey, String imageUrl) {
         SecurityUtils.getCurrentUserLogin()
@@ -82,6 +80,7 @@ public class UserService {
 
     /**
      * Gets a list of all the authorities.
+     *
      * @return a list of all the authorities.
      */
     @Transactional(readOnly = true)
@@ -130,8 +129,8 @@ public class UserService {
     }
 
     /**
-     * Returns the user from an OAuth 2.0 login or resource server with JWT.
-     * Synchronizes the user in the local repository.
+     * Returns the user from an OAuth 2.0 login or resource server with JWT. Synchronizes the user in
+     * the local repository.
      *
      * @param authToken the authentication token.
      * @return the user from the authentication.

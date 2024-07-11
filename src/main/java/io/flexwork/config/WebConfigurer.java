@@ -20,9 +20,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 import tech.jhipster.config.JHipsterProperties;
 
-/**
- * Configuration of web application with Servlet 3.0 APIs.
- */
+/** Configuration of web application with Servlet 3.0 APIs. */
 @Configuration
 public class WebConfigurer implements ServletContextInitializer, WebServerFactoryCustomizer<WebServerFactory> {
 
@@ -46,9 +44,7 @@ public class WebConfigurer implements ServletContextInitializer, WebServerFactor
         log.info("Web application fully configured");
     }
 
-    /**
-     * Customize the Servlet engine: Mime types, the document root, the cache.
-     */
+    /** Customize the Servlet engine: Mime types, the document root, the cache. */
     @Override
     public void customize(WebServerFactory server) {
         // When running in an IDE or with ./gradlew bootRun, set location of the static web assets.
@@ -66,9 +62,7 @@ public class WebConfigurer implements ServletContextInitializer, WebServerFactor
         }
     }
 
-    /**
-     * Resolve path prefix to static resources.
-     */
+    /** Resolve path prefix to static resources. */
     private String resolvePathPrefix() {
         String fullExecutablePath = decode(this.getClass().getResource("").getPath(), StandardCharsets.UTF_8);
         String rootPath = Paths.get(".").toUri().normalize().getPath();

@@ -10,6 +10,7 @@ plugins {
     id "jhipster.node-gradle-conventions"
     id "org.liquibase.gradle"
     id "org.jetbrains.kotlin.jvm"
+    id "com.diffplug.spotless"
 }
 
 group = "io.flexwork"
@@ -106,67 +107,67 @@ configurations {
 }
 
 dependencies {
-    implementation "com.fasterxml.jackson.datatype:jackson-datatype-hppc"
-    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
-    implementation "com.github.ben-manes.caffeine:caffeine"
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-hppc")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
+    implementation("com.github.ben-manes.caffeine:caffeine")
     testImplementation("com.tngtech.archunit:archunit-junit5-api:${archunitJunit5Version}") {
         exclude group: "org.slf4j", module: "slf4j-api"
     }
     testRuntimeOnly("com.tngtech.archunit:archunit-junit5-engine:${archunitJunit5Version}") {
         exclude group: "org.slf4j", module: "slf4j-api"
     }
-    implementation "io.micrometer:micrometer-registry-prometheus-simpleclient"
-    implementation "jakarta.annotation:jakarta.annotation-api"
-    implementation "org.apache.commons:commons-lang3"
-    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
-    implementation "org.mapstruct:mapstruct:${mapstructVersion}"
-    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
-    implementation "org.springframework.boot:spring-boot-loader-tools"
-    implementation "org.springframework.boot:spring-boot-starter-actuator"
-    implementation "org.springframework.boot:spring-boot-starter-aop"
-    implementation "org.springframework.boot:spring-boot-starter-logging"
-    implementation "org.springframework.boot:spring-boot-starter-mail"
-    implementation "org.springframework.boot:spring-boot-starter-oauth2-client"
-    implementation "org.springframework.boot:spring-boot-starter-oauth2-resource-server"
-    testImplementation "org.springframework.boot:spring-boot-starter-test"
-    implementation "org.springframework.boot:spring-boot-starter-thymeleaf"
-    implementation "org.springframework.boot:spring-boot-starter-undertow"
+    implementation("io.micrometer:micrometer-registry-prometheus-simpleclient")
+    implementation("jakarta.annotation:jakarta.annotation-api")
+    implementation("org.apache.commons:commons-lang3")
+    annotationProcessor("org.mapstruct:mapstruct-processor:${mapstructVersion}")
+    implementation("org.mapstruct:mapstruct:${mapstructVersion}")
+    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+    implementation("org.springframework.boot:spring-boot-loader-tools")
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("org.springframework.boot:spring-boot-starter-aop")
+    implementation("org.springframework.boot:spring-boot-starter-logging")
+    implementation("org.springframework.boot:spring-boot-starter-mail")
+    implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
+    implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+    implementation("org.springframework.boot:spring-boot-starter-undertow")
     modules {
         module("org.springframework.boot:spring-boot-starter-tomcat") {
             replacedBy("org.springframework.boot:spring-boot-starter-undertow", "Use Undertow instead of Tomcat")
         }
     }
-    implementation "org.springframework.boot:spring-boot-starter-validation"
-    implementation "org.springframework.boot:spring-boot-starter-web"
-    testImplementation "org.springframework.boot:spring-boot-test"
-    testImplementation "org.springframework.security:spring-security-test"
-    implementation libs.jhipster.framework
-    implementation libs.springdoc.openapi.starter.webmvc.api
-    implementation "org.springframework.boot:spring-boot-starter-data-jpa"
-    implementation "org.springframework.security:spring-security-data"
-    implementation "com.fasterxml.jackson.datatype:jackson-datatype-hibernate6"
-    implementation "org.hibernate.orm:hibernate-core"
-    implementation "org.hibernate.validator:hibernate-validator"
-    annotationProcessor "org.hibernate.orm:hibernate-jpamodelgen"
-    implementation "com.fasterxml.jackson.module:jackson-module-jaxb-annotations"
-    implementation "com.zaxxer:HikariCP"
-    annotationProcessor "org.glassfish.jaxb:jaxb-runtime"
-    testImplementation "org.testcontainers:jdbc"
-    testImplementation "org.testcontainers:junit-jupiter"
-    testImplementation "org.testcontainers:testcontainers"
+    implementation("org.springframework.boot:spring-boot-starter-validation")
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    testImplementation("org.springframework.boot:spring-boot-test")
+    testImplementation("org.springframework.security:spring-security-test")
+    implementation(libs.jhipster.framework)
+    implementation(libs.springdoc.openapi.starter.webmvc.api)
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.springframework.security:spring-security-data")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-hibernate6")
+    implementation("org.hibernate.orm:hibernate-core")
+    implementation("org.hibernate.validator:hibernate-validator")
+    annotationProcessor("org.hibernate.orm:hibernate-jpamodelgen")
+    implementation("com.fasterxml.jackson.module:jackson-module-jaxb-annotations")
+    implementation("com.zaxxer:HikariCP")
+    annotationProcessor("org.glassfish.jaxb:jaxb-runtime")
+    testImplementation("org.testcontainers:jdbc")
+    testImplementation("org.testcontainers:junit-jupiter")
+    testImplementation("org.testcontainers:testcontainers")
 
-    implementation "org.springframework.statemachine:spring-statemachine-starter:${springStateMachineVersion}"
-    implementation "org.springframework.statemachine:spring-statemachine-data-jpa:${springStateMachineVersion}"
-    testImplementation "org.springframework.statemachine:spring-statemachine-test:${springStateMachineVersion}"
+    implementation("org.springframework.statemachine:spring-statemachine-starter:${springStateMachineVersion}")
+    implementation("org.springframework.statemachine:spring-statemachine-data-jpa:${springStateMachineVersion}")
+    testImplementation("org.springframework.statemachine:spring-statemachine-test:${springStateMachineVersion}")
 
-    compileOnly "org.projectlombok:lombok:${lombokVersion}"
-    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+    compileOnly("org.projectlombok:lombok:${lombokVersion}")
+    annotationProcessor("org.projectlombok:lombok:${lombokVersion}")
 
-    testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
-    testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+    testCompileOnly("org.projectlombok:lombok:${lombokVersion}")
+    testAnnotationProcessor("org.projectlombok:lombok:${lombokVersion}")
 
 
-    testImplementation 'org.jetbrains.kotlin:kotlin-test'
+    testImplementation("org.jetbrains.kotlin:kotlin-test")
 }
 
 task cleanResources(type: Delete) {
@@ -176,3 +177,17 @@ task cleanResources(type: Delete) {
 
 compileJava.dependsOn processResources
 processResources.dependsOn bootBuildInfo
+
+spotless {
+    java {
+        // Use the default importOrder configuration
+        importOrder()
+
+        removeUnusedImports()
+
+        googleJavaFormat()
+        formatAnnotations()
+    }
+
+
+}

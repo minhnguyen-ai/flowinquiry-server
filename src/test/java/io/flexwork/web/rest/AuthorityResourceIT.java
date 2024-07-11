@@ -23,9 +23,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * Integration tests for the {@link AuthorityResource} REST controller.
- */
+/** Integration tests for the {@link AuthorityResource} REST controller. */
 @IntegrationTest
 @AutoConfigureMockMvc
 @WithMockUser(authorities = { "ROLE_ADMIN" })
@@ -53,8 +51,8 @@ class AuthorityResourceIT {
     /**
      * Create an entity for this test.
      *
-     * This is a static method, as tests for other entities might also need it,
-     * if they test an entity which requires the current entity.
+     * <p>This is a static method, as tests for other entities might also need it, if they test an
+     * entity which requires the current entity.
      */
     public static Authority createEntity(EntityManager em) {
         Authority authority = new Authority().name(UUID.randomUUID().toString());
@@ -64,8 +62,8 @@ class AuthorityResourceIT {
     /**
      * Create an updated entity for this test.
      *
-     * This is a static method, as tests for other entities might also need it,
-     * if they test an entity which requires the current entity.
+     * <p>This is a static method, as tests for other entities might also need it, if they test an
+     * entity which requires the current entity.
      */
     public static Authority createUpdatedEntity(EntityManager em) {
         Authority authority = new Authority().name(UUID.randomUUID().toString());

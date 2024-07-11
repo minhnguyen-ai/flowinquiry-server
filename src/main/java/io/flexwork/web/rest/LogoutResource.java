@@ -11,9 +11,7 @@ import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-/**
- * REST controller for managing global OIDC logout.
- */
+/** REST controller for managing global OIDC logout. */
 @RestController
 public class LogoutResource {
 
@@ -24,11 +22,12 @@ public class LogoutResource {
     }
 
     /**
-     * {@code POST  /api/logout} : logout the current user.
+     * {@code POST /api/logout} : logout the current user.
      *
      * @param request the {@link HttpServletRequest}.
      * @param idToken the ID token.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and a body with a global logout URL.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and a body with a global logout
+     *     URL.
      */
     @PostMapping("/api/logout")
     public ResponseEntity<?> logout(HttpServletRequest request, @AuthenticationPrincipal(expression = "idToken") OidcIdToken idToken) {

@@ -21,9 +21,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * Integration tests for the {@link AccountResource} REST controller.
- */
+/** Integration tests for the {@link AccountResource} REST controller. */
 @AutoConfigureMockMvc
 @IntegrationTest
 class AccountResourceIT {

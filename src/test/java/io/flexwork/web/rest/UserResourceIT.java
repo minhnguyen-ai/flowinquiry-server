@@ -22,9 +22,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
-/**
- * Integration tests for the {@link UserResource} REST controller.
- */
+/** Integration tests for the {@link UserResource} REST controller. */
 @AutoConfigureMockMvc
 @WithMockUser(authorities = AuthoritiesConstants.ADMIN)
 @IntegrationTest
@@ -64,8 +62,8 @@ class UserResourceIT {
     /**
      * Create a User.
      *
-     * This is a static method, as tests for other entities might also need it,
-     * if they test an entity which has a required relationship to the User entity.
+     * <p>This is a static method, as tests for other entities might also need it, if they test an
+     * entity which has a required relationship to the User entity.
      */
     public static User createEntity(EntityManager em) {
         User persistUser = new User();
@@ -80,9 +78,7 @@ class UserResourceIT {
         return persistUser;
     }
 
-    /**
-     * Setups the database with one user.
-     */
+    /** Setups the database with one user. */
     public static User initTestUser(EntityManager em) {
         User persistUser = createEntity(em);
         persistUser.setLogin(DEFAULT_LOGIN);

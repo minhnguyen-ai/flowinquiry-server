@@ -1,4 +1,2 @@
-/**
- * Repository layer.
- */
+/** Repository layer. */
 package io.flexwork.repository;

@@ -1,4 +1,2 @@
-/**
- * Request chain filters.
- */
+/** Request chain filters. */
 package io.flexwork.web.filter;

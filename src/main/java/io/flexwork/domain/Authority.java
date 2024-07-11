@@ -7,9 +7,7 @@ import java.io.Serializable;
 import java.util.Objects;
 import org.springframework.data.domain.Persistable;
 
-/**
- * A Authority.
- */
+/** A Authority. */
 @Entity
 @Table(name = "jhi_authority")
 @JsonIgnoreProperties(value = { "new", "id" })
@@ -83,10 +81,8 @@ public class Authority implements Serializable, Persistable<String> {
     }
 
     // prettier-ignore
-    @Override
-    public String toString() {
-        return "Authority{" +
-            "name=" + getName() +
-            "}";
-    }
+  @Override
+  public String toString() {
+    return "Authority{" + "name=" + getName() + "}";
+  }
 }

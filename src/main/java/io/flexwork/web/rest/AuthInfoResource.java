@@ -5,9 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-/**
- * Resource to return information about OIDC properties
- */
+/** Resource to return information about OIDC properties */
 @RestController
 @RequestMapping("/api")
 public class AuthInfoResource {
