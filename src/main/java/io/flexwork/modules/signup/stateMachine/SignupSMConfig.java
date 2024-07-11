@@ -1,7 +1,7 @@
-package io.flexwork.stateMacine.signup;
+package io.flexwork.modules.signup.stateMachine;
 
-import io.flexwork.stateMacine.signup.actions.NewSignUpAction;
-import io.flexwork.stateMacine.signup.actions.NewSignupVerificationAction;
+import io.flexwork.modules.signup.stateMachine.actions.NewSignUpAction;
+import io.flexwork.modules.signup.stateMachine.actions.NewSignupVerificationAction;
 import java.util.EnumSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -34,8 +34,10 @@ public class SignupSMConfig {
         }
 
         @Bean
-        public DefaultStateMachinePersister stateMachinePersister(JpaStateMachineRepository jpaStateMachineRepository) {
-            return new DefaultStateMachinePersister(new JpaPersistingStateMachineInterceptor<>(jpaStateMachineRepository));
+        public DefaultStateMachinePersister<SignupStates, SignupEvents, String> stateMachinePersister(
+            JpaStateMachineRepository jpaStateMachineRepository
+        ) {
+            return new DefaultStateMachinePersister<>(new JpaPersistingStateMachineInterceptor<>(jpaStateMachineRepository));
         }
     }
 

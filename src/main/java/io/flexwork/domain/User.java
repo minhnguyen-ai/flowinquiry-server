@@ -2,7 +2,7 @@ package io.flexwork.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.flexwork.config.Constants;
-import io.flexwork.stateMacine.signup.SignupStates;
+import io.flexwork.modules.signup.stateMachine.SignupStates;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -22,144 +22,149 @@ import org.hibernate.annotations.BatchSize;
 @Data
 public class User extends AbstractAuditingEntity<String> implements Serializable {
 
-  private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-  @Id private String id;
+    @Id
+    private String id;
 
-  @NotNull @Pattern(regexp = Constants.LOGIN_REGEX)
-  @Size(min = 1, max = 50)
-  @Column(length = 50, unique = true, nullable = false)
-  private String login;
+    @NotNull
+    @Pattern(regexp = Constants.LOGIN_REGEX)
+    @Size(min = 1, max = 50)
+    @Column(length = 50, unique = true, nullable = false)
+    private String login;
 
-  @Size(max = 50)
-  @Column(name = "first_name", length = 50)
-  private String firstName;
+    @Size(max = 50)
+    @Column(name = "first_name", length = 50)
+    private String firstName;
 
-  @Size(max = 50)
-  @Column(name = "last_name", length = 50)
-  private String lastName;
+    @Size(max = 50)
+    @Column(name = "last_name", length = 50)
+    private String lastName;
 
-  @Email
-  @Size(min = 5, max = 254)
-  @Column(length = 254, unique = true)
-  private String email;
+    @Email
+    @Size(min = 5, max = 254)
+    @Column(length = 254, unique = true)
+    private String email;
 
-  @NotNull @Enumerated(EnumType.STRING)
-  @Column(length = 20, name = "state", unique = true)
-  private SignupStates signupState;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20, name = "state", unique = true)
+    private SignupStates signupState;
 
-  @NotNull @Column(nullable = false)
-  private boolean activated = false;
+    @NotNull
+    @Column(nullable = false)
+    private boolean activated = false;
 
-  @Size(min = 2, max = 10)
-  @Column(name = "lang_key", length = 10)
-  private String langKey;
+    @Size(min = 2, max = 10)
+    @Column(name = "lang_key", length = 10)
+    private String langKey;
 
-  @Size(max = 256)
-  @Column(name = "image_url", length = 256)
-  private String imageUrl;
+    @Size(max = 256)
+    @Column(name = "image_url", length = 256)
+    private String imageUrl;
 
-  @JsonIgnore
-  @ManyToMany
-  @JoinTable(
-      name = "jhi_user_authority",
-      joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
-      inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")})
-  @BatchSize(size = 20)
-  private Set<Authority> authorities = new HashSet<>();
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(
+        name = "jhi_user_authority",
+        joinColumns = { @JoinColumn(name = "user_id", referencedColumnName = "id") },
+        inverseJoinColumns = { @JoinColumn(name = "authority_name", referencedColumnName = "name") }
+    )
+    @BatchSize(size = 20)
+    private Set<Authority> authorities = new HashSet<>();
 
-  public String getId() {
-    return id;
-  }
-
-  public void setId(String id) {
-    this.id = id;
-  }
-
-  public String getLogin() {
-    return login;
-  }
-
-  // Lowercase the login before saving it in database
-  public void setLogin(String login) {
-    this.login = StringUtils.lowerCase(login, Locale.ENGLISH);
-  }
-
-  public String getFirstName() {
-    return firstName;
-  }
-
-  public void setFirstName(String firstName) {
-    this.firstName = firstName;
-  }
-
-  public String getLastName() {
-    return lastName;
-  }
-
-  public void setLastName(String lastName) {
-    this.lastName = lastName;
-  }
-
-  public String getEmail() {
-    return email;
-  }
-
-  public void setEmail(String email) {
-    this.email = email;
-  }
-
-  public String getImageUrl() {
-    return imageUrl;
-  }
-
-  public void setImageUrl(String imageUrl) {
-    this.imageUrl = imageUrl;
-  }
-
-  public boolean isActivated() {
-    return activated;
-  }
-
-  public void setActivated(boolean activated) {
-    this.activated = activated;
-  }
-
-  public String getLangKey() {
-    return langKey;
-  }
-
-  public void setLangKey(String langKey) {
-    this.langKey = langKey;
-  }
-
-  public Set<Authority> getAuthorities() {
-    return authorities;
-  }
-
-  public void setAuthorities(Set<Authority> authorities) {
-    this.authorities = authorities;
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
+    public String getId() {
+        return id;
     }
-    if (!(o instanceof User)) {
-      return false;
+
+    public void setId(String id) {
+        this.id = id;
     }
-    return id != null && id.equals(((User) o).id);
-  }
 
-  @Override
-  public int hashCode() {
-    // see
-    // https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
-    return getClass().hashCode();
-  }
+    public String getLogin() {
+        return login;
+    }
 
-  // prettier-ignore
+    // Lowercase the login before saving it in database
+    public void setLogin(String login) {
+        this.login = StringUtils.lowerCase(login, Locale.ENGLISH);
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public boolean isActivated() {
+        return activated;
+    }
+
+    public void setActivated(boolean activated) {
+        this.activated = activated;
+    }
+
+    public String getLangKey() {
+        return langKey;
+    }
+
+    public void setLangKey(String langKey) {
+        this.langKey = langKey;
+    }
+
+    public Set<Authority> getAuthorities() {
+        return authorities;
+    }
+
+    public void setAuthorities(Set<Authority> authorities) {
+        this.authorities = authorities;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof User)) {
+            return false;
+        }
+        return id != null && id.equals(((User) o).id);
+    }
+
+    @Override
+    public int hashCode() {
+        // see
+        // https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        return getClass().hashCode();
+    }
+
+    // prettier-ignore
   @Override
   public String toString() {
     return "User{"

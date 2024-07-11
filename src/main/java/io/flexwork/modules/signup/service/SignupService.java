@@ -1,9 +1,9 @@
-package io.flexwork.service;
+package io.flexwork.modules.signup.service;
 
 import io.flexwork.domain.User;
+import io.flexwork.modules.signup.stateMachine.SignupEvents;
+import io.flexwork.modules.signup.stateMachine.SignupStates;
 import io.flexwork.repository.UserRepository;
-import io.flexwork.stateMacine.signup.SignupEvents;
-import io.flexwork.stateMacine.signup.SignupStates;
 import java.util.Optional;
 import lombok.SneakyThrows;
 import org.slf4j.Logger;
