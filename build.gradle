@@ -164,10 +164,13 @@ dependencies {
     testImplementation "org.testcontainers:jdbc"
     testImplementation "org.testcontainers:junit-jupiter"
     testImplementation "org.testcontainers:testcontainers"
-    implementation 'org.springframework.statemachine:spring-statemachine-starter:4.0.0'
 
-    compileOnly 'org.projectlombok:lombok:1.18.34'
-    annotationProcessor 'org.projectlombok:lombok:1.18.34'
+    implementation "org.springframework.statemachine:spring-statemachine-starter:${springStateMachineVersion}"
+    implementation "org.springframework.statemachine:spring-statemachine-data-jpa:${springStateMachineVersion}"
+    testImplementation "org.springframework.statemachine:spring-statemachine-test:${springStateMachineVersion}"
+
+    compileOnly "org.projectlombok:lombok:${lombokVersion}"
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 
     testCompileOnly 'org.projectlombok:lombok:1.18.34'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.34'
