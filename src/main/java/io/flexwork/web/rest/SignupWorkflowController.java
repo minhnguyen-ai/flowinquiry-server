@@ -11,21 +11,21 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api")
 public class SignupWorkflowController {
 
-    private static final Logger log = LoggerFactory.getLogger(UserService.class);
+  private static final Logger log = LoggerFactory.getLogger(UserService.class);
 
-    private SignupService signupService;
+  private SignupService signupService;
 
-    public SignupWorkflowController(SignupService signupService) {
-        this.signupService = signupService;
-    }
+  public SignupWorkflowController(SignupService signupService) {
+    this.signupService = signupService;
+  }
 
-    @PostMapping("/signup")
-    public void signup(@RequestBody User user) {
-        signupService.signup(user);
-    }
+  @PostMapping("/signup")
+  public void signup(@RequestBody User user) {
+    signupService.signup(user);
+  }
 
-    @GetMapping("/signup")
-    public String hello() {
-        return "Hello";
-    }
+  @GetMapping("/signup")
+  public String hello() {
+    return "Hello";
+  }
 }

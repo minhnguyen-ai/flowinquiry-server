@@ -26,55 +26,59 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @Component
 public class OAuth2RefreshTokensWebFilter extends OncePerRequestFilter {
 
-    private final OAuth2AuthorizedClientManager clientManager;
-    private final OAuth2AuthorizedClientRepository authorizedClientRepository;
-    private final OAuth2AuthorizationRequestResolver authorizationRequestResolver;
-    private final RedirectStrategy authorizationRedirectStrategy = new DefaultRedirectStrategy();
+  private final OAuth2AuthorizedClientManager clientManager;
+  private final OAuth2AuthorizedClientRepository authorizedClientRepository;
+  private final OAuth2AuthorizationRequestResolver authorizationRequestResolver;
+  private final RedirectStrategy authorizationRedirectStrategy = new DefaultRedirectStrategy();
 
-    public OAuth2RefreshTokensWebFilter(
-        OAuth2AuthorizedClientManager clientManager,
-        OAuth2AuthorizedClientRepository authorizedClientRepository,
-        ClientRegistrationRepository clientRegistrationRepository
-    ) {
-        this.clientManager = clientManager;
-        this.authorizedClientRepository = authorizedClientRepository;
-        this.authorizationRequestResolver = new DefaultOAuth2AuthorizationRequestResolver(
+  public OAuth2RefreshTokensWebFilter(
+      OAuth2AuthorizedClientManager clientManager,
+      OAuth2AuthorizedClientRepository authorizedClientRepository,
+      ClientRegistrationRepository clientRegistrationRepository) {
+    this.clientManager = clientManager;
+    this.authorizedClientRepository = authorizedClientRepository;
+    this.authorizationRequestResolver =
+        new DefaultOAuth2AuthorizationRequestResolver(
             clientRegistrationRepository,
-            OAuth2AuthorizationRequestRedirectFilter.DEFAULT_AUTHORIZATION_REQUEST_BASE_URI
-        );
-    }
+            OAuth2AuthorizationRequestRedirectFilter.DEFAULT_AUTHORIZATION_REQUEST_BASE_URI);
+  }
 
-    @Override
-    public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-        throws IOException, ServletException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if ((authentication instanceof OAuth2AuthenticationToken)) {
-            try {
-                OAuth2AuthorizedClient authorizedClient = authorizedClient((OAuth2AuthenticationToken) authentication);
-                this.authorizedClientRepository.saveAuthorizedClient(authorizedClient, authentication, request, response);
-            } catch (Exception e) {
-                OAuth2AuthorizationRequest authorizationRequest = this.authorizationRequestResolver.resolve(request);
-                if (authorizationRequest != null) {
-                    this.authorizationRedirectStrategy.sendRedirect(request, response, authorizationRequest.getAuthorizationRequestUri());
-                    return;
-                }
-            }
+  @Override
+  public void doFilterInternal(
+      HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+      throws IOException, ServletException {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    if ((authentication instanceof OAuth2AuthenticationToken)) {
+      try {
+        OAuth2AuthorizedClient authorizedClient =
+            authorizedClient((OAuth2AuthenticationToken) authentication);
+        this.authorizedClientRepository.saveAuthorizedClient(
+            authorizedClient, authentication, request, response);
+      } catch (Exception e) {
+        OAuth2AuthorizationRequest authorizationRequest =
+            this.authorizationRequestResolver.resolve(request);
+        if (authorizationRequest != null) {
+          this.authorizationRedirectStrategy.sendRedirect(
+              request, response, authorizationRequest.getAuthorizationRequestUri());
+          return;
         }
-
-        filterChain.doFilter(request, response);
+      }
     }
 
-    private OAuth2AuthorizedClient authorizedClient(OAuth2AuthenticationToken oauth2Authentication) {
-        String clientRegistrationId = oauth2Authentication.getAuthorizedClientRegistrationId();
-        OAuth2AuthorizeRequest request = OAuth2AuthorizeRequest.withClientRegistrationId(clientRegistrationId)
+    filterChain.doFilter(request, response);
+  }
+
+  private OAuth2AuthorizedClient authorizedClient(OAuth2AuthenticationToken oauth2Authentication) {
+    String clientRegistrationId = oauth2Authentication.getAuthorizedClientRegistrationId();
+    OAuth2AuthorizeRequest request =
+        OAuth2AuthorizeRequest.withClientRegistrationId(clientRegistrationId)
             .principal(oauth2Authentication)
             .build();
-        if (clientManager == null) {
-            throw new IllegalStateException(
-                "No OAuth2AuthorizedClientManager bean was found. Did you include the " +
-                "org.springframework.boot:spring-boot-starter-oauth2-client dependency?"
-            );
-        }
-        return clientManager.authorize(request);
+    if (clientManager == null) {
+      throw new IllegalStateException(
+          "No OAuth2AuthorizedClientManager bean was found. Did you include the "
+              + "org.springframework.boot:spring-boot-starter-oauth2-client dependency?");
     }
+    return clientManager.authorize(request);
+  }
 }

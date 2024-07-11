@@ -28,176 +28,190 @@ import org.springframework.web.client.RestTemplate;
 @IntegrationTest
 class CustomClaimConverterIT {
 
-    private static final String USERNAME = "admin";
-    private static final String NAME = "John";
-    private static final String FAMILY_NAME = "Doe";
-    private static final String FULL_NAME = NAME + " " + FAMILY_NAME;
-    private static final String NAME_SUFFIX = "Sr.";
-    private static final String EMAIL = "john.doe@gmail.com";
+  private static final String USERNAME = "admin";
+  private static final String NAME = "John";
+  private static final String FAMILY_NAME = "Doe";
+  private static final String FULL_NAME = NAME + " " + FAMILY_NAME;
+  private static final String NAME_SUFFIX = "Sr.";
+  private static final String EMAIL = "john.doe@gmail.com";
 
-    private final ObjectMapper mapper = new ObjectMapper();
+  private final ObjectMapper mapper = new ObjectMapper();
 
-    @MockBean
-    private RestTemplate restTemplate;
+  @MockBean private RestTemplate restTemplate;
 
-    @Autowired
-    private ClientRegistrationRepository clientRegistrationRepository;
+  @Autowired private ClientRegistrationRepository clientRegistrationRepository;
 
-    private CustomClaimConverter customClaimConverter;
+  private CustomClaimConverter customClaimConverter;
 
-    @BeforeEach
-    public void initTest() {
-        customClaimConverter = new CustomClaimConverter(clientRegistrationRepository.findByRegistrationId("oidc"), restTemplate);
-    }
+  @BeforeEach
+  public void initTest() {
+    customClaimConverter =
+        new CustomClaimConverter(
+            clientRegistrationRepository.findByRegistrationId("oidc"), restTemplate);
+  }
 
-    private void mockHttpGetUserInfo(ObjectNode userInfo) {
-        when(
-            restTemplate.exchange(
-                eq("https://api.jhipster.org/user"),
-                eq(HttpMethod.GET),
-                any(HttpEntity.class),
-                ArgumentMatchers.<Class<ObjectNode>>any()
-            )
-        ).thenReturn(ResponseEntity.ok(userInfo));
-    }
+  private void mockHttpGetUserInfo(ObjectNode userInfo) {
+    when(restTemplate.exchange(
+            eq("https://api.jhipster.org/user"),
+            eq(HttpMethod.GET),
+            any(HttpEntity.class),
+            ArgumentMatchers.<Class<ObjectNode>>any()))
+        .thenReturn(ResponseEntity.ok(userInfo));
+  }
 
-    @Test
-    void testConvert() {
-        // GIVEN
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("sub", "123");
-        // AND
-        ObjectNode user = mapper.createObjectNode();
-        user.put("preferred_username", USERNAME);
-        user.put("given_name", NAME);
-        user.put("family_name", FAMILY_NAME);
-        user.putArray("groups").add(AuthoritiesConstants.ADMIN).add(AuthoritiesConstants.USER);
-        mockHttpGetUserInfo(user);
+  @Test
+  void testConvert() {
+    // GIVEN
+    Map<String, Object> claims = new HashMap<>();
+    claims.put("sub", "123");
+    // AND
+    ObjectNode user = mapper.createObjectNode();
+    user.put("preferred_username", USERNAME);
+    user.put("given_name", NAME);
+    user.put("family_name", FAMILY_NAME);
+    user.putArray("groups").add(AuthoritiesConstants.ADMIN).add(AuthoritiesConstants.USER);
+    mockHttpGetUserInfo(user);
 
-        // WHEN
-        Map<String, Object> convertedClaims = customClaimConverter.convert(claims);
+    // WHEN
+    Map<String, Object> convertedClaims = customClaimConverter.convert(claims);
 
-        // THEN
-        assertThat(convertedClaims)
-            .containsEntry("sub", "123")
-            .containsEntry("preferred_username", USERNAME)
-            .containsEntry("given_name", NAME)
-            .containsEntry("family_name", FAMILY_NAME)
-            .containsEntry("groups", Arrays.asList(AuthoritiesConstants.ADMIN, AuthoritiesConstants.USER));
-    }
+    // THEN
+    assertThat(convertedClaims)
+        .containsEntry("sub", "123")
+        .containsEntry("preferred_username", USERNAME)
+        .containsEntry("given_name", NAME)
+        .containsEntry("family_name", FAMILY_NAME)
+        .containsEntry(
+            "groups", Arrays.asList(AuthoritiesConstants.ADMIN, AuthoritiesConstants.USER));
+  }
 
-    @Test
-    void testConvert_withoutGroups() {
-        // GIVEN
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("sub", "123");
-        // AND
-        ObjectNode user = mapper.createObjectNode();
-        user.put("preferred_username", USERNAME);
-        user.put("given_name", NAME);
-        user.put("family_name", FAMILY_NAME);
-        mockHttpGetUserInfo(user);
+  @Test
+  void testConvert_withoutGroups() {
+    // GIVEN
+    Map<String, Object> claims = new HashMap<>();
+    claims.put("sub", "123");
+    // AND
+    ObjectNode user = mapper.createObjectNode();
+    user.put("preferred_username", USERNAME);
+    user.put("given_name", NAME);
+    user.put("family_name", FAMILY_NAME);
+    mockHttpGetUserInfo(user);
 
-        // WHEN
-        assertThatCode(() -> customClaimConverter.convert(claims)).doesNotThrowAnyException();
-    }
+    // WHEN
+    assertThatCode(() -> customClaimConverter.convert(claims)).doesNotThrowAnyException();
+  }
 
-    @Test
-    void testConvert_withNamespacedRoles() {
-        // GIVEN
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("sub", "123");
-        // AND
-        ObjectNode user = mapper.createObjectNode();
-        user.put("preferred_username", USERNAME);
-        user.put("given_name", NAME);
-        user.put("family_name", FAMILY_NAME);
-        user.putArray(SecurityUtils.CLAIMS_NAMESPACE + "roles").add(AuthoritiesConstants.ADMIN).add(AuthoritiesConstants.USER);
-        mockHttpGetUserInfo(user);
+  @Test
+  void testConvert_withNamespacedRoles() {
+    // GIVEN
+    Map<String, Object> claims = new HashMap<>();
+    claims.put("sub", "123");
+    // AND
+    ObjectNode user = mapper.createObjectNode();
+    user.put("preferred_username", USERNAME);
+    user.put("given_name", NAME);
+    user.put("family_name", FAMILY_NAME);
+    user.putArray(SecurityUtils.CLAIMS_NAMESPACE + "roles")
+        .add(AuthoritiesConstants.ADMIN)
+        .add(AuthoritiesConstants.USER);
+    mockHttpGetUserInfo(user);
 
-        // WHEN
-        Map<String, Object> convertedClaims = customClaimConverter.convert(claims);
+    // WHEN
+    Map<String, Object> convertedClaims = customClaimConverter.convert(claims);
 
-        // THEN
-        assertThat(convertedClaims)
-            .containsEntry("sub", "123")
-            .containsEntry("preferred_username", USERNAME)
-            .containsEntry("given_name", NAME)
-            .containsEntry("family_name", FAMILY_NAME)
-            .containsEntry("roles", Arrays.asList(AuthoritiesConstants.ADMIN, AuthoritiesConstants.USER));
-    }
+    // THEN
+    assertThat(convertedClaims)
+        .containsEntry("sub", "123")
+        .containsEntry("preferred_username", USERNAME)
+        .containsEntry("given_name", NAME)
+        .containsEntry("family_name", FAMILY_NAME)
+        .containsEntry(
+            "roles", Arrays.asList(AuthoritiesConstants.ADMIN, AuthoritiesConstants.USER));
+  }
 
-    @Test
-    void testConvert_withoutFirstAndLastName() {
-        // GIVEN
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("sub", "123");
-        // AND
-        ObjectNode user = mapper.createObjectNode();
-        user.put("preferred_username", USERNAME);
-        mockHttpGetUserInfo(user);
+  @Test
+  void testConvert_withoutFirstAndLastName() {
+    // GIVEN
+    Map<String, Object> claims = new HashMap<>();
+    claims.put("sub", "123");
+    // AND
+    ObjectNode user = mapper.createObjectNode();
+    user.put("preferred_username", USERNAME);
+    mockHttpGetUserInfo(user);
 
-        assertThatCode(() -> {
-            Map<String, Object> convertedClaims = customClaimConverter.convert(claims);
-            assertThat(convertedClaims).containsEntry("preferred_username", USERNAME).doesNotContainKeys("given_name", "family_name");
-        }).doesNotThrowAnyException();
-    }
+    assertThatCode(
+            () -> {
+              Map<String, Object> convertedClaims = customClaimConverter.convert(claims);
+              assertThat(convertedClaims)
+                  .containsEntry("preferred_username", USERNAME)
+                  .doesNotContainKeys("given_name", "family_name");
+            })
+        .doesNotThrowAnyException();
+  }
 
-    @Test
-    void testConvert_withName() {
-        // GIVEN
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("sub", "123");
-        // AND
-        ObjectNode user = mapper.createObjectNode();
-        user.put("preferred_username", USERNAME);
-        user.put("name", FULL_NAME);
-        mockHttpGetUserInfo(user);
+  @Test
+  void testConvert_withName() {
+    // GIVEN
+    Map<String, Object> claims = new HashMap<>();
+    claims.put("sub", "123");
+    // AND
+    ObjectNode user = mapper.createObjectNode();
+    user.put("preferred_username", USERNAME);
+    user.put("name", FULL_NAME);
+    mockHttpGetUserInfo(user);
 
-        assertThatCode(() -> {
-            Map<String, Object> convertedClaims = customClaimConverter.convert(claims);
-            assertThat(convertedClaims)
-                .containsEntry("preferred_username", USERNAME)
-                .containsEntry("given_name", NAME)
-                .containsEntry("family_name", FAMILY_NAME);
-        }).doesNotThrowAnyException();
-    }
+    assertThatCode(
+            () -> {
+              Map<String, Object> convertedClaims = customClaimConverter.convert(claims);
+              assertThat(convertedClaims)
+                  .containsEntry("preferred_username", USERNAME)
+                  .containsEntry("given_name", NAME)
+                  .containsEntry("family_name", FAMILY_NAME);
+            })
+        .doesNotThrowAnyException();
+  }
 
-    @Test
-    void testConvert_withLastNameMultipleWords() {
-        // GIVEN
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("sub", "123");
-        // AND
-        ObjectNode user = mapper.createObjectNode();
-        user.put("preferred_username", USERNAME);
-        user.put("name", FULL_NAME + " " + NAME_SUFFIX);
-        mockHttpGetUserInfo(user);
+  @Test
+  void testConvert_withLastNameMultipleWords() {
+    // GIVEN
+    Map<String, Object> claims = new HashMap<>();
+    claims.put("sub", "123");
+    // AND
+    ObjectNode user = mapper.createObjectNode();
+    user.put("preferred_username", USERNAME);
+    user.put("name", FULL_NAME + " " + NAME_SUFFIX);
+    mockHttpGetUserInfo(user);
 
-        assertThatCode(() -> {
-            Map<String, Object> convertedClaims = customClaimConverter.convert(claims);
-            System.out.println(convertedClaims);
-            assertThat(convertedClaims)
-                .containsEntry("preferred_username", USERNAME)
-                .containsEntry("given_name", NAME)
-                .containsEntry("family_name", FAMILY_NAME + " " + NAME_SUFFIX);
-        }).doesNotThrowAnyException();
-    }
+    assertThatCode(
+            () -> {
+              Map<String, Object> convertedClaims = customClaimConverter.convert(claims);
+              System.out.println(convertedClaims);
+              assertThat(convertedClaims)
+                  .containsEntry("preferred_username", USERNAME)
+                  .containsEntry("given_name", NAME)
+                  .containsEntry("family_name", FAMILY_NAME + " " + NAME_SUFFIX);
+            })
+        .doesNotThrowAnyException();
+  }
 
-    @Test
-    void testConvert_withEmail() {
-        // GIVEN
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("sub", "123");
-        // AND
-        ObjectNode user = mapper.createObjectNode();
-        user.put("preferred_username", USERNAME);
-        user.put("email", EMAIL);
-        mockHttpGetUserInfo(user);
+  @Test
+  void testConvert_withEmail() {
+    // GIVEN
+    Map<String, Object> claims = new HashMap<>();
+    claims.put("sub", "123");
+    // AND
+    ObjectNode user = mapper.createObjectNode();
+    user.put("preferred_username", USERNAME);
+    user.put("email", EMAIL);
+    mockHttpGetUserInfo(user);
 
-        assertThatCode(() -> {
-            Map<String, Object> convertedClaims = customClaimConverter.convert(claims);
-            assertThat(convertedClaims).containsEntry("preferred_username", USERNAME).containsEntry("email", EMAIL);
-        }).doesNotThrowAnyException();
-    }
+    assertThatCode(
+            () -> {
+              Map<String, Object> convertedClaims = customClaimConverter.convert(claims);
+              assertThat(convertedClaims)
+                  .containsEntry("preferred_username", USERNAME)
+                  .containsEntry("email", EMAIL);
+            })
+        .doesNotThrowAnyException();
+  }
 }

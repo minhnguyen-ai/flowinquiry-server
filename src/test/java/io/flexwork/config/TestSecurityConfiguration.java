@@ -21,44 +21,45 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 @Import(OAuth2Configuration.class)
 public class TestSecurityConfiguration {
 
-    @Bean
-    ClientRegistration clientRegistration() {
-        return clientRegistrationBuilder().build();
-    }
+  @Bean
+  ClientRegistration clientRegistration() {
+    return clientRegistrationBuilder().build();
+  }
 
-    @Bean
-    ClientRegistrationRepository clientRegistrationRepository(ClientRegistration clientRegistration) {
-        return new InMemoryClientRegistrationRepository(clientRegistration);
-    }
+  @Bean
+  ClientRegistrationRepository clientRegistrationRepository(ClientRegistration clientRegistration) {
+    return new InMemoryClientRegistrationRepository(clientRegistration);
+  }
 
-    private ClientRegistration.Builder clientRegistrationBuilder() {
-        Map<String, Object> metadata = new HashMap<>();
-        metadata.put("end_session_endpoint", "https://jhipster.org/logout");
+  private ClientRegistration.Builder clientRegistrationBuilder() {
+    Map<String, Object> metadata = new HashMap<>();
+    metadata.put("end_session_endpoint", "https://jhipster.org/logout");
 
-        return ClientRegistration.withRegistrationId("oidc")
-            .issuerUri("{baseUrl}")
-            .redirectUri("{baseUrl}/{action}/oauth2/code/{registrationId}")
-            .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
-            .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-            .scope("read:user")
-            .authorizationUri("https://jhipster.org/login/oauth/authorize")
-            .tokenUri("https://jhipster.org/login/oauth/access_token")
-            .jwkSetUri("https://jhipster.org/oauth/jwk")
-            .userInfoUri("https://api.jhipster.org/user")
-            .providerConfigurationMetadata(metadata)
-            .userNameAttributeName("id")
-            .clientName("Client Name")
-            .clientId("client-id")
-            .clientSecret("client-secret");
-    }
+    return ClientRegistration.withRegistrationId("oidc")
+        .issuerUri("{baseUrl}")
+        .redirectUri("{baseUrl}/{action}/oauth2/code/{registrationId}")
+        .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+        .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+        .scope("read:user")
+        .authorizationUri("https://jhipster.org/login/oauth/authorize")
+        .tokenUri("https://jhipster.org/login/oauth/access_token")
+        .jwkSetUri("https://jhipster.org/oauth/jwk")
+        .userInfoUri("https://api.jhipster.org/user")
+        .providerConfigurationMetadata(metadata)
+        .userNameAttributeName("id")
+        .clientName("Client Name")
+        .clientId("client-id")
+        .clientSecret("client-secret");
+  }
 
-    @Bean
-    JwtDecoder jwtDecoder() {
-        return mock(JwtDecoder.class);
-    }
+  @Bean
+  JwtDecoder jwtDecoder() {
+    return mock(JwtDecoder.class);
+  }
 
-    @Bean
-    OAuth2AuthorizedClientService authorizedClientService(ClientRegistrationRepository clientRegistrationRepository) {
-        return new InMemoryOAuth2AuthorizedClientService(clientRegistrationRepository);
-    }
+  @Bean
+  OAuth2AuthorizedClientService authorizedClientService(
+      ClientRegistrationRepository clientRegistrationRepository) {
+    return new InMemoryOAuth2AuthorizedClientService(clientRegistrationRepository);
+  }
 }

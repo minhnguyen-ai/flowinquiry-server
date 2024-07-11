@@ -11,10 +11,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class NewSignUpAction implements Action<SignupStates, SignupEvents> {
 
-    private static Logger log = LoggerFactory.getLogger(NewSignUpAction.class);
+  private static Logger log = LoggerFactory.getLogger(NewSignUpAction.class);
 
-    @Override
-    public void execute(StateContext<SignupStates, SignupEvents> context) {
-        log.debug("New signup action");
-    }
+  @Override
+  public void execute(StateContext<SignupStates, SignupEvents> context) {
+    log.debug("New signup action");
+  }
 }

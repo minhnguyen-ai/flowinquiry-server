@@ -20,77 +20,79 @@ import tech.jhipster.config.DefaultProfileUtil;
 import tech.jhipster.config.JHipsterConstants;
 
 @SpringBootApplication
-@EnableConfigurationProperties({ LiquibaseProperties.class, ApplicationProperties.class })
+@EnableConfigurationProperties({LiquibaseProperties.class, ApplicationProperties.class})
 @EntityScan("io.flexwork.domain")
 public class FlexworkApp {
 
-    private static final Logger log = LoggerFactory.getLogger(FlexworkApp.class);
+  private static final Logger log = LoggerFactory.getLogger(FlexworkApp.class);
 
-    private final Environment env;
+  private final Environment env;
 
-    public FlexworkApp(Environment env) {
-        this.env = env;
+  public FlexworkApp(Environment env) {
+    this.env = env;
+  }
+
+  /**
+   * Initializes flexwork.
+   *
+   * <p>Spring profiles can be configured with a program argument
+   * --spring.profiles.active=your-active-profile
+   *
+   * <p>You can find more information on how profiles work with JHipster on <a
+   * href="https://www.jhipster.tech/profiles/">https://www.jhipster.tech/profiles/</a>.
+   */
+  @PostConstruct
+  public void initApplication() {
+    Collection<String> activeProfiles = Arrays.asList(env.getActiveProfiles());
+    if (activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT)
+        && activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_PRODUCTION)) {
+      log.error(
+          "You have misconfigured your application! It should not run "
+              + "with both the 'dev' and 'prod' profiles at the same time.");
     }
-
-    /**
-     * Initializes flexwork.
-     *
-     * <p>Spring profiles can be configured with a program argument
-     * --spring.profiles.active=your-active-profile
-     *
-     * <p>You can find more information on how profiles work with JHipster on <a
-     * href="https://www.jhipster.tech/profiles/">https://www.jhipster.tech/profiles/</a>.
-     */
-    @PostConstruct
-    public void initApplication() {
-        Collection<String> activeProfiles = Arrays.asList(env.getActiveProfiles());
-        if (
-            activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT) &&
-            activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_PRODUCTION)
-        ) {
-            log.error(
-                "You have misconfigured your application! It should not run " + "with both the 'dev' and 'prod' profiles at the same time."
-            );
-        }
-        if (
-            activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT) &&
-            activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_CLOUD)
-        ) {
-            log.error(
-                "You have misconfigured your application! It should not " + "run with both the 'dev' and 'cloud' profiles at the same time."
-            );
-        }
+    if (activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT)
+        && activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_CLOUD)) {
+      log.error(
+          "You have misconfigured your application! It should not "
+              + "run with both the 'dev' and 'cloud' profiles at the same time.");
     }
+  }
 
-    /**
-     * Main method, used to run the application.
-     *
-     * @param args the command line arguments.
-     */
-    public static void main(String[] args) {
-        SpringApplication app = new SpringApplication(FlexworkApp.class);
-        DefaultProfileUtil.addDefaultProfile(app);
-        Environment env = app.run(args).getEnvironment();
-        logApplicationStartup(env);
-    }
+  /**
+   * Main method, used to run the application.
+   *
+   * @param args the command line arguments.
+   */
+  public static void main(String[] args) {
+    SpringApplication app = new SpringApplication(FlexworkApp.class);
+    DefaultProfileUtil.addDefaultProfile(app);
+    Environment env = app.run(args).getEnvironment();
+    logApplicationStartup(env);
+  }
 
-    private static void logApplicationStartup(Environment env) {
-        String protocol = Optional.ofNullable(env.getProperty("server.ssl.key-store")).map(key -> "https").orElse("http");
-        String applicationName = env.getProperty("spring.application.name");
-        String serverPort = env.getProperty("server.port");
-        String contextPath = Optional.ofNullable(env.getProperty("server.servlet.context-path"))
+  private static void logApplicationStartup(Environment env) {
+    String protocol =
+        Optional.ofNullable(env.getProperty("server.ssl.key-store"))
+            .map(key -> "https")
+            .orElse("http");
+    String applicationName = env.getProperty("spring.application.name");
+    String serverPort = env.getProperty("server.port");
+    String contextPath =
+        Optional.ofNullable(env.getProperty("server.servlet.context-path"))
             .filter(StringUtils::isNotBlank)
             .orElse("/");
-        String hostAddress = "localhost";
-        try {
-            hostAddress = InetAddress.getLocalHost().getHostAddress();
-        } catch (UnknownHostException e) {
-            log.warn("The host name could not be determined, using `localhost` as fallback");
-        }
-        log.info("----------------------------------------------------------");
-        log.info("\tApplication '{}' is running! Access URLs:", applicationName);
-        log.info("\tLocal: \t\t{}://localhost:{}{}", protocol, serverPort, contextPath);
-        log.info("\tExternal: \t{}://{}:{}{}", protocol, hostAddress, serverPort, contextPath);
-        log.info("\tProfile(s): \t{}", env.getActiveProfiles().length == 0 ? env.getDefaultProfiles() : env.getActiveProfiles());
+    String hostAddress = "localhost";
+    try {
+      hostAddress = InetAddress.getLocalHost().getHostAddress();
+    } catch (UnknownHostException e) {
+      log.warn("The host name could not be determined, using `localhost` as fallback");
     }
+    log.info("----------------------------------------------------------");
+    log.info("\tApplication '{}' is running! Access URLs:", applicationName);
+    log.info("\tLocal: \t\t{}://localhost:{}{}", protocol, serverPort, contextPath);
+    log.info("\tExternal: \t{}://{}:{}{}", protocol, hostAddress, serverPort, contextPath);
+    log.info(
+        "\tProfile(s): \t{}",
+        env.getActiveProfiles().length == 0 ? env.getDefaultProfiles() : env.getActiveProfiles());
+  }
 }

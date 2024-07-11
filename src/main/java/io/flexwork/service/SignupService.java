@@ -19,28 +19,27 @@ import reactor.core.publisher.Mono;
 @WithStateMachine
 public class SignupService {
 
-    private static final Logger log = LoggerFactory.getLogger(SignupService.class);
+  private static final Logger log = LoggerFactory.getLogger(SignupService.class);
 
-    @Autowired
-    private UserRepository userRepository;
+  @Autowired private UserRepository userRepository;
 
-    @Autowired
-    private StateMachineService<SignupStates, SignupEvents> stateMachineService;
+  @Autowired private StateMachineService<SignupStates, SignupEvents> stateMachineService;
 
-    public SignupService() {}
+  public SignupService() {}
 
-    public void signup(User user) {
-        log.debug("Start signup workflow {}", user);
-        Optional<User> existingUser = userRepository.findById(user.getId());
-        if (existingUser.isPresent()) {
-            throw new IllegalArgumentException("User " + user.getId() + " existed");
-        } else {
-            userRepository.save(user);
-            StateMachine<SignupStates, SignupEvents> stateMachine = stateMachineService.acquireStateMachine("signup-" + user.getId(), true);
+  public void signup(User user) {
+    log.debug("Start signup workflow {}", user);
+    Optional<User> existingUser = userRepository.findById(user.getId());
+    if (existingUser.isPresent()) {
+      throw new IllegalArgumentException("User " + user.getId() + " existed");
+    } else {
+      userRepository.save(user);
+      StateMachine<SignupStates, SignupEvents> stateMachine =
+          stateMachineService.acquireStateMachine("signup-" + user.getId(), true);
 
-            stateMachine
-                .sendEvent(Mono.just(MessageBuilder.withPayload(SignupEvents.NEW_SIGNUP).build()))
-                .doOnComplete(() -> log.info("Start signing up user {}", user));
-        }
+      stateMachine
+          .sendEvent(Mono.just(MessageBuilder.withPayload(SignupEvents.NEW_SIGNUP).build()))
+          .doOnComplete(() -> log.info("Start signing up user {}", user));
     }
+  }
 }

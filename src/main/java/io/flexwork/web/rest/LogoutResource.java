@@ -15,31 +15,42 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class LogoutResource {
 
-    private final ClientRegistration registration;
+  private final ClientRegistration registration;
 
-    public LogoutResource(ClientRegistrationRepository registrations) {
-        this.registration = registrations.findByRegistrationId("oidc");
-    }
+  public LogoutResource(ClientRegistrationRepository registrations) {
+    this.registration = registrations.findByRegistrationId("oidc");
+  }
 
-    /**
-     * {@code POST /api/logout} : logout the current user.
-     *
-     * @param request the {@link HttpServletRequest}.
-     * @param idToken the ID token.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and a body with a global logout
-     *     URL.
-     */
-    @PostMapping("/api/logout")
-    public ResponseEntity<?> logout(HttpServletRequest request, @AuthenticationPrincipal(expression = "idToken") OidcIdToken idToken) {
-        StringBuilder logoutUrl = new StringBuilder();
+  /**
+   * {@code POST /api/logout} : logout the current user.
+   *
+   * @param request the {@link HttpServletRequest}.
+   * @param idToken the ID token.
+   * @return the {@link ResponseEntity} with status {@code 200 (OK)} and a body with a global logout
+   *     URL.
+   */
+  @PostMapping("/api/logout")
+  public ResponseEntity<?> logout(
+      HttpServletRequest request,
+      @AuthenticationPrincipal(expression = "idToken") OidcIdToken idToken) {
+    StringBuilder logoutUrl = new StringBuilder();
 
-        logoutUrl.append(this.registration.getProviderDetails().getConfigurationMetadata().get("end_session_endpoint").toString());
+    logoutUrl.append(
+        this.registration
+            .getProviderDetails()
+            .getConfigurationMetadata()
+            .get("end_session_endpoint")
+            .toString());
 
-        String originUrl = request.getHeader(HttpHeaders.ORIGIN);
+    String originUrl = request.getHeader(HttpHeaders.ORIGIN);
 
-        logoutUrl.append("?id_token_hint=").append(idToken.getTokenValue()).append("&post_logout_redirect_uri=").append(originUrl);
+    logoutUrl
+        .append("?id_token_hint=")
+        .append(idToken.getTokenValue())
+        .append("&post_logout_redirect_uri=")
+        .append(originUrl);
 
-        request.getSession().invalidate();
-        return ResponseEntity.ok().body(Map.of("logoutUrl", logoutUrl.toString()));
-    }
+    request.getSession().invalidate();
+    return ResponseEntity.ok().body(Map.of("logoutUrl", logoutUrl.toString()));
+  }
 }
