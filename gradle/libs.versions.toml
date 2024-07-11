@@ -1,7 +1,5 @@
 [versions]
 jacoco = "0.8.12"
-checkstyle = "10.17.0"
-# jhipster-needle-gradle-dependency-catalog-version - JHipster will add additional versions for convention plugins heref
 
 [libraries]
 jhipster-framework = { module = "tech.jhipster:jhipster-framework", version = "8.6.0" }
