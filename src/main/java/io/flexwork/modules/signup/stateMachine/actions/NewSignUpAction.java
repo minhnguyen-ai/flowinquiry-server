@@ -1,5 +1,6 @@
 package io.flexwork.modules.signup.stateMachine.actions;
 
+import io.flexwork.domain.User;
 import io.flexwork.modules.signup.stateMachine.SignupEvents;
 import io.flexwork.modules.signup.stateMachine.SignupStates;
 import org.slf4j.Logger;
@@ -15,6 +16,6 @@ public class NewSignUpAction implements Action<SignupStates, SignupEvents> {
 
     @Override
     public void execute(StateContext<SignupStates, SignupEvents> context) {
-        log.debug("New signup action");
+        User user = (User) context.getExtendedState().getVariables().get("user");
     }
 }

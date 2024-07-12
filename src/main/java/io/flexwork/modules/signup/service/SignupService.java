@@ -44,9 +44,10 @@ public class SignupService {
             userRepository.save(user);
             StateMachine<SignupStates, SignupEvents> stateMachine = stateMachineService.acquireStateMachine("signup-" + user.getId(), true);
 
+            stateMachine.getExtendedState().getVariables().put("user", user);
             stateMachine
                 .sendEvent(Mono.just(MessageBuilder.withPayload(SignupEvents.NEW_SIGNUP).build()))
-                .doOnComplete(() -> log.info("Start signing up user {}", user));
+                .subscribe(signupStatesSignupEventsStateMachineEventResult -> log.debug("Success {}", stateMachine));
             stateMachinePersister.persist(stateMachine, "signup-" + user.getId());
         }
     }

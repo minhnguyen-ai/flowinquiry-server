@@ -25,8 +25,7 @@
         <appender-ref ref="ASYNC"/>
     </root>
     -->
-
-    <logger name="io.flexwork" level="INFO"/>
+    <logger name="io.flexwork" level="DEBUG"/>
 
     <logger name="angus.activation" level="WARN"/>
     <logger name="jakarta.activation" level="WARN"/>

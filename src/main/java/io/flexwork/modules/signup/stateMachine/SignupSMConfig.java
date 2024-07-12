@@ -14,7 +14,6 @@ import org.springframework.statemachine.config.builders.StateMachineStateConfigu
 import org.springframework.statemachine.config.builders.StateMachineTransitionConfigurer;
 import org.springframework.statemachine.data.jpa.JpaPersistingStateMachineInterceptor;
 import org.springframework.statemachine.data.jpa.JpaStateMachineRepository;
-import org.springframework.statemachine.guard.Guard;
 import org.springframework.statemachine.persist.DefaultStateMachinePersister;
 import org.springframework.statemachine.persist.StateMachineRuntimePersister;
 import org.springframework.statemachine.service.DefaultStateMachineService;
@@ -74,7 +73,6 @@ public class SignupSMConfig {
                 .source(SignupStates.NEW_SIGNUP_USER)
                 .target(SignupStates.SIGNING_UP)
                 .event(SignupEvents.NEW_SIGNUP)
-                .guard(signupGuard())
                 .action(newSignUpAction)
                 .and()
                 .withExternal()
@@ -87,14 +85,6 @@ public class SignupSMConfig {
                 .source(SignupStates.SIGNUP_VERIFICATION)
                 .target(SignupStates.SIGNUP_COMPLETED)
                 .event(SignupEvents.SIGNUP_SUCCESS);
-        }
-
-        @Bean
-        public Guard<SignupStates, SignupEvents> signupGuard() {
-            return context -> {
-                System.out.println("Signup Guard");
-                return true;
-            };
         }
     }
 
