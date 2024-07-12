@@ -42,7 +42,7 @@ spring:
       client:
         provider:
           oidc:
-            issuer-uri: http://localhost:9080/realms/jhipster
+            issuer-uri: http://localhost:9080/realms/flexwork
         registration:
           oidc:
             client-id: web_app
