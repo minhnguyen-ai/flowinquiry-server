@@ -1,4 +1,4 @@
-package io.flexwork.repository;
+package io.flexwork.security.repository;
 
 import io.flexwork.domain.User;
 import org.springframework.data.domain.Page;

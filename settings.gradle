@@ -13,4 +13,6 @@ pluginManagement {
 
 rootProject.name = "flexwork"
 include 'web-app'
+include 'libs:security'
+findProject(':libs:security')?.name = 'security'
 

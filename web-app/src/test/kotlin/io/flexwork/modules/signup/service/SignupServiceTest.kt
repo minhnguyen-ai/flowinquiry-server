@@ -1,7 +1,7 @@
 package io.flexwork.modules.signup.service
 
 import io.flexwork.IntegrationTest
-import io.flexwork.domain.User
+import io.flexwork.security.domain.User
 import io.flexwork.modules.signup.stateMachine.SignupEvents
 import io.flexwork.modules.signup.stateMachine.SignupStates
 import kotlin.test.Test
@@ -19,7 +19,7 @@ class SignupServiceTest {
 
   @Test
   fun signup() {
-    val user = User()
+    val user = io.flexwork.security.domain.User()
     user.id = "123"
     user.login = "hainguyenLogin"
     user.signupState = SignupStates.NEW_SIGNUP_USER

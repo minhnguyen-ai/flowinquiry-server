@@ -1,4 +1,4 @@
-package io.flexwork.repository;
+package io.flexwork.security.repository;
 
 import io.flexwork.domain.Authority;
 import org.springframework.data.jpa.repository.JpaRepository;
