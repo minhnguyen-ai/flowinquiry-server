@@ -1,4 +1,4 @@
-package io.flexwork.modules.signup.stateMachine;
+package io.flexwork.usermanagement.stateMachine;
 
 public enum SignupEvents {
     NEW_SIGNUP,

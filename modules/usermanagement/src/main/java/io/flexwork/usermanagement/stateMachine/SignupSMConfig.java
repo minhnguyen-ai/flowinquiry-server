@@ -1,7 +1,7 @@
-package io.flexwork.modules.signup.stateMachine;
+package io.flexwork.usermanagement.stateMachine;
 
-import io.flexwork.modules.signup.stateMachine.actions.NewSignUpAction;
-import io.flexwork.modules.signup.stateMachine.actions.NewSignupVerificationAction;
+import io.flexwork.usermanagement.stateMachine.actions.NewSignUpAction;
+import io.flexwork.usermanagement.stateMachine.actions.NewSignupVerificationAction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
