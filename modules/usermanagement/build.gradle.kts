@@ -22,9 +22,13 @@ dependencies {
     testCompileOnly("org.projectlombok:lombok:1.18.34")
     testAnnotationProcessor("org.projectlombok:lombok:1.18.34")
 
+    implementation("org.springframework.boot:spring-boot-starter-mail")
     implementation("org.springframework.boot:spring-boot-starter-web")
 
     testImplementation("org.jetbrains.kotlin:kotlin-test")
+
+    implementation("gg.jte:jte-spring-boot-starter-3:3.1.12")
+    implementation("gg.jte:jte:3.1.12")
 }
 
 tasks.test {
