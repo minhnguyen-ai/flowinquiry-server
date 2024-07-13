@@ -1,5 +1,8 @@
-package io.flexwork.usermanagement.stateMachine;
+package io.flexwork.usermanagement.stateMachine.config;
 
+import io.flexwork.statemachine.service.ExtDefaultStateMachineService;
+import io.flexwork.usermanagement.stateMachine.SignupEvents;
+import io.flexwork.usermanagement.stateMachine.SignupStates;
 import io.flexwork.usermanagement.stateMachine.actions.NewSignUpAction;
 import io.flexwork.usermanagement.stateMachine.actions.NewSignupVerificationAction;
 import java.util.EnumSet;
@@ -20,7 +23,7 @@ import org.springframework.statemachine.service.DefaultStateMachineService;
 import org.springframework.statemachine.service.StateMachineService;
 
 @Configuration
-public class SignupSMConfig {
+public class StateMachineSignupConfigurer {
 
   @Configuration
   public static class StateMachinePersisterConfig {
@@ -98,7 +101,7 @@ public class SignupSMConfig {
         StateMachineFactory<SignupStates, SignupEvents> stateMachineFactory,
         StateMachineRuntimePersister<SignupStates, SignupEvents, String>
             stateMachineRuntimePersister) {
-      return new DefaultStateMachineService<>(stateMachineFactory, stateMachineRuntimePersister);
+      return new ExtDefaultStateMachineService<>(new DefaultStateMachineService<>(stateMachineFactory, stateMachineRuntimePersister));
     }
   }
 }

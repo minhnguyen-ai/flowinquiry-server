@@ -1,0 +1,42 @@
+plugins {
+    id("java-library")
+    id("org.jetbrains.kotlin.jvm")
+    id("gg.jte.gradle")
+}
+
+version = "0.0.1-SNAPSHOT"
+
+
+dependencies {
+    api(project(":libs:security"))
+    api(project(":libs:statemachine"))
+    implementation(platform("org.springframework.boot:spring-boot-dependencies:3.3.1"))
+    testImplementation(platform("org.junit:junit-bom:5.10.0"))
+    testImplementation("org.junit.jupiter:junit-jupiter")
+
+    implementation("org.springframework.statemachine:spring-statemachine-starter:${springStateMachineVersion}")
+    implementation("org.springframework.statemachine:spring-statemachine-data-jpa:${springStateMachineVersion}")
+    testImplementation("org.springframework.statemachine:spring-statemachine-test:${springStateMachineVersion}")
+
+    compileOnly("org.projectlombok:lombok:${lombokVersion}")
+    annotationProcessor("org.projectlombok:lombok:${lombokVersion}")
+
+    testCompileOnly("org.projectlombok:lombok:${lombokVersion}")
+    testAnnotationProcessor("org.projectlombok:lombok:${lombokVersion}")
+
+    api("org.springframework.boot:spring-boot-starter-mail")
+    implementation("org.springframework.boot:spring-boot-starter-web")
+
+    testImplementation("org.jetbrains.kotlin:kotlin-test")
+
+    implementation("gg.jte:jte-spring-boot-starter-3:${jtePluginVersion}")
+    implementation("gg.jte:jte:${jtePluginVersion}")
+}
+
+jte {
+    precompile()
+}
+
+test {
+    useJUnitPlatform()
+}

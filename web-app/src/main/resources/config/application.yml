@@ -220,7 +220,3 @@ jhipster:
 # ===================================================================
 
 # application:
-
-gg:
-  jte:
-    developmentMode: true

@@ -42,6 +42,15 @@ spring:
     # Remove 'faker' if you do not want the sample data to be loaded automatically
     contexts: dev
     enabled: true
+  mail: # DEV custom
+    host: smtp.gmail.com
+    port: 587
+    username: "hainguyenrelax@gmail.com"
+    password: "krgn aepp wrbn cbxi"
+    properties:
+      mail.smtp:
+        auth: true
+        starttls.enable: true
   messages:
     cache-duration: PT1S # 1 second, see the ISO 8601 standard
   thymeleaf:
@@ -77,4 +86,5 @@ jhipster:
 # https://www.jhipster.tech/common-application-properties/
 # ===================================================================
 
-# application:
+# Custom setting for dev
+gg.jte.developmentMode: true # DEV custom

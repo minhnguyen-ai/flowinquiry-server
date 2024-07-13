@@ -36,9 +36,9 @@ public class SignupService {
   public void signup(User user) {
     log.debug("Start signup workflow {}", user);
     Optional<User> existingUser = userRepository.findById(user.getId());
-    if (existingUser.isPresent()) {
-      throw new IllegalArgumentException("User " + user.getId() + " existed");
-    } else {
+//    if (existingUser.isPresent()) {
+//      throw new IllegalArgumentException("User " + user.getId() + " existed");
+//    } else {
       userRepository.save(user);
       StateMachine<SignupStates, SignupEvents> stateMachine =
           stateMachineService.acquireStateMachine("signup-" + user.getId(), true);
@@ -48,8 +48,8 @@ public class SignupService {
           .sendEvent(Mono.just(MessageBuilder.withPayload(SignupEvents.NEW_SIGNUP).build()))
           .subscribe(
               signupStatesSignupEventsStateMachineEventResult ->
-                  log.debug("Success {}", stateMachine));
+                  log.debug("Result {}", signupStatesSignupEventsStateMachineEventResult.getResultType()));
       stateMachinePersister.persist(stateMachine, "signup-" + user.getId());
-    }
+//    }
   }
 }

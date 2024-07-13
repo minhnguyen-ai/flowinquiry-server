@@ -7,6 +7,7 @@ pluginManagement {
         id "org.liquibase.gradle" version "${liquibasePluginVersion}"
         id "org.jetbrains.kotlin.jvm" version "${kotlinPluginVersion}"
         id "com.diffplug.spotless" version "${spotlessPluginVersion}"
+        id "gg.jte.gradle" version "${jtePluginVersion}"
     }
 }
 
@@ -16,4 +17,6 @@ include 'libs:security'
 findProject(':libs:security')?.name = 'security'
 include 'modules:usermanagement'
 findProject(':libs:usermanagement')?.name = 'usermanagement'
+include 'libs:statemachine'
+findProject(':libs:statemachine')?.name = 'statemachine'
 

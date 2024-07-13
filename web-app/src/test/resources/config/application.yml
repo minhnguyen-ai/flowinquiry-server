@@ -81,3 +81,4 @@ management:
   health:
     mail:
       enabled: false
+gg.jte.developmentMode: true
