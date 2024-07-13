@@ -28,8 +28,13 @@ public class SignupWorkflowController {
     signupService.signup(user);
   }
 
-  @GetMapping("/signup")
-  public String hello() {
-    return "Hello";
+  @GetMapping("/verifyEmail")
+  public void verifyEmail(String userEmail) {
+
+  }
+
+  @GetMapping("/forgotPassword")
+  public void forgotPassword(String userEmail) {
+
   }
 }

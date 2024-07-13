@@ -2,15 +2,7 @@ package io.flexwork.security.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.flexwork.security.Constants;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -26,7 +18,7 @@ import java.util.Set;
 
 /** A user. */
 @Entity
-@Table(name = "jhi_user")
+@Table(name = "fw_user")
 @Data
 public class User extends AbstractAuditingEntity<String> implements Serializable {
 
@@ -74,7 +66,7 @@ public class User extends AbstractAuditingEntity<String> implements Serializable
     @JsonIgnore
     @ManyToMany
     @JoinTable(
-        name = "jhi_user_authority",
+        name = "fw_user_authority",
         joinColumns = { @JoinColumn(name = "user_id", referencedColumnName = "id") },
         inverseJoinColumns = { @JoinColumn(name = "authority_name", referencedColumnName = "name") }
     )

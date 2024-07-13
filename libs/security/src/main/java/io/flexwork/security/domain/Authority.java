@@ -17,7 +17,7 @@ import java.io.Serializable;
 
 /** A Authority. */
 @Entity
-@Table(name = "jhi_authority")
+@Table(name = "fw_authority")
 @JsonIgnoreProperties(value = {"new", "id"})
 @Data
 @SuppressWarnings("common-java:DuplicatedBlocks")

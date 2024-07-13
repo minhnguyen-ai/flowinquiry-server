@@ -13,7 +13,7 @@ dependencies {
     implementation("org.hibernate.validator:hibernate-validator")
     implementation("org.apache.commons:commons-lang3")
     implementation("com.github.ben-manes.caffeine:caffeine")
-    implementation platform("org.springframework.boot:spring-boot-dependencies:3.1.1")
+    implementation platform("org.springframework.boot:spring-boot-dependencies:3.3.1")
     api("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("com.fasterxml.jackson.module:jackson-module-jaxb-annotations")
     implementation("org.springframework.security:spring-security-data")

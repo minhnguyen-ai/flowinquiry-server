@@ -8,7 +8,7 @@ version = "0.0.1-SNAPSHOT"
 
 dependencies {
     api(project(":libs:security"))
-    implementation(platform("org.springframework.boot:spring-boot-dependencies:3.1.1"))
+    implementation(platform("org.springframework.boot:spring-boot-dependencies:3.3.1"))
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
 
@@ -22,7 +22,7 @@ dependencies {
     testCompileOnly("org.projectlombok:lombok:1.18.34")
     testAnnotationProcessor("org.projectlombok:lombok:1.18.34")
 
-    implementation("org.springframework.boot:spring-boot-starter-mail")
+    api("org.springframework.boot:spring-boot-starter-mail")
     implementation("org.springframework.boot:spring-boot-starter-web")
 
     testImplementation("org.jetbrains.kotlin:kotlin-test")
