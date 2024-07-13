@@ -53,7 +53,7 @@ class AccountResourceIT {
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
         .andExpect(jsonPath("$.login").value(TEST_USER_LOGIN))
-        .andExpect(jsonPath("$.email").value("john.doe@jhipster.com"))
+        .andExpect(jsonPath("$.email").value("hai.nguyen@flexwork.io"))
         .andExpect(jsonPath("$.authorities").value(AuthoritiesConstants.ADMIN));
   }
 

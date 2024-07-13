@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api")
-public class SignupWorkflowController {
+public class SignupResource {
 
   private static final Logger log = LoggerFactory.getLogger(UserService.class);
 
   private SignupService signupService;
 
-  public SignupWorkflowController(SignupService signupService) {
+  public SignupResource(SignupService signupService) {
     this.signupService = signupService;
   }
 

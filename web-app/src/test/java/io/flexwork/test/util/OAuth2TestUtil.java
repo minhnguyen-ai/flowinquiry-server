@@ -34,7 +34,7 @@ public class OAuth2TestUtil {
     Map<String, Object> claims = new HashMap<>();
     claims.put("sub", TEST_USER_LOGIN);
     claims.put("preferred_username", TEST_USER_LOGIN);
-    claims.put("email", "john.doe@jhipster.com");
+    claims.put("email", "hai.nguyen@flexwork.io");
     claims.put("roles", Collections.singletonList(AuthoritiesConstants.ADMIN));
 
     return authenticationToken(claims);
@@ -50,7 +50,7 @@ public class OAuth2TestUtil {
       claims.put("preferred_username", "jane");
     }
     if (!claims.containsKey("email")) {
-      claims.put("email", "jane.doe@jhipster.com");
+      claims.put("email", "jane.doe@flexwork.io");
     }
     if (claims.containsKey("auth_time")) {
       issuedAt = (Instant) claims.get("auth_time");
