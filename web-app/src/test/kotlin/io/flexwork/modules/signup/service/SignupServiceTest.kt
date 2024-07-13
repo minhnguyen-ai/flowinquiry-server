@@ -22,7 +22,7 @@ class SignupServiceTest {
     val user = io.flexwork.security.domain.User()
     user.id = "123"
     user.login = "hainguyenLogin"
-    user.signupState = SignupStates.NEW_SIGNUP_USER
+    user.signupState = "Active"
     user.email = "test@test.com"
     signupService.signup(user)
 

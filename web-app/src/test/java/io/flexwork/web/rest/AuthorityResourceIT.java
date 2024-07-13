@@ -1,6 +1,6 @@
 package io.flexwork.web.rest;
 
-import static io.flexwork.domain.AuthorityAsserts.*;
+import static io.flexwork.security.domain.AuthorityAsserts.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -9,8 +9,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.flexwork.IntegrationTest;
-import io.flexwork.domain.Authority;
-import io.flexwork.repository.AuthorityRepository;
+import io.flexwork.security.domain.Authority;
+import io.flexwork.security.repository.AuthorityRepository;
 import jakarta.persistence.EntityManager;
 import java.util.UUID;
 import org.junit.jupiter.api.AfterEach;

@@ -1,4 +1,6 @@
-package io.flexwork.domain;
+package io.flexwork.security.domain;
+
+import io.flexwork.security.domain.Authority;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

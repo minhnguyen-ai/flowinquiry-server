@@ -3,11 +3,12 @@ package io.flexwork.service;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.flexwork.IntegrationTest;
-import io.flexwork.config.Constants;
-import io.flexwork.domain.User;
-import io.flexwork.repository.UserRepository;
+import io.flexwork.security.Constants;
 import io.flexwork.security.AuthoritiesConstants;
-import io.flexwork.service.dto.AdminUserDTO;
+import io.flexwork.security.domain.User;
+import io.flexwork.security.repository.UserRepository;
+import io.flexwork.security.service.UserService;
+import io.flexwork.security.service.dto.AdminUserDTO;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;

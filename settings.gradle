@@ -1,7 +1,6 @@
 
 pluginManagement {
     repositories {
-        // jhipster-needle-gradle-plugin-management-repositories - JHipster will add additional entries here
     }
     plugins {
         id 'com.gorylenko.gradle-git-properties' version "${gitPropertiesPluginVersion}"

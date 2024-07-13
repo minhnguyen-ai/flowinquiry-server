@@ -83,6 +83,7 @@ configurations {
 }
 
 dependencies {
+    api project(":libs:security")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-hppc")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
     implementation("com.github.ben-manes.caffeine:caffeine")
@@ -101,6 +102,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-loader-tools")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-aop")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-logging")
     implementation("org.springframework.boot:spring-boot-starter-mail")
     implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
@@ -119,7 +121,6 @@ dependencies {
     testImplementation("org.springframework.security:spring-security-test")
     implementation(libs.jhipster.framework)
     implementation(libs.springdoc.openapi.starter.webmvc.api)
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.security:spring-security-data")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-hibernate6")
     implementation("org.hibernate.orm:hibernate-core")

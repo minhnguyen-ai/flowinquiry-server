@@ -4,10 +4,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.flexwork.IntegrationTest;
-import io.flexwork.domain.User;
-import io.flexwork.repository.UserRepository;
 import io.flexwork.security.AuthoritiesConstants;
-import io.flexwork.service.mapper.UserMapper;
+import io.flexwork.security.domain.User;
+import io.flexwork.security.repository.UserRepository;
+import io.flexwork.security.service.mapper.UserMapper;
 import jakarta.persistence.EntityManager;
 import java.util.*;
 import java.util.function.Consumer;

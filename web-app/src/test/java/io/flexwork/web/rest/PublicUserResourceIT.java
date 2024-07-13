@@ -4,9 +4,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import io.flexwork.IntegrationTest;
-import io.flexwork.domain.User;
-import io.flexwork.repository.UserRepository;
 import io.flexwork.security.AuthoritiesConstants;
+import io.flexwork.security.domain.User;
+import io.flexwork.security.repository.UserRepository;
 import jakarta.persistence.EntityManager;
 import java.util.Set;
 import org.junit.jupiter.api.AfterEach;

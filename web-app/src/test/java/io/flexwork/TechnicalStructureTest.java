@@ -8,6 +8,7 @@ import com.tngtech.archunit.core.importer.ImportOption.DoNotIncludeTests;
 import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.lang.ArchRule;
+import io.flexwork.security.Constants;
 
 @AnalyzeClasses(packagesOf = FlexworkApp.class, importOptions = DoNotIncludeTests.class)
 class TechnicalStructureTest {
@@ -45,6 +46,6 @@ class TechnicalStructureTest {
           .ignoreDependency(
               alwaysTrue(),
               belongToAnyOf(
-                  io.flexwork.config.Constants.class,
+                  Constants.class,
                   io.flexwork.config.ApplicationProperties.class));
 }

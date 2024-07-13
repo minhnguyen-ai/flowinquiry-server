@@ -1,4 +1,4 @@
-package io.flexwork.config;
+package io.flexwork.security;
 
 /** Application constants. */
 public final class Constants {

@@ -1,6 +1,7 @@
 package io.flexwork.security.repository;
 
-import io.flexwork.domain.User;
+
+import io.flexwork.security.domain.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;

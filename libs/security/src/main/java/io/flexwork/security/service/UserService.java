@@ -1,13 +1,13 @@
-package io.flexwork.service;
+package io.flexwork.security.service;
 
-import io.flexwork.config.Constants;
-import io.flexwork.domain.Authority;
-import io.flexwork.domain.User;
-import io.flexwork.repository.AuthorityRepository;
-import io.flexwork.repository.UserRepository;
+import io.flexwork.security.Constants;
 import io.flexwork.security.SecurityUtils;
-import io.flexwork.service.dto.AdminUserDTO;
-import io.flexwork.service.dto.UserDTO;
+import io.flexwork.security.domain.Authority;
+import io.flexwork.security.domain.User;
+import io.flexwork.security.repository.AuthorityRepository;
+import io.flexwork.security.repository.UserRepository;
+import io.flexwork.security.service.dto.AdminUserDTO;
+import io.flexwork.security.service.dto.UserDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;

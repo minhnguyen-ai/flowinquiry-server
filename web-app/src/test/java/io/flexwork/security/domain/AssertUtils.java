@@ -1,4 +1,4 @@
-package io.flexwork.domain;
+package io.flexwork.security.domain;
 
 import java.math.BigDecimal;
 import java.time.ZoneOffset;

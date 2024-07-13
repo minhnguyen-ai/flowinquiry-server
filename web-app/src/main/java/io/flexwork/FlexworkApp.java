@@ -22,7 +22,7 @@ import java.util.Optional;
 
 @SpringBootApplication
 @EnableConfigurationProperties({LiquibaseProperties.class, ApplicationProperties.class})
-@EntityScan("io.flexwork.domain")
+@EntityScan("io.flexwork")
 public class FlexworkApp {
 
   private static final Logger log = LoggerFactory.getLogger(FlexworkApp.class);

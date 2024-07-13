@@ -1,7 +1,7 @@
 package io.flexwork.web.rest;
 
-import io.flexwork.service.UserService;
-import io.flexwork.service.dto.AdminUserDTO;
+import io.flexwork.security.service.UserService;
+import io.flexwork.security.service.dto.AdminUserDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

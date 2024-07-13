@@ -2,16 +2,18 @@ package io.flexwork.service.mapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.flexwork.domain.Authority;
-import io.flexwork.domain.User;
 import io.flexwork.security.AuthoritiesConstants;
-import io.flexwork.service.dto.AdminUserDTO;
-import io.flexwork.service.dto.UserDTO;
+import io.flexwork.security.domain.Authority;
+import io.flexwork.security.domain.User;
+import io.flexwork.security.service.dto.AdminUserDTO;
+import io.flexwork.security.service.dto.UserDTO;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import io.flexwork.security.service.mapper.UserMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

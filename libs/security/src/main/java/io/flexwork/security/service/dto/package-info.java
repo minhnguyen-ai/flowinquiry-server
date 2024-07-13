@@ -1,2 +1,2 @@
 /** Data transfer objects for rest mapping. */
-package io.flexwork.service.dto;
+package io.flexwork.security.service.dto;

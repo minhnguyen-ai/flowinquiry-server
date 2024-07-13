@@ -1,7 +1,7 @@
 package io.flexwork.web.rest;
 
-import io.flexwork.service.UserService;
-import io.flexwork.service.dto.UserDTO;
+import io.flexwork.security.service.UserService;
+import io.flexwork.security.service.dto.UserDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;

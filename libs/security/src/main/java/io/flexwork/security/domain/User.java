@@ -1,8 +1,7 @@
 package io.flexwork.security.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import io.flexwork.config.Constants;
-import io.flexwork.modules.signup.stateMachine.SignupStates;
+import io.flexwork.security.Constants;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -56,9 +55,9 @@ public class User extends AbstractAuditingEntity<String> implements Serializable
     private String email;
 
     @NotNull
-    @Enumerated(EnumType.STRING)
+//    @Enumerated(EnumType.STRING)
     @Column(length = 20, name = "state", unique = true)
-    private SignupStates signupState = SignupStates.ACTIVE;
+    private String signupState = "Active";
 
     @NotNull
     @Column(nullable = false)

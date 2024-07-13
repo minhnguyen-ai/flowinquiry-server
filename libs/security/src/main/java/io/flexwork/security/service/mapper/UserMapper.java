@@ -1,9 +1,9 @@
-package io.flexwork.service.mapper;
+package io.flexwork.security.service.mapper;
 
-import io.flexwork.domain.Authority;
-import io.flexwork.domain.User;
-import io.flexwork.service.dto.AdminUserDTO;
-import io.flexwork.service.dto.UserDTO;
+import io.flexwork.security.domain.Authority;
+import io.flexwork.security.domain.User;
+import io.flexwork.security.service.dto.UserDTO;
+import io.flexwork.security.service.dto.AdminUserDTO;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
