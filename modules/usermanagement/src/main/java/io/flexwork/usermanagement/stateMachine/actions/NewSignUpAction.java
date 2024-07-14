@@ -1,7 +1,5 @@
 package io.flexwork.usermanagement.stateMachine.actions;
 
-import gg.jte.TemplateEngine;
-import gg.jte.output.StringOutput;
 import io.flexwork.security.domain.User;
 import io.flexwork.usermanagement.stateMachine.SignupEvents;
 import io.flexwork.usermanagement.stateMachine.SignupStates;
@@ -12,6 +10,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.statemachine.StateContext;
 import org.springframework.statemachine.action.Action;
 import org.springframework.stereotype.Component;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring6.SpringTemplateEngine;
 
 @Component
 public class NewSignUpAction implements Action<SignupStates, SignupEvents> {
@@ -20,9 +20,9 @@ public class NewSignUpAction implements Action<SignupStates, SignupEvents> {
 
     private JavaMailSender mailSender;
 
-    private TemplateEngine templateEngine;
+    private SpringTemplateEngine templateEngine;
 
-    public NewSignUpAction(JavaMailSender mailSender, TemplateEngine templateEngine) {
+    public NewSignUpAction(JavaMailSender mailSender, SpringTemplateEngine templateEngine) {
         this.mailSender = mailSender;
         this.templateEngine = templateEngine;
     }
@@ -36,9 +36,10 @@ public class NewSignUpAction implements Action<SignupStates, SignupEvents> {
         message.setTo("haiphucnguyen@gmail.com");
         message.setSubject("Sign up");
         message.setFrom("noreply@flexwork.com");
-        StringOutput output = new StringOutput();
-        templateEngine.render("email_verification.jte", user, new StringOutput());
-        message.setText(output.toString());
+        Context templateContext = new Context();
+        templateContext.setVariable("user", user);
+        String body = templateEngine.process("email_verification.html", templateContext);
+        message.setText(body);
         mailSender.send(message);
     }
 }

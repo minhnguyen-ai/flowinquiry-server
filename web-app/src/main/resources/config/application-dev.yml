@@ -86,5 +86,3 @@ jhipster:
 # https://www.jhipster.tech/common-application-properties/
 # ===================================================================
 
-# Custom setting for dev
-gg.jte.developmentMode: true # DEV custom
