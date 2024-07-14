@@ -1,11 +1,10 @@
 package io.flexwork.usermanagement.stateMachine.config;
 
-import io.flexwork.statemachine.service.ExtDefaultStateMachineService;
+import io.flexwork.statemachine.support.ErrorHandlingAction;
 import io.flexwork.usermanagement.stateMachine.SignupEvents;
 import io.flexwork.usermanagement.stateMachine.SignupStates;
 import io.flexwork.usermanagement.stateMachine.actions.NewSignUpAction;
 import io.flexwork.usermanagement.stateMachine.actions.NewSignupVerificationAction;
-import java.util.EnumSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +20,8 @@ import org.springframework.statemachine.persist.DefaultStateMachinePersister;
 import org.springframework.statemachine.persist.StateMachineRuntimePersister;
 import org.springframework.statemachine.service.DefaultStateMachineService;
 import org.springframework.statemachine.service.StateMachineService;
+
+import java.util.EnumSet;
 
 @Configuration
 public class StateMachineSignupConfigurer {
@@ -78,7 +79,7 @@ public class StateMachineSignupConfigurer {
           .source(SignupStates.NEW_SIGNUP_USER)
           .target(SignupStates.SIGNING_UP)
           .event(SignupEvents.NEW_SIGNUP)
-          .action(newSignUpAction)
+          .action(newSignUpAction, new ErrorHandlingAction<>())
           .and()
           .withExternal()
           .source(SignupStates.SIGNING_UP)
@@ -101,7 +102,7 @@ public class StateMachineSignupConfigurer {
         StateMachineFactory<SignupStates, SignupEvents> stateMachineFactory,
         StateMachineRuntimePersister<SignupStates, SignupEvents, String>
             stateMachineRuntimePersister) {
-      return new ExtDefaultStateMachineService<>(new DefaultStateMachineService<>(stateMachineFactory, stateMachineRuntimePersister));
+      return new DefaultStateMachineService<>(stateMachineFactory, stateMachineRuntimePersister);
     }
   }
 }
