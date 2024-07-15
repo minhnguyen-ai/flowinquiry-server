@@ -1,25 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <databaseChangeLog
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
-                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
-    <changeSet id="00003" author="flexapp">
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet id="00000000000003" author="flexapp">
         <comment>Tenant table changelog</comment>
         <createTable tableName="fw_tenant">
-            <column name="id"  type="int">
+            <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="name" type="varchar(255)">
-                <constraints nullable="false" />
+                <constraints nullable="false"/>
             </column>
             <column name="description" type="varchar(4000)"/>
             <column name="logo_url" type="varchar(255)"/>
             <column name="realm" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="subdomain" type="varchar(255)">
+            <column name="domain" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
             <column name="created_by" type="varchar(50)">
@@ -29,8 +27,5 @@
             <column name="last_modified_by" type="varchar(50)"/>
             <column name="last_modified_date" type="timestamp"/>
         </createTable>
-        <addAutoIncrement columnDataType="int"
-                          columnName="id"
-                          tableName="fw_tenant"/>
     </changeSet>
 </databaseChangeLog>
