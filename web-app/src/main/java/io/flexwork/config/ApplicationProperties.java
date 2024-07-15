@@ -3,7 +3,6 @@ package io.flexwork.config;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import tech.jhipster.config.JHipsterProperties;
 
 /**
  * Properties specific to Flexwork App.

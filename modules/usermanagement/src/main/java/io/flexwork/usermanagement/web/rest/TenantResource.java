@@ -13,7 +13,5 @@ public class TenantResource {
     private static final Logger log = LoggerFactory.getLogger(TenantResource.class);
 
     @PostMapping
-    public void createTenant() {
-
-    }
+    public void createTenant() {}
 }
