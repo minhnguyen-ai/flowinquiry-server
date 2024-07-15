@@ -5,14 +5,14 @@ services:
     extends:
       file: ./postgresql.yml
       service: postgresql
-  postgresql-admin:
-    extends:
-      file: ./postgresql-pgadmin.yml
-      service: postgresql-admin
-  keycloak:
-    extends:
-      file: ./keycloak.yml
-      service: keycloak
+#  postgresql-admin:
+#    extends:
+#      file: ./postgresql-pgadmin.yml
+#      service: postgresql-admin
+#  keycloak:
+#    extends:
+#      file: ./keycloak.yml
+#      service: keycloak
 networks:
   theflexwork_nw:
     driver: bridge

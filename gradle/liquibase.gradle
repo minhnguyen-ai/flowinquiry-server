@@ -9,7 +9,6 @@ dependencies {
   liquibaseRuntime "info.picocli:picocli:4.7.6"
   liquibaseRuntime "org.postgresql:postgresql"
   liquibaseRuntime "org.liquibase.ext:liquibase-hibernate6:${dependencyManagement.importedProperties['liquibase.version']}"
-  // jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
 }
 
 project.ext.diffChangelogFile = "src/main/resources/config/liquibase/changelog/" + new Date().format("yyyyMMddHHmmss") + "_changelog.xml"

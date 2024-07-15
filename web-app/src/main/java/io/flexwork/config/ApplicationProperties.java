@@ -1,6 +1,9 @@
 package io.flexwork.config;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import tech.jhipster.config.JHipsterProperties;
 
 /**
  * Properties specific to Flexwork App.
@@ -9,29 +12,26 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * tech.jhipster.config.JHipsterProperties} for a good example.
  */
 @ConfigurationProperties(prefix = "application", ignoreUnknownFields = false)
+@Getter
 public class ApplicationProperties {
 
     private final Liquibase liquibase = new Liquibase();
 
-    // jhipster-needle-application-properties-property
+    private final Keycloak keycloak = new Keycloak();
 
-    public Liquibase getLiquibase() {
-        return liquibase;
-    }
-
-    // jhipster-needle-application-properties-property-getter
-
+    @Getter
+    @Setter
     public static class Liquibase {
-
         private Boolean asyncStart;
-
-        public Boolean getAsyncStart() {
-            return asyncStart;
-        }
-
-        public void setAsyncStart(Boolean asyncStart) {
-            this.asyncStart = asyncStart;
-        }
     }
-    // jhipster-needle-application-properties-property-class
+
+    @Getter
+    @Setter
+    public static class Keycloak {
+        private String realm;
+        private String clientId;
+        private String serverUrl;
+        private String username;
+        private String password;
+    }
 }

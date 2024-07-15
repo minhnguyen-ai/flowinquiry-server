@@ -20,7 +20,7 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 /** Utility class for Spring Security. */
 public final class SecurityUtils {
 
-    public static final String CLAIMS_NAMESPACE = "https://www.jhipster.tech/";
+    public static final String CLAIMS_NAMESPACE = "https://www.flexwork.io/";
 
     private SecurityUtils() {}
 

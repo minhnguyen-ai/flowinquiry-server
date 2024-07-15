@@ -3,8 +3,8 @@ name: flexwork
 services:
   postgresql-admin:
     image: dpage/pgadmin4:8.9
-    # volumes:
-    #   - ~/volumes/jhipster/flexwork/postgresql/:/var/lib/postgresql/data/
+    volumes:
+      - ./volumes/pgadmin/:/var/lib/postgresql/data/
     environment:
       - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
       - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
