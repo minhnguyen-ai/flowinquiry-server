@@ -19,7 +19,5 @@ public class TenantService {
     }
 
     @Transactional
-    public void registerNewTenant(Tenant tenant) {
-        
-    }
+    public void registerNewTenant(Tenant tenant) {}
 }

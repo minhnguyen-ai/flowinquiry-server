@@ -6,9 +6,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
-
 import java.io.Serializable;
+import lombok.Data;
 
 @Entity
 @Table(name = "fw_tenant")
@@ -17,8 +16,7 @@ public class Tenant extends AbstractAuditingEntity<Long> implements Serializable
     @Id private Long id;
 
     @Size(max = 255)
-    @NotNull
-    @Column
+    @NotNull @Column
     private String name;
 
     @Size(max = 4000)
@@ -30,9 +28,6 @@ public class Tenant extends AbstractAuditingEntity<Long> implements Serializable
     private String logoUrl;
 
     @Size(max = 255)
-    @NotNull
-    @Column
+    @NotNull @Column
     private String domain;
-
-
 }
