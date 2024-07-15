@@ -1,5 +1,6 @@
 plugins {
-    id 'java-library'
+    id("java-library")
+    id("flexwork.code-conventions")
 }
 
 group = 'io.flexwork'
@@ -20,6 +21,9 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
     implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
+
+    implementation("org.keycloak:keycloak-admin-client:${keycloakVersion}")
+
 
     annotationProcessor("org.mapstruct:mapstruct-processor:${mapstructVersion}")
     implementation("org.mapstruct:mapstruct:${mapstructVersion}")

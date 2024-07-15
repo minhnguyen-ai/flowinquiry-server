@@ -10,41 +10,41 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api")
 public class AuthInfoResource {
 
-  @Value("${spring.security.oauth2.client.provider.oidc.issuer-uri:}")
-  private String issuer;
-
-  @Value("${spring.security.oauth2.client.registration.oidc.client-id:}")
-  private String clientId;
-
-  @GetMapping("/auth-info")
-  public AuthInfoVM getAuthInfo() {
-    return new AuthInfoVM(issuer, clientId);
-  }
-
-  class AuthInfoVM {
-
+    @Value("${spring.security.oauth2.client.provider.oidc.issuer-uri:}")
     private String issuer;
+
+    @Value("${spring.security.oauth2.client.registration.oidc.client-id:}")
     private String clientId;
 
-    AuthInfoVM(String issuer, String clientId) {
-      this.issuer = issuer;
-      this.clientId = clientId;
+    @GetMapping("/auth-info")
+    public AuthInfoVM getAuthInfo() {
+        return new AuthInfoVM(issuer, clientId);
     }
 
-    public String getIssuer() {
-      return this.issuer;
-    }
+    class AuthInfoVM {
 
-    public void setIssuer(String issuer) {
-      this.issuer = issuer;
-    }
+        private String issuer;
+        private String clientId;
 
-    public String getClientId() {
-      return clientId;
-    }
+        AuthInfoVM(String issuer, String clientId) {
+            this.issuer = issuer;
+            this.clientId = clientId;
+        }
 
-    public void setClientId(String clientId) {
-      this.clientId = clientId;
+        public String getIssuer() {
+            return this.issuer;
+        }
+
+        public void setIssuer(String issuer) {
+            this.issuer = issuer;
+        }
+
+        public String getClientId() {
+            return clientId;
+        }
+
+        public void setClientId(String clientId) {
+            this.clientId = clientId;
+        }
     }
-  }
 }

@@ -1,0 +1,17 @@
+plugins {
+    id "com.diffplug.spotless"
+}
+
+spotless {
+    java {
+        // Use the default importOrder configuration
+        importOrder()
+
+        googleJavaFormat().aosp()
+        formatAnnotations()
+    }
+
+    kotlin {
+        ktfmt()
+    }
+}

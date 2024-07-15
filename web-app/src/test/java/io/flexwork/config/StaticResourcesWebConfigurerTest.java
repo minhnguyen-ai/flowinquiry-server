@@ -17,64 +17,65 @@ import tech.jhipster.config.JHipsterProperties;
 
 class StaticResourcesWebConfigurerTest {
 
-  public static final int MAX_AGE_TEST = 5;
-  public StaticResourcesWebConfiguration staticResourcesWebConfiguration;
-  private ResourceHandlerRegistry resourceHandlerRegistry;
-  private MockServletContext servletContext;
-  private WebApplicationContext applicationContext;
-  private JHipsterProperties props;
+    public static final int MAX_AGE_TEST = 5;
+    public StaticResourcesWebConfiguration staticResourcesWebConfiguration;
+    private ResourceHandlerRegistry resourceHandlerRegistry;
+    private MockServletContext servletContext;
+    private WebApplicationContext applicationContext;
+    private JHipsterProperties props;
 
-  @BeforeEach
-  void setUp() {
-    servletContext = spy(new MockServletContext());
-    applicationContext = mock(WebApplicationContext.class);
-    resourceHandlerRegistry = spy(new ResourceHandlerRegistry(applicationContext, servletContext));
-    props = new JHipsterProperties();
-    staticResourcesWebConfiguration = spy(new StaticResourcesWebConfiguration(props));
-  }
-
-  @Test
-  void shouldAppendResourceHandlerAndInitializeIt() {
-    staticResourcesWebConfiguration.addResourceHandlers(resourceHandlerRegistry);
-
-    verify(resourceHandlerRegistry, times(1)).addResourceHandler(RESOURCE_PATHS);
-    verify(staticResourcesWebConfiguration, times(1))
-        .initializeResourceHandler(any(ResourceHandlerRegistration.class));
-    for (String testingPath : RESOURCE_PATHS) {
-      assertThat(resourceHandlerRegistry.hasMappingForPattern(testingPath)).isTrue();
+    @BeforeEach
+    void setUp() {
+        servletContext = spy(new MockServletContext());
+        applicationContext = mock(WebApplicationContext.class);
+        resourceHandlerRegistry =
+                spy(new ResourceHandlerRegistry(applicationContext, servletContext));
+        props = new JHipsterProperties();
+        staticResourcesWebConfiguration = spy(new StaticResourcesWebConfiguration(props));
     }
-  }
 
-  @Test
-  void shouldInitializeResourceHandlerWithCacheControlAndLocations() {
-    CacheControl ccExpected = CacheControl.maxAge(5, TimeUnit.DAYS).cachePublic();
-    when(staticResourcesWebConfiguration.getCacheControl()).thenReturn(ccExpected);
-    ResourceHandlerRegistration resourceHandlerRegistration =
-        spy(new ResourceHandlerRegistration(RESOURCE_PATHS));
+    @Test
+    void shouldAppendResourceHandlerAndInitializeIt() {
+        staticResourcesWebConfiguration.addResourceHandlers(resourceHandlerRegistry);
 
-    staticResourcesWebConfiguration.initializeResourceHandler(resourceHandlerRegistration);
+        verify(resourceHandlerRegistry, times(1)).addResourceHandler(RESOURCE_PATHS);
+        verify(staticResourcesWebConfiguration, times(1))
+                .initializeResourceHandler(any(ResourceHandlerRegistration.class));
+        for (String testingPath : RESOURCE_PATHS) {
+            assertThat(resourceHandlerRegistry.hasMappingForPattern(testingPath)).isTrue();
+        }
+    }
 
-    verify(staticResourcesWebConfiguration, times(1)).getCacheControl();
-    verify(resourceHandlerRegistration, times(1)).setCacheControl(ccExpected);
-    verify(resourceHandlerRegistration, times(1)).addResourceLocations(RESOURCE_LOCATIONS);
-  }
+    @Test
+    void shouldInitializeResourceHandlerWithCacheControlAndLocations() {
+        CacheControl ccExpected = CacheControl.maxAge(5, TimeUnit.DAYS).cachePublic();
+        when(staticResourcesWebConfiguration.getCacheControl()).thenReturn(ccExpected);
+        ResourceHandlerRegistration resourceHandlerRegistration =
+                spy(new ResourceHandlerRegistration(RESOURCE_PATHS));
 
-  @Test
-  void shouldCreateCacheControlBasedOnJhipsterDefaultProperties() {
-    CacheControl cacheExpected =
-        CacheControl.maxAge(JHipsterDefaults.Http.Cache.timeToLiveInDays, TimeUnit.DAYS)
-            .cachePublic();
-    assertThat(staticResourcesWebConfiguration.getCacheControl())
-        .extracting(CacheControl::getHeaderValue)
-        .isEqualTo(cacheExpected.getHeaderValue());
-  }
+        staticResourcesWebConfiguration.initializeResourceHandler(resourceHandlerRegistration);
 
-  @Test
-  void shouldCreateCacheControlWithSpecificConfigurationInProperties() {
-    props.getHttp().getCache().setTimeToLiveInDays(MAX_AGE_TEST);
-    CacheControl cacheExpected = CacheControl.maxAge(MAX_AGE_TEST, TimeUnit.DAYS).cachePublic();
-    assertThat(staticResourcesWebConfiguration.getCacheControl())
-        .extracting(CacheControl::getHeaderValue)
-        .isEqualTo(cacheExpected.getHeaderValue());
-  }
+        verify(staticResourcesWebConfiguration, times(1)).getCacheControl();
+        verify(resourceHandlerRegistration, times(1)).setCacheControl(ccExpected);
+        verify(resourceHandlerRegistration, times(1)).addResourceLocations(RESOURCE_LOCATIONS);
+    }
+
+    @Test
+    void shouldCreateCacheControlBasedOnJhipsterDefaultProperties() {
+        CacheControl cacheExpected =
+                CacheControl.maxAge(JHipsterDefaults.Http.Cache.timeToLiveInDays, TimeUnit.DAYS)
+                        .cachePublic();
+        assertThat(staticResourcesWebConfiguration.getCacheControl())
+                .extracting(CacheControl::getHeaderValue)
+                .isEqualTo(cacheExpected.getHeaderValue());
+    }
+
+    @Test
+    void shouldCreateCacheControlWithSpecificConfigurationInProperties() {
+        props.getHttp().getCache().setTimeToLiveInDays(MAX_AGE_TEST);
+        CacheControl cacheExpected = CacheControl.maxAge(MAX_AGE_TEST, TimeUnit.DAYS).cachePublic();
+        assertThat(staticResourcesWebConfiguration.getCacheControl())
+                .extracting(CacheControl::getHeaderValue)
+                .isEqualTo(cacheExpected.getHeaderValue());
+    }
 }

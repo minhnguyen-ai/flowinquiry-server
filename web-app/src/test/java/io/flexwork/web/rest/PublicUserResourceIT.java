@@ -25,42 +25,44 @@ import org.springframework.transaction.annotation.Transactional;
 @IntegrationTest
 class PublicUserResourceIT {
 
-  private static final String DEFAULT_LOGIN = "johndoe";
+    private static final String DEFAULT_LOGIN = "johndoe";
 
-  @Autowired private UserRepository userRepository;
+    @Autowired private UserRepository userRepository;
 
-  @Autowired private EntityManager em;
+    @Autowired private EntityManager em;
 
-  @Autowired private MockMvc restUserMockMvc;
+    @Autowired private MockMvc restUserMockMvc;
 
-  private User user;
+    private User user;
 
-  @BeforeEach
-  public void initTest() {
-    user = UserResourceIT.initTestUser(em);
-  }
+    @BeforeEach
+    public void initTest() {
+        user = UserResourceIT.initTestUser(em);
+    }
 
-  @AfterEach
-  public void cleanupAndCheck() {
-    userRepository.deleteAll();
-  }
+    @AfterEach
+    public void cleanupAndCheck() {
+        userRepository.deleteAll();
+    }
 
-  @Test
-  @Transactional
-  void getAllPublicUsers() throws Exception {
-    // Initialize the database
-    userRepository.saveAndFlush(user);
+    @Test
+    @Transactional
+    void getAllPublicUsers() throws Exception {
+        // Initialize the database
+        userRepository.saveAndFlush(user);
 
-    // Get all the users
-    restUserMockMvc
-        .perform(get("/api/users?sort=id,desc").accept(MediaType.APPLICATION_JSON))
-        .andExpect(status().isOk())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-        .andExpect(jsonPath("$.[?(@.id == '%s')].login", user.getId()).value(user.getLogin()))
-        .andExpect(
-            jsonPath("$.[?(@.id == '%s')].keys()", user.getId()).value(Set.of("id", "login")))
-        .andExpect(jsonPath("$.[*].email").doesNotHaveJsonPath())
-        .andExpect(jsonPath("$.[*].imageUrl").doesNotHaveJsonPath())
-        .andExpect(jsonPath("$.[*].langKey").doesNotHaveJsonPath());
-  }
+        // Get all the users
+        restUserMockMvc
+                .perform(get("/api/users?sort=id,desc").accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(
+                        jsonPath("$.[?(@.id == '%s')].login", user.getId()).value(user.getLogin()))
+                .andExpect(
+                        jsonPath("$.[?(@.id == '%s')].keys()", user.getId())
+                                .value(Set.of("id", "login")))
+                .andExpect(jsonPath("$.[*].email").doesNotHaveJsonPath())
+                .andExpect(jsonPath("$.[*].imageUrl").doesNotHaveJsonPath())
+                .andExpect(jsonPath("$.[*].langKey").doesNotHaveJsonPath());
+    }
 }

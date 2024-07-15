@@ -4,8 +4,9 @@ plugins {
     id "idea"
     id "com.gorylenko.gradle-git-properties"
     alias(libs.plugins.spring.boot)
-    id "jhipster.docker-conventions"
-    id "jhipster.node-gradle-conventions"
+    id "flexwork.docker-conventions"
+    id "flexwork.node-gradle-conventions"
+    id "flexwork.code-conventions"
     id "org.liquibase.gradle"
     id "org.jetbrains.kotlin.jvm"
 }
@@ -146,6 +147,7 @@ dependencies {
 
     testImplementation("org.jetbrains.kotlin:kotlin-test")
 
+    testImplementation("com.icegreen:greenmail:${greenmailVersion}")
     testImplementation("com.icegreen:greenmail-junit5:${greenmailVersion}")
 
 }

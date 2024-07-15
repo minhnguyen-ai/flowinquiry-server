@@ -1,6 +1,7 @@
 plugins {
     id("java-library")
     id("org.jetbrains.kotlin.jvm")
+    id("flexwork.code-conventions")
 }
 
 version = "0.0.1-SNAPSHOT"

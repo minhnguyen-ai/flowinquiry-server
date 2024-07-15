@@ -26,9 +26,7 @@ public class SignupResource {
     }
 
     @GetMapping("/verifyEmail")
-    public void verifyEmail(String userEmail) {
-
-    }
+    public void verifyEmail(String userEmail) {}
 
     @GetMapping("/forgotPassword")
     public void forgotPassword(String userEmail) {

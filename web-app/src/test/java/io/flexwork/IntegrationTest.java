@@ -14,11 +14,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @SpringBootTest(
-    classes = {
-      FlexworkApp.class,
-      JacksonConfiguration.class,
-      AsyncSyncConfiguration.class,
-      TestSecurityConfiguration.class
-    })
+        classes = {
+            FlexworkApp.class,
+            JacksonConfiguration.class,
+            AsyncSyncConfiguration.class,
+            TestSecurityConfiguration.class
+        })
 @EmbeddedSQL
 public @interface IntegrationTest {}

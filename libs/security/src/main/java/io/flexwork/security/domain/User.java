@@ -7,14 +7,13 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
-import org.apache.commons.lang3.StringUtils;
-import org.hibernate.annotations.BatchSize;
-
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
+import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
+import org.hibernate.annotations.BatchSize;
 
 /** A user. */
 @Entity
@@ -24,11 +23,9 @@ public class User extends AbstractAuditingEntity<String> implements Serializable
 
     private static final long serialVersionUID = 1L;
 
-    @Id
-    private String id;
+    @Id private String id;
 
-    @NotNull
-    @Pattern(regexp = Constants.LOGIN_REGEX)
+    @NotNull @Pattern(regexp = Constants.LOGIN_REGEX)
     @Size(min = 1, max = 50)
     @Column(length = 50, unique = true, nullable = false)
     private String login;
@@ -47,12 +44,11 @@ public class User extends AbstractAuditingEntity<String> implements Serializable
     private String email;
 
     @NotNull
-//    @Enumerated(EnumType.STRING)
+    //    @Enumerated(EnumType.STRING)
     @Column(length = 20, name = "state", unique = true)
     private String signupState = "Active";
 
-    @NotNull
-    @Column(nullable = false)
+    @NotNull @Column(nullable = false)
     private boolean activated = false;
 
     @Size(min = 2, max = 10)
@@ -66,10 +62,11 @@ public class User extends AbstractAuditingEntity<String> implements Serializable
     @JsonIgnore
     @ManyToMany
     @JoinTable(
-        name = "fw_user_authority",
-        joinColumns = { @JoinColumn(name = "user_id", referencedColumnName = "id") },
-        inverseJoinColumns = { @JoinColumn(name = "authority_name", referencedColumnName = "name") }
-    )
+            name = "fw_user_authority",
+            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
+            inverseJoinColumns = {
+                @JoinColumn(name = "authority_name", referencedColumnName = "name")
+            })
     @BatchSize(size = 20)
     private Set<Authority> authorities = new HashSet<>();
 
@@ -91,7 +88,8 @@ public class User extends AbstractAuditingEntity<String> implements Serializable
 
     @Override
     public int hashCode() {
-        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        // see
+        // https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
         return getClass().hashCode();
     }
 }

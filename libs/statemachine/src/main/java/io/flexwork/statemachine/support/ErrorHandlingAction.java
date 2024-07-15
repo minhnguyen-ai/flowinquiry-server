@@ -11,6 +11,10 @@ public class ErrorHandlingAction<S, E> implements Action<S, E> {
 
     @Override
     public void execute(StateContext<S, E> context) {
-        log.error("State machine {} has a error while executing at state {}", context.getStateMachine().getId(), context.getStateMachine().getState().getId(), context.getException());
+        log.error(
+                "State machine {} has a error while executing at state {}",
+                context.getStateMachine().getId(),
+                context.getStateMachine().getState().getId(),
+                context.getException());
     }
 }

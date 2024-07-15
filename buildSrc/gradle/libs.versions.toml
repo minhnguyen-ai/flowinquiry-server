@@ -5,5 +5,5 @@ jib-plugin = { module = "com.google.cloud.tools:jib-gradle-plugin", version = "3
 modernizer-plugin = { module = "com.github.andygoossens:gradle-modernizer-plugin", version = "1.9.2" }
 nohttp-plugin = { module = "io.spring.nohttp:nohttp-gradle", version = "0.0.11" }
 node-gradle = { module = "com.github.node-gradle:gradle-node-plugin", version = "7.0.2" }
-
+splotless-plugin = { module = "com.diffplug.spotless:spotless-plugin-gradle", version = "7.0.0.BETA1" }
 [plugins]

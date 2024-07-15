@@ -24,6 +24,9 @@ spring:
       write-durations-as-timestamps: false
   mail:
     host: localhost
+    port: 3025
+    username: flexwork
+    password: flexwork-pass
   main:
     allow-bean-definition-overriding: true
   messages:

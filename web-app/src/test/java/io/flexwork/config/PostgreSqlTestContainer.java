@@ -9,34 +9,34 @@ import org.testcontainers.containers.output.Slf4jLogConsumer;
 
 public class PostgreSqlTestContainer implements SqlTestContainer {
 
-  private static final Logger log = LoggerFactory.getLogger(PostgreSqlTestContainer.class);
+    private static final Logger log = LoggerFactory.getLogger(PostgreSqlTestContainer.class);
 
-  private PostgreSQLContainer<?> postgreSQLContainer;
+    private PostgreSQLContainer<?> postgreSQLContainer;
 
-  @Override
-  public void destroy() {
-    if (null != postgreSQLContainer && postgreSQLContainer.isRunning()) {
-      postgreSQLContainer.stop();
+    @Override
+    public void destroy() {
+        if (null != postgreSQLContainer && postgreSQLContainer.isRunning()) {
+            postgreSQLContainer.stop();
+        }
     }
-  }
 
-  @Override
-  public void afterPropertiesSet() {
-    if (null == postgreSQLContainer) {
-      postgreSQLContainer =
-          new PostgreSQLContainer<>("postgres:16.3")
-              .withDatabaseName("flexwork-app")
-              .withTmpFs(Collections.singletonMap("/testtmpfs", "rw"))
-              .withLogConsumer(new Slf4jLogConsumer(log))
-              .withReuse(true);
+    @Override
+    public void afterPropertiesSet() {
+        if (null == postgreSQLContainer) {
+            postgreSQLContainer =
+                    new PostgreSQLContainer<>("postgres:16.3")
+                            .withDatabaseName("flexwork-app")
+                            .withTmpFs(Collections.singletonMap("/testtmpfs", "rw"))
+                            .withLogConsumer(new Slf4jLogConsumer(log))
+                            .withReuse(true);
+        }
+        if (!postgreSQLContainer.isRunning()) {
+            postgreSQLContainer.start();
+        }
     }
-    if (!postgreSQLContainer.isRunning()) {
-      postgreSQLContainer.start();
-    }
-  }
 
-  @Override
-  public JdbcDatabaseContainer<?> getTestContainer() {
-    return postgreSQLContainer;
-  }
+    @Override
+    public JdbcDatabaseContainer<?> getTestContainer() {
+        return postgreSQLContainer;
+    }
 }
