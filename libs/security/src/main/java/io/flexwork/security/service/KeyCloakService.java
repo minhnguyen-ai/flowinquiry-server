@@ -43,8 +43,7 @@ public class KeyCloakService {
                         put("realm_name", tenant.getRealm());
                     }
                 });
-        String keycloadRealConfig =
-                templateEngine.process("templates/flexwork-realm.json", templateContext);
+        String keycloadRealConfig = templateEngine.process("flexwork-realm.json", templateContext);
         RealmRepresentation realmRepresentation =
                 om.readValue(keycloadRealConfig, RealmRepresentation.class);
 
