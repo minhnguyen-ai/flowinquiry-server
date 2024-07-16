@@ -1,2 +1,2 @@
 org.springframework.test.context.ContextCustomizerFactory = io.flexwork.config.\
-    SqlTestContainersSpringContextCustomizerFactory
+    SqlTestContainersSpringContextCustomizerFactory, io.flexwork.config.KeycloakTestContainerSpringContextCustomizer

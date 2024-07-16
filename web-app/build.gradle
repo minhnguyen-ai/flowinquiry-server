@@ -150,6 +150,9 @@ dependencies {
     testImplementation("com.icegreen:greenmail:${greenmailVersion}")
     testImplementation("com.icegreen:greenmail-junit5:${greenmailVersion}")
 
+    testImplementation("com.github.dasniko:testcontainers-keycloak:3.4.0")
+
+
 }
 
 task cleanResources(type: Delete) {

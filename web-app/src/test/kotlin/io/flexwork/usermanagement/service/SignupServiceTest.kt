@@ -1,6 +1,7 @@
 package io.flexwork.usermanagement.service
 
 import io.flexwork.IntegrationTest
+import io.flexwork.usermanagement.stateMachine.SignupEvents
 import io.flexwork.usermanagement.stateMachine.SignupStates
 import kotlin.test.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -12,10 +13,7 @@ class SignupServiceTest {
   @Autowired private lateinit var signupService: SignupService
 
   @Autowired
-  private lateinit var stateMachineService:
-      StateMachineService<
-          io.flexwork.usermanagement.stateMachine.SignupStates,
-          io.flexwork.usermanagement.stateMachine.SignupEvents>
+  private lateinit var stateMachineService: StateMachineService<SignupStates, SignupEvents>
 
   @Test
   fun signup() {

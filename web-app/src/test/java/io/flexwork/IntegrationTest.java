@@ -1,9 +1,6 @@
 package io.flexwork;
 
-import io.flexwork.config.AsyncSyncConfiguration;
-import io.flexwork.config.EmbeddedSQL;
-import io.flexwork.config.JacksonConfiguration;
-import io.flexwork.config.TestSecurityConfiguration;
+import io.flexwork.config.*;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -21,4 +18,5 @@ import org.springframework.boot.test.context.SpringBootTest;
             TestSecurityConfiguration.class
         })
 @EmbeddedSQL
+@EmbeddedKeycloak
 public @interface IntegrationTest {}
