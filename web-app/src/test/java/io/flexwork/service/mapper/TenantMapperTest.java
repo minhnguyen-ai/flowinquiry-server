@@ -1,12 +1,11 @@
 package io.flexwork.service.mapper;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import io.flexwork.security.domain.Tenant;
 import io.flexwork.security.service.dto.TenantDTO;
 import io.flexwork.security.service.mapper.TenantMapper;
-import io.flexwork.security.service.mapper.UserMapper;
 import org.junit.jupiter.api.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 /** Unit tests for {@link io.flexwork.security.service.mapper.TenantMapper}. */
 public class TenantMapperTest {
