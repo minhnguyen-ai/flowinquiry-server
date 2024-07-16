@@ -3,6 +3,7 @@ package io.flexwork.security.service;
 import io.flexwork.security.domain.Tenant;
 import io.flexwork.security.repository.TenantRepository;
 import jakarta.transaction.Transactional;
+import java.util.Optional;
 import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,9 +27,14 @@ public class TenantService {
     public void registerNewTenant(Tenant tenant) {
         log.info("Registering new tenant: {}", tenant);
 
-        Tenant existingTenant = tenantRepository.findByNameIgnoreCase(tenant.getName());
-        if (existingTenant != null) {
+        Optional<Tenant> existingTenant = tenantRepository.findByNameIgnoreCase(tenant.getName());
+        if (existingTenant.isPresent()) {
             throw new IllegalArgumentException("Tenant already exists: " + tenant.getName());
+        }
+
+        existingTenant = tenantRepository.findByDomainContainingIgnoreCase(tenant.getDomain());
+        if (existingTenant.isPresent()) {
+            throw new IllegalArgumentException("Domain already exists: " + tenant.getDomain());
         }
 
         log.debug("Registering new tenant: {}", tenant.getName());

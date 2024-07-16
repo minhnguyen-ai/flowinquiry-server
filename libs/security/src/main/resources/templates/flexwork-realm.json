@@ -1,6 +1,6 @@
 {
-  "id": "${realm_id}",
-  "realm": "${realm_name}",
+  "id": "[(${realm_id})]",
+  "realm": "[(${realm_name})]",
   "displayName": "FlexWork",
   "displayNameHtml": "<div class=\"kc-logo-text\"><span>FlexWork</span></div>",
   "notBefore": 0,
@@ -53,7 +53,7 @@
         "description": "FlexWork administrator role",
         "composite": false,
         "clientRole": false,
-        "containerId": "${realm_id}",
+        "containerId": "[(${realm_id})]",
         "attributes": {}
       },
       {
@@ -62,7 +62,7 @@
         "description": "${role_offline-access}",
         "composite": false,
         "clientRole": false,
-        "containerId": "${realm_id}",
+        "containerId": "[(${realm_id})]",
         "attributes": {}
       },
       {
@@ -71,7 +71,7 @@
         "description": "FlexWork user role",
         "composite": false,
         "clientRole": false,
-        "containerId": "${realm_id}",
+        "containerId": "[(${realm_id})]",
         "attributes": {}
       },
       {
@@ -86,7 +86,7 @@
           }
         },
         "clientRole": false,
-        "containerId": "${realm_id}",
+        "containerId": "[(${realm_id})]",
         "attributes": {}
       },
       {
@@ -95,7 +95,7 @@
         "description": "${role_uma_authorization}",
         "composite": false,
         "clientRole": false,
-        "containerId": "${realm_id}",
+        "containerId": "[(${realm_id})]",
         "attributes": {}
       }
     ],
@@ -435,7 +435,7 @@
     "description": "${role_default-roles}",
     "composite": true,
     "clientRole": false,
-    "containerId": "${realm_id}"
+    "containerId": "[(${realm_id})]"
   },
   "requiredCredentials": ["password"],
   "defaultGroups": ["/Users"],
