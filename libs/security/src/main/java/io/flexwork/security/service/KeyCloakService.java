@@ -24,8 +24,9 @@ public class KeyCloakService {
 
     private Keycloak keycloak;
 
-    public KeyCloakService(Keycloak keycloak) {
+    public KeyCloakService(Keycloak keycloak, SpringTemplateEngine templateEngine) {
         this.keycloak = keycloak;
+        this.templateEngine = templateEngine;
     }
 
     public void saveUser(User user) {}
@@ -42,9 +43,8 @@ public class KeyCloakService {
                         put("realm_name", tenant.getRealm());
                     }
                 });
-        templateEngine = new SpringTemplateEngine();
         String keycloadRealConfig =
-                templateEngine.process("keycloak/flexwork-realm.json", templateContext);
+                templateEngine.process("templates/flexwork-realm.json", templateContext);
         RealmRepresentation realmRepresentation =
                 om.readValue(keycloadRealConfig, RealmRepresentation.class);
 
