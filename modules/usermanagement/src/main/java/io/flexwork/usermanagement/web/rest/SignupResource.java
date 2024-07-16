@@ -5,7 +5,6 @@ import io.flexwork.security.service.UserService;
 import io.flexwork.usermanagement.service.SignupService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,7 +19,7 @@ public class SignupResource {
         this.signupService = signupService;
     }
 
-    @PostMapping(value = "/signup", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/signup")
     public void signup(@RequestBody User user) {
         signupService.signup(user);
     }
