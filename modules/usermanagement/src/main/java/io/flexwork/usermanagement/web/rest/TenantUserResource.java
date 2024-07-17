@@ -1,10 +1,9 @@
 package io.flexwork.usermanagement.web.rest;
 
 import io.flexwork.security.service.dto.UserDTO;
+import io.flexwork.usermanagement.TenantConstants;
 import java.util.ArrayList;
 import java.util.List;
-
-import io.flexwork.usermanagement.TenantConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;

@@ -3,6 +3,8 @@ package io.flexwork.security.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.flexwork.security.domain.Tenant;
 import io.flexwork.security.domain.User;
+import java.util.HashMap;
+import java.util.UUID;
 import lombok.SneakyThrows;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.representations.idm.RealmRepresentation;
@@ -11,9 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
-
-import java.util.HashMap;
-import java.util.UUID;
 
 @Service
 public class KeyCloakService {
