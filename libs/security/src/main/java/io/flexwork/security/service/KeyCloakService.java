@@ -3,7 +3,6 @@ package io.flexwork.security.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.flexwork.security.domain.Tenant;
 import io.flexwork.security.domain.User;
-import java.util.HashMap;
 import lombok.SneakyThrows;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.representations.idm.RealmRepresentation;
@@ -12,6 +11,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
+
+import java.util.HashMap;
+import java.util.UUID;
 
 @Service
 public class KeyCloakService {
@@ -41,12 +43,54 @@ public class KeyCloakService {
                     {
                         put("realm_id", tenant.getRealm());
                         put("realm_name", tenant.getRealm());
+                        put("var", new VariableGenerator());
                     }
                 });
         String keycloadRealConfig = templateEngine.process("flexwork-realm.json", templateContext);
         RealmRepresentation realmRepresentation =
                 om.readValue(keycloadRealConfig, RealmRepresentation.class);
-
         keycloak.realms().create(realmRepresentation);
+    }
+
+    static class VariableGenerator {
+        private String defaultRoleId;
+
+        private String clientRealmManagementId;
+
+        private String clientAccountId;
+
+        private String readTokenId;
+
+        public String randomValue() {
+            return UUID.randomUUID().toString();
+        }
+
+        public String getDefaultRoleId() {
+            if (defaultRoleId == null) {
+                defaultRoleId = randomValue();
+            }
+            return defaultRoleId;
+        }
+
+        public String getClientRealmManagementId() {
+            if (clientRealmManagementId == null) {
+                clientRealmManagementId = randomValue();
+            }
+            return clientRealmManagementId;
+        }
+
+        public String getClientAccountId() {
+            if (clientAccountId == null) {
+                clientAccountId = randomValue();
+            }
+            return clientAccountId;
+        }
+
+        public String getReadTokenId() {
+            if (readTokenId == null) {
+                readTokenId = randomValue();
+            }
+            return readTokenId;
+        }
     }
 }

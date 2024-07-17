@@ -17,7 +17,17 @@ public class TenantServiceIT {
         tenant.setName("Test Tenant");
         tenant.setId(1L);
         tenant.setRealm("realm123");
-        tenant.setDomain("domain123");
+        tenant.setDomain("domain12111111113");
+        tenantService.registerNewTenant(tenant);
+    }
+
+    @Test
+    public void testRegisterNewTenant2Successfully() {
+        Tenant tenant = new Tenant();
+        tenant.setName("Test Tenant 2");
+        tenant.setId(2L);
+        tenant.setRealm("realm1234");
+        tenant.setDomain("domain1234");
         tenantService.registerNewTenant(tenant);
     }
 }

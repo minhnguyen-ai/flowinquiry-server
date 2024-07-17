@@ -81,5 +81,5 @@ jhipster:
 # application configuration
 application:
   keycloak:
-    server-url: http://localhost:9050
+    server-url: http://localhost:9080
     password: admin
