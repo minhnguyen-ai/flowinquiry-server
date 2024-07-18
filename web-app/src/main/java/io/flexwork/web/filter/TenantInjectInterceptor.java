@@ -1,8 +1,8 @@
 package io.flexwork.web.filter;
 
-import static io.flexwork.usermanagement.TenantConstants.HEADER_TENANT_ID;
+import static io.flexwork.platform.db.TenantConstants.HEADER_TENANT_ID;
 
-import io.flexwork.usermanagement.TenantContext;
+import io.flexwork.platform.db.TenantContext;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;

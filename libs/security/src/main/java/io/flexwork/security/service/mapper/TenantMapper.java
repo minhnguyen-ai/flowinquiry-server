@@ -11,4 +11,6 @@ public interface TenantMapper {
     TenantMapper INSTANCE = Mappers.getMapper(TenantMapper.class);
 
     Tenant tenantDTOToTenant(TenantDTO tenantDTO);
+
+    TenantDTO tenantToTenantDTO(Tenant tenant);
 }

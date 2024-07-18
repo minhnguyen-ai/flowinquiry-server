@@ -1,4 +1,4 @@
-package io.flexwork.usermanagement;
+package io.flexwork.platform.db;
 
 public class TenantConstants {
 

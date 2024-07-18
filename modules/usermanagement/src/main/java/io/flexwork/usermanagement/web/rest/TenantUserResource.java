@@ -1,7 +1,7 @@
 package io.flexwork.usermanagement.web.rest;
 
+import io.flexwork.platform.db.TenantConstants;
 import io.flexwork.security.service.dto.UserDTO;
-import io.flexwork.usermanagement.TenantConstants;
 import java.util.ArrayList;
 import java.util.List;
 import org.slf4j.Logger;

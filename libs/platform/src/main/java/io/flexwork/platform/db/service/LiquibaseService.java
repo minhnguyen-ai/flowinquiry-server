@@ -7,7 +7,6 @@ import liquibase.Liquibase;
 import liquibase.database.Database;
 import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
-import liquibase.exception.LiquibaseException;
 import liquibase.resource.ClassLoaderResourceAccessor;
 import lombok.SneakyThrows;
 import org.slf4j.Logger;
@@ -16,12 +15,15 @@ import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
-import java.sql.SQLException;
 
 @Service
 public class LiquibaseService {
 
     private static final Logger log = LoggerFactory.getLogger(LiquibaseService.class);
+
+    private static final String MASTER_CHANGESET = "config/liquibase/master/master.xml";
+
+    private static final String TENANT_CHANGESET = "config/liquibase/tenant/master.xml";
 
     private DataSource dataSource;
 
@@ -50,11 +52,11 @@ public class LiquibaseService {
 
     @Transactional
     public void createTenantDbSchema(String schema) {
-        updateLiquibaseSchema("config/liquibase/tenant/master.xml", schema);
+        updateLiquibaseSchema(TENANT_CHANGESET, schema);
     }
 
     @Transactional
     public void updateMasterDbSchema(String schema) {
-        updateLiquibaseSchema("config/liquibase/master/master.xml", schema);
+        updateLiquibaseSchema(MASTER_CHANGESET, schema);
     }
 }

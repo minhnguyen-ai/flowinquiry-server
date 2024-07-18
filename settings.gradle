@@ -18,4 +18,7 @@ include 'libs:statemachine'
 findProject(':libs:statemachine')?.name = 'statemachine'
 include 'libs:platform'
 findProject(':libs:platform')?.name = 'platform'
+include 'tools'
+include 'tools:liquibase'
+findProject(':tools:liquibase')?.name = 'liquibase'
 

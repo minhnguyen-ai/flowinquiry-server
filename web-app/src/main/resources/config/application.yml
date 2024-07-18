@@ -115,6 +115,7 @@ spring:
       hibernate.order_updates: true
       hibernate.query.fail_on_pagination_over_collection_fetch: true
       hibernate.query.in_clause_parameter_padding: true
+      hibernate.tenant_identifier_resolver: io.flexwork.platform.db.TenantSchemaResolver
     hibernate:
       ddl-auto: none
       naming:
