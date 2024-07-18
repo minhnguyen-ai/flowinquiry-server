@@ -8,19 +8,16 @@ import jakarta.transaction.Transactional;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Optional;
 import javax.sql.DataSource;
-
 import liquibase.Contexts;
 import liquibase.LabelExpression;
 import liquibase.Liquibase;
 import liquibase.database.Database;
 import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
-import liquibase.integration.spring.SpringLiquibase;
 import liquibase.resource.ClassLoaderResourceAccessor;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -128,9 +125,15 @@ public class FlexworkApp implements CommandLineRunner {
         try (Connection connection = dataSource.getConnection()) {
             connection.prepareCall("CREATE SCHEMA IF NOT EXISTS flexwork").execute();
             // Create the database for the default tenant
-            Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(connection));
+            Database database =
+                    DatabaseFactory.getInstance()
+                            .findCorrectDatabaseImplementation(new JdbcConnection(connection));
             database.setDefaultSchemaName(defaultTenant.getName());
-            Liquibase liquibase = new Liquibase("config/liquibase/tenant/master.xml", new ClassLoaderResourceAccessor(), database);
+            Liquibase liquibase =
+                    new Liquibase(
+                            "config/liquibase/tenant/master.xml",
+                            new ClassLoaderResourceAccessor(),
+                            database);
             liquibase.update(new Contexts(), new LabelExpression());
         }
     }
