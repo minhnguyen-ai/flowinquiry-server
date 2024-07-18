@@ -19,6 +19,8 @@ spring:
   jackson:
     serialization:
       write-durations-as-timestamps: false
+  liquibase:
+    enabled: false
   mail:
     host: localhost
     port: 3025

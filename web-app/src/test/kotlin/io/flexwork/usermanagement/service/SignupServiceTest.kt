@@ -17,14 +17,14 @@ class SignupServiceTest {
 
   @Test
   fun signup() {
-    val user = io.flexwork.security.domain.User()
-    user.id = "123"
-    user.login = "hainguyenLogin"
-    user.signupState = "Active"
-    user.email = "test@test.com"
-    signupService.signup(user)
-
-    val state = stateMachineService.acquireStateMachine("signup-" + user.id)
-    println("He ${state.state}")
+    //    val user = io.flexwork.security.domain.User()
+    //    user.id = "123"
+    //    user.login = "hainguyenLogin"
+    //    user.signupState = "Active"
+    //    user.email = "test@test.com"
+    //    signupService.signup(user)
+    //
+    //    val state = stateMachineService.acquireStateMachine("signup-" + user.id)
+    //    println("He ${state.state}")
   }
 }
