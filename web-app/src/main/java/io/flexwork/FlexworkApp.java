@@ -6,11 +6,6 @@ import io.flexwork.security.domain.Tenant;
 import io.flexwork.security.service.TenantService;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +18,14 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.core.env.Environment;
 import tech.jhipster.config.DefaultProfileUtil;
 import tech.jhipster.config.JHipsterConstants;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Optional;
+
+import static io.flexwork.platform.db.DbConstants.MASTER_SCHEMA;
 
 @SpringBootApplication
 @EnableConfigurationProperties({LiquibaseProperties.class, ApplicationProperties.class})
@@ -113,6 +116,7 @@ public class FlexworkApp implements CommandLineRunner {
     @Transactional
     @Override
     public void run(String... args) throws Exception {
+        liquibaseService.updateMasterDbSchema(MASTER_SCHEMA);
         Tenant defaultTenant = tenantService.getDefaultTenant();
         log.debug("Default tenant: {}", defaultTenant);
         liquibaseService.createTenantDbSchema(defaultTenant.getRealm());

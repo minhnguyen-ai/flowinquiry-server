@@ -14,15 +14,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Getter
 public class ApplicationProperties {
 
-    private final Liquibase liquibase = new Liquibase();
-
     private final Keycloak keycloak = new Keycloak();
-
-    @Getter
-    @Setter
-    public static class Liquibase {
-        private Boolean asyncStart;
-    }
 
     @Getter
     @Setter

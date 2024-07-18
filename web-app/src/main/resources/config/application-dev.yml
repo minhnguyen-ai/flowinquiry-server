@@ -38,10 +38,6 @@ spring:
     hikari:
       poolName: Hikari
       auto-commit: false
-  liquibase:
-    # Remove 'faker' if you do not want the sample data to be loaded automatically
-    contexts: dev
-    enabled: true
   mail: # DEV custom
     host: smtp.gmail.com
     port: 587

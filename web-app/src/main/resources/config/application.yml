@@ -40,7 +40,6 @@ management:
           - loggers
           - prometheus
           - threaddump
-          - liquibase
   endpoint:
     health:
       show-details: when_authorized
@@ -121,6 +120,8 @@ spring:
       naming:
         physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
         implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+  liquibase:
+    enabled: false
   messages:
     basename: i18n/messages
   main:

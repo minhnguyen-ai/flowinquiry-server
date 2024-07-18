@@ -7,7 +7,6 @@ plugins {
     id "flexwork.docker-conventions"
     id "flexwork.node-gradle-conventions"
     id "flexwork.code-conventions"
-    id "org.liquibase.gradle"
     id "org.jetbrains.kotlin.jvm"
 }
 
@@ -32,7 +31,6 @@ ext {
 
 apply plugin: 'io.spring.dependency-management'
 
-apply from: "../gradle/liquibase.gradle"
 
 if (project.hasProperty("prod")) {
     apply from: "../gradle/profile_prod.gradle"
@@ -151,6 +149,8 @@ dependencies {
     testImplementation("com.icegreen:greenmail-junit5:${greenmailVersion}")
 
     testImplementation("com.github.dasniko:testcontainers-keycloak:3.4.0")
+
+    implementation("org.liquibase:liquibase-core:4.28.0")
 
 
 }
