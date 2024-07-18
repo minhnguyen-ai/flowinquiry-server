@@ -1,5 +1,7 @@
 package io.flexwork.security.service;
 
+import static io.flexwork.platform.db.DbConstants.DEFAULT_TENANT;
+
 import io.flexwork.security.domain.Tenant;
 import io.flexwork.security.repository.TenantRepository;
 import jakarta.transaction.Transactional;
@@ -23,8 +25,12 @@ public class TenantService {
         this.keyCloakService = keyCloakService;
     }
 
+    /**
+     * @param tenant
+     * @return the tenant realm
+     */
     @Transactional
-    public void registerNewTenant(Tenant tenant) {
+    public String registerNewTenant(Tenant tenant) {
         log.info("Registering new tenant: {}", tenant);
 
         Optional<Tenant> existingTenant = tenantRepository.findByNameIgnoreCase(tenant.getName());
@@ -42,5 +48,12 @@ public class TenantService {
 
         tenantRepository.save(tenant);
         keyCloakService.createNewRealmForNewTenant(tenant);
+        return tenant.getRealm();
+    }
+
+    public Tenant getDefaultTenant() {
+        return tenantRepository
+                .findByNameIgnoreCase(DEFAULT_TENANT)
+                .orElseThrow(() -> new IllegalArgumentException("Default tenant not found"));
     }
 }

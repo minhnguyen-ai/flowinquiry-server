@@ -92,7 +92,7 @@
                                  referencedTableName="fw_user"/>
 
         <loadData
-                  file="config/liquibase/data/authority.csv"
+                  file="config/liquibase/tenant/data/authority.csv"
                   separator=";"
                   tableName="fw_authority"
                   usePreparedStatements="true">

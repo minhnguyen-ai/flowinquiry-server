@@ -1,15 +1,31 @@
 package io.flexwork;
 
 import io.flexwork.config.ApplicationProperties;
+import io.flexwork.security.domain.Tenant;
+import io.flexwork.security.service.TenantService;
 import jakarta.annotation.PostConstruct;
+import jakarta.transaction.Transactional;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Optional;
+import javax.sql.DataSource;
+
+import liquibase.Contexts;
+import liquibase.LabelExpression;
+import liquibase.Liquibase;
+import liquibase.database.Database;
+import liquibase.database.DatabaseFactory;
+import liquibase.database.jvm.JdbcConnection;
+import liquibase.integration.spring.SpringLiquibase;
+import liquibase.resource.ClassLoaderResourceAccessor;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -22,14 +38,20 @@ import tech.jhipster.config.JHipsterConstants;
 @SpringBootApplication
 @EnableConfigurationProperties({LiquibaseProperties.class, ApplicationProperties.class})
 @EntityScan("io.flexwork")
-public class FlexworkApp {
+public class FlexworkApp implements CommandLineRunner {
 
     private static final Logger log = LoggerFactory.getLogger(FlexworkApp.class);
 
+    private TenantService tenantService;
+
+    private DataSource dataSource;
+
     private final Environment env;
 
-    public FlexworkApp(Environment env) {
+    public FlexworkApp(Environment env, DataSource dataSource, TenantService tenantService) {
         this.env = env;
+        this.tenantService = tenantService;
+        this.dataSource = dataSource;
     }
 
     /**
@@ -96,5 +118,20 @@ public class FlexworkApp {
                 env.getActiveProfiles().length == 0
                         ? env.getDefaultProfiles()
                         : env.getActiveProfiles());
+    }
+
+    @Transactional
+    @Override
+    public void run(String... args) throws Exception {
+        Tenant defaultTenant = tenantService.getDefaultTenant();
+        log.debug("Default tenant: {}", defaultTenant);
+        try (Connection connection = dataSource.getConnection()) {
+            connection.prepareCall("CREATE SCHEMA IF NOT EXISTS flexwork").execute();
+            // Create the database for the default tenant
+            Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(connection));
+            database.setDefaultSchemaName(defaultTenant.getName());
+            Liquibase liquibase = new Liquibase("config/liquibase/tenant/master.xml", new ClassLoaderResourceAccessor(), database);
+            liquibase.update(new Contexts(), new LabelExpression());
+        }
     }
 }

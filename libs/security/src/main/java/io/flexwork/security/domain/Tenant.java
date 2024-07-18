@@ -1,5 +1,7 @@
 package io.flexwork.security.domain;
 
+import static io.flexwork.platform.db.DbConstants.MASTER_SCHEMA;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -7,7 +9,7 @@ import java.io.Serializable;
 import lombok.Data;
 
 @Entity
-@Table(name = "fw_tenant")
+@Table(name = "fw_tenant", schema = MASTER_SCHEMA)
 @Data
 public class Tenant extends AbstractAuditingEntity<Long> implements Serializable {
     @Id

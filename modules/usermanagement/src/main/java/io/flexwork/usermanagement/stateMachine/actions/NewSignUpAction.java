@@ -16,7 +16,7 @@ import org.thymeleaf.spring6.SpringTemplateEngine;
 @Component
 public class NewSignUpAction implements Action<SignupStates, SignupEvents> {
 
-    private static Logger log = LoggerFactory.getLogger(NewSignUpAction.class);
+    private static final Logger log = LoggerFactory.getLogger(NewSignUpAction.class);
 
     private JavaMailSender mailSender;
 

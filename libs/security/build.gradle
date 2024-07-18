@@ -11,6 +11,7 @@ repositories {
 }
 
 dependencies {
+    api(project(":libs:platform"))
     implementation("org.hibernate.validator:hibernate-validator")
     implementation("org.apache.commons:commons-lang3")
     implementation("com.github.ben-manes.caffeine:caffeine")

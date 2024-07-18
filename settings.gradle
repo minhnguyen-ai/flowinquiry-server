@@ -17,4 +17,6 @@ include 'modules:usermanagement'
 findProject(':libs:usermanagement')?.name = 'usermanagement'
 include 'libs:statemachine'
 findProject(':libs:statemachine')?.name = 'statemachine'
+include 'libs:platform'
+findProject(':libs:platform')?.name = 'platform'
 
