@@ -8,7 +8,6 @@ import io.flexwork.security.repository.TenantRepository;
 import jakarta.transaction.Transactional;
 import java.util.Optional;
 import java.util.UUID;
-
 import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +24,10 @@ public class TenantService {
 
     private LiquibaseService liquibaseService;
 
-    public TenantService(TenantRepository tenantRepository, KeyCloakService keyCloakService, LiquibaseService liquibaseService) {
+    public TenantService(
+            TenantRepository tenantRepository,
+            KeyCloakService keyCloakService,
+            LiquibaseService liquibaseService) {
         this.tenantRepository = tenantRepository;
         this.keyCloakService = keyCloakService;
         this.liquibaseService = liquibaseService;

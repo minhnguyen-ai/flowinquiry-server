@@ -1,18 +1,15 @@
 package io.flexwork.config;
 
+import io.flexwork.platform.db.DbConstants;
 import java.sql.Connection;
 import java.util.concurrent.Executor;
 import javax.sql.DataSource;
-
-import io.flexwork.platform.db.DbConstants;
 import liquibase.integration.spring.SpringLiquibase;
 import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseDataSource;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
@@ -34,8 +31,6 @@ public class LiquibaseConfiguration {
         this.env = env;
     }
 
-
-
     @SneakyThrows
     @Bean
     public SpringLiquibase liquibase(
@@ -48,7 +43,9 @@ public class LiquibaseConfiguration {
         SpringLiquibase liquibase;
 
         try (Connection connection = dataSource.getConnection()) {
-            connection.prepareCall("CREATE SCHEMA IF NOT EXISTS " + DbConstants.MASTER_SCHEMA).execute();
+            connection
+                    .prepareCall("CREATE SCHEMA IF NOT EXISTS " + DbConstants.MASTER_SCHEMA)
+                    .execute();
             connection.commit();
         }
         liquibase =
