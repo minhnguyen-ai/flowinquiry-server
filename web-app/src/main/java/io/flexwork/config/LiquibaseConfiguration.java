@@ -1,10 +1,15 @@
 package io.flexwork.config;
 
+import java.sql.Connection;
 import java.util.concurrent.Executor;
 import javax.sql.DataSource;
+
+import io.flexwork.platform.db.DbConstants;
 import liquibase.integration.spring.SpringLiquibase;
+import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,37 +34,32 @@ public class LiquibaseConfiguration {
         this.env = env;
     }
 
-    @Value("${application.liquibase.async-start:true}")
-    private Boolean asyncStart;
 
+
+    @SneakyThrows
     @Bean
     public SpringLiquibase liquibase(
             @Qualifier("taskExecutor") Executor executor,
             LiquibaseProperties liquibaseProperties,
             @LiquibaseDataSource ObjectProvider<DataSource> liquibaseDataSource,
-            ObjectProvider<DataSource> dataSource,
+            ObjectProvider<DataSource> dataSourceProvider,
+            DataSource dataSource,
             DataSourceProperties dataSourceProperties) {
         SpringLiquibase liquibase;
-        if (Boolean.TRUE.equals(asyncStart)) {
-            liquibase =
-                    SpringLiquibaseUtil.createAsyncSpringLiquibase(
-                            this.env,
-                            executor,
-                            liquibaseDataSource.getIfAvailable(),
-                            liquibaseProperties,
-                            dataSource.getIfUnique(),
-                            dataSourceProperties);
-        } else {
-            liquibase =
-                    SpringLiquibaseUtil.createSpringLiquibase(
-                            liquibaseDataSource.getIfAvailable(),
-                            liquibaseProperties,
-                            dataSource.getIfUnique(),
-                            dataSourceProperties);
+
+        try (Connection connection = dataSource.getConnection()) {
+            connection.prepareCall("CREATE SCHEMA IF NOT EXISTS " + DbConstants.MASTER_SCHEMA).execute();
+            connection.commit();
         }
+        liquibase =
+                SpringLiquibaseUtil.createSpringLiquibase(
+                        liquibaseDataSource.getIfAvailable(),
+                        liquibaseProperties,
+                        dataSourceProvider.getIfUnique(),
+                        dataSourceProperties);
         liquibase.setChangeLog("classpath:config/liquibase/master/master.xml");
         liquibase.setContexts(liquibaseProperties.getContexts());
-        liquibase.setDefaultSchema(liquibaseProperties.getDefaultSchema());
+        liquibase.setDefaultSchema(DbConstants.MASTER_SCHEMA);
         liquibase.setLiquibaseSchema(liquibaseProperties.getLiquibaseSchema());
         liquibase.setLiquibaseTablespace(liquibaseProperties.getLiquibaseTablespace());
         liquibase.setDatabaseChangeLogLockTable(

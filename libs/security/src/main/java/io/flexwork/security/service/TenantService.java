@@ -2,11 +2,14 @@ package io.flexwork.security.service;
 
 import static io.flexwork.platform.db.DbConstants.DEFAULT_TENANT;
 
+import io.flexwork.platform.db.service.LiquibaseService;
 import io.flexwork.security.domain.Tenant;
 import io.flexwork.security.repository.TenantRepository;
 import jakarta.transaction.Transactional;
 import java.util.Optional;
 import java.util.UUID;
+
+import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -20,15 +23,19 @@ public class TenantService {
 
     private TenantRepository tenantRepository;
 
-    public TenantService(TenantRepository tenantRepository, KeyCloakService keyCloakService) {
+    private LiquibaseService liquibaseService;
+
+    public TenantService(TenantRepository tenantRepository, KeyCloakService keyCloakService, LiquibaseService liquibaseService) {
         this.tenantRepository = tenantRepository;
         this.keyCloakService = keyCloakService;
+        this.liquibaseService = liquibaseService;
     }
 
     /**
      * @param tenant
      * @return the tenant realm
      */
+    @SneakyThrows
     @Transactional
     public String registerNewTenant(Tenant tenant) {
         log.info("Registering new tenant: {}", tenant);
@@ -48,6 +55,7 @@ public class TenantService {
 
         tenantRepository.save(tenant);
         keyCloakService.createNewRealmForNewTenant(tenant);
+        liquibaseService.createTenantDbSchema(tenant.getRealm());
         return tenant.getRealm();
     }
 
