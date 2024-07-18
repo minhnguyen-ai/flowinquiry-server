@@ -31,6 +31,7 @@ public class LiquibaseService {
     @SneakyThrows
     public void createTenantDbSchema(String schema) {
         try (Connection connection = dataSource.getConnection()) {
+            log.info("Going to create a schema {}", schema);
             connection.prepareCall("CREATE SCHEMA IF NOT EXISTS " + schema).execute();
             // Create the database for the default tenant
             Database database =

@@ -20,6 +20,10 @@ public class Tenant extends AbstractAuditingEntity<Long> implements Serializable
     @NotNull @Column
     private String name;
 
+    @Size(max = 50)
+    @NotNull @Column(name = "name_id")
+    private String nameId;
+
     @Size(max = 4000)
     @Column
     private String description;

@@ -1,7 +1,5 @@
 package io.flexwork.config;
 
-import io.flexwork.platform.db.DbConstants;
-import java.sql.Connection;
 import java.util.concurrent.Executor;
 import javax.sql.DataSource;
 import liquibase.integration.spring.SpringLiquibase;
@@ -16,8 +14,6 @@ import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
-import org.springframework.core.env.Profiles;
-import tech.jhipster.config.JHipsterConstants;
 import tech.jhipster.config.liquibase.SpringLiquibaseUtil;
 
 @Configuration
@@ -38,16 +34,9 @@ public class LiquibaseConfiguration {
             LiquibaseProperties liquibaseProperties,
             @LiquibaseDataSource ObjectProvider<DataSource> liquibaseDataSource,
             ObjectProvider<DataSource> dataSourceProvider,
-            DataSource dataSource,
             DataSourceProperties dataSourceProperties) {
         SpringLiquibase liquibase;
 
-        try (Connection connection = dataSource.getConnection()) {
-            connection
-                    .prepareCall("CREATE SCHEMA IF NOT EXISTS " + DbConstants.MASTER_SCHEMA)
-                    .execute();
-            connection.commit();
-        }
         liquibase =
                 SpringLiquibaseUtil.createSpringLiquibase(
                         liquibaseDataSource.getIfAvailable(),
@@ -56,7 +45,7 @@ public class LiquibaseConfiguration {
                         dataSourceProperties);
         liquibase.setChangeLog("classpath:config/liquibase/master/master.xml");
         liquibase.setContexts(liquibaseProperties.getContexts());
-        liquibase.setDefaultSchema(DbConstants.MASTER_SCHEMA);
+        //        liquibase.setDefaultSchema(DbConstants.MASTER_SCHEMA);
         liquibase.setLiquibaseSchema(liquibaseProperties.getLiquibaseSchema());
         liquibase.setLiquibaseTablespace(liquibaseProperties.getLiquibaseTablespace());
         liquibase.setDatabaseChangeLogLockTable(
@@ -67,12 +56,7 @@ public class LiquibaseConfiguration {
         liquibase.setChangeLogParameters(liquibaseProperties.getParameters());
         liquibase.setRollbackFile(liquibaseProperties.getRollbackFile());
         liquibase.setTestRollbackOnUpdate(liquibaseProperties.isTestRollbackOnUpdate());
-        if (env.acceptsProfiles(Profiles.of(JHipsterConstants.SPRING_PROFILE_NO_LIQUIBASE))) {
-            liquibase.setShouldRun(false);
-        } else {
-            liquibase.setShouldRun(liquibaseProperties.isEnabled());
-            log.debug("Configuring Liquibase");
-        }
+        liquibase.setShouldRun(true);
         return liquibase;
     }
 }

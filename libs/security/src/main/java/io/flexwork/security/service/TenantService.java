@@ -54,10 +54,11 @@ public class TenantService {
 
         log.debug("Registering new tenant: {}", tenant.getName());
         tenant.setRealm(UUID.randomUUID().toString());
+        tenant.setNameId(tenant.getRealm().replace("-", ""));
 
         tenantRepository.save(tenant);
         keyCloakService.createNewRealmForNewTenant(tenant);
-        liquibaseService.createTenantDbSchema(tenant.getRealm());
+        liquibaseService.createTenantDbSchema(tenant.getNameId());
         return tenant.getRealm();
     }
 
