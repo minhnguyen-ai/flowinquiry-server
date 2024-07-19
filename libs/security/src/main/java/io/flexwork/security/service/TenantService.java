@@ -9,6 +9,7 @@ import io.flexwork.security.repository.TenantRepository;
 import io.flexwork.security.service.dto.TenantDTO;
 import jakarta.transaction.Transactional;
 import java.util.Optional;
+import java.util.Random;
 import java.util.UUID;
 import lombok.SneakyThrows;
 import org.slf4j.Logger;
@@ -57,13 +58,19 @@ public class TenantService {
         }
 
         log.debug("Registering new tenant: {}", tenant.getName());
-        tenant.setRealm(UUID.randomUUID().toString());
-        tenant.setNameId(tenant.getRealm().replace("-", ""));
+
+        // database does not accept the first character is numeric, so create a random alphabet
+        // character
+        String uuid =
+                (char) (new Random().nextInt(24) + 'a')
+                        + UUID.randomUUID().toString().replace("-", "");
+
+        tenant.setNameId(uuid);
 
         tenantRepository.save(tenant);
         keyCloakService.createNewRealmForNewTenant(tenant);
         liquibaseService.createTenantDbSchema(tenant.getNameId());
-        return tenant.getRealm();
+        return tenant.getNameId();
     }
 
     public Tenant getDefaultTenant() {

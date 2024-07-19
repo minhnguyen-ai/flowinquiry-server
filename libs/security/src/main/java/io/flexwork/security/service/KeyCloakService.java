@@ -34,14 +34,14 @@ public class KeyCloakService {
 
     @SneakyThrows
     public void createNewRealmForNewTenant(Tenant tenant) {
-        log.info("Creating new realm {} for new tenant {}", tenant.getRealm(), tenant.getName());
+        log.info("Creating new realm {} for new tenant {}", tenant.getNameId(), tenant.getName());
 
         Context templateContext = new Context();
         templateContext.setVariables(
                 new HashMap<>() {
                     {
-                        put("realm_id", tenant.getRealm());
-                        put("realm_name", tenant.getRealm());
+                        put("realm_id", tenant.getNameId());
+                        put("realm_name", tenant.getNameId());
                         put("var", new VariableGenerator());
                     }
                 });

@@ -7,7 +7,6 @@ import io.flexwork.IntegrationTest;
 import io.flexwork.security.AuthoritiesConstants;
 import io.flexwork.security.domain.User;
 import io.flexwork.security.repository.UserRepository;
-import io.flexwork.security.service.mapper.UserMapper;
 import jakarta.persistence.EntityManager;
 import java.util.*;
 import java.util.function.Consumer;
@@ -43,8 +42,6 @@ class UserResourceIT {
     @Autowired private ObjectMapper om;
 
     @Autowired private UserRepository userRepository;
-
-    @Autowired private UserMapper userMapper;
 
     @Autowired private EntityManager em;
 

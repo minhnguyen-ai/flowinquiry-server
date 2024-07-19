@@ -28,9 +28,6 @@
             </column>
             <column name="description" type="varchar(4000)"/>
             <column name="logo_url" type="varchar(255)"/>
-            <column name="realm" type="varchar(50)">
-                <constraints nullable="false"/>
-            </column>
             <column name="domain" type="varchar(255)">
                 <constraints nullable="false" unique="true"/>
             </column>
@@ -44,11 +41,10 @@
     </changeSet>
     <changeSet id="00000000000003" author="flexapp">
         <insert tableName="fw_tenant" schemaName="flexwork_master">
-            <column name="id" value="2"/>
+            <column name="id" value="1"/>
             <column name="name" value="flexwork"/>
             <column name="name_id" value="flexwork"/>
             <column name="description" value="Default tenant"/>
-            <column name="realm" value="flexwork"/>
             <column name="domain" value=""/>
             <column name="created_by" value="Hai Nguyen"/>
         </insert>

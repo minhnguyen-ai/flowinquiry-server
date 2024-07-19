@@ -32,10 +32,6 @@ public class Tenant extends AbstractAuditingEntity<Long> implements Serializable
     @Column(length = 255, name = "logo_url")
     private String logoUrl;
 
-    @Size(max = 50)
-    @NotNull @Column
-    private String realm;
-
     @Size(max = 255)
     @NotNull @Column
     private String domain;
