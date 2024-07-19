@@ -11,13 +11,13 @@ import org.junit.jupiter.api.Test;
 public class TenantMapperTest {
 
     @Test
-    public void testTenantDTOToTenant() {
+    public void testTenantDtoToTenant() {
         TenantDTO tenantDTO = new TenantDTO();
         tenantDTO.setId(1L);
         tenantDTO.setName("test");
         tenantDTO.setDescription("description");
 
-        Tenant tenant = TenantMapper.INSTANCE.tenantDTOToTenant(tenantDTO);
+        Tenant tenant = TenantMapper.instance.tenantDtoToTenant(tenantDTO);
         assertThat(tenant.getName()).isEqualTo("test");
         assertThat(tenant.getId()).isEqualTo(1L);
         assertThat(tenant.getDescription()).isEqualTo("description");

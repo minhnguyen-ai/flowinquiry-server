@@ -3,6 +3,7 @@ package io.flexwork.usermanagement.web.rest;
 import io.flexwork.platform.db.TenantConstants;
 import io.flexwork.security.service.UserService;
 import io.flexwork.security.service.dto.UserDTO;
+import io.flexwork.security.service.mapper.UserMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -31,5 +32,6 @@ public class TenantUserResource {
             @RequestHeader(value = TenantConstants.HEADER_TENANT_ID) String tenantId,
             @RequestBody UserDTO userDTO) {
         log.debug("REST request to save User: {} for tenant {}", userDTO, tenantId);
+        userService.saveUser(UserMapper.instance.userDtoToUser(userDTO));
     }
 }

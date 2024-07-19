@@ -1,7 +1,7 @@
 package io.flexwork.security.service;
 
 import static io.flexwork.platform.db.DbConstants.DEFAULT_TENANT;
-import static io.flexwork.security.service.mapper.TenantMapper.INSTANCE;
+import static io.flexwork.security.service.mapper.TenantMapper.instance;
 
 import io.flexwork.platform.db.service.LiquibaseService;
 import io.flexwork.security.domain.Tenant;
@@ -80,6 +80,6 @@ public class TenantService {
     }
 
     public Page<TenantDTO> findAllTenants(Pageable pageable) {
-        return tenantRepository.findAll(pageable).map(INSTANCE::tenantToTenantDTO);
+        return tenantRepository.findAll(pageable).map(instance::tenantToTenantDto);
     }
 }

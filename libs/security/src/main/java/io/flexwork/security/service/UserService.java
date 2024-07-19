@@ -35,10 +35,15 @@ public class UserService {
     private final UserRepository userRepository;
 
     private final AuthorityRepository authorityRepository;
+    private final KeyCloakService keyCloakService;
 
-    public UserService(UserRepository userRepository, AuthorityRepository authorityRepository) {
+    public UserService(
+            UserRepository userRepository,
+            AuthorityRepository authorityRepository,
+            KeyCloakService keyCloakService) {
         this.userRepository = userRepository;
         this.authorityRepository = authorityRepository;
+        this.keyCloakService = keyCloakService;
     }
 
     /**
@@ -235,5 +240,11 @@ public class UserService {
         }
         user.setActivated(activated);
         return user;
+    }
+
+    @Transactional
+    public void saveUser(User user) {
+        userRepository.save(user);
+        keyCloakService.saveUser(user);
     }
 }

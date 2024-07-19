@@ -1,13 +1,18 @@
 package io.flexwork.security.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.flexwork.exceptions.DuplicatedRecordException;
+import io.flexwork.platform.db.TenantContext;
 import io.flexwork.security.domain.Tenant;
 import io.flexwork.security.domain.User;
+import jakarta.ws.rs.core.Response;
 import java.util.HashMap;
 import java.util.UUID;
 import lombok.SneakyThrows;
 import org.keycloak.admin.client.Keycloak;
+import org.keycloak.admin.client.resource.UsersResource;
 import org.keycloak.representations.idm.RealmRepresentation;
+import org.keycloak.representations.idm.UserRepresentation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -30,7 +35,21 @@ public class KeyCloakService {
         this.templateEngine = templateEngine;
     }
 
-    public void saveUser(User user) {}
+    public void saveUser(User user) {
+        String tenantId = TenantContext.getCurrentTenant();
+        UsersResource usersResource = keycloak.realm(tenantId).users();
+        log.info("Saving user {} in tenant {}", user, tenantId);
+        if (usersResource.get(user.getLogin()) != null) {
+            throw new DuplicatedRecordException(
+                    "User with login " + user.getLogin() + " already exists");
+        }
+        UserRepresentation userRepresentation = new UserRepresentation();
+        Response response = usersResource.create(userRepresentation);
+        if (response.getStatus() != Response.Status.CREATED.getStatusCode()) {
+            throw new SecurityException(
+                    "Failed to create user " + user.getLogin() + ": " + response.getStatus());
+        }
+    }
 
     @SneakyThrows
     public void createNewRealmForNewTenant(Tenant tenant) {

@@ -18,6 +18,8 @@ public class UserDTO implements Serializable {
 
     private String lastName;
 
+    private String email;
+
     public UserDTO() {
         // Empty constructor needed for Jackson.
     }
