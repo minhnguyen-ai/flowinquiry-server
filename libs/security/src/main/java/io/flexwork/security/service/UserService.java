@@ -8,14 +8,12 @@ import io.flexwork.security.repository.AuthorityRepository;
 import io.flexwork.security.repository.UserRepository;
 import io.flexwork.security.service.dto.AdminUserDTO;
 import io.flexwork.security.service.dto.UserDTO;
-
 import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -27,9 +25,7 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * Service class for managing users.
- */
+/** Service class for managing users. */
 @Service
 @Transactional
 public class UserService {
@@ -54,10 +50,10 @@ public class UserService {
      * Update basic information (first name, last name, email, language) for the current user.
      *
      * @param firstName first name of user.
-     * @param lastName  last name of user.
-     * @param email     email id of user.
-     * @param langKey   language key.
-     * @param imageUrl  image URL of user.
+     * @param lastName last name of user.
+     * @param email email id of user.
+     * @param langKey language key.
+     * @param imageUrl image URL of user.
      */
     public void updateUser(
             String firstName, String lastName, String email, String langKey, String imageUrl) {

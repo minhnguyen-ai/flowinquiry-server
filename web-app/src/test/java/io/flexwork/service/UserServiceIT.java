@@ -96,7 +96,7 @@ class UserServiceIT {
         OAuth2AuthenticationToken authentication = createMockOAuth2AuthenticationToken(userDetails);
         AdminUserDTO userDTO = userService.getUserFromAuthentication(authentication);
 
-//        assertThat(userDTO.getEmail()).isEqualTo("some_email");
+        //        assertThat(userDTO.getEmail()).isEqualTo("some_email");
     }
 
     @Test

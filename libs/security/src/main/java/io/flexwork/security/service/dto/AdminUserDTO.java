@@ -1,11 +1,8 @@
 package io.flexwork.security.service.dto;
 
-import io.flexwork.security.Constants;
 import io.flexwork.security.domain.Authority;
 import io.flexwork.security.domain.User;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.Instant;
