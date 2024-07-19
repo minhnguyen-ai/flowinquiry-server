@@ -57,8 +57,6 @@ class PublicUserResourceIT {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(
-                        jsonPath("$.[?(@.id == '%s')].login", user.getId()).value(user.getLogin()))
-                .andExpect(
                         jsonPath("$.[?(@.id == '%s')].keys()", user.getId())
                                 .value(Set.of("id", "login")))
                 .andExpect(jsonPath("$.[*].email").doesNotHaveJsonPath())

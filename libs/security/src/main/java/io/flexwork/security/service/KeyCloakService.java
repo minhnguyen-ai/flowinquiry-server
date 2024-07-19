@@ -39,15 +39,15 @@ public class KeyCloakService {
         String tenantId = TenantContext.getCurrentTenant();
         UsersResource usersResource = keycloak.realm(tenantId).users();
         log.info("Saving user {} in tenant {}", user, tenantId);
-        if (usersResource.get(user.getLogin()) != null) {
+        if (usersResource.get(user.getEmail()) != null) {
             throw new DuplicatedRecordException(
-                    "User with login " + user.getLogin() + " already exists");
+                    "User with login " + user.getEmail() + " already exists");
         }
         UserRepresentation userRepresentation = new UserRepresentation();
         Response response = usersResource.create(userRepresentation);
         if (response.getStatus() != Response.Status.CREATED.getStatusCode()) {
             throw new SecurityException(
-                    "Failed to create user " + user.getLogin() + ": " + response.getStatus());
+                    "Failed to create user " + user.getEmail() + ": " + response.getStatus());
         }
     }
 

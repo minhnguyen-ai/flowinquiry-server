@@ -33,11 +33,11 @@ export const Home = () => {
         <p className="lead">
           <Translate contentKey="home.subtitle">This is your homepage</Translate>
         </p>
-        {account?.login ? (
+        {account?.email ? (
           <div>
             <Alert color="success">
-              <Translate contentKey="home.logged.message" interpolate={{ username: account.login }}>
-                You are logged in as user {account.login}.
+              <Translate contentKey="home.logged.message" interpolate={{ username: account.email }}>
+                You are logged in as user {account.email}.
               </Translate>
             </Alert>
           </div>

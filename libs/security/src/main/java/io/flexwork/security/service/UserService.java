@@ -8,12 +8,14 @@ import io.flexwork.security.repository.AuthorityRepository;
 import io.flexwork.security.repository.UserRepository;
 import io.flexwork.security.service.dto.AdminUserDTO;
 import io.flexwork.security.service.dto.UserDTO;
+
 import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -25,7 +27,9 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/** Service class for managing users. */
+/**
+ * Service class for managing users.
+ */
 @Service
 @Transactional
 public class UserService {
@@ -50,15 +54,15 @@ public class UserService {
      * Update basic information (first name, last name, email, language) for the current user.
      *
      * @param firstName first name of user.
-     * @param lastName last name of user.
-     * @param email email id of user.
-     * @param langKey language key.
-     * @param imageUrl image URL of user.
+     * @param lastName  last name of user.
+     * @param email     email id of user.
+     * @param langKey   language key.
+     * @param imageUrl  image URL of user.
      */
     public void updateUser(
             String firstName, String lastName, String email, String langKey, String imageUrl) {
         SecurityUtils.getCurrentUserLogin()
-                .flatMap(userRepository::findOneByLogin)
+                .flatMap(userRepository::findOneByEmail)
                 .ifPresent(
                         user -> {
                             user.setFirstName(firstName);
@@ -84,8 +88,8 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public Optional<User> getUserWithAuthoritiesByLogin(String login) {
-        return userRepository.findOneWithAuthoritiesByLogin(login);
+    public Optional<User> getUserWithAuthoritiesByEmail(String email) {
+        return userRepository.findOneWithAuthoritiesByEmail(email);
     }
 
     /**
@@ -112,7 +116,7 @@ public class UserService {
             }
         }
         // save account in to sync users between IdP and Flexwork's local database
-        Optional<User> existingUser = userRepository.findOneByLogin(user.getLogin());
+        Optional<User> existingUser = userRepository.findOneByEmail(user.getEmail());
         if (existingUser.isPresent()) {
             // if IdP sends last updated information, use it to determine if an update should happen
             if (details.get("updated_at") != null) {
@@ -124,7 +128,7 @@ public class UserService {
                     idpModifiedDate = Instant.ofEpochSecond((Integer) details.get("updated_at"));
                 }
                 if (idpModifiedDate.isAfter(dbModifiedDate)) {
-                    log.debug("Updating user '{}' in local database", user.getLogin());
+                    log.debug("Updating user '{}' in local database", user.getEmail());
                     updateUser(
                             user.getFirstName(),
                             user.getLastName(),
@@ -134,7 +138,7 @@ public class UserService {
                 }
                 // no last updated info, blindly update
             } else {
-                log.debug("Updating user '{}' in local database", user.getLogin());
+                log.debug("Updating user '{}' in local database", user.getEmail());
                 updateUser(
                         user.getFirstName(),
                         user.getLastName(),
@@ -143,7 +147,7 @@ public class UserService {
                         user.getImageUrl());
             }
         } else {
-            log.debug("Saving user '{}' in local database", user.getLogin());
+            log.debug("Saving user '{}' in local database", user.getEmail());
             userRepository.save(user);
         }
         return user;
@@ -190,17 +194,8 @@ public class UserService {
             username = ((String) details.get("preferred_username")).toLowerCase();
         }
         // handle resource server JWT, where sub claim is email and uid is ID
-        if (details.get("uid") != null) {
-            user.setId((String) details.get("uid"));
-            user.setLogin(sub);
-        } else {
-            user.setId(sub);
-        }
-        if (username != null) {
-            user.setLogin(username);
-        } else if (user.getLogin() == null) {
-            user.setLogin(user.getId());
-        }
+        user.setId((String) details.get("sub"));
+
         if (details.get("given_name") != null) {
             user.setFirstName((String) details.get("given_name"));
         } else if (details.get("name") != null) {

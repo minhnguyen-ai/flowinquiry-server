@@ -21,11 +21,6 @@ public class AdminUserDTO implements Serializable {
 
     private String id;
 
-    @NotBlank
-    @Pattern(regexp = Constants.LOGIN_REGEX)
-    @Size(min = 1, max = 50)
-    private String login;
-
     @Size(max = 50)
     private String firstName;
 
@@ -60,7 +55,6 @@ public class AdminUserDTO implements Serializable {
 
     public AdminUserDTO(User user) {
         this.id = user.getId();
-        this.login = user.getLogin();
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
         this.email = user.getEmail();

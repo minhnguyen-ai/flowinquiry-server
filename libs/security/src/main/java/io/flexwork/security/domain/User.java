@@ -25,11 +25,6 @@ public class User extends AbstractAuditingEntity<String> implements Serializable
 
     @Id private String id;
 
-    @NotNull @Pattern(regexp = Constants.LOGIN_REGEX)
-    @Size(min = 1, max = 50)
-    @Column(length = 50, unique = true, nullable = false)
-    private String login;
-
     @Size(max = 50)
     @Column(name = "first_name", length = 50)
     private String firstName;
@@ -69,11 +64,6 @@ public class User extends AbstractAuditingEntity<String> implements Serializable
             })
     @BatchSize(size = 20)
     private Set<Authority> authorities = new HashSet<>();
-
-    // Lowercase the login before saving it in database
-    public void setLogin(String login) {
-        this.login = StringUtils.lowerCase(login, Locale.ENGLISH);
-    }
 
     @Override
     public boolean equals(Object o) {

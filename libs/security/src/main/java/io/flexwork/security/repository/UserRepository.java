@@ -11,10 +11,10 @@ import org.springframework.stereotype.Repository;
 /** Spring Data JPA repository for the {@link User} entity. */
 @Repository
 public interface UserRepository extends JpaRepository<User, String> {
-    Optional<User> findOneByLogin(String login);
+    Optional<User> findOneByEmail(String email);
 
     @EntityGraph(attributePaths = "authorities")
-    Optional<User> findOneWithAuthoritiesByLogin(String login);
+    Optional<User> findOneWithAuthoritiesByEmail(String email);
 
     Page<User> findAllByIdNotNullAndActivatedIsTrue(Pageable pageable);
 }

@@ -58,7 +58,6 @@ class UserResourceIT {
     public static User createEntity(EntityManager em) {
         User persistUser = new User();
         persistUser.setId(UUID.randomUUID().toString());
-        persistUser.setLogin(DEFAULT_LOGIN + RandomStringUtils.randomAlphabetic(5));
         persistUser.setActivated(true);
         persistUser.setEmail(RandomStringUtils.randomAlphabetic(5) + DEFAULT_EMAIL);
         persistUser.setFirstName(DEFAULT_FIRSTNAME);
@@ -71,7 +70,6 @@ class UserResourceIT {
     /** Setups the database with one user. */
     public static User initTestUser(EntityManager em) {
         User persistUser = createEntity(em);
-        persistUser.setLogin(DEFAULT_LOGIN);
         persistUser.setEmail(DEFAULT_EMAIL);
         return persistUser;
     }

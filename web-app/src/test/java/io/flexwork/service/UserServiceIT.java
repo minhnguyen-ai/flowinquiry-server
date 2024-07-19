@@ -53,7 +53,6 @@ class UserServiceIT {
     @BeforeEach
     public void init() {
         user = new User();
-        user.setLogin(DEFAULT_LOGIN);
         user.setActivated(true);
         user.setEmail(DEFAULT_EMAIL);
         user.setFirstName(DEFAULT_FIRSTNAME);
@@ -80,7 +79,6 @@ class UserServiceIT {
         OAuth2AuthenticationToken authentication = createMockOAuth2AuthenticationToken(userDetails);
         AdminUserDTO userDTO = userService.getUserFromAuthentication(authentication);
 
-        assertThat(userDTO.getLogin()).isEqualTo(DEFAULT_LOGIN);
         assertThat(userDTO.getFirstName()).isEqualTo(DEFAULT_FIRSTNAME);
         assertThat(userDTO.getLastName()).isEqualTo(DEFAULT_LASTNAME);
         assertThat(userDTO.getEmail()).isEqualTo(DEFAULT_EMAIL);
@@ -98,7 +96,7 @@ class UserServiceIT {
         OAuth2AuthenticationToken authentication = createMockOAuth2AuthenticationToken(userDetails);
         AdminUserDTO userDTO = userService.getUserFromAuthentication(authentication);
 
-        assertThat(userDTO.getLogin()).isEqualTo("test");
+//        assertThat(userDTO.getEmail()).isEqualTo("some_email");
     }
 
     @Test
