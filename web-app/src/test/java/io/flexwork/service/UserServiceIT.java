@@ -3,6 +3,7 @@ package io.flexwork.service;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.flexwork.IntegrationTest;
+import io.flexwork.platform.db.TenantContext;
 import io.flexwork.security.AuthoritiesConstants;
 import io.flexwork.security.Constants;
 import io.flexwork.security.domain.User;
@@ -92,6 +93,7 @@ class UserServiceIT {
     @Transactional
     void testUserDetailsWithUsername() {
         userDetails.put("preferred_username", "TEST");
+        TenantContext.setCurrentTenant("flexwork");
 
         OAuth2AuthenticationToken authentication = createMockOAuth2AuthenticationToken(userDetails);
         AdminUserDTO userDTO = userService.getUserFromAuthentication(authentication);

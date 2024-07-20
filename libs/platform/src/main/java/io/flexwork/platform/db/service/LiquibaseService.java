@@ -47,6 +47,7 @@ public class LiquibaseService {
                             new ClassLoaderResourceAccessor(),
                             database);
             liquibase.update(new Contexts(), new LabelExpression());
+            liquibase.close();
         }
     }
 
