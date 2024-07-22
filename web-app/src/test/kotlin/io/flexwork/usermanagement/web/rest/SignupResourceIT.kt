@@ -51,7 +51,6 @@ class SignupResourceIT {
     val user = User()
     user.email = "hainguyen@flexwork.io"
     user.id = "userid"
-    user.login = "hainguyen@flexwork.io"
     user.firstName = "Hai"
     user.lastName = "Nguyen"
     restSignupMockMvc
