@@ -1,12 +1,34 @@
-import React from 'react';
-import logo from './logo.svg';
+import { Provider } from 'react-redux'
+import { BrowserRouter } from 'react-router-dom'
+import { PersistGate } from 'redux-persist/integration/react'
+import store, { persistor } from './store'
+import Theme from '@/components/template/Theme'
+import Layout from '@/components/layouts'
+import mockServer from './mock'
+import appConfig from '@/configs/app.config'
+import './locales'
 
+const environment = process.env.NODE_ENV
+
+/**
+ * Set enableMock(Default false) to true at configs/app.config.js
+ * If you wish to enable mock api
+ */
+if (environment !== 'production' && appConfig.enableMock) {
+    mockServer({ environment })
+}
 function App() {
-  return (
-      <h1 className="text-3xl font-bold underline">
-        Hello guest, you can log in at
-      </h1>
-    );
+    return (
+        <Provider store={store}>
+            <PersistGate loading={null} persistor={persistor}>
+                <BrowserRouter>
+                    <Theme>
+                        <Layout />
+                    </Theme>
+                </BrowserRouter>
+            </PersistGate>
+        </Provider>
+    )
 }
 
-export default App;
+export default App
