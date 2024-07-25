@@ -12,4 +12,5 @@
 
     <include file="/config/liquibase/tenant/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
     <include file="/config/liquibase/tenant/changelog/00000000000001_spring_state_machine_tables_created.xml" relativeToChangelogFile="false"/>
+    <include file="/config/liquibase/tenant/changelog/00000000000002_fss_tables.xml" relativeToChangelogFile="false"/>
 </databaseChangeLog>

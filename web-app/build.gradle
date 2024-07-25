@@ -84,6 +84,7 @@ configurations {
 dependencies {
     api project(":libs:security")
     api project(":modules:usermanagement")
+    api project(":tools:liquibase")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-hppc")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
     implementation("com.github.ben-manes.caffeine:caffeine")

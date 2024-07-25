@@ -21,4 +21,6 @@ findProject(':libs:platform')?.name = 'platform'
 include 'tools'
 include 'tools:liquibase'
 findProject(':tools:liquibase')?.name = 'liquibase'
+include 'modules:fss'
+findProject(':modules:fss')?.name = 'fss'
 
