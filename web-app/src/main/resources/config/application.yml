@@ -40,6 +40,8 @@ management:
           - loggers
           - prometheus
           - threaddump
+          - caches
+          - liquibase
   endpoint:
     health:
       show-details: when_authorized
@@ -61,6 +63,14 @@ management:
   health:
     mail:
       enabled: false # When using the MailService, configure an SMTP server and set this to true
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+        step: 60
+  observations:
+    key-values:
+      application: ${spring.application.name}
   metrics:
     enable:
       http: true
@@ -80,7 +90,7 @@ management:
 
 spring:
   application:
-    name: flexwork-app
+    name: flexApp
   profiles:
     # The commented value for `active` can be replaced with valid Spring profiles to load.
     # Otherwise, it will be filled in by gradle when building the JAR file
@@ -106,7 +116,7 @@ spring:
       hibernate.type.preferred_instant_jdbc_type: TIMESTAMP
       hibernate.id.new_generator_mappings: true
       hibernate.connection.provider_disables_autocommit: true
-      hibernate.cache.use_second_level_cache: false
+      hibernate.cache.use_second_level_cache: true
       hibernate.cache.use_query_cache: false
       hibernate.generate_statistics: false
       # modify batch size as necessary
@@ -115,7 +125,6 @@ spring:
       hibernate.order_updates: true
       hibernate.query.fail_on_pagination_over_collection_fetch: true
       hibernate.query.in_clause_parameter_padding: true
-      hibernate.tenant_identifier_resolver: io.flexwork.platform.db.TenantSchemaResolver
     hibernate:
       ddl-auto: none
       naming:
@@ -132,27 +141,19 @@ spring:
       enabled: true
   security:
     oauth2:
-      client:
-        provider:
-          oidc:
-            issuer-uri: http://localhost:9080/realms/flexwork
-        registration:
-          oidc:
-            client-id: web_app
-            client-secret: web_app
-            scope: openid, profile, email, offline_access # last one for refresh tokens
       resourceserver:
         jwt:
-          principal-claim-name: preferred_username
+          authority-prefix: ''
+          authorities-claim-name: auth
   task:
     execution:
-      thread-name-prefix: flexwork-app-task-
+      thread-name-prefix: flex-app-task-
       pool:
         core-size: 2
         max-size: 50
         queue-capacity: 10000
     scheduling:
-      thread-name-prefix: flexwork-app-scheduling-
+      thread-name-prefix: flex-app-scheduling-
       pool:
         size: 2
   thymeleaf:
@@ -183,7 +184,7 @@ info:
 
 jhipster:
   clientApp:
-    name: 'flexworkApp'
+    name: 'flexApp'
   # By default CORS is disabled. Uncomment to enable.
   # cors:
   #   allowed-origins: "http://localhost:8100,http://localhost:9000"
@@ -193,12 +194,12 @@ jhipster:
   #   allow-credentials: true
   #   max-age: 1800
   mail:
-    from: flexwork-app@localhost
+    from: flexApp@localhost
   api-docs:
     default-include-pattern: /api/**
     management-include-pattern: /management/**
-    title: Flexwork App API
-    description: Flexwork App API documentation
+    title: Flex App API
+    description: Flex App API documentation
     version: 0.0.1
     terms-of-service-url:
     contact-name:
@@ -207,15 +208,14 @@ jhipster:
     license: unlicensed
     license-url:
   security:
-    content-security-policy: "default-src 'self'; frame-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://storage.googleapis.com; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com data:"
-    oauth2:
-      audience:
-        - account
-        - api://default
+    content-security-policy: "default-src 'self'; frame-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://storage.googleapis.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:"
+# ===================================================================
+# Application specific properties
+# Add your own application properties here, see the ApplicationProperties class
+# to have type-safe configuration, like in the JHipsterProperties above
+#
+# More documentation is available at:
+# https://www.jhipster.tech/common-application-properties/
+# ===================================================================
 
-# application configuration
-application:
-  keycloak:
-    realm: master
-    client-id: admin-cli
-    username: admin
+# application:

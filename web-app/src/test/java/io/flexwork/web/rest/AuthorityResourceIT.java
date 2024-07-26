@@ -3,7 +3,6 @@ package io.flexwork.web.rest;
 import static io.flexwork.security.domain.AuthorityAsserts.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -89,7 +88,6 @@ class AuthorityResourceIT {
                         restAuthorityMockMvc
                                 .perform(
                                         post(ENTITY_API_URL)
-                                                .with(csrf())
                                                 .contentType(MediaType.APPLICATION_JSON)
                                                 .content(om.writeValueAsBytes(authority)))
                                 .andExpect(status().isCreated())
@@ -118,7 +116,6 @@ class AuthorityResourceIT {
         restAuthorityMockMvc
                 .perform(
                         post(ENTITY_API_URL)
-                                .with(csrf())
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(om.writeValueAsBytes(authority)))
                 .andExpect(status().isBadRequest());
@@ -179,7 +176,6 @@ class AuthorityResourceIT {
         restAuthorityMockMvc
                 .perform(
                         delete(ENTITY_API_URL_ID, authority.getName())
-                                .with(csrf())
                                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
 

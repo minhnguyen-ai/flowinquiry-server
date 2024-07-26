@@ -1,6 +1,8 @@
 package io.flexwork;
 
-import io.flexwork.config.*;
+import io.flexwork.config.AsyncSyncConfiguration;
+import io.flexwork.config.EmbeddedSQL;
+import io.flexwork.config.JacksonConfiguration;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -11,12 +13,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @SpringBootTest(
-        classes = {
-            FlexworkApp.class,
-            JacksonConfiguration.class,
-            AsyncSyncConfiguration.class,
-            TestSecurityConfiguration.class
-        })
+        classes = {FlexworkApp.class, JacksonConfiguration.class, AsyncSyncConfiguration.class})
 @EmbeddedSQL
-@EmbeddedKeycloak
 public @interface IntegrationTest {}

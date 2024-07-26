@@ -4,14 +4,8 @@ import static org.springframework.core.annotation.AnnotatedElementUtils.findMerg
 
 import jakarta.servlet.http.HttpServletRequest;
 import java.net.URI;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.dao.ConcurrencyFailureException;
@@ -46,8 +40,6 @@ import tech.jhipster.web.util.HeaderUtil;
 @ControllerAdvice
 public class ExceptionTranslator extends ResponseEntityExceptionHandler {
 
-    private static Logger log = LoggerFactory.getLogger(ExceptionTranslator.class);
-
     private static final String FIELD_ERRORS_KEY = "fieldErrors";
     private static final String MESSAGE_KEY = "message";
     private static final String PATH_KEY = "path";
@@ -65,7 +57,6 @@ public class ExceptionTranslator extends ResponseEntityExceptionHandler {
     @ExceptionHandler
     public ResponseEntity<Object> handleAnyException(Throwable ex, NativeWebRequest request) {
         ProblemDetailWithCause pdCause = wrapAndCustomizeProblem(ex, request);
-        log.error("Error occurred ", ex);
         return handleExceptionInternal(
                 (Exception) ex,
                 pdCause,
@@ -94,6 +85,13 @@ public class ExceptionTranslator extends ResponseEntityExceptionHandler {
     }
 
     private ProblemDetailWithCause getProblemDetailWithCause(Throwable ex) {
+        if (ex instanceof io.flexwork.security.service.UsernameAlreadyUsedException)
+            return (ProblemDetailWithCause) new LoginAlreadyUsedException().getBody();
+        if (ex instanceof io.flexwork.security.service.EmailAlreadyUsedException)
+            return (ProblemDetailWithCause) new EmailAlreadyUsedException().getBody();
+        if (ex instanceof io.flexwork.security.service.InvalidPasswordException)
+            return (ProblemDetailWithCause) new InvalidPasswordException().getBody();
+
         if (ex instanceof ErrorResponseException exp
                 && exp.getBody() instanceof ProblemDetailWithCause problemDetailWithCause)
             return problemDetailWithCause;
@@ -276,6 +274,6 @@ public class ExceptionTranslator extends ResponseEntityExceptionHandler {
                 "com.",
                 "io.",
                 "de.",
-                "io.flexwork");
+                "com.mycompany.myapp");
     }
 }

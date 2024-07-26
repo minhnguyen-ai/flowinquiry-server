@@ -4,6 +4,7 @@ plugins {
     id "idea"
     id "com.gorylenko.gradle-git-properties"
     alias(libs.plugins.spring.boot)
+    id "jhipster.spring-cache-conventions"
     id "flexwork.docker-conventions"
     id "flexwork.node-gradle-conventions"
     id "flexwork.code-conventions"
@@ -84,6 +85,7 @@ configurations {
 dependencies {
     api project(":libs:security")
     api project(":modules:usermanagement")
+    api project(":modules:fss")
     api project(":tools:liquibase")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-hppc")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
@@ -148,8 +150,6 @@ dependencies {
 
     testImplementation("com.icegreen:greenmail:${greenmailVersion}")
     testImplementation("com.icegreen:greenmail-junit5:${greenmailVersion}")
-
-    testImplementation("com.github.dasniko:testcontainers-keycloak:3.4.0")
 
     implementation("org.liquibase:liquibase-core:4.28.0")
 

@@ -1,12 +1,14 @@
 package io.flexwork.web.rest;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import io.flexwork.IntegrationTest;
 import io.flexwork.security.AuthoritiesConstants;
 import io.flexwork.security.domain.User;
 import io.flexwork.security.repository.UserRepository;
+import io.flexwork.security.service.UserService;
 import jakarta.persistence.EntityManager;
 import java.util.Set;
 import org.junit.jupiter.api.AfterEach;
@@ -29,11 +31,19 @@ class PublicUserResourceIT {
 
     @Autowired private UserRepository userRepository;
 
+    @Autowired private UserService userService;
+
     @Autowired private EntityManager em;
 
     @Autowired private MockMvc restUserMockMvc;
 
     private User user;
+    private Long numberOfUsers;
+
+    @BeforeEach
+    public void countUsers() {
+        numberOfUsers = userRepository.count();
+    }
 
     @BeforeEach
     public void initTest() {
@@ -42,7 +52,9 @@ class PublicUserResourceIT {
 
     @AfterEach
     public void cleanupAndCheck() {
-        userRepository.deleteAll();
+        userService.deleteUser(user.getLogin());
+        assertThat(userRepository.count()).isEqualTo(numberOfUsers);
+        numberOfUsers = null;
     }
 
     @Test
@@ -56,11 +68,34 @@ class PublicUserResourceIT {
                 .perform(get("/api/users?sort=id,desc").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.[?(@.id == %d)].login", user.getId()).value(user.getLogin()))
                 .andExpect(
-                        jsonPath("$.[?(@.id == '%s')].keys()", user.getId())
+                        jsonPath("$.[?(@.id == %d)].keys()", user.getId())
                                 .value(Set.of("id", "login")))
                 .andExpect(jsonPath("$.[*].email").doesNotHaveJsonPath())
                 .andExpect(jsonPath("$.[*].imageUrl").doesNotHaveJsonPath())
                 .andExpect(jsonPath("$.[*].langKey").doesNotHaveJsonPath());
+    }
+
+    @Test
+    @Transactional
+    void getAllUsersSortedByParameters() throws Exception {
+        // Initialize the database
+        userRepository.saveAndFlush(user);
+
+        restUserMockMvc
+                .perform(get("/api/users?sort=resetKey,desc").accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+        restUserMockMvc
+                .perform(get("/api/users?sort=password,desc").accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+        restUserMockMvc
+                .perform(
+                        get("/api/users?sort=resetKey,desc&sort=id,desc")
+                                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+        restUserMockMvc
+                .perform(get("/api/users?sort=id,desc").accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 }

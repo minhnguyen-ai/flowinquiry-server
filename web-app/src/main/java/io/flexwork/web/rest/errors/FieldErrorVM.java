@@ -1,11 +1,7 @@
 package io.flexwork.web.rest.errors;
 
 import java.io.Serializable;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 
-@Getter
-@AllArgsConstructor
 public class FieldErrorVM implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -15,4 +11,22 @@ public class FieldErrorVM implements Serializable {
     private final String field;
 
     private final String message;
+
+    public FieldErrorVM(String dto, String field, String message) {
+        this.objectName = dto;
+        this.field = field;
+        this.message = message;
+    }
+
+    public String getObjectName() {
+        return objectName;
+    }
+
+    public String getField() {
+        return field;
+    }
+
+    public String getMessage() {
+        return message;
+    }
 }

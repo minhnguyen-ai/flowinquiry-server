@@ -1,6 +1,7 @@
 package io.flexwork.config;
 
-import static io.flexwork.config.StaticResourcesWebConfiguration.*;
+import static io.flexwork.config.StaticResourcesWebConfiguration.RESOURCE_LOCATIONS;
+import static io.flexwork.config.StaticResourcesWebConfiguration.RESOURCE_PATHS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 

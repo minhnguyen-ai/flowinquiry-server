@@ -23,18 +23,12 @@ public class TenantService {
 
     private static final Logger log = LoggerFactory.getLogger(TenantService.class);
 
-    private KeyCloakService keyCloakService;
-
     private TenantRepository tenantRepository;
 
     private LiquibaseService liquibaseService;
 
-    public TenantService(
-            TenantRepository tenantRepository,
-            KeyCloakService keyCloakService,
-            LiquibaseService liquibaseService) {
+    public TenantService(TenantRepository tenantRepository, LiquibaseService liquibaseService) {
         this.tenantRepository = tenantRepository;
-        this.keyCloakService = keyCloakService;
         this.liquibaseService = liquibaseService;
     }
 
@@ -68,7 +62,6 @@ public class TenantService {
         tenant.setNameId(uuid);
 
         tenantRepository.save(tenant);
-        keyCloakService.createNewRealmForNewTenant(tenant);
         liquibaseService.createTenantDbSchema(tenant.getNameId());
         return tenant.getNameId();
     }
