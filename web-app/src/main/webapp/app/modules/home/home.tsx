@@ -1,25 +1,14 @@
 import './home.scss';
 
-import React, { useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import { Translate } from 'react-jhipster';
 import { Row, Col, Alert } from 'reactstrap';
 
-import { getLoginUrl, REDIRECT_URL } from 'app/shared/util/url-utils';
 import { useAppSelector } from 'app/config/store';
 
 export const Home = () => {
   const account = useAppSelector(state => state.authentication.account);
-  const pageLocation = useLocation();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const redirectURL = localStorage.getItem(REDIRECT_URL);
-    if (redirectURL) {
-      localStorage.removeItem(REDIRECT_URL);
-      location.href = `${location.origin}${redirectURL}`;
-    }
-  });
 
   return (
     <Row>
@@ -33,11 +22,11 @@ export const Home = () => {
         <p className="lead">
           <Translate contentKey="home.subtitle">This is your homepage</Translate>
         </p>
-        {account?.email ? (
+        {account?.login ? (
           <div>
             <Alert color="success">
-              <Translate contentKey="home.logged.message" interpolate={{ username: account.email }}>
-                You are logged in as user {account.email}.
+              <Translate contentKey="home.logged.message" interpolate={{ username: account.login }}>
+                You are logged in as user {account.login}.
               </Translate>
             </Alert>
           </div>
@@ -46,21 +35,21 @@ export const Home = () => {
             <Alert color="warning">
               <Translate contentKey="global.messages.info.authenticated.prefix">If you want to </Translate>
 
-              <a
-                className="alert-link"
-                onClick={() =>
-                  navigate(getLoginUrl(), {
-                    state: { from: pageLocation },
-                  })
-                }
-              >
-                <Translate contentKey="global.messages.info.authenticated.link">sign in</Translate>
-              </a>
+              <Link to="/login" className="alert-link">
+                <Translate contentKey="global.messages.info.authenticated.link"> sign in</Translate>
+              </Link>
               <Translate contentKey="global.messages.info.authenticated.suffix">
                 , you can try the default accounts:
                 <br />- Administrator (login=&quot;admin&quot; and password=&quot;admin&quot;)
                 <br />- User (login=&quot;user&quot; and password=&quot;user&quot;).
               </Translate>
+            </Alert>
+
+            <Alert color="warning">
+              <Translate contentKey="global.messages.info.register.noaccount">You do not have an account yet?</Translate>&nbsp;
+              <Link to="/account/register" className="alert-link">
+                <Translate contentKey="global.messages.info.register.link">Register a new account</Translate>
+              </Link>
             </Alert>
           </div>
         )}
