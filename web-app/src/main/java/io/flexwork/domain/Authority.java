@@ -10,7 +10,7 @@ import org.springframework.data.domain.Persistable;
 
 /** A Authority. */
 @Entity
-@Table(name = "jhi_authority")
+@Table(name = "fw_authority")
 @JsonIgnoreProperties(value = {"new", "id"})
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class Authority implements Serializable, Persistable<String> {

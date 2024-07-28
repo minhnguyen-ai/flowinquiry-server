@@ -17,7 +17,7 @@ import org.hibernate.annotations.BatchSize;
 
 /** A user. */
 @Entity
-@Table(name = "jhi_user")
+@Table(name = "fw_user")
 public class User extends AbstractAuditingEntity<Long> implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -77,7 +77,7 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
     @JsonIgnore
     @ManyToMany
     @JoinTable(
-            name = "jhi_user_authority",
+            name = "fw_user_authority",
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
             inverseJoinColumns = {
                 @JoinColumn(name = "authority_name", referencedColumnName = "name")

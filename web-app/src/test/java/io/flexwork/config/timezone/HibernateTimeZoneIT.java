@@ -171,7 +171,7 @@ class HibernateTimeZoneIT {
     }
 
     private String generateSqlRequest(String fieldName, long id) {
-        return format("SELECT %s FROM jhi_date_time_wrapper where id=%d", fieldName, id);
+        return format("SELECT %s FROM fw_date_time_wrapper where id=%d", fieldName, id);
     }
 
     private void assertThatValueFromSqlRowSetIsEqualToExpectedValue(
