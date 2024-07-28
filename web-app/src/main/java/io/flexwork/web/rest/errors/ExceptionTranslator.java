@@ -2,6 +2,7 @@ package io.flexwork.web.rest.errors;
 
 import static org.springframework.core.annotation.AnnotatedElementUtils.findMergedAnnotation;
 
+import io.flexwork.security.service.UsernameAlreadyUsedException;
 import jakarta.servlet.http.HttpServletRequest;
 import java.net.URI;
 import java.util.*;
@@ -85,7 +86,7 @@ public class ExceptionTranslator extends ResponseEntityExceptionHandler {
     }
 
     private ProblemDetailWithCause getProblemDetailWithCause(Throwable ex) {
-        if (ex instanceof io.flexwork.security.service.UsernameAlreadyUsedException)
+        if (ex instanceof UsernameAlreadyUsedException)
             return (ProblemDetailWithCause) new LoginAlreadyUsedException().getBody();
         if (ex instanceof io.flexwork.security.service.EmailAlreadyUsedException)
             return (ProblemDetailWithCause) new EmailAlreadyUsedException().getBody();

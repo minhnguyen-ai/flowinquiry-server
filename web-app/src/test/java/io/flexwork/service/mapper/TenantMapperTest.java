@@ -7,7 +7,7 @@ import io.flexwork.security.service.dto.TenantDTO;
 import io.flexwork.security.service.mapper.TenantMapper;
 import org.junit.jupiter.api.Test;
 
-/** Unit tests for {@link io.flexwork.security.service.mapper.TenantMapper}. */
+/** Unit tests for {@link TenantMapper}. */
 public class TenantMapperTest {
 
     @Test

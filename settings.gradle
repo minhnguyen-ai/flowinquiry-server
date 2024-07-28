@@ -10,17 +10,7 @@ pluginManagement {
 
 rootProject.name = "flexwork"
 include 'web-app'
-include 'libs:security'
-findProject(':libs:security')?.name = 'security'
-include 'modules:usermanagement'
-findProject(':libs:usermanagement')?.name = 'usermanagement'
-include 'libs:statemachine'
-findProject(':libs:statemachine')?.name = 'statemachine'
-include 'libs:platform'
-findProject(':libs:platform')?.name = 'platform'
 include 'tools'
 include 'tools:liquibase'
 findProject(':tools:liquibase')?.name = 'liquibase'
-include 'modules:fss'
-findProject(':modules:fss')?.name = 'fss'
 

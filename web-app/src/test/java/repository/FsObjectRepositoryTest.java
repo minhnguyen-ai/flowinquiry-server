@@ -1,6 +1,6 @@
 package repository;
 
-import io.flexwork.fss.repository.FsObjectRepository;
+import io.flexwork.modules.fss.repository.FsObjectRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 

@@ -118,6 +118,6 @@ public class FlexworkApp implements CommandLineRunner {
         liquibaseService.updateMasterDbSchema(MASTER_SCHEMA);
         Tenant defaultTenant = tenantService.getDefaultTenant();
         log.debug("Default tenant: {}", defaultTenant);
-        liquibaseService.createTenantDbSchema("flexwork");
+        liquibaseService.createTenantDbSchema(defaultTenant.getName());
     }
 }
