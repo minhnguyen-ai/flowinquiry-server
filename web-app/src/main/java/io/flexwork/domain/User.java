@@ -1,4 +1,4 @@
-package io.flexwork.security.domain;
+package io.flexwork.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.flexwork.security.Constants;

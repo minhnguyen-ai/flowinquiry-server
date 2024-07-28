@@ -1,6 +1,6 @@
 package io.flexwork.security.service.dto;
 
-import io.flexwork.security.domain.User;
+import io.flexwork.domain.User;
 import java.io.Serializable;
 import java.util.Objects;
 

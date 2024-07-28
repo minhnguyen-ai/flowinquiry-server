@@ -1,6 +1,6 @@
 package io.flexwork.web.rest;
 
-import io.flexwork.security.domain.Authority;
+import io.flexwork.domain.Authority;
 import io.flexwork.security.repository.AuthorityRepository;
 import io.flexwork.web.rest.errors.BadRequestAlertException;
 import jakarta.validation.Valid;

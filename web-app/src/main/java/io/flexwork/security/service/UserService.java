@@ -1,10 +1,10 @@
 package io.flexwork.security.service;
 
+import io.flexwork.domain.Authority;
+import io.flexwork.domain.User;
 import io.flexwork.security.AuthoritiesConstants;
 import io.flexwork.security.Constants;
 import io.flexwork.security.SecurityUtils;
-import io.flexwork.security.domain.Authority;
-import io.flexwork.security.domain.User;
 import io.flexwork.security.repository.AuthorityRepository;
 import io.flexwork.security.repository.UserRepository;
 import io.flexwork.security.service.dto.AdminUserDTO;

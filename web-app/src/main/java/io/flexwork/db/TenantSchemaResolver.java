@@ -1,4 +1,4 @@
-package io.flexwork.platform.db;
+package io.flexwork.db;
 
 import java.util.Map;
 import org.hibernate.cfg.AvailableSettings;
@@ -12,16 +12,18 @@ public class TenantSchemaResolver
 
     @Override
     public String resolveCurrentTenantIdentifier() {
-        return TenantContext.getCurrentTenant();
-    }
-
-    @Override
-    public boolean validateExistingCurrentSessions() {
-        return true;
+        return TenantContext.getCurrentTenant() == null
+                ? "public"
+                : TenantContext.getCurrentTenant();
     }
 
     @Override
     public void customize(Map<String, Object> hibernateProperties) {
         hibernateProperties.put(AvailableSettings.MULTI_TENANT_IDENTIFIER_RESOLVER, this);
+    }
+
+    @Override
+    public boolean validateExistingCurrentSessions() {
+        return true;
     }
 }

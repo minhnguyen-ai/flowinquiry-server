@@ -1,8 +1,8 @@
 package io.flexwork.web.filter;
 
-import static io.flexwork.platform.db.TenantConstants.HEADER_TENANT_ID;
+import static io.flexwork.db.TenantConstants.HEADER_TENANT_ID;
 
-import io.flexwork.platform.db.TenantContext;
+import io.flexwork.db.TenantContext;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
@@ -25,7 +25,7 @@ public class TenantInjectInterceptor implements HandlerInterceptor {
                     "Find the header {} in request. Inject the tenant id into the current thread",
                     HEADER_TENANT_ID);
             TenantContext.setCurrentTenant(tenantId);
-        }
+        } else TenantContext.setCurrentTenant("flexwork");
         return true;
     }
 

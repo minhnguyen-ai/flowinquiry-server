@@ -6,8 +6,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 import io.flexwork.IntegrationTest;
+import io.flexwork.domain.User;
 import io.flexwork.security.Constants;
-import io.flexwork.security.domain.User;
 import io.flexwork.security.service.MailService;
 import jakarta.mail.Multipart;
 import jakarta.mail.Session;

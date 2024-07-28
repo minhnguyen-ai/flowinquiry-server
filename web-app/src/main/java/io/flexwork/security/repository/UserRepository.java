@@ -1,6 +1,6 @@
 package io.flexwork.security.repository;
 
-import io.flexwork.security.domain.User;
+import io.flexwork.domain.User;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;

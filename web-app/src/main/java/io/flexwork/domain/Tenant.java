@@ -1,6 +1,6 @@
-package io.flexwork.security.domain;
+package io.flexwork.domain;
 
-import static io.flexwork.platform.db.DbConstants.MASTER_SCHEMA;
+import static io.flexwork.db.DbConstants.MASTER_SCHEMA;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -13,7 +13,8 @@ import lombok.Data;
 @Data
 public class Tenant extends AbstractAuditingEntity<Long> implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
+    @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
     @Size(max = 255)

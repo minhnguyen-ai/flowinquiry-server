@@ -1,10 +1,11 @@
 package io.flexwork;
 
-import static io.flexwork.platform.db.DbConstants.MASTER_SCHEMA;
+import static io.flexwork.db.DbConstants.MASTER_SCHEMA;
 
 import io.flexwork.config.ApplicationProperties;
-import io.flexwork.platform.db.service.LiquibaseService;
-import io.flexwork.security.domain.Tenant;
+import io.flexwork.db.TenantContext;
+import io.flexwork.db.service.LiquibaseService;
+import io.flexwork.domain.Tenant;
 import io.flexwork.security.service.TenantService;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
@@ -119,5 +120,6 @@ public class FlexworkApp implements CommandLineRunner {
         Tenant defaultTenant = tenantService.getDefaultTenant();
         log.debug("Default tenant: {}", defaultTenant);
         liquibaseService.createTenantDbSchema(defaultTenant.getName());
+        TenantContext.setCurrentTenant(defaultTenant.getName());
     }
 }

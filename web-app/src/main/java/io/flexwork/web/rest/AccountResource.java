@@ -1,7 +1,7 @@
 package io.flexwork.web.rest;
 
+import io.flexwork.domain.User;
 import io.flexwork.security.SecurityUtils;
-import io.flexwork.security.domain.User;
 import io.flexwork.security.repository.UserRepository;
 import io.flexwork.security.service.MailService;
 import io.flexwork.security.service.UserService;

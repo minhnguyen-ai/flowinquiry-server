@@ -1,15 +1,21 @@
-package io.flexwork.platform.db;
+package io.flexwork.db;
+
+import static io.flexwork.db.DbConstants.MASTER_SCHEMA;
+import static org.hibernate.cfg.MultiTenancySettings.MULTI_TENANT_CONNECTION_PROVIDER;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Map;
 import javax.sql.DataSource;
 import org.hibernate.engine.jdbc.connections.spi.MultiTenantConnectionProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomizer;
 import org.springframework.stereotype.Component;
 
 @Component
-public class TenantConnectionProvider<T> implements MultiTenantConnectionProvider<String> {
+public class TenantConnectionProvider<T>
+        implements MultiTenantConnectionProvider<String>, HibernatePropertiesCustomizer {
 
     private DataSource dataSource;
 
@@ -21,7 +27,7 @@ public class TenantConnectionProvider<T> implements MultiTenantConnectionProvide
 
     @Override
     public Connection getAnyConnection() throws SQLException {
-        return dataSource.getConnection();
+        return getConnection(MASTER_SCHEMA);
     }
 
     @Override
@@ -32,7 +38,7 @@ public class TenantConnectionProvider<T> implements MultiTenantConnectionProvide
     @Override
     public Connection getConnection(String tenantIdentifier) throws SQLException {
         log.debug("Get connection for tenant {}", tenantIdentifier);
-        final Connection connection = getAnyConnection();
+        Connection connection = dataSource.getConnection();
         connection.setSchema(tenantIdentifier);
         return connection;
     }
@@ -41,6 +47,7 @@ public class TenantConnectionProvider<T> implements MultiTenantConnectionProvide
     public void releaseConnection(String tenantIdentifier, Connection connection)
             throws SQLException {
         log.info("Release connection for tenant {}", tenantIdentifier);
+        connection.setSchema(MASTER_SCHEMA);
         releaseAnyConnection(connection);
     }
 
@@ -57,5 +64,10 @@ public class TenantConnectionProvider<T> implements MultiTenantConnectionProvide
     @Override
     public <T> T unwrap(Class<T> unwrapType) {
         return null;
+    }
+
+    @Override
+    public void customize(Map<String, Object> hibernateProperties) {
+        hibernateProperties.put(MULTI_TENANT_CONNECTION_PROVIDER, this);
     }
 }

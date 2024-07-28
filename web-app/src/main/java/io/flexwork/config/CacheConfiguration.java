@@ -1,7 +1,7 @@
 package io.flexwork.config;
 
-import io.flexwork.security.domain.Authority;
-import io.flexwork.security.domain.User;
+import io.flexwork.domain.Authority;
+import io.flexwork.domain.User;
 import io.flexwork.security.repository.UserRepository;
 import java.time.Duration;
 import org.ehcache.config.builders.*;

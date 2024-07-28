@@ -1,9 +1,9 @@
 package io.flexwork.security.service;
 
-import static io.flexwork.platform.db.DbConstants.DEFAULT_TENANT;
+import static io.flexwork.db.DbConstants.DEFAULT_TENANT;
 
-import io.flexwork.platform.db.service.LiquibaseService;
-import io.flexwork.security.domain.Tenant;
+import io.flexwork.db.service.LiquibaseService;
+import io.flexwork.domain.Tenant;
 import io.flexwork.security.repository.TenantRepository;
 import io.flexwork.security.service.dto.TenantDTO;
 import io.flexwork.security.service.mapper.TenantMapper;
@@ -69,7 +69,10 @@ public class TenantService {
     public Tenant getDefaultTenant() {
         return tenantRepository
                 .findByNameIgnoreCase(DEFAULT_TENANT)
-                .orElseThrow(() -> new IllegalArgumentException("Default tenant not found"));
+                .orElseThrow(
+                        () ->
+                                new IllegalArgumentException(
+                                        "Default tenant " + DEFAULT_TENANT + " not found"));
     }
 
     public Page<TenantDTO> findAllTenants(Pageable pageable) {

@@ -1,4 +1,4 @@
-package io.flexwork.platform.db.service;
+package io.flexwork.db.service;
 
 import jakarta.transaction.Transactional;
 import java.sql.Connection;

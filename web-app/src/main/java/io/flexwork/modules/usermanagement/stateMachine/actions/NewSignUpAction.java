@@ -1,8 +1,8 @@
 package io.flexwork.modules.usermanagement.stateMachine.actions;
 
+import io.flexwork.domain.User;
 import io.flexwork.modules.usermanagement.stateMachine.SignupEvents;
 import io.flexwork.modules.usermanagement.stateMachine.SignupStates;
-import io.flexwork.security.domain.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.mail.SimpleMailMessage;
