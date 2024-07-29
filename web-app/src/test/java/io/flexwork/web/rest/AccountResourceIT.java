@@ -58,7 +58,6 @@ class AccountResourceIT {
 
     @BeforeEach
     public void countUsers() {
-
         numberOfUsers = userRepository.count();
     }
 
