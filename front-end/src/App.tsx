@@ -6,10 +6,11 @@ import {
   ShowGuesser,
 } from "react-admin";
 import { Layout } from "./Layout";
-import { dataProvider } from "./dataProvider";
+import authProvider from "./authProvider";
+import myDataProvider from "./dataProvider";
 
 export const App = () => (
-  <Admin layout={Layout} dataProvider={dataProvider}>
+  <Admin layout={Layout} authProvider={authProvider} dataProvider={ myDataProvider}>
     <Resource name="documents"/>
   </Admin>
 );
