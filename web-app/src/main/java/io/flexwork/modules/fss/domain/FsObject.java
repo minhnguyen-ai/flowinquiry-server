@@ -3,27 +3,27 @@ package io.flexwork.modules.fss.domain;
 import io.flexwork.domain.AbstractAuditingEntity;
 import jakarta.persistence.*;
 import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.HashSet;
+import java.util.Set;
 import lombok.Data;
 
 @Entity
 @Table(name = "fw_fss_object")
 @Data
-public class FsObject extends AbstractAuditingEntity<BigInteger> implements Serializable {
+public class FsObject extends AbstractAuditingEntity<Long> implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private BigInteger id;
+    private Long id;
 
-    @Column(name = "name", length = 255)
+    @Column(name = "name", length = 255, unique = true)
     private String name;
 
     @Column(name = "description", length = 4000)
     private String description;
 
-    @Column private FsType type;
+    @OneToMany(mappedBy = "descendant", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<FsObjectPath> ancestors = new HashSet<>();
 
-    public enum FsType {
-        File,
-        Folder
-    }
+    @OneToMany(mappedBy = "ancestor", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<FsObjectPath> descendants = new HashSet<>();
 }

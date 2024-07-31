@@ -2,26 +2,25 @@ package io.flexwork.modules.fss.domain;
 
 import jakarta.persistence.*;
 import java.io.Serializable;
-import java.math.BigInteger;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "fw_fss_object_paths")
-public class FsObjectPath {
+@Data
+public class FsObjectPath implements Serializable {
 
-    @EmbeddedId private FsObjectPathKey id;
+    @EmbeddedId private FsObjectPathId id;
 
-    @Column private int dept;
+    @ManyToOne
+    @MapsId("ancestorId")
+    @JoinColumn(name = "ancestor_id")
+    private FsObject ancestor;
 
-    @Embeddable
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class FsObjectPathKey implements Serializable {
-        private BigInteger ancestor;
+    @ManyToOne
+    @MapsId("descendantId")
+    @JoinColumn(name = "descendant_id")
+    private FsObject descendant;
 
-        private BigInteger descendant;
-    }
+    @Column(nullable = false)
+    private int depth;
 }
