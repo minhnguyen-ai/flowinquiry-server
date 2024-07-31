@@ -43,7 +43,7 @@ public class FsObjectService {
     }
 
     @Transactional
-    public void addSubObject(FsObject parent, String name, String description) {
+    public FsObject addSubObject(FsObject parent, String name, String description) {
         FsObject child = createFsObject(name, description);
         List<FsObjectPath> paths = fsObjectPathRepository.findByDescendant(parent);
 
@@ -68,6 +68,8 @@ public class FsObjectService {
         selfPath.setAncestor(child);
         selfPath.setDescendant(child);
         selfPath.setDepth(0);
+
+        return child;
     }
 
     @Transactional(readOnly = true)

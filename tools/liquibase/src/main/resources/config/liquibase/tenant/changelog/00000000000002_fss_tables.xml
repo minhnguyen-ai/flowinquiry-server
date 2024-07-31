@@ -7,6 +7,7 @@
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
     <changeSet id="00000000000004" author="flexapp">
         <comment>File storage system table design with closure table model</comment>
+        <createSequence sequenceName="fw_fss_object_seq" startValue="3" incrementBy="3"/>
         <createTable tableName="fw_fss_object">
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
@@ -26,22 +27,22 @@
             <column name="last_modified_date" type="timestamp"/>
         </createTable>
         <createTable tableName="fw_fss_object_paths">
-            <column name="ancestor" type="bigint">
+            <column name="ancestor_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="descendant" type="bigint">
+            <column name="descendant_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="dept" type="int">
+            <column name="depth" type="int">
                 <constraints nullable="false"/>
             </column>
         </createTable>
-        <addPrimaryKey tableName="fw_fss_object_paths" columnNames="ancestor,descendant"
+        <addPrimaryKey tableName="fw_fss_object_paths" columnNames="ancestor_id,descendant_id"
                        constraintName="pk_fw_fss_object_paths"/>
-        <addForeignKeyConstraint baseTableName="fw_fss_object_paths" baseColumnNames="ancestor" constraintName="fk_fw_fss_object_paths_1"
+        <addForeignKeyConstraint baseTableName="fw_fss_object_paths" baseColumnNames="ancestor_id" constraintName="fk_fw_fss_object_paths_1"
                                  referencedTableName="fw_fss_object"
                                  referencedColumnNames="id"/>
-        <addForeignKeyConstraint baseTableName="fw_fss_object_paths" baseColumnNames="descendant" constraintName="fk_fw_fss_object_paths2"
+        <addForeignKeyConstraint baseTableName="fw_fss_object_paths" baseColumnNames="descendant_id" constraintName="fk_fw_fss_object_paths2"
                                  referencedTableName="fw_fss_object"
                                  referencedColumnNames="id"/>
     </changeSet>
