@@ -9,7 +9,7 @@ pluginManagement {
 }
 
 rootProject.name = "flexwork"
-include 'web-app'
+include 'server'
 include 'tools'
 include 'tools:liquibase'
 findProject(':tools:liquibase')?.name = 'liquibase'
