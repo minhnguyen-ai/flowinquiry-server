@@ -40,7 +40,7 @@ const Navbar = () => {
                         </DropdownMenuItem>
                         <DropdownMenuItem>
                             {' '}
-                            <Link href='/login'>Logout</Link>
+                            <Link href='/auth'>Logout</Link>
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
