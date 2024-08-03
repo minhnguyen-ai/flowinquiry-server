@@ -7,8 +7,8 @@ import { ThemeProvider } from '@/components/providers/ThemeProvider';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-    title: 'TraversyPress',
-    description: 'Admin dashboard',
+    title: 'Flexwork',
+    description: 'Flexwork dashboard',
 };
 
 export default function RootLayout({
@@ -26,7 +26,6 @@ export default function RootLayout({
             storageKey='dashboard-theme'
         >
             {children}
-            <Toaster />
         </ThemeProvider>
         </body>
         </html>

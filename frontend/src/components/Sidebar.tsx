@@ -4,47 +4,74 @@ import {
     LayoutDashboard,
     Folders,
     Settings,
-    User
+    User, Users, Package, Badge, ShoppingCart, Home, Files, Package2, Bell
 } from "lucide-react";
 
-import {
-    Command,
-    CommandEmpty,
-    CommandGroup,
-    CommandInput,
-    CommandItem,
-    CommandList,
-    CommandSeparator,
-    CommandShortcut,
-} from '@/components/ui/command';
+import {Button} from "@/components/ui/button";
+import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
+import ThemeToggler from "@/components/ThemeToggler";
 
 const Sidebar = () => {
     return (
-        <Command className='rounded-none bg-secondary'>
-            <CommandInput placeholder='Type a command or search ...'/>
-            <CommandList>
-                <CommandEmpty>No results found</CommandEmpty>
-                <CommandGroup heading='Suggestions'>
-                    <CommandItem>
-                        <LayoutDashboard className='mr-2 h-4 w-4' />
-                        <Link href='/'>Dashboard</Link>
-                    </CommandItem>
-                    <CommandItem>
-                        <Folders className='mr-2 h-4 w-4'/>
-                        <Link href='/files'>Files</Link>
-                    </CommandItem>
-                    <CommandSeparator />
-                    <CommandItem>
-                        <User className='mr-2 h-4 w-4' />
-                        <Link href='/users'>Users</Link>
-                    </CommandItem>
-                    <CommandItem>
-                        <Settings className='mr-2 h-4 w-4' />
-                        <Link href='/settings'>Settings</Link>
-                    </CommandItem>
-                </CommandGroup>
-            </CommandList>
-        </Command>
+        <div className="hidden border-r bg-muted/40 md:block">
+            <div className="flex h-full max-h-screen flex-col gap-2">
+                <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
+                    <Link href="/" className="flex items-center gap-2 font-semibold">
+                        <Package2 className="h-6 w-6"/>
+                        <span className="">Flexwork</span>
+                    </Link>
+                    <ThemeToggler className="ml-auto h-8 w-8"/>
+                </div>
+                <div className="flex-1">
+                    <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
+                        <Link
+                            href="/"
+                            className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                        >
+                            <Home className="h-4 w-4"/>
+                            Dashboard
+                        </Link>
+                        <Link
+                            href="/files"
+                            className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                        >
+                            <Files className="h-4 w-4"/>
+                            Files{" "}
+                        </Link>
+                        <Link
+                            href="/users"
+                            className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                        >
+                            <Users className="h-4 w-4"/>
+                            Users
+                        </Link>
+                        <Link
+                            href="/settings"
+                            className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                        >
+                            <Settings className="h-4 w-4"/>
+                            Settings
+                        </Link>
+                    </nav>
+                </div>
+                <div className="mt-auto p-4">
+                    <Card x-chunk="dashboard-02-chunk-0">
+                        <CardHeader className="p-2 pt-0 md:p-4">
+                            <CardTitle>Upgrade to Pro</CardTitle>
+                            <CardDescription>
+                                Unlock all features and get unlimited access to our support
+                                team.
+                            </CardDescription>
+                        </CardHeader>
+                        <CardContent className="p-2 pt-0 md:p-4 md:pt-0">
+                            <Button size="sm" className="w-full">
+                                Upgrade
+                            </Button>
+                        </CardContent>
+                    </Card>
+                </div>
+            </div>
+        </div>
     );
 }
 

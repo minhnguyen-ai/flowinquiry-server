@@ -1,17 +1,17 @@
 import Navbar from '@/components/Navbar';
 import Sidebar from '@/components/Sidebar';
 
-const MainLayout = ({ children }: { children: React.ReactNode }) => {
+const MainLayout = ({children}: { children: React.ReactNode }) => {
     return (
-        <>
-            <Navbar />
-            <div className='flex'>
-                <div className='hidden md:block h-[100vh] w-[300px]'>
-                    <Sidebar />
-                </div>
-                <div className='p-5 w-full md:max-w-[1140px]'>{children}</div>
+        <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
+            <Sidebar/>
+            <div className="flex flex-col">
+                <Navbar/>
+                <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
+                    {children}
+                </main>
             </div>
-        </>
+        </div>
     );
 };
 

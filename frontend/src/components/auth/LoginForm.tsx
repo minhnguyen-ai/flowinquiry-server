@@ -9,6 +9,7 @@ import {useRouter} from 'next/navigation';
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
 import {Input} from "@/components/ui/input";
+import Link from "next/link";
 
 const formSchema = z.object({
     email: z.string().email({message: 'Invalid email'}).min(1, {message: 'Email is required'}),
@@ -63,7 +64,7 @@ const LoginForm = () => {
                         <FormField
                             control={form.control}
                             name='password'
-                            render={({ field }) => (
+                            render={({field}) => (
                                 <FormItem>
                                     <FormLabel className='uppercase text-xs font-bold text-zinc-500 dark:text-white'>
                                         Password
@@ -76,13 +77,19 @@ const LoginForm = () => {
                                             {...field}
                                         />
                                     </FormControl>
-                                    <FormMessage />
+                                    <FormMessage/>
                                 </FormItem>
                             )}
                         />
                         <Button className='w-full'>Sign In</Button>
                     </form>
                 </Form>
+                <div className="mt-4 text-center text-sm">
+                    Don&apos;t have an account?{" "}
+                    <Link href="/register" className="underline">
+                        Sign up
+                    </Link>
+                </div>
             </CardContent>
         </Card>
     );
