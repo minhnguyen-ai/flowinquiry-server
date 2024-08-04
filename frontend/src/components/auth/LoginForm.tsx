@@ -1,6 +1,7 @@
 'use client';
 
 import * as z from 'zod';
+import { signIn } from "next-auth/react";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {Button} from "@/components/ui/button";
@@ -10,6 +11,7 @@ import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/compo
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
 import {Input} from "@/components/ui/input";
 import Link from "next/link";
+
 
 const formSchema = z.object({
     email: z.string().email({message: 'Invalid email'}).min(1, {message: 'Email is required'}),
@@ -27,8 +29,19 @@ const LoginForm = () => {
         }
     });
 
-    const handleSubmit = (data: z.infer<typeof formSchema>) => {
-        router.push('/');
+    const handleSubmit = async (data: z.infer<typeof formSchema>) => {
+        try {
+
+            await signIn("credentials", {
+                "email": data.email,
+                "password": data.password,
+                callbackUrl: "/dashboard",
+                redirect: false,
+            });
+        }
+        catch(error){
+            // setError("Invalid credentials");
+        }
     }
 
     return (

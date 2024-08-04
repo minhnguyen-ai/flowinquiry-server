@@ -1,0 +1,1 @@
+export const BACKEND_API = process.env.NEXTAUTH_URL;
