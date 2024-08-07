@@ -3,8 +3,8 @@
 import Image from "next/image"
 import {File, ListFilter, MoreHorizontal, PlusCircle} from "lucide-react"
 
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+import {Badge} from "@/components/ui/badge"
+import {Button} from "@/components/ui/button"
 import {
     Card,
     CardContent,
@@ -29,8 +29,15 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
+import {useRouter} from "next/navigation";
 
 export default function UserList() {
+    const router = useRouter();
+
+    const addNewUser = () => {
+        router.push("/portal/users/new")
+    }
+
     return (
         <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
             <Tabs defaultValue="all">
@@ -71,10 +78,10 @@ export default function UserList() {
                     Export
                   </span>
                         </Button>
-                        <Button size="sm" className="h-8 gap-1">
+                        <Button size="sm" className="h-8 gap-1" onClick={addNewUser}>
                             <PlusCircle className="h-3.5 w-3.5"/>
                             <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-                    Add Product
+                    Add User
                   </span>
                         </Button>
                     </div>
