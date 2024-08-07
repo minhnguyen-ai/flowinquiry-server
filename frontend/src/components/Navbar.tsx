@@ -133,7 +133,7 @@ const Navbar = () => {
                         </DropdownMenuLabel>
                         <DropdownMenuSeparator/>
                         <DropdownMenuItem>
-                            <Link href='/profile'>Profile</Link>
+                            <Link href='/portal/profile'>Profile</Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem>
                             <Link href='#' onClick={() => signOut()}>

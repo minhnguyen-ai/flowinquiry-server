@@ -32,21 +32,21 @@ const Sidebar = () => {
                             Dashboard
                         </Link>
                         <Link
-                            href="/files"
+                            href="/portal/files"
                             className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
                         >
                             <Files className="h-4 w-4"/>
                             Files{" "}
                         </Link>
                         <Link
-                            href="/users"
+                            href="/portal/users"
                             className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
                         >
                             <Users className="h-4 w-4"/>
                             Users
                         </Link>
                         <Link
-                            href="/settings"
+                            href="/portal/settings"
                             className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
                         >
                             <Settings className="h-4 w-4"/>
