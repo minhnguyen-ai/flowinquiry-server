@@ -1,33 +1,29 @@
-import { BACKEND_API } from "./constants";
+import axios, {Axios, AxiosResponse} from 'axios';
+import {BACKEND_API} from "./constants";
+
 export default async function apiAuthSignIn(credentials: Record<"email" | "username" | "password", string> | undefined) {
     try {
-        const response = await fetch(`${BACKEND_API}/api/authenticate`, {
-            method: "POST",
+        const response = await axios.post(`${BACKEND_API}/api/login`, JSON.stringify(credentials), {
             headers: {
                 "Content-Type": "application/json",
-            },
-            body: JSON.stringify(credentials as any),
-        });
+            }
+        }).catch((error: AxiosResponse) => {
+                console.log(error);
+            })
 
-        //if 401 unauthorized
-        if (!response.ok) {
-            return new Error("Invalid credentials");
-        }
+        console.log("Response: " + JSON.stringify(response.data));
 
-        const data = await response.json();
+
         //verify jwt access token
-        // const decoded = jwt.verify(data.accessToken, process.env.JWT_SECRET);
-        if (data.error) {
-            return { error: data.message };
-        }
 
-        const userID = data.userID;
-        return { ...data, userID };
+        const bearerToken = response?.headers?.authorization;
+        const jwt = (bearerToken && bearerToken.slice(0, 7) === 'Bearer ') ? bearerToken.slice(7, bearerToken.length) : "";
+
+        const remoteUser = response.data;
+        return {...remoteUser, "accessToken": jwt};
     } catch (error) {
         // return { error: error.message };
-        return { error: error };
+        console.log(error);
+        return {error: error};
     }
 }
-
-export const BAPI = process.env.BACKEND_SERVER as string;
-export const Token = process.env.BEARER as string;

@@ -1,7 +1,6 @@
 import { NextAuthOptions, getServerSession } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import apiAuthSignIn from "./api";
-import { JWT } from "next-auth/jwt";
 
 export const authOptions:NextAuthOptions = {
     providers: [
@@ -17,6 +16,7 @@ export const authOptions:NextAuthOptions = {
                     throw new Error("Invalid credentials");
                 }
                 const user = await apiAuthSignIn(credentials);
+                console.log("API sign in: " + JSON.stringify(user));
                 return user;
             },
         }),
@@ -24,23 +24,26 @@ export const authOptions:NextAuthOptions = {
     callbacks: {
         async jwt({ token, account, user }) {
             // Persist the OAuth access_token to the token right after signin
-            if (account) {
+            console.log(`Token: ${JSON.stringify(token)}, account ${JSON.stringify(account)}, user ${JSON.stringify(user)}`);
+            if (user) {
                 token.accessToken = user?.accessToken;
+                token.id = user.id;
             }
-            return user as JWT;
+            console.log(`Return token ${JSON.stringify(token)}`)
+            return token;
         },
         async session({ session, token, user }) {
             // Send properties to the client, like an access_token from a provider.
+            console.log(`Callback session! Token: ${JSON.stringify(token)}, session ${JSON.stringify(session)}, user ${JSON.stringify(user)}`);
             return session;
-        },
+        }
     },
     session: {
         strategy: "jwt",
         maxAge: 30 * 24 * 60 * 60, // Maximum session age in seconds (30 days)
     },
-
     pages: {
-        // signIn: "/auth/signin",
+        signIn: "/login",
     },
     secret: process.env.NEXTAUTH_SECRET as string,
 };

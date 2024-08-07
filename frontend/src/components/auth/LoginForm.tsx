@@ -6,7 +6,7 @@ import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {Button} from "@/components/ui/button";
 
-import {useRouter} from 'next/navigation';
+import {redirect, useRouter} from 'next/navigation';
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
 import {Input} from "@/components/ui/input";
@@ -31,15 +31,18 @@ const LoginForm = () => {
 
     const handleSubmit = async (data: z.infer<typeof formSchema>) => {
         try {
-
-            await signIn("credentials", {
+            const response = await signIn("credentials", {
+                "username": data.email,
                 "email": data.email,
                 "password": data.password,
-                callbackUrl: "/dashboard",
+                callbackUrl: "/",
                 redirect: false,
             });
+            console.log("Login success " + JSON.stringify(response));
+            router.push("/portal");
         }
-        catch(error){
+        catch (error){
+            console.log("ERROR" + error);
             // setError("Invalid credentials");
         }
     }

@@ -87,6 +87,8 @@ public class SecurityConfiguration {
                                         .permitAll()
                                         .requestMatchers(mvc.pattern("/swagger-ui/**"))
                                         .permitAll()
+                                        .requestMatchers(mvc.pattern(HttpMethod.POST, "/api/login"))
+                                        .permitAll()
                                         .requestMatchers(
                                                 mvc.pattern(HttpMethod.POST, "/api/authenticate"))
                                         .permitAll()
