@@ -3,6 +3,7 @@ import {Inter} from 'next/font/google';
 import './globals.css';
 import {ThemeProvider} from '@/components/providers/ThemeProvider';
 import AuthProvider from "./AuthProvider";
+import { Toaster } from '@/components/ui/toaster';
 
 const inter = Inter({subsets: ['latin']});
 
@@ -27,6 +28,7 @@ export default async function RootLayout({
                 enableSystem={true}
                 storageKey='dashboard-theme'
             >
+                <Toaster/>
                 {children}
             </ThemeProvider>
         </AuthProvider>

@@ -11,8 +11,6 @@ export default async function apiAuthSignIn(credentials: Record<"email" | "usern
                 console.log(error);
             })
 
-        console.log("Response: " + JSON.stringify(response.data));
-
 
         //verify jwt access token
 

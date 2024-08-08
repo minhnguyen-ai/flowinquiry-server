@@ -35,6 +35,7 @@ export const authOptions:NextAuthOptions = {
         async session({ session, token, user }) {
             // Send properties to the client, like an access_token from a provider.
             console.log(`Callback session! Token: ${JSON.stringify(token)}, session ${JSON.stringify(session)}, user ${JSON.stringify(user)}`);
+            session.token = token.accessToken;
             return session;
         }
     },
