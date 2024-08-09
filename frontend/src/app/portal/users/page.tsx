@@ -11,6 +11,7 @@ import {UserTable} from "@/components/tables/user-tables/user-table";
 import {columns} from "@/components/tables/user-tables/columns";
 import {toast} from "@/components/ui/use-toast";
 import {useSession} from "next-auth/react";
+import {useEffect} from "react";
 
 const breadcrumbItems = [
     { title: 'Dashboard', link: '/portal' },
@@ -25,33 +26,39 @@ type paramsProps = {
 
 
 const Users = async ({searchParams}: paramsProps) => {
-    const {data:session} = useSession();
+    // const {data:session} = useSession();
 
     const page = Number(searchParams.page) || 1;
     const pageLimit = Number(searchParams.limit) || 10;
     const country = searchParams.search || null;
     const offset = (page - 1) * pageLimit;
 
-    const res = await fetch(
-        `http://localhost:8080/api/users`, {
-            headers: {
-                'Content-Type':'application/json',
-                'Access-Control-Allow-Origin': '*',
-                'X-TENANT-ID': 'flexwork'
-            }
-        }
-    );
-    console.log("RESPONSE " + JSON.stringify(res));
-    if (!res) {
-        // Return error
-        return (
-            <div>Users</div>
-        );
-    } else {
-        return (
-            <div>Users</div>
-        );
-    }
+    // useEffect(()=> {
+    //     async function fetchUsersInfo() {
+    //
+    //     }
+    // });
+    // const res = await fetch(
+    //     `http://localhost:8080/api/users`, {
+    //         headers: {
+    //             'Content-Type':'application/json',
+    //             'Access-Control-Allow-Origin': '*',
+    //             'X-TENANT-ID': 'flexwork'
+    //         }
+    //     }
+    // );
+    // console.log("RESPONSE " + JSON.stringify(res));
+    // if (!res) {
+    //     // Return error
+    //     return (
+    //         <div>Users</div>
+    //     );
+    // } else {
+    //     return (
+    //         <div>Users</div>
+    //     );
+    // }
+    return (<div>Users</div>);
 
 }
 
