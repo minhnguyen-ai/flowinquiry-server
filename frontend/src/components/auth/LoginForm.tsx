@@ -31,6 +31,7 @@ const LoginForm = () => {
 
     const handleSubmit = async (data: z.infer<typeof formSchema>) => {
         try {
+            console.log(`Start signin ${data.email} and ${data.password}`)
             const response = await signIn("credentials", {
                 "username": data.email,
                 "email": data.email,

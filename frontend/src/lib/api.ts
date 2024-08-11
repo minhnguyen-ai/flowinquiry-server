@@ -3,6 +3,7 @@ import {BACKEND_API} from "./constants";
 
 export default async function apiAuthSignIn(credentials: Record<"email" | "username" | "password", string> | undefined) {
     try {
+        console.log(`Call remote login ${BACKEND_API}`)
         const response = await axios.post(`${BACKEND_API}/api/login`, JSON.stringify(credentials), {
             headers: {
                 "Content-Type": "application/json",
