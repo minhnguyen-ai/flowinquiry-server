@@ -12,6 +12,8 @@ import {columns} from "@/components/tables/user-tables/columns";
 import {toast} from "@/components/ui/use-toast";
 import {useSession} from "next-auth/react";
 import {useEffect} from "react";
+import {auth} from "@/auth";
+import {BACKEND_API} from "@/lib/constants";
 
 const breadcrumbItems = [
     { title: 'Dashboard', link: '/portal' },
@@ -26,39 +28,35 @@ type paramsProps = {
 
 
 const Users = async ({searchParams}: paramsProps) => {
-    // const {data:session} = useSession();
+    const session = await auth();
 
     const page = Number(searchParams.page) || 1;
     const pageLimit = Number(searchParams.limit) || 10;
     const country = searchParams.search || null;
     const offset = (page - 1) * pageLimit;
 
-    // useEffect(()=> {
-    //     async function fetchUsersInfo() {
-    //
-    //     }
-    // });
-    // const res = await fetch(
-    //     `http://localhost:8080/api/users`, {
-    //         headers: {
-    //             'Content-Type':'application/json',
-    //             'Access-Control-Allow-Origin': '*',
-    //             'X-TENANT-ID': 'flexwork'
-    //         }
-    //     }
-    // );
-    // console.log("RESPONSE " + JSON.stringify(res));
-    // if (!res) {
-    //     // Return error
-    //     return (
-    //         <div>Users</div>
-    //     );
-    // } else {
-    //     return (
-    //         <div>Users</div>
-    //     );
-    // }
-    return (<div>Users</div>);
+    const res = await fetch(
+        `${BACKEND_API}/api/users`, {
+            headers: {
+                'Content-Type':'application/json',
+                'Access-Control-Allow-Origin': '*',
+                'Authorization': `Bearer ${session.token}`
+            }
+        }
+    );
+
+    if (!res) {
+        // Return error
+        return (
+            <div>Users: Can not load</div>
+        );
+    } else {
+        const users = await res.json();
+        console.log(`Users ${JSON.stringify(users)}`);
+        return (
+            <div>Load users ${JSON.stringify(users)}</div>
+        );
+    }
 
 }
 

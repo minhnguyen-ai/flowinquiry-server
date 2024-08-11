@@ -16,7 +16,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                     throw new Error("Invalid credentials");
                 }
                 const user = await apiAuthSignIn(credentials);
-                console.log("API sign in: " + JSON.stringify(user));
                 return user;
             },
         }),
