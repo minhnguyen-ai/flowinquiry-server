@@ -1,10 +1,12 @@
-package io.flexwork.web.rest;
+package io.flexwork.security.rest;
 
 import static io.flexwork.security.SecurityUtils.AUTHORITIES_KEY;
 import static io.flexwork.security.SecurityUtils.JWT_ALGORITHM;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.servlet.http.HttpServletRequest;
+import io.flexwork.security.rest.errors.InvalidLoginException;
+import io.flexwork.security.service.UserService;
+import io.flexwork.security.service.dto.AdminUserDTO;
 import jakarta.validation.Valid;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -26,12 +28,10 @@ import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.web.bind.annotation.*;
 
-/** Controller to authenticate users. */
 @RestController
 @RequestMapping("/api")
-public class AuthenticateController {
-
-    private static final Logger log = LoggerFactory.getLogger(AuthenticateController.class);
+public class LoginController {
+    private static final Logger log = LoggerFactory.getLogger(LoginController.class);
 
     private final JwtEncoder jwtEncoder;
 
@@ -43,14 +43,19 @@ public class AuthenticateController {
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
-    public AuthenticateController(
-            JwtEncoder jwtEncoder, AuthenticationManagerBuilder authenticationManagerBuilder) {
+    private final UserService userService;
+
+    public LoginController(
+            JwtEncoder jwtEncoder,
+            AuthenticationManagerBuilder authenticationManagerBuilder,
+            UserService userService) {
         this.jwtEncoder = jwtEncoder;
         this.authenticationManagerBuilder = authenticationManagerBuilder;
+        this.userService = userService;
     }
 
-    @PostMapping("/authenticate")
-    public ResponseEntity<JWTToken> authorize(@Valid @RequestBody LoginVM loginVM) {
+    @PostMapping("/login")
+    public ResponseEntity<AdminUserDTO> authorize(@Valid @RequestBody LoginVM loginVM) {
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(
                         loginVM.getUsername(), loginVM.getPassword());
@@ -58,22 +63,17 @@ public class AuthenticateController {
         Authentication authentication =
                 authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        AdminUserDTO adminUserDTO =
+                userService
+                        .getUserWithAuthorities()
+                        .map(AdminUserDTO::new)
+                        .orElseThrow(() -> new InvalidLoginException());
+
         String jwt = this.createToken(authentication, loginVM.isRememberMe());
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setBearerAuth(jwt);
-        return new ResponseEntity<>(new JWTToken(jwt), httpHeaders, HttpStatus.OK);
-    }
-
-    /**
-     * {@code GET /authenticate} : check if the user is authenticated, and return its login.
-     *
-     * @param request the HTTP request.
-     * @return the login if the user is authenticated.
-     */
-    @GetMapping("/authenticate")
-    public String isAuthenticated(HttpServletRequest request) {
-        log.debug("REST request to check if the current user is authenticated");
-        return request.getRemoteUser();
+        return new ResponseEntity<>(adminUserDTO, httpHeaders, HttpStatus.OK);
     }
 
     public String createToken(Authentication authentication, boolean rememberMe) {

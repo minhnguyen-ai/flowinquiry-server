@@ -1,4 +1,4 @@
-package io.flexwork.web.rest;
+package io.flexwork.modules.fss.rest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

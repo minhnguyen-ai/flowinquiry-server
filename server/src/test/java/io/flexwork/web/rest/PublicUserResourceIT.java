@@ -8,6 +8,7 @@ import io.flexwork.IntegrationTest;
 import io.flexwork.domain.User;
 import io.flexwork.security.AuthoritiesConstants;
 import io.flexwork.security.repository.UserRepository;
+import io.flexwork.security.rest.PublicUserResource;
 import io.flexwork.security.service.UserService;
 import jakarta.persistence.EntityManager;
 import java.util.Set;

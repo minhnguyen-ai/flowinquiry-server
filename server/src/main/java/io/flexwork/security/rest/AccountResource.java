@@ -1,14 +1,14 @@
-package io.flexwork.web.rest;
+package io.flexwork.security.rest;
 
 import io.flexwork.domain.User;
 import io.flexwork.security.SecurityUtils;
 import io.flexwork.security.repository.UserRepository;
+import io.flexwork.security.rest.errors.EmailAlreadyUsedException;
+import io.flexwork.security.rest.errors.InvalidPasswordException;
 import io.flexwork.security.service.MailService;
 import io.flexwork.security.service.UserService;
 import io.flexwork.security.service.dto.AdminUserDTO;
 import io.flexwork.security.service.dto.PasswordChangeDTO;
-import io.flexwork.web.rest.errors.EmailAlreadyUsedException;
-import io.flexwork.web.rest.errors.InvalidPasswordException;
 import jakarta.validation.Valid;
 import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;

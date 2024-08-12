@@ -10,6 +10,7 @@ import io.flexwork.IntegrationTest;
 import io.flexwork.domain.User;
 import io.flexwork.security.AuthoritiesConstants;
 import io.flexwork.security.repository.UserRepository;
+import io.flexwork.security.rest.UserResource;
 import io.flexwork.security.service.UserService;
 import io.flexwork.security.service.dto.AdminUserDTO;
 import io.flexwork.security.service.mapper.UserMapperClassic;

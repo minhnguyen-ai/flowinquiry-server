@@ -1,4 +1,4 @@
-package io.flexwork.modules.usermanagement.web.rest;
+package io.flexwork.modules.usermanagement.rest;
 
 import io.flexwork.db.TenantConstants;
 import io.flexwork.security.service.UserService;

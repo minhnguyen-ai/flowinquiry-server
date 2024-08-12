@@ -1,4 +1,4 @@
-package io.flexwork.modules.usermanagement.web.rest;
+package io.flexwork.modules.usermanagement.rest;
 
 import io.flexwork.domain.Tenant;
 import io.flexwork.security.service.TenantService;

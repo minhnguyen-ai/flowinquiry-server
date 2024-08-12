@@ -1,4 +1,4 @@
-package io.flexwork.web.rest.errors;
+package io.flexwork.security.rest.errors;
 
 @SuppressWarnings("java:S110") // Inheritance tree of classes should not be too deep
 public class LoginAlreadyUsedException extends BadRequestAlertException {

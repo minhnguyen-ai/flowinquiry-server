@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.flexwork.IntegrationTest;
 import io.flexwork.domain.Authority;
 import io.flexwork.security.repository.AuthorityRepository;
+import io.flexwork.security.rest.AuthorityResource;
 import jakarta.persistence.EntityManager;
 import java.util.UUID;
 import org.junit.jupiter.api.AfterEach;

@@ -1,4 +1,4 @@
-package io.flexwork.web.rest.errors;
+package io.flexwork.security.rest.errors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.ErrorResponseException;

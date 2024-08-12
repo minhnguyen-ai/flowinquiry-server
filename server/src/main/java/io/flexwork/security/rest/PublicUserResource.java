@@ -1,4 +1,4 @@
-package io.flexwork.web.rest;
+package io.flexwork.security.rest;
 
 import io.flexwork.security.service.UserService;
 import io.flexwork.security.service.dto.UserDTO;

@@ -1,4 +1,4 @@
-package io.flexwork.web.rest;
+package io.flexwork.security.rest;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
