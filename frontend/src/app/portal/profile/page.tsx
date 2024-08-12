@@ -9,7 +9,7 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {useForm} from "react-hook-form";
 import {z} from "zod";
 import {useSession} from "next-auth/react";
-import {FwSession} from "@/types/commons";
+import {BACKEND_API} from "@/lib/constants";
 
 
 const UserProfile = () => {
@@ -38,7 +38,23 @@ const UserProfile = () => {
         }
     });
 
+    const handleFileUpload = async (event) => {
+        console.log(`Start upload file ${BACKEND_API}`);
+        const file = event.target.files[0];
+        const formData = new FormData();
+        formData.append("file", file);
+        console.log("Upload file " + file);
 
+        const response = await fetch(`${BACKEND_API}/api/files/singleUpload`, {
+            method: 'POST',
+            body: formData,
+        });
+        if (response.ok) {
+            console.log("Upload successfully");
+        } else {
+            console.log("Error uploading file");
+        }
+    }
 
     return (
         <Card>
@@ -49,7 +65,7 @@ const UserProfile = () => {
                     <AvatarImage/>
                     <AvatarFallback>HN</AvatarFallback>
                 </Avatar>
-                <input type="file" accept="image/*"/>
+                <input type="file" onChange={handleFileUpload}/>
             </div>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">
