@@ -1,9 +1,12 @@
 import Navbar from '@/components/Navbar';
 import Sidebar from '@/components/Sidebar';
+import {auth} from "@/auth";
+import {redirect} from "next/navigation";
 
 
 const MainLayout = async ({children}: { children: React.ReactNode }) => {
-
+    const session = await auth();
+    if (!session) redirect("/login");
     return (
             <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
                 <Sidebar/>

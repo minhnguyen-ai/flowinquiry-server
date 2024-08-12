@@ -9,6 +9,7 @@ import io.flexwork.security.repository.AuthorityRepository;
 import io.flexwork.security.repository.UserRepository;
 import io.flexwork.security.service.dto.AdminUserDTO;
 import io.flexwork.security.service.dto.UserDTO;
+import io.flexwork.security.service.mapper.UserMapper;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
@@ -39,13 +40,17 @@ public class UserService {
 
     private final AuthorityRepository authorityRepository;
 
+    private UserMapper userMapper;
+
     public UserService(
             UserRepository userRepository,
             PasswordEncoder passwordEncoder,
-            AuthorityRepository authorityRepository) {
+            AuthorityRepository authorityRepository,
+            UserMapper userMapper) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authorityRepository = authorityRepository;
+        this.userMapper = userMapper;
     }
 
     public Optional<User> activateRegistration(String key) {
@@ -272,7 +277,9 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public Page<UserDTO> getAllPublicUsers(Pageable pageable) {
-        return userRepository.findAllByIdNotNullAndActivatedIsTrue(pageable).map(UserDTO::new);
+        return userRepository
+                .findAllByIdNotNullAndActivatedIsTrue(pageable)
+                .map(userMapper::userToUserDTO);
     }
 
     @Transactional(readOnly = true)

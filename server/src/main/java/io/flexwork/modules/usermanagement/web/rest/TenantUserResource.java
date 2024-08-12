@@ -31,6 +31,6 @@ public class TenantUserResource {
             @RequestHeader(value = TenantConstants.HEADER_TENANT_ID) String tenantId,
             @RequestBody UserDTO userDTO) {
         log.debug("REST request to save User: {} for tenant {}", userDTO, tenantId);
-        //        userService.saveUser(UserMapper.instance.userDtoToUser(userDTO));
+        //        userService.saveUser(UserMapperClassic.instance.userDtoToUser(userDTO));
     }
 }

@@ -1,10 +1,9 @@
-'use client';
-
-import {useSession} from "next-auth/react";
 import {redirect} from "next/navigation";
+import {auth} from "@/auth";
 
-export default function Home() {
-    const { data: session } = useSession();
+export default async function Home() {
+    const session = await auth();
+    console.log(`Session ${session}`)
     if (!session) {
         console.log("No session defined. Redirect to login page")
         redirect("/login");

@@ -145,6 +145,12 @@ spring:
         jwt:
           authority-prefix: ''
           authorities-claim-name: auth
+  # Configure parameters for the file upload
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+      file-size-threshold: 2KB
   task:
     execution:
       thread-name-prefix: flex-app-task-

@@ -7,7 +7,7 @@ import io.flexwork.domain.User;
 import io.flexwork.security.AuthoritiesConstants;
 import io.flexwork.security.service.dto.AdminUserDTO;
 import io.flexwork.security.service.dto.UserDTO;
-import io.flexwork.security.service.mapper.UserMapper;
+import io.flexwork.security.service.mapper.UserMapperClassic;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -17,19 +17,19 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-/** Unit tests for {@link UserMapper}. */
-class UserMapperTest {
+/** Unit tests for {@link UserMapperClassic}. */
+class UserMapperClassicTest {
 
     private static final String DEFAULT_LOGIN = "johndoe";
     private static final Long DEFAULT_ID = 1L;
 
-    private UserMapper userMapper;
+    private UserMapperClassic userMapper;
     private User user;
     private AdminUserDTO userDto;
 
     @BeforeEach
     public void init() {
-        userMapper = new UserMapper();
+        userMapper = new UserMapperClassic();
         user = new User();
         user.setLogin(DEFAULT_LOGIN);
         user.setPassword(RandomStringUtils.randomAlphanumeric(60));

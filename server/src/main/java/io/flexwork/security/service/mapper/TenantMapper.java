@@ -8,7 +8,7 @@ import org.mapstruct.factory.Mappers;
 @Mapper
 public interface TenantMapper {
 
-    public static TenantMapper instance = Mappers.getMapper(TenantMapper.class);
+    TenantMapper instance = Mappers.getMapper(TenantMapper.class);
 
     Tenant tenantDtoToTenant(TenantDTO tenantDTO);
 

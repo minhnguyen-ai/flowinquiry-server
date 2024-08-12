@@ -1,6 +1,6 @@
 'use client';
 import { Checkbox } from '@/components/ui/checkbox';
-import { User } from '@/types/User';
+import { User } from '@/types/commons';
 import { ColumnDef } from '@tanstack/react-table';
 import { CellAction } from './cell-action';
 
@@ -26,23 +26,15 @@ export const columns: ColumnDef<User>[] = [
     },
     {
         accessorKey: 'first_name',
-        header: 'NAME'
-    },
-    {
-        accessorKey: 'country',
-        header: 'COUNTRY'
+        header: 'Name'
     },
     {
         accessorKey: 'email',
-        header: 'EMAIL'
+        header: 'Email'
     },
     {
-        accessorKey: 'job',
-        header: 'COMPANY'
-    },
-    {
-        accessorKey: 'gender',
-        header: 'GENDER'
+        accessorKey: 'authorities',
+        header: 'Authorities'
     },
     {
         id: 'actions',

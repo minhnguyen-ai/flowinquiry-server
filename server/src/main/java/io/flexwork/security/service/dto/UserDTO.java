@@ -1,9 +1,13 @@
 package io.flexwork.security.service.dto;
 
+import io.flexwork.domain.Authority;
 import io.flexwork.domain.User;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.Set;
+import lombok.Data;
 
+@Data
 /** A DTO representing a user, with only the public attributes. */
 public class UserDTO implements Serializable {
 
@@ -12,6 +16,14 @@ public class UserDTO implements Serializable {
     private Long id;
 
     private String login;
+
+    private String email;
+
+    private String firstName;
+
+    private String lastName;
+
+    private Set<Authority> authorities;
 
     public UserDTO() {
         // Empty constructor needed for Jackson.
@@ -23,48 +35,16 @@ public class UserDTO implements Serializable {
         this.login = user.getLogin();
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
         UserDTO userDTO = (UserDTO) o;
-        if (userDTO.getId() == null || getId() == null) {
-            return false;
-        }
-
-        return Objects.equals(getId(), userDTO.getId())
-                && Objects.equals(getLogin(), userDTO.getLogin());
+        return Objects.equals(id, userDTO.id) && Objects.equals(login, userDTO.login);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getLogin());
-    }
-
-    // prettier-ignore
-    @Override
-    public String toString() {
-        return "UserDTO{" + "id='" + id + '\'' + ", login='" + login + '\'' + "}";
+        return Objects.hash(id, login);
     }
 }

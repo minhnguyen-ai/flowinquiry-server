@@ -12,7 +12,7 @@ import io.flexwork.security.AuthoritiesConstants;
 import io.flexwork.security.repository.UserRepository;
 import io.flexwork.security.service.UserService;
 import io.flexwork.security.service.dto.AdminUserDTO;
-import io.flexwork.security.service.mapper.UserMapper;
+import io.flexwork.security.service.mapper.UserMapperClassic;
 import jakarta.persistence.EntityManager;
 import java.util.Collections;
 import java.util.List;
@@ -63,7 +63,7 @@ class UserResourceIT {
 
     @Autowired private UserService userService;
 
-    @Autowired private UserMapper userMapper;
+    @Autowired private UserMapperClassic userMapper;
 
     @Autowired private EntityManager em;
 

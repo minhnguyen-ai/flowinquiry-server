@@ -1,7 +1,7 @@
 import axios, {Axios, AxiosResponse} from 'axios';
 import {BACKEND_API} from "./constants";
 
-export default async function apiAuthSignIn(credentials: Record<"email" | "username" | "password", string> | undefined) {
+export default async function apiAuthSignIn(credentials: Record<"email" | "password", string> | undefined) {
     try {
         const response = await axios.post(`${BACKEND_API}/api/login`, JSON.stringify(credentials), {
             headers: {

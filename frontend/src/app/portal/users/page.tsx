@@ -1,5 +1,5 @@
 import UserList from "@/components/users/UserList";
-import {User} from "@/types/User";
+import {User} from "@/types/commons";
 import {Breadcrumbs} from "@/components/breadcrumbs";
 import {Heading} from "@/components/heading";
 import Link from "next/link";
@@ -46,15 +46,42 @@ const Users = async ({searchParams}: paramsProps) => {
     );
 
     if (!res) {
-        // Return error
         return (
-            <div>Users: Can not load</div>
+            <div>Users: Can not load data</div>
         );
     } else {
         const users = await res.json();
-        console.log(`Users ${JSON.stringify(users)}`);
+        const totalUsers = 100; //1000
+        const pageCount = Math.ceil(totalUsers / pageLimit);
+console.log(`Users ${JSON.stringify(users)}`)
         return (
-            <div>Load users ${JSON.stringify(users)}</div>
+            <div className="space-y-4">
+                <Breadcrumbs items={breadcrumbItems}/>
+
+                <div className="flex items-start justify-between">
+                    <Heading
+                        title={`Users (${totalUsers})`}
+                        description="Manage users"
+                    />
+
+                    <Link
+                        href={'/dashboard/employee/new'}
+                        className={cn(buttonVariants({variant: 'default'}))}
+                    >
+                        <Plus className="mr-2 h-4 w-4"/> Add New
+                    </Link>
+                </div>
+                <Separator/>
+
+                <UserTable
+                    searchKey="country"
+                    pageNo={page}
+                    columns={columns}
+                    totalUsers={totalUsers}
+                    data={users}
+                    pageCount={pageCount}
+                />
+            </div>
         );
     }
 

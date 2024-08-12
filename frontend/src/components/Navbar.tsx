@@ -122,7 +122,7 @@ const Navbar = () => {
                                     </Avatar>
                                 </TooltipTrigger>
                                 <TooltipContent>
-                                    <p>{session?.user?.email}</p>
+                                    <p>{session?.user?.firstName}</p>
                                 </TooltipContent>
                             </Tooltip>
                         </TooltipProvider>
