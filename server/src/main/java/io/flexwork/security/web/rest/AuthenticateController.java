@@ -1,4 +1,4 @@
-package io.flexwork.security.rest;
+package io.flexwork.security.web.rest;
 
 import static io.flexwork.security.SecurityUtils.AUTHORITIES_KEY;
 import static io.flexwork.security.SecurityUtils.JWT_ALGORITHM;

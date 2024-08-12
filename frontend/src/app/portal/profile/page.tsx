@@ -11,7 +11,6 @@ import {z} from "zod";
 import {useSession} from "next-auth/react";
 import {BACKEND_API} from "@/lib/constants";
 
-
 const UserProfile = () => {
 
     const handleSubmit = async (data: z.infer<typeof formSchema>) => {
@@ -45,7 +44,7 @@ const UserProfile = () => {
         formData.append("file", file);
         console.log("Upload file " + file);
 
-        const response = await fetch(`${BACKEND_API}/api/files/singleUpload`, {
+        const response = await fetch(`http://localhost:8080/api/files/singleUpload`, {
             method: 'POST',
             body: formData,
         });

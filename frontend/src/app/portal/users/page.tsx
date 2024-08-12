@@ -53,7 +53,6 @@ const Users = async ({searchParams}: paramsProps) => {
         const users = await res.json();
         const totalUsers = 100; //1000
         const pageCount = Math.ceil(totalUsers / pageLimit);
-console.log(`Users ${JSON.stringify(users)}`)
         return (
             <div className="space-y-4">
                 <Breadcrumbs items={breadcrumbItems}/>
@@ -65,7 +64,7 @@ console.log(`Users ${JSON.stringify(users)}`)
                     />
 
                     <Link
-                        href={'/dashboard/employee/new'}
+                        href={'/portal/users/new'}
                         className={cn(buttonVariants({variant: 'default'}))}
                     >
                         <Plus className="mr-2 h-4 w-4"/> Add New
@@ -84,7 +83,6 @@ console.log(`Users ${JSON.stringify(users)}`)
             </div>
         );
     }
-
 }
 
 export default Users;

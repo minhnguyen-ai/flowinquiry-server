@@ -1,12 +1,12 @@
-package io.flexwork.security.rest;
+package io.flexwork.security.web.rest;
 
 import static io.flexwork.security.SecurityUtils.AUTHORITIES_KEY;
 import static io.flexwork.security.SecurityUtils.JWT_ALGORITHM;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.flexwork.security.rest.errors.InvalidLoginException;
 import io.flexwork.security.service.UserService;
 import io.flexwork.security.service.dto.AdminUserDTO;
+import io.flexwork.security.web.rest.errors.InvalidLoginException;
 import jakarta.validation.Valid;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;

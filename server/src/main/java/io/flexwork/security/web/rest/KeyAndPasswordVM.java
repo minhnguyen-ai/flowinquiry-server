@@ -1,4 +1,4 @@
-package io.flexwork.security.rest;
+package io.flexwork.security.web.rest;
 
 /** View Model object for storing the user's key and password. */
 public class KeyAndPasswordVM {

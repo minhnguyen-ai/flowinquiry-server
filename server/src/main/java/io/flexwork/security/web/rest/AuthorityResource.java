@@ -1,8 +1,8 @@
-package io.flexwork.security.rest;
+package io.flexwork.security.web.rest;
 
 import io.flexwork.domain.Authority;
 import io.flexwork.security.repository.AuthorityRepository;
-import io.flexwork.security.rest.errors.BadRequestAlertException;
+import io.flexwork.security.web.rest.errors.BadRequestAlertException;
 import jakarta.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;

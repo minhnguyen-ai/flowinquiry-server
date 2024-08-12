@@ -1,4 +1,4 @@
-package io.flexwork.security.rest.errors;
+package io.flexwork.security.web.rest.errors;
 
 import java.io.Serializable;
 

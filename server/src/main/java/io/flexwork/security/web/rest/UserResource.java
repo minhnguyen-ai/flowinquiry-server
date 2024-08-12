@@ -1,15 +1,15 @@
-package io.flexwork.security.rest;
+package io.flexwork.security.web.rest;
 
 import io.flexwork.domain.User;
 import io.flexwork.security.AuthoritiesConstants;
 import io.flexwork.security.Constants;
 import io.flexwork.security.repository.UserRepository;
-import io.flexwork.security.rest.errors.BadRequestAlertException;
-import io.flexwork.security.rest.errors.EmailAlreadyUsedException;
-import io.flexwork.security.rest.errors.LoginAlreadyUsedException;
 import io.flexwork.security.service.MailService;
 import io.flexwork.security.service.UserService;
 import io.flexwork.security.service.dto.AdminUserDTO;
+import io.flexwork.security.web.rest.errors.BadRequestAlertException;
+import io.flexwork.security.web.rest.errors.EmailAlreadyUsedException;
+import io.flexwork.security.web.rest.errors.LoginAlreadyUsedException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import java.net.URI;
