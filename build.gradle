@@ -15,6 +15,17 @@ allprojects {
         mavenCentral()
     }
 
+    subprojects {
+        afterEvaluate {
+            if (it.plugins.hasPlugin('java') || it.plugins.hasPlugin('java-library')) {
+                java {
+                    sourceCompatibility=17
+                    targetCompatibility=17
+                }
+            }
+        }
+    }
+
     gitProperties {
         failOnNoGitDirectory = false
         keys = ["git.branch", "git.commit.id.abbrev", "git.commit.id.describe"]
