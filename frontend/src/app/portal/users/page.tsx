@@ -43,7 +43,7 @@ const Users = async ({searchParams}: paramsProps) => {
                 'Authorization': `Bearer ${session.token}`
             }
         }
-    );
+    ).catch((error) => console.error("Error fetching data", error));
 
     if (!res) {
         return (

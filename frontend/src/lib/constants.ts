@@ -1,1 +1,1 @@
-export const BACKEND_API = process.env.NEXTAUTH_URL;
+export const BACKEND_API = process.env.BACK_END_SERVER;

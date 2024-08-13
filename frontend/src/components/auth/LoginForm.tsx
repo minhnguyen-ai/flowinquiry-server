@@ -68,7 +68,7 @@ const LoginForm = () => {
                                                Email
                                            </FormLabel>
                                            <FormControl>
-                                               <Input
+                                               <Input autoComplete="email"
                                                    className='bg-slate-100 dark:bg-slate-300 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0'
                                                    placeholder='Enter email'
                                                    {...field}
@@ -87,7 +87,7 @@ const LoginForm = () => {
                                         Password
                                     </FormLabel>
                                     <FormControl>
-                                        <Input
+                                        <Input autoComplete="current-password"
                                             type='password'
                                             className='bg-slate-100 dark:bg-slate-300 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0'
                                             placeholder='Enter password'
