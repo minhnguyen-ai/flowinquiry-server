@@ -22,7 +22,7 @@ public class SecurityJwtConfiguration {
 
     private static final Logger log = LoggerFactory.getLogger(SecurityJwtConfiguration.class);
 
-    @Value("${jhipster.security.authentication.jwt.base64-secret}")
+    @Value("${flexwork.security.authentication.jwt.base64-secret}")
     private String jwtKey;
 
     @Bean

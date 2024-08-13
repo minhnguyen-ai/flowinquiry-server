@@ -4,7 +4,7 @@ plugins {
     id "idea"
     id "com.gorylenko.gradle-git-properties"
     alias(libs.plugins.spring.boot)
-    id "jhipster.spring-cache-conventions"
+    id "flexwork.spring-cache-conventions"
     id "flexwork.docker-conventions"
     id "flexwork.node-gradle-conventions"
     id "flexwork.code-conventions"
@@ -97,6 +97,7 @@ dependencies {
     implementation(libs.jhipster.framework)
     implementation(libs.springdoc.openapi.starter.webmvc.api)
     implementation("org.apache.commons:commons-lang3")
+    implementation("org.apache.jclouds:jclouds-all:2.6.0")
     implementation("org.springframework.boot:spring-boot-loader-tools")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-aop")
@@ -120,7 +121,7 @@ dependencies {
     implementation("org.hibernate.validator:hibernate-validator")
     implementation("org.springframework.statemachine:spring-statemachine-starter:${springStateMachineVersion}")
     implementation("org.springframework.statemachine:spring-statemachine-data-jpa:${springStateMachineVersion}")
-    implementation("org.liquibase:liquibase-core:4.28.0")
+    implementation("org.liquibase:liquibase-core:${liquibaseVersion}")
 
     testImplementation("com.tngtech.archunit:archunit-junit5-api:${archunitJunit5Version}") {
         exclude group: "org.slf4j", module: "slf4j-api"
@@ -140,7 +141,7 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     testImplementation("com.icegreen:greenmail:${greenmailVersion}")
     testImplementation("com.icegreen:greenmail-junit5:${greenmailVersion}")
-    testImplementation("org.assertj:assertj-core:3.26.3")
+    testImplementation("org.assertj:assertj-core:${assertJVersion}")
 
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     annotationProcessor("org.hibernate.orm:hibernate-jpamodelgen")
