@@ -1,11 +1,3 @@
-# ===================================================================
-# Spring Boot configuration.
-#
-# This configuration is used for unit/integration tests.
-#
-# More information on profiles: https://www.jhipster.tech/profiles/
-# More information on configuration properties: https://www.jhipster.tech/common-application-properties/
-# ===================================================================
 
 # ===================================================================
 # Standard Spring Boot properties.

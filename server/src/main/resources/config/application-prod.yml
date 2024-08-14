@@ -7,7 +7,6 @@
 logging:
   level:
     ROOT: INFO
-    tech.jhipster: INFO
     io.flexwork: INFO
 
 management:
@@ -82,7 +81,6 @@ flexwork:
         # As this is the PRODUCTION configuration, you MUST change the default key, and store it securely:
         # - In the Consul configserver
         # - In a separate `application-prod.yml` file, in the same folder as your executable JAR file
-        # - In the `JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET` environment variable
         base64-secret: YjRkNzc2YTliYjZlZjQzOTRhNzA5Mzk1ZTM5Mjk3NjczZDI4ZDg4ZDJlZjQ2NGRlNzk1MmU5YTE5ZGFlYTFjYTdmNjM3ZjBmY2QzOTNlY2Y2ODczZWQzZTg3OTcwNDU5M2E2ZjQzZGQ0Mzc2NWIxODM3YzY0YmFhYmZhODI3NDk=
         # Token is valid 24 hours
         token-validity-in-seconds: 86400

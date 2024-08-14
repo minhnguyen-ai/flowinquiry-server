@@ -24,8 +24,6 @@ public class Authority implements Serializable, Persistable<String> {
 
     @Transient private boolean isPersisted;
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here
-
     public String getName() {
         return this.name;
     }
@@ -60,8 +58,6 @@ public class Authority implements Serializable, Persistable<String> {
         this.isPersisted = true;
         return this;
     }
-
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
     public boolean equals(Object o) {
