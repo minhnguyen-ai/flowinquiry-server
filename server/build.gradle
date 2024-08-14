@@ -6,7 +6,6 @@ plugins {
     alias(libs.plugins.spring.boot)
     id "flexwork.spring-cache-conventions"
     id "flexwork.docker-conventions"
-    id "flexwork.node-gradle-conventions"
     id "flexwork.code-conventions"
     id "org.jetbrains.kotlin.jvm"
 }

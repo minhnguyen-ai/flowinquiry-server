@@ -27,11 +27,6 @@ bootRun {
     args = ["--spring.profiles.active=${springProfiles}"]
 }
 
-task webapp(type: NpmTask) {
-    dependsOn npmInstall
-    args = ["run", "webapp:prod"]
-    environment = [APP_VERSION: project.version]
-}
 
 processResources {
     inputs.property('version', version)
@@ -65,6 +60,4 @@ task integrationTest(type: Test) {
 }
 integrationTest.dependsOn test
 
-
-processResources.dependsOn webapp
 bootJar.dependsOn processResources
