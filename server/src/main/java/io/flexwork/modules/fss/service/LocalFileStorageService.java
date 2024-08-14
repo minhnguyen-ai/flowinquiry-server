@@ -7,16 +7,20 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 public class LocalFileStorageService implements IStorageService {
 
+    private static Logger log = LoggerFactory.getLogger(LocalFileStorageService.class);
+
     private String rootDirectory;
 
     public LocalFileStorageService(
-            @Value("{application.file.rootDirectory:/}") String rootDirectory) {
+            @Value("${application.file.rootDirectory:storage}") String rootDirectory) {
         this.rootDirectory = rootDirectory;
     }
 
@@ -37,6 +41,11 @@ public class LocalFileStorageService implements IStorageService {
                 outputStream.write(buffer, 0, bytesRead);
             }
         }
+        log.debug(
+                "Save container {} blob {} to file {} successfully",
+                containerName,
+                blobName,
+                destinationFile.getAbsolutePath());
     }
 
     @Override

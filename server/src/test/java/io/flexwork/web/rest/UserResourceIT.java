@@ -394,10 +394,10 @@ class UserResourceIT {
         userRepository.saveAndFlush(user);
 
         User anotherUser = new User();
-        anotherUser.setLogin("jhipster");
+        anotherUser.setLogin("flexwork");
         anotherUser.setPassword(RandomStringUtils.randomAlphanumeric(60));
         anotherUser.setActivated(true);
-        anotherUser.setEmail("jhipster@localhost");
+        anotherUser.setEmail("flexwork@localhost");
         anotherUser.setFirstName("java");
         anotherUser.setLastName("hipster");
         anotherUser.setImageUrl("");
@@ -412,7 +412,7 @@ class UserResourceIT {
         userDTO.setLogin(updatedUser.getLogin());
         userDTO.setFirstName(updatedUser.getFirstName());
         userDTO.setLastName(updatedUser.getLastName());
-        userDTO.setEmail("jhipster@localhost"); // this email should already be used by anotherUser
+        userDTO.setEmail("flexwork@localhost"); // this email should already be used by anotherUser
         userDTO.setActivated(updatedUser.isActivated());
         userDTO.setImageUrl(updatedUser.getImageUrl());
         userDTO.setLangKey(updatedUser.getLangKey());
@@ -437,10 +437,10 @@ class UserResourceIT {
         userRepository.saveAndFlush(user);
 
         User anotherUser = new User();
-        anotherUser.setLogin("jhipster");
+        anotherUser.setLogin("flexwork");
         anotherUser.setPassword(RandomStringUtils.randomAlphanumeric(60));
         anotherUser.setActivated(true);
-        anotherUser.setEmail("jhipster@localhost");
+        anotherUser.setEmail("flexwork@localhost");
         anotherUser.setFirstName("java");
         anotherUser.setLastName("hipster");
         anotherUser.setImageUrl("");
@@ -452,7 +452,7 @@ class UserResourceIT {
 
         AdminUserDTO userDTO = new AdminUserDTO();
         userDTO.setId(updatedUser.getId());
-        userDTO.setLogin("jhipster"); // this login should already be used by anotherUser
+        userDTO.setLogin("flexwork"); // this login should already be used by anotherUser
         userDTO.setFirstName(updatedUser.getFirstName());
         userDTO.setLastName(updatedUser.getLastName());
         userDTO.setEmail(updatedUser.getEmail());

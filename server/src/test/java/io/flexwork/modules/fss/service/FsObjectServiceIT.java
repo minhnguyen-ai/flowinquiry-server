@@ -41,10 +41,10 @@ public class FsObjectServiceIT {
     }
 
     @Test
-    public void testGetCategoryById() {
+    public void testGetObjectById() {
         FsObject category = fsObjectService.createFsObject("Home", "");
 
-        FsObject foundCategory = fsObjectService.getCategoryById(category.getId());
+        FsObject foundCategory = fsObjectService.getObjectById(category.getId());
 
         assertEquals(category.getId(), foundCategory.getId());
         assertEquals("Home", foundCategory.getName());

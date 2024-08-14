@@ -73,7 +73,7 @@ public class FsObjectService {
     }
 
     @Transactional(readOnly = true)
-    public FsObject getCategoryById(Long id) {
+    public FsObject getObjectById(Long id) {
         return fsObjectRepository
                 .findById(id)
                 .orElseThrow(
@@ -81,8 +81,8 @@ public class FsObjectService {
     }
 
     @Transactional(readOnly = true)
-    public List<FsObject> getAllDescendants(Long categoryId) {
-        FsObject category = getCategoryById(categoryId);
+    public List<FsObject> getAllDescendants(Long objectId) {
+        FsObject category = getObjectById(objectId);
         List<FsObjectPath> paths = fsObjectPathRepository.findByAncestor(category);
 
         return paths.stream()
@@ -92,9 +92,9 @@ public class FsObjectService {
     }
 
     @Transactional(readOnly = true)
-    public FsObject getDirectAncestor(Long categoryId) {
-        FsObject category = getCategoryById(categoryId);
-        List<FsObjectPath> paths = fsObjectPathRepository.findByDescendantAndDepth(category, 1);
+    public FsObject getDirectAncestor(Long objectId) {
+        FsObject object = getObjectById(objectId);
+        List<FsObjectPath> paths = fsObjectPathRepository.findByDescendantAndDepth(object, 1);
 
         return paths.stream()
                 .findFirst()
@@ -102,14 +102,13 @@ public class FsObjectService {
                 .orElseThrow(
                         () ->
                                 new IllegalArgumentException(
-                                        "Direct ancestor not found for category id: "
-                                                + categoryId));
+                                        "Direct ancestor not found for category id: " + objectId));
     }
 
     @Transactional(readOnly = true)
-    public List<FsObject> getDirectDescendants(Long categoryId) {
-        FsObject category = getCategoryById(categoryId);
-        List<FsObjectPath> paths = fsObjectPathRepository.findByAncestorAndDepth(category, 1);
+    public List<FsObject> getDirectDescendants(Long objectId) {
+        FsObject object = getObjectById(objectId);
+        List<FsObjectPath> paths = fsObjectPathRepository.findByAncestorAndDepth(object, 1);
 
         return paths.stream().map(FsObjectPath::getDescendant).collect(Collectors.toList());
     }
