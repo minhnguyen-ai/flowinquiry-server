@@ -11,7 +11,6 @@ import {UserTable} from "@/components/tables/user-tables/user-table";
 import {columns} from "@/components/tables/user-tables/columns";
 import {toast} from "@/components/ui/use-toast";
 import {useSession} from "next-auth/react";
-import {useEffect} from "react";
 import {auth} from "@/auth";
 import {BACKEND_API} from "@/lib/constants";
 
@@ -50,7 +49,7 @@ const Users = async ({searchParams}: paramsProps) => {
             <div>Users: Can not load data</div>
         );
     } else {
-        const users = await res.json();
+        const users = res.json();
         const totalUsers = 100; //1000
         const pageCount = Math.ceil(totalUsers / pageLimit);
         return (
@@ -73,7 +72,7 @@ const Users = async ({searchParams}: paramsProps) => {
                 <Separator/>
 
                 <UserTable
-                    searchKey="country"
+                    searchKey="email"
                     pageNo={page}
                     columns={columns}
                     totalUsers={totalUsers}

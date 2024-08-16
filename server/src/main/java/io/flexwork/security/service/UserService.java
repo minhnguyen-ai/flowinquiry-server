@@ -21,7 +21,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -293,22 +292,23 @@ public class UserService {
                 .flatMap(userRepository::findOneWithAuthoritiesByLogin);
     }
 
-    /**
-     * Not activated users should be automatically deleted after 3 days.
-     *
-     * <p>This is scheduled to get fired everyday, at 01:00 (am).
-     */
-    @Scheduled(cron = "0 0 1 * * ?")
-    public void removeNotActivatedUsers() {
-        userRepository
-                .findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(
-                        Instant.now().minus(3, ChronoUnit.DAYS))
-                .forEach(
-                        user -> {
-                            log.debug("Deleting not activated user {}", user.getLogin());
-                            userRepository.delete(user);
-                        });
-    }
+    //
+    //    /**
+    //     * Not activated users should be automatically deleted after 3 days.
+    //     *
+    //     * <p>This is scheduled to get fired everyday, at 01:00 (am).
+    //     */
+    //    @Scheduled(cron = "0 0 1 * * ?")
+    //    public void removeNotActivatedUsers() {
+    //        userRepository
+    //                .findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(
+    //                        Instant.now().minus(3, ChronoUnit.DAYS))
+    //                .forEach(
+    //                        user -> {
+    //                            log.debug("Deleting not activated user {}", user.getLogin());
+    //                            userRepository.delete(user);
+    //                        });
+    //    }
 
     /**
      * Gets a list of all the authorities.

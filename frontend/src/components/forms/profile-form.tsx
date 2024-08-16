@@ -30,7 +30,7 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({initialData}) => {
         lastName: z.string().min(1),
     })
 
-    const {data:session} = useSession();
+    const {data: session} = useSession();
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -48,16 +48,16 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({initialData}) => {
         formData.append("file", file);
         console.log("Upload file " + file);
 
-        const response = await fetch(`/api/files/singleUpload`, {
+        const response = await fetch(`/api/files/singleUpload?type=avatar`, {
             method: 'POST',
             headers: {
                 'Access-Control-Allow-Origin': '*',
                 'Authorization': `Bearer ${session?.token}`
             },
             body: formData,
-        }).catch((error)=> console.error("Error uploading file", error));
+        }).catch((error) => console.error("Error uploading file", error));
 
-            console.log(" uploading file successfully");
+        console.log(" uploading file successfully");
     }
 
     return (
