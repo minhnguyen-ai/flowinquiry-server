@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import {
     LayoutDashboard,
+    Building2,
     Folders,
     Settings,
     User, Users, Package, Badge, ShoppingCart, Home, Files, Package2, Bell
@@ -32,11 +33,18 @@ const Sidebar = () => {
                             Dashboard
                         </Link>
                         <Link
+                            href="/portal/accounts"
+                            className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                        >
+                            <Building2 className="h-4 w-4"/>
+                            Accounts
+                        </Link>
+                        <Link
                             href="/portal/files"
                             className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
                         >
                             <Files className="h-4 w-4"/>
-                            Files{" "}
+                            Files
                         </Link>
                         <Link
                             href="/portal/users"
