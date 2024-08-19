@@ -78,6 +78,7 @@ public class AccountController {
         }
     }
 
+    @GetMapping
     public ResponseEntity<Page<Account>> getAllAccounts(Pageable pageable) {
         Page<Account> accounts = accountService.findAllAccounts(pageable);
         return new ResponseEntity<>(accounts, HttpStatus.OK);

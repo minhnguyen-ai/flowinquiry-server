@@ -1,4 +1,4 @@
-import UserList from "@/components/users/UserList";
+import UsersList from "@/components/users/users-list";
 import {User} from "@/types/commons";
 import {Breadcrumbs} from "@/components/breadcrumbs";
 import {Heading} from "@/components/heading";

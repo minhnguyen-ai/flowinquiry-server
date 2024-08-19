@@ -7,6 +7,7 @@
 
     <!-- ChangeSet for creating the 'account' table -->
     <changeSet id="5" author="flexapp">
+        <createSequence sequenceName="fw_crm_account_seq" startValue="3" incrementBy="3"/>
         <createTable tableName="fw_crm_account">
             <column name="id"  type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>

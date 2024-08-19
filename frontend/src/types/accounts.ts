@@ -1,10 +1,10 @@
-
+import {z} from "zod";
 
 
 export interface Account {
-    id: bigint,
-    accountName: string,
-    accountType: string,
+    id?: bigint,
+    accountName?: string,
+    accountType?: string,
     industry?: string,
     website?: string,
     phoneNumber?: string,
@@ -19,5 +19,14 @@ export interface Account {
     numberOfEmployees?: number,
     createdAt?: string,
     updatedAt?: string,
-    notes?:string
+    notes?: string
 }
+
+export const accountSchema = z.object({
+    accountName: z.string().min(1, {message: 'Name is required'}),
+    accountType: z.string().min(6, {message: 'Type is required'}),
+    industry: z.ostring(),
+    website: z.ostring(),
+});
+
+export type AccountSchema = z.infer<typeof accountSchema>;

@@ -8,15 +8,15 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "account")
+@Table(name = "fw_crm_account")
 @Getter
 @Setter
 public class Account {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "account_id", nullable = false, updatable = false)
-    private Long accountId;
+    @Column(name = "id", nullable = false, updatable = false)
+    private Long id;
 
     @Column(name = "account_name", nullable = false, length = 255)
     private String accountName;

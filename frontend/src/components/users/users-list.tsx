@@ -31,7 +31,7 @@ import {
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import {useRouter} from "next/navigation";
 
-export default function UserList() {
+export default function UsersList() {
     const router = useRouter();
 
     const addNewUser = () => {
