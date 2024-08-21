@@ -1,0 +1,5 @@
+{
+    "java.compile.nullAnalysis.mode": "automatic",
+    "files.autoSaveWorkspaceFilesOnly": true,
+    "files.autoSave": "afterDelay"
+}

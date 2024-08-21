@@ -7,6 +7,7 @@ import {auth} from "@/auth";
 export const getAccounts = async () => {
     try {
         const session = await auth();
+
         console.log(`Token ${JSON.stringify(session)}`);
         const res = await fetch(
             `${BACKEND_API}/api/accounts`, {
@@ -41,7 +42,11 @@ export const saveAccount = async (formData: FormData) => {
             })
             console.log("Save account " + JSON.stringify(Object.fromEntries(formData.entries())) + " . Result " + response.status);
         } else {
-            console.log("Form error")
+            let message = "";
+            validation.error.issues.forEach((issue) => {
+                message = message + issue.path[0] + " " + issue.message + ".";
+            });
+            console.log(`Error message ${message}`);
             return {
                 errors: validation.error.issues
             }

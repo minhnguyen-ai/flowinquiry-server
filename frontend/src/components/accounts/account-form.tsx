@@ -30,6 +30,7 @@ export const AccountForm: React.FC<AccountFormProps> = ({initialData}) => {
         resolver: zodResolver(accountSchema),
         defaultValues
     });
+    
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const isEdit = !!initialData;
@@ -55,8 +56,8 @@ export const AccountForm: React.FC<AccountFormProps> = ({initialData}) => {
             <Separator/>
             <Form {...form}>
                 <form className="space-y-6" action={saveAccount}>
-                    <ExtInputField form={form} fieldName="accountName" label="Name" placeholder="Account Name"/>
-                    <AccountTypesCombobox form={form}/>
+                    <ExtInputField form={form} required={true} fieldName="accountName" label="Name" placeholder="Account Name"/>
+                    <AccountTypesCombobox form={form} required={true}/>
                     <ExtInputField form={form} fieldName="industry" label="Industry" placeholder="Industry"/>
                     <ExtInputField form={form} fieldName="website" label="Website" placeholder="https://example.com"/>
                     <Button type="submit" disabled={loading}>{action}</Button>
