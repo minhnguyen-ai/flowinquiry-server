@@ -8,17 +8,26 @@ import {Button} from "@/components/ui/button";
 import {Trash} from "lucide-react";
 import {Separator} from "@/components/ui/separator";
 import {Form} from "@/components/ui/form";
-import AccountTypesCombobox from "@/components/accounts/account-types-combobox";
+import AccountTypesSelect from "@/components/accounts/account-types-combobox";
 import {saveAccount} from "@/lib/actions/accounts.action";
 import {ExtInputField} from "@/components/ui/ext-form";
 import {AccountSchema, accountSchema} from "@/types/accounts";
+import AccountIndustriesSelect from "@/components/accounts/account-industries-select";
+import ValuesSelect from "../ui/ext-select-values";
+import { useToast } from "../ui/use-toast";
+import { useFormStatus } from "react-dom";
 
 interface AccountFormProps {
     initialData: any | null;
 }
 
 
+
+
 export const AccountForm: React.FC<AccountFormProps> = ({initialData}) => {
+    const {toast} = useToast();
+    
+
     const defaultValues = initialData
         ? initialData
         : {
@@ -30,9 +39,31 @@ export const AccountForm: React.FC<AccountFormProps> = ({initialData}) => {
         resolver: zodResolver(accountSchema),
         defaultValues
     });
+
+    const saveAccountClientAction = async (formData: FormData) => {
     
+        const validation = accountSchema.safeParse(Object.fromEntries(formData.entries()))
+        if (validation.error) {
+            let errorMessage = "";
+            validation.error.issues.forEach((issue)=> {
+                errorMessage = errorMessage + issue.path[0] + ": " + issue.message + ". ";
+            });
+            console.log("Error " + errorMessage);
+            setTimeout(()=> {
+                toast({
+                    variant: "destructive",
+                    title: "Error",
+                    description: "Invalid values. Please fix them before submitting"
+                })
+            }, 2000);
+            form.setError("accountName", {type: "manual", message: "aaa"})
+        } else {
+            console.log("Data valid " + JSON.stringify(Object.fromEntries(formData.entries())));
+        }
+    }
+
     const [open, setOpen] = useState(false);
-    const [loading, setLoading] = useState(false);
+    const {pending} = useFormStatus();
     const isEdit = !!initialData;
     const title = isEdit ? 'Edit account' : 'Create account';
     const description = isEdit ? 'Edit account' : 'Add a new account';
@@ -44,7 +75,7 @@ export const AccountForm: React.FC<AccountFormProps> = ({initialData}) => {
                 <Heading title={title} description={description}/>
                 {initialData && (
                     <Button
-                        disabled={loading}
+                        disabled={pending}
                         variant="destructive"
                         size="sm"
                         onClick={() => setOpen(true)}
@@ -55,12 +86,13 @@ export const AccountForm: React.FC<AccountFormProps> = ({initialData}) => {
             </div>
             <Separator/>
             <Form {...form}>
-                <form className="space-y-6" action={saveAccount}>
+                <form className="space-y-6" action={saveAccountClientAction}>
                     <ExtInputField form={form} required={true} fieldName="accountName" label="Name" placeholder="Account Name"/>
-                    <AccountTypesCombobox form={form} required={true}/>
-                    <ExtInputField form={form} fieldName="industry" label="Industry" placeholder="Industry"/>
+                    <AccountTypesSelect form={form} required={true}/>
+                    <AccountIndustriesSelect form={form} required={true}/>
                     <ExtInputField form={form} fieldName="website" label="Website" placeholder="https://example.com"/>
-                    <Button type="submit" disabled={loading}>{action}</Button>
+                    <ValuesSelect form={form} fieldName="status" label="Status" placeholder="Status" required={true} values={["Active", "Inactive"]}/>
+                    <Button type="submit" disabled={pending}>{action}</Button>
                 </form>
             </Form>
         </>

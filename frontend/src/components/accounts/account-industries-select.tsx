@@ -4,11 +4,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { UiAttributes } from "@/types/ui-components";
 
 
-interface AccountTypesSelectProps {
+interface AccountIndustriesSelectProps {
     form: any
 }
 
-const accountTypes = [
+const accountIndustries = [
     { label: "Customer-Direct"},
     { label: "Customer-Channel"},
     { label: "Reseller"},
@@ -16,26 +16,26 @@ const accountTypes = [
     { label: "Other"}
 ] as const
 
-const AccountTypesSelect = ({form, required}: AccountTypesSelectProps & UiAttributes) => {
+const AccountIndustriesSelect = ({form, required}: AccountIndustriesSelectProps & UiAttributes) => {
     return <FormField
         control={form.control}
         name="accountType"
         render={({ field }) => (
             <FormItem className="flex flex-col">
-                <FormLabel>Type
+                <FormLabel>Industry
                 {required && <span className="text-destructive"> *</span>}
                 </FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}
                 {...field}>
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select an account type" />
+                    <SelectValue placeholder="Select an account industry" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                    {accountTypes?.map((accountType) => (
-                        <SelectItem key={accountType.label} value={accountType.label}>
-                            {accountType.label}
+                    {accountIndustries?.map((accountIndustry) => (
+                        <SelectItem key={accountIndustry.label} value={accountIndustry.label}>
+                            {accountIndustry.label}
                         </SelectItem>
                     ))}
                 </SelectContent>
@@ -46,4 +46,4 @@ const AccountTypesSelect = ({form, required}: AccountTypesSelectProps & UiAttrib
     />
 }
 
-export default AccountTypesSelect;
+export default AccountIndustriesSelect;

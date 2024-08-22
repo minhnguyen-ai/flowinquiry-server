@@ -28,8 +28,8 @@ export default async function RootLayout({
                 enableSystem={true}
                 storageKey='dashboard-theme'
             >
-                <Toaster/>
                 {children}
+                <Toaster/>
             </ThemeProvider>
         </AuthProvider>
         </body>

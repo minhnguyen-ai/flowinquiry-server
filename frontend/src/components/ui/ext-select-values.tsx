@@ -1,49 +1,45 @@
-import {FormControl, FormField, FormItem, FormLabel} from "@/components/ui/form";
+import {FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
 import React from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { UiAttributes } from "@/types/ui-components";
 
 
-interface AccountTypesSelectProps {
-    form: any
+interface ValuesSelectProps {
+    form: any,
+    fieldName: string,
+    values: Array<string>,
+    label: string,
+    placeholder: string
 }
 
-const accountTypes = [
-    { label: "Customer-Direct"},
-    { label: "Customer-Channel"},
-    { label: "Reseller"},
-    { label: "Prospect"},
-    { label: "Other"}
-] as const
-
-const AccountTypesSelect = ({form, required}: AccountTypesSelectProps & UiAttributes) => {
+const ValuesSelect = ({form, fieldName, label, placeholder, values, required}: ValuesSelectProps & UiAttributes) => {
     return <FormField
         control={form.control}
-        name="accountType"
+        name={fieldName}
         render={({ field }) => (
             <FormItem className="flex flex-col">
-                <FormLabel>Type
+                <FormLabel>{label}
                 {required && <span className="text-destructive"> *</span>}
                 </FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}
                 {...field}>
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select an account type" />
+                    <SelectValue placeholder={placeholder} />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                    {accountTypes?.map((accountType) => (
-                        <SelectItem key={accountType.label} value={accountType.label}>
-                            {accountType.label}
+                    {values?.map((value) => (
+                        <SelectItem key={value} value={value}>
+                            {value}
                         </SelectItem>
                     ))}
                 </SelectContent>
               </Select>
-
+              <FormMessage/>
             </FormItem>
         )}
     />
 }
 
-export default AccountTypesSelect;
+export default ValuesSelect;

@@ -53,7 +53,7 @@ const Accounts = async ({searchParams}: paramsProps) => {
             <Separator/>
 
             <AccountTable
-                searchKey="email"
+                searchKey="name"
                 pageNo={page}
                 columns={columns}
                 totalUsers={totalUsers}

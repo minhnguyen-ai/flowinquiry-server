@@ -23,10 +23,11 @@ export interface Account {
 }
 
 export const accountSchema = z.object({
-    accountName: z.string().min(1, {message: 'Name is required'}),
-    accountType: z.string().min(6, {message: 'Type is required'}),
-    industry: z.ostring(),
+    accountName: z.string().min(1),
+    accountType: z.string().min(1),
+    industry: z.string().min(1),
     website: z.ostring(),
+    status: z.string().min(1)
 });
 
 export type AccountSchema = z.infer<typeof accountSchema>;

@@ -17,8 +17,13 @@ export const getAccounts = async () => {
                     'Authorization': `Bearer ${session.token}`
                 }
             });
-
-        return res.json();
+        if (res.ok) {
+            let x = await res.json();
+            console.log("Result " + JSON.stringify(x));
+            return x;
+        } else {
+            console.log("Error");
+        }
 
     } catch (error) {
         console.log("Error occurs while getting accounts", error);
