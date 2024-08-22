@@ -20,6 +20,10 @@ interface ExtInputProps {
   placeholder: string;
 }
 
+export interface FormProps<Entity> {
+  initialData: Entity | undefined;
+}
+
 export const ExtInputField = ({
   form,
   fieldName,
@@ -59,7 +63,7 @@ export const SubmitButton = ({
 
   return (
     <Button type="submit" disabled={pending}>
-      {pending ? label : labelWhileLoading}
+      {!pending ? label : labelWhileLoading}
     </Button>
   );
 };

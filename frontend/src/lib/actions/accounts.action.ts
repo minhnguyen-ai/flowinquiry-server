@@ -29,32 +29,27 @@ export const getAccounts = async () => {
 };
 
 export const saveAccount = async (formData: FormData) => {
-  try {
-    const validation = accountSchema.safeParse(
-      Object.fromEntries(formData.entries()),
-    );
-    if (validation.success) {
-      const session = await auth();
-      const response = await fetch(`${BACKEND_API}/api/accounts`, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          Authorization: `Bearer ${session?.token}`,
-        },
-        body: JSON.stringify(Object.fromEntries(formData.entries())),
-      });
+  const validation = accountSchema.safeParse(
+    Object.fromEntries(formData.entries()),
+  );
+
+  if (validation.success) {
+    console.log("Save entity");
+    const session = await auth();
+    const response = await fetch(`${BACKEND_API}/api/accounts`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        Authorization: `Bearer ${session?.token}`,
+      },
+      body: JSON.stringify(Object.fromEntries(formData.entries())),
+    });
+    if (response.ok) {
+      console.log("Save entity successfully");
     } else {
-      let message = "";
-      validation.error.issues.forEach((issue) => {
-        message = message + issue.path[0] + " " + issue.message + ".";
-      });
-      console.log(`Error message ${message}`);
-      return {
-        errors: validation.error.issues,
-      };
+      console.log("Failed to save " + response.statusText);
     }
-  } finally {
   }
 };

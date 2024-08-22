@@ -9,18 +9,19 @@ import { Trash } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Form } from "@/components/ui/form";
 import AccountTypesSelect from "@/components/accounts/account-types-select";
-import { ExtInputField, SubmitButton } from "@/components/ui/ext-form";
-import { AccountSchema, accountSchema } from "@/types/accounts";
+import {
+  ExtInputField,
+  FormProps,
+  SubmitButton,
+} from "@/components/ui/ext-form";
+import { Account, AccountSchema, accountSchema } from "@/types/accounts";
 import AccountIndustriesSelect from "@/components/accounts/account-industries-select";
 import ValuesSelect from "@/components/ui/ext-select-values";
 import { useToast } from "@/components/ui/use-toast";
 import { saveAccount } from "@/lib/actions/accounts.action";
+import { useFormState } from "react-dom";
 
-interface AccountFormProps {
-  initialData: any | null;
-}
-
-export const AccountForm: React.FC<AccountFormProps> = ({ initialData }) => {
+export const AccountForm: React.FC<FormProps<Account>> = ({ initialData }) => {
   const { toast } = useToast();
 
   const defaultValues = initialData
@@ -35,15 +36,21 @@ export const AccountForm: React.FC<AccountFormProps> = ({ initialData }) => {
     defaultValues,
   });
 
-  const saveAccountClientAction = async (formData: FormData) => {
+  const saveAccountClientAction = async (
+    prevState: any,
+    formData: FormData,
+  ) => {
+    form.clearErrors();
     const validation = accountSchema.safeParse(
       Object.fromEntries(formData.entries()),
     );
+    console.log(
+      "Form " + JSON.stringify(Object.fromEntries(formData.entries())),
+    );
     if (validation.error) {
-      let errorMessage = "";
       validation.error.issues.forEach((issue) => {
-        errorMessage =
-          errorMessage + issue.path[0] + ": " + issue.message + ". ";
+        console.log("Error " + issue.path[0] + "--" + issue.message);
+        form.setError(issue.path[0], { message: issue.message });
       });
       setTimeout(() => {
         toast({
@@ -52,15 +59,15 @@ export const AccountForm: React.FC<AccountFormProps> = ({ initialData }) => {
           description: "Invalid values. Please fix them before submitting",
         });
       }, 2000);
-      form.setError("accountName", { message: "zydfd" });
-    } else {
-      console.log(
-        "Data valid " + JSON.stringify(Object.fromEntries(formData.entries())),
-      );
     }
 
     await saveAccount(formData);
+    return { message: "Hello" };
   };
+
+  const [formState, formAction] = useFormState(saveAccountClientAction, {
+    message: "",
+  });
 
   const [open, setOpen] = useState(false);
   const isEdit = !!initialData;
@@ -86,7 +93,7 @@ export const AccountForm: React.FC<AccountFormProps> = ({ initialData }) => {
       </div>
       <Separator />
       <Form {...form}>
-        <form className="space-y-6" action={saveAccountClientAction}>
+        <form className="space-y-6" action={formAction}>
           <ExtInputField
             form={form}
             required={true}

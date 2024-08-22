@@ -19,11 +19,8 @@ interface AccountIndustriesSelectProps {
 }
 
 const accountIndustries = [
-  { label: "Customer-Direct" },
-  { label: "Customer-Channel" },
-  { label: "Reseller" },
-  { label: "Prospect" },
-  { label: "Other" },
+  { label: "Retail" },
+  { label: "Information" },
 ] as const;
 
 const AccountIndustriesSelect = ({
@@ -33,7 +30,7 @@ const AccountIndustriesSelect = ({
   return (
     <FormField
       control={form.control}
-      name="accountType"
+      name="industry"
       render={({ field }) => (
         <FormItem className="flex flex-col">
           <FormLabel>
