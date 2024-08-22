@@ -1,3 +1,3 @@
 export interface UiAttributes {
-    required?: boolean
+  required?: boolean;
 }

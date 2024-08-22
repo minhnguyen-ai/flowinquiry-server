@@ -2,5 +2,6 @@
 . "$(dirname "$0")/_/husky.sh"
 
 "$(dirname "$0")/../gradlew" spotlessApply
+npx prettier "$(dirname "$0")/../frontend" --write
 git add -A .
 #"$(dirname "$0")/../npmw" exec --no-install --allow-empty lint-staged
