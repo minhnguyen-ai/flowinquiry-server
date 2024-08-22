@@ -8,21 +8,17 @@ import {Button} from "@/components/ui/button";
 import {Trash} from "lucide-react";
 import {Separator} from "@/components/ui/separator";
 import {Form} from "@/components/ui/form";
-import AccountTypesSelect from "@/components/accounts/account-types-combobox";
-import {saveAccount} from "@/lib/actions/accounts.action";
-import {ExtInputField} from "@/components/ui/ext-form";
+import AccountTypesSelect from "@/components/accounts/account-types-select";
+import {ExtInputField, SubmitButton} from "@/components/ui/ext-form";
 import {AccountSchema, accountSchema} from "@/types/accounts";
 import AccountIndustriesSelect from "@/components/accounts/account-industries-select";
 import ValuesSelect from "../ui/ext-select-values";
 import { useToast } from "../ui/use-toast";
-import { useFormStatus } from "react-dom";
+import {saveAccount} from "@/lib/actions/accounts.action";
 
 interface AccountFormProps {
     initialData: any | null;
 }
-
-
-
 
 export const AccountForm: React.FC<AccountFormProps> = ({initialData}) => {
     const {toast} = useToast();
@@ -48,7 +44,6 @@ export const AccountForm: React.FC<AccountFormProps> = ({initialData}) => {
             validation.error.issues.forEach((issue)=> {
                 errorMessage = errorMessage + issue.path[0] + ": " + issue.message + ". ";
             });
-            console.log("Error " + errorMessage);
             setTimeout(()=> {
                 toast({
                     variant: "destructive",
@@ -56,18 +51,20 @@ export const AccountForm: React.FC<AccountFormProps> = ({initialData}) => {
                     description: "Invalid values. Please fix them before submitting"
                 })
             }, 2000);
-            form.setError("accountName", {type: "manual", message: "aaa"})
+            form.setError("accountName", {message: "zydfd"})
         } else {
             console.log("Data valid " + JSON.stringify(Object.fromEntries(formData.entries())));
         }
+
+        await saveAccount(formData);
     }
 
     const [open, setOpen] = useState(false);
-    const {pending} = useFormStatus();
     const isEdit = !!initialData;
     const title = isEdit ? 'Edit account' : 'Create account';
     const description = isEdit ? 'Edit account' : 'Add a new account';
-    const action = isEdit ? 'Save changes' : 'Create';
+    const submitText = isEdit ? 'Save changes' : 'Create';
+    const submitTextWhileLoading = isEdit ? 'Saving changes ...' : 'Creating ...';
 
     return (
         <>
@@ -75,7 +72,7 @@ export const AccountForm: React.FC<AccountFormProps> = ({initialData}) => {
                 <Heading title={title} description={description}/>
                 {initialData && (
                     <Button
-                        disabled={pending}
+                        // disabled={pending}
                         variant="destructive"
                         size="sm"
                         onClick={() => setOpen(true)}
@@ -92,7 +89,7 @@ export const AccountForm: React.FC<AccountFormProps> = ({initialData}) => {
                     <AccountIndustriesSelect form={form} required={true}/>
                     <ExtInputField form={form} fieldName="website" label="Website" placeholder="https://example.com"/>
                     <ValuesSelect form={form} fieldName="status" label="Status" placeholder="Status" required={true} values={["Active", "Inactive"]}/>
-                    <Button type="submit" disabled={pending}>{action}</Button>
+                    <SubmitButton label={submitText} labelWhileLoading={submitTextWhileLoading}/>
                 </form>
             </Form>
         </>

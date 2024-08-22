@@ -45,7 +45,6 @@ export const saveAccount = async (formData: FormData) => {
                 },
                 body: JSON.stringify(Object.fromEntries(formData.entries())),
             })
-            console.log("Save account " + JSON.stringify(Object.fromEntries(formData.entries())) + " . Result " + response.status);
         } else {
             let message = "";
             validation.error.issues.forEach((issue) => {
