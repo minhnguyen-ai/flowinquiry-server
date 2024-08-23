@@ -20,6 +20,7 @@ import ValuesSelect from "@/components/ui/ext-select-values";
 import { useToast } from "@/components/ui/use-toast";
 import { saveAccount } from "@/lib/actions/accounts.action";
 import { useFormState } from "react-dom";
+import { ActionResult } from "@/types/commons";
 
 export const AccountForm: React.FC<FormProps<Account>> = ({ initialData }) => {
   const { toast } = useToast();
@@ -28,7 +29,6 @@ export const AccountForm: React.FC<FormProps<Account>> = ({ initialData }) => {
     ? initialData
     : {
         accountName: "",
-        accountType: "",
       };
 
   const form = useForm<AccountSchema>({
@@ -37,15 +37,12 @@ export const AccountForm: React.FC<FormProps<Account>> = ({ initialData }) => {
   });
 
   const saveAccountClientAction = async (
-    prevState: any,
+    prevState: ActionResult,
     formData: FormData,
   ) => {
     form.clearErrors();
     const validation = accountSchema.safeParse(
       Object.fromEntries(formData.entries()),
-    );
-    console.log(
-      "Form " + JSON.stringify(Object.fromEntries(formData.entries())),
     );
     if (validation.error) {
       validation.error.issues.forEach((issue) => {
@@ -56,17 +53,17 @@ export const AccountForm: React.FC<FormProps<Account>> = ({ initialData }) => {
         toast({
           variant: "destructive",
           title: "Error",
-          description: "Invalid values. Please fix them before submitting",
+          description:
+            "Invalid values. Please fix them before submitting again",
         });
       }, 2000);
     }
 
-    await saveAccount(formData);
-    return { message: "Hello" };
+    return await saveAccount(prevState, formData);
   };
 
   const [formState, formAction] = useFormState(saveAccountClientAction, {
-    message: "",
+    status: "default",
   });
 
   const [open, setOpen] = useState(false);
@@ -80,16 +77,6 @@ export const AccountForm: React.FC<FormProps<Account>> = ({ initialData }) => {
     <>
       <div className="flex items-center justify-between">
         <Heading title={title} description={description} />
-        {initialData && (
-          <Button
-            // disabled={pending}
-            variant="destructive"
-            size="sm"
-            onClick={() => setOpen(true)}
-          >
-            <Trash className="h-4 w-4" />
-          </Button>
-        )}
       </div>
       <Separator />
       <Form {...form}>

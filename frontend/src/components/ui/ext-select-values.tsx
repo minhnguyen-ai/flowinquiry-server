@@ -48,7 +48,7 @@ const ValuesSelect = ({
           >
             <FormControl>
               <SelectTrigger>
-                <SelectValue defaultValue={values[0]} />
+                <SelectValue />
               </SelectTrigger>
             </FormControl>
             <SelectContent>

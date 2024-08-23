@@ -25,7 +25,7 @@ export const accountSchema = z.object({
   accountName: z.string().min(1),
   accountType: z.string().min(1),
   industry: z.string().min(1),
-  website: z.string().optional(),
+  website: z.string().url({ message: "Invalid url" }).optional(),
   status: z.string().min(1),
 });
 

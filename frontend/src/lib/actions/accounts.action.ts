@@ -1,8 +1,9 @@
 "use server";
 
-import { Account, accountSchema } from "@/types/accounts";
+import { accountSchema } from "@/types/accounts";
 import { BACKEND_API } from "@/lib/constants";
 import { auth } from "@/auth";
+import { ActionResult } from "@/types/commons";
 
 export const getAccounts = async () => {
   try {
@@ -28,7 +29,11 @@ export const getAccounts = async () => {
   }
 };
 
-export const saveAccount = async (formData: FormData) => {
+export const saveAccount = async (
+  prevState: ActionResult,
+  formData: FormData,
+): Promise<ActionResult> => {
+  console.log("Form " + formData);
   const validation = accountSchema.safeParse(
     Object.fromEntries(formData.entries()),
   );
@@ -47,9 +52,11 @@ export const saveAccount = async (formData: FormData) => {
       body: JSON.stringify(Object.fromEntries(formData.entries())),
     });
     if (response.ok) {
-      console.log("Save entity successfully");
+      return { status: "success" };
     } else {
-      console.log("Failed to save " + response.statusText);
+      return { status: "system_error", text: response.statusText };
     }
+  } else {
+    return { status: "user_error" };
   }
 };

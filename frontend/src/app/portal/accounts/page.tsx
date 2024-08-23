@@ -1,3 +1,4 @@
+import React from "react";
 import { auth } from "@/auth";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { Heading } from "@/components/heading";
@@ -29,7 +30,7 @@ const Accounts = async ({ searchParams }: paramsProps) => {
   const country = searchParams.search || null;
   const offset = (page - 1) * pageLimit;
 
-  const accounts = getAccounts();
+  const accounts = await getAccounts();
 
   const totalUsers = 100; //1000
   const pageCount = Math.ceil(totalUsers / pageLimit);

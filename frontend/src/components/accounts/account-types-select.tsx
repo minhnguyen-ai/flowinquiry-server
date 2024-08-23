@@ -42,12 +42,12 @@ const AccountTypesSelect = ({
           </FormLabel>
           <Select
             onValueChange={field.onChange}
-            defaultValue={field.value}
+            defaultValue={accountTypes[0].label}
             {...field}
           >
             <FormControl>
               <SelectTrigger>
-                <SelectValue defaultValue={accountTypes[0].label} />
+                <SelectValue />
               </SelectTrigger>
             </FormControl>
             <SelectContent>

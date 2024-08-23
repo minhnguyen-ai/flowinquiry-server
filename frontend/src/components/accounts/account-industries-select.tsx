@@ -40,7 +40,7 @@ const AccountIndustriesSelect = ({
           </FormLabel>
           <Select
             onValueChange={field.onChange}
-            defaultValue={field.value}
+            defaultValue={accountIndustries[0].label}
             {...field}
           >
             <FormControl>

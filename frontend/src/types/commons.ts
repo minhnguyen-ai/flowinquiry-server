@@ -21,3 +21,17 @@ export interface User {
   lastModifiedDate?: ISODateString | null;
   authorities?: string[] | null;
 }
+
+export type ActionResult = {
+  status: "default" | "success" | "system_error" | "user_error";
+  text?: string;
+};
+
+export interface PageableResult<Entity> {
+  totalPages: number;
+  totalElements: number;
+  first: boolean;
+  last: boolean;
+  size: number;
+  content: Array<Entity>;
+}
