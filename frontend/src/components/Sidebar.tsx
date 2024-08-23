@@ -1,21 +1,14 @@
+import {
+  Building2,
+  Files,
+  Home,
+  Package2,
+  Settings,
+  Users,
+} from "lucide-react";
 import Link from "next/link";
 
-import {
-  LayoutDashboard,
-  Building2,
-  Folders,
-  Settings,
-  User,
-  Users,
-  Package,
-  Badge,
-  ShoppingCart,
-  Home,
-  Files,
-  Package2,
-  Bell,
-} from "lucide-react";
-
+import ThemeToggler from "@/components/ThemeToggler";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -24,7 +17,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import ThemeToggler from "@/components/ThemeToggler";
 
 const Sidebar = () => {
   return (

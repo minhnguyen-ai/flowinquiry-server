@@ -1,18 +1,15 @@
-import UsersList from "@/components/users/users-list";
-import { User } from "@/types/commons";
+import { Plus } from "lucide-react";
+import Link from "next/link";
+
+import { auth } from "@/auth";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { Heading } from "@/components/heading";
-import Link from "next/link";
-import { cn } from "@/lib/utils";
-import { buttonVariants } from "@/components/ui/button";
-import { Plus } from "lucide-react";
-import { Separator } from "@/components/ui/separator";
-import { UserTable } from "@/components/tables/user-tables/user-table";
 import { columns } from "@/components/tables/user-tables/columns";
-import { toast } from "@/components/ui/use-toast";
-import { useSession } from "next-auth/react";
-import { auth } from "@/auth";
+import { UserTable } from "@/components/tables/user-tables/user-table";
+import { buttonVariants } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import { BACKEND_API } from "@/lib/constants";
+import { cn } from "@/lib/utils";
 
 const breadcrumbItems = [
   { title: "Dashboard", link: "/portal" },

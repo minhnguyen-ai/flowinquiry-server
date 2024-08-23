@@ -1,15 +1,16 @@
+import { Plus } from "lucide-react";
+import Link from "next/link";
 import React from "react";
+
 import { auth } from "@/auth";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { Heading } from "@/components/heading";
-import Link from "next/link";
-import { cn } from "@/lib/utils";
-import { buttonVariants } from "@/components/ui/button";
-import { Plus } from "lucide-react";
-import { Separator } from "@/components/ui/separator";
 import { AccountTable } from "@/components/tables/account-tables/account-table";
-import { getAccounts } from "@/lib/actions/accounts.action";
 import { columns } from "@/components/tables/account-tables/columns";
+import { buttonVariants } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { getAccounts } from "@/lib/actions/accounts.action";
+import { cn } from "@/lib/utils";
 
 const breadcrumbItems = [
   { title: "Dashboard", link: "/portal" },

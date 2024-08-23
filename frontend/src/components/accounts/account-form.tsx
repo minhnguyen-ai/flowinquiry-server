@@ -1,25 +1,24 @@
 "use client";
 
-import React, { useState } from "react";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Heading } from "@/components/heading";
-import { Button } from "@/components/ui/button";
-import { Trash } from "lucide-react";
-import { Separator } from "@/components/ui/separator";
-import { Form } from "@/components/ui/form";
+import React, { useState } from "react";
+import { useFormState } from "react-dom";
+import { useForm } from "react-hook-form";
+
+import AccountIndustriesSelect from "@/components/accounts/account-industries-select";
 import AccountTypesSelect from "@/components/accounts/account-types-select";
+import { Heading } from "@/components/heading";
 import {
   ExtInputField,
   FormProps,
   SubmitButton,
 } from "@/components/ui/ext-form";
-import { Account, AccountSchema, accountSchema } from "@/types/accounts";
-import AccountIndustriesSelect from "@/components/accounts/account-industries-select";
 import ValuesSelect from "@/components/ui/ext-select-values";
+import { Form } from "@/components/ui/form";
+import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/components/ui/use-toast";
 import { saveAccount } from "@/lib/actions/accounts.action";
-import { useFormState } from "react-dom";
+import { Account, AccountSchema, accountSchema } from "@/types/accounts";
 import { ActionResult } from "@/types/commons";
 
 export const AccountForm: React.FC<FormProps<Account>> = ({ initialData }) => {

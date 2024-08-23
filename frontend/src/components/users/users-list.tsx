@@ -1,7 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import { File, ListFilter, MoreHorizontal, PlusCircle } from "lucide-react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -31,7 +32,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useRouter } from "next/navigation";
 
 export default function UsersList() {
   const router = useRouter();

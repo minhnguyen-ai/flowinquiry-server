@@ -1,11 +1,11 @@
 "use server";
 
-import { accountSchema } from "@/types/accounts";
-import { BACKEND_API } from "@/lib/constants";
 import { auth } from "@/auth";
-import { ActionResult } from "@/types/commons";
+import { BACKEND_API } from "@/lib/constants";
+import { Account, accountSchema } from "@/types/accounts";
+import { ActionResult, PageableResult } from "@/types/commons";
 
-export const getAccounts = async () => {
+export const getAccounts = async (): Promise<PageableResult<Account>> => {
   try {
     const session = await auth();
 
@@ -18,14 +18,12 @@ export const getAccounts = async () => {
       },
     });
     if (res.ok) {
-      let x = await res.json();
-      console.log("Result " + JSON.stringify(x));
-      return x;
+      return await res.json();
     } else {
-      console.log("Error");
+      throw new Error("");
     }
   } catch (error) {
-    console.log("Error occurs while getting accounts", error);
+    throw new Error("Server error");
   }
 };
 

@@ -1,5 +1,6 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+
 import apiAuthSignIn from "@/lib/api";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({

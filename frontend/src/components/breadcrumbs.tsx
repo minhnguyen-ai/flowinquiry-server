@@ -1,3 +1,6 @@
+import { Slash } from "lucide-react";
+import { Fragment } from "react";
+
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -6,8 +9,6 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { Slash } from "lucide-react";
-import { Fragment } from "react";
 
 type BreadcrumbItemProps = {
   title: string;

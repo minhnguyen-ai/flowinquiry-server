@@ -1,4 +1,5 @@
-import axios, { Axios, AxiosResponse } from "axios";
+import axios, { AxiosResponse } from "axios";
+
 import { BACKEND_API } from "./constants";
 
 export default async function apiAuthSignIn(

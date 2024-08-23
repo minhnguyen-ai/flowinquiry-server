@@ -1,5 +1,6 @@
-import DashboardCard from "@/components/dashboard/DashboardCard";
 import { Folder, Newspaper, User } from "lucide-react";
+
+import DashboardCard from "@/components/dashboard/DashboardCard";
 
 export default function Home() {
   return (

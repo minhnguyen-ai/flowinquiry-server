@@ -1,12 +1,14 @@
 "use client";
 
-import React from "react";
-import { z } from "zod";
-import { useSession } from "next-auth/react";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { BACKEND_API } from "@/lib/constants";
+import { useSession } from "next-auth/react";
+import React from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -16,8 +18,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { BACKEND_API } from "@/lib/constants";
 
 interface ProfileFormProps {
   initialData: any | null;

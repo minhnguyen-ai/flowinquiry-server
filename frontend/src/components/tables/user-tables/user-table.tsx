@@ -1,18 +1,25 @@
 "use client";
 
 import {
+  DoubleArrowLeftIcon,
+  DoubleArrowRightIcon,
+} from "@radix-ui/react-icons";
+import {
   ColumnDef,
-  PaginationState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
+  PaginationState,
   useReactTable,
 } from "@tanstack/react-table";
+import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React from "react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import {
   Select,
   SelectContent,
@@ -28,13 +35,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  DoubleArrowLeftIcon,
-  DoubleArrowRightIcon,
-} from "@radix-ui/react-icons";
-import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -108,8 +108,6 @@ export function UserTable<TData, TValue>({
         scroll: false,
       },
     );
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageIndex, pageSize]);
 
   const table = useReactTable({
@@ -183,8 +181,6 @@ export function UserTable<TData, TValue>({
     }
 
     setPagination((prev) => ({ ...prev, pageIndex: 0 }));
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchValue]);
 
   return (

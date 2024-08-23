@@ -1,7 +1,8 @@
+import { redirect } from "next/navigation";
+
+import { auth } from "@/auth";
 import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
-import { auth } from "@/auth";
-import { redirect } from "next/navigation";
 
 const MainLayout = async ({ children }: { children: React.ReactNode }) => {
   const session = await auth();
