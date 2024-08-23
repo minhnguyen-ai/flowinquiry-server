@@ -43,12 +43,12 @@ const ValuesSelect = ({
           </FormLabel>
           <Select
             onValueChange={field.onChange}
-            defaultValue={field.value}
+            defaultValue={values[0]}
             {...field}
           >
             <FormControl>
               <SelectTrigger>
-                <SelectValue placeholder={placeholder} />
+                <SelectValue defaultValue={values[0]} />
               </SelectTrigger>
             </FormControl>
             <SelectContent>

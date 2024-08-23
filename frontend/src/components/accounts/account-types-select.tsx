@@ -24,7 +24,7 @@ const accountTypes = [
   { label: "Reseller" },
   { label: "Prospect" },
   { label: "Other" },
-] as const;
+];
 
 const AccountTypesSelect = ({
   form,
@@ -47,7 +47,7 @@ const AccountTypesSelect = ({
           >
             <FormControl>
               <SelectTrigger>
-                <SelectValue placeholder="Select an account type" />
+                <SelectValue defaultValue={accountTypes[0].label} />
               </SelectTrigger>
             </FormControl>
             <SelectContent>

@@ -3,6 +3,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import React from "react";
 import {
@@ -44,7 +45,7 @@ const AccountIndustriesSelect = ({
           >
             <FormControl>
               <SelectTrigger>
-                <SelectValue placeholder="Select an account industry" />
+                <SelectValue defaultValue={accountIndustries[0].label} />
               </SelectTrigger>
             </FormControl>
             <SelectContent>
@@ -58,6 +59,7 @@ const AccountIndustriesSelect = ({
               ))}
             </SelectContent>
           </Select>
+          <FormMessage />
         </FormItem>
       )}
     />

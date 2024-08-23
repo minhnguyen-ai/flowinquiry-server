@@ -113,7 +113,7 @@ export const AccountForm: React.FC<FormProps<Account>> = ({ initialData }) => {
             form={form}
             fieldName="status"
             label="Status"
-            placeholder="Status"
+            placeholder="Select status"
             required={true}
             values={["Active", "Inactive"]}
           />
