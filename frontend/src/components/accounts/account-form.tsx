@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useState } from "react";
+import React from "react";
 import { useFormState } from "react-dom";
 import { useForm } from "react-hook-form";
 
@@ -17,7 +17,7 @@ import ValuesSelect from "@/components/ui/ext-select-values";
 import { Form } from "@/components/ui/form";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/components/ui/use-toast";
-import { saveAccount } from "@/lib/actions/accounts.action";
+import { saveOrUpdateAccount } from "@/lib/actions/accounts.action";
 import { Account, AccountSchema, accountSchema } from "@/types/accounts";
 import { ActionResult } from "@/types/commons";
 
@@ -45,7 +45,6 @@ export const AccountForm: React.FC<FormProps<Account>> = ({ initialData }) => {
     );
     if (validation.error) {
       validation.error.issues.forEach((issue) => {
-        console.log("Error " + issue.path[0] + "--" + issue.message);
         form.setError(issue.path[0], { message: issue.message });
       });
       setTimeout(() => {
@@ -58,14 +57,13 @@ export const AccountForm: React.FC<FormProps<Account>> = ({ initialData }) => {
       }, 2000);
     }
 
-    return await saveAccount(prevState, formData);
+    return await saveOrUpdateAccount(prevState, isEdit, formData);
   };
 
   const [formState, formAction] = useFormState(saveAccountClientAction, {
     status: "default",
   });
 
-  const [open, setOpen] = useState(false);
   const isEdit = !!initialData;
   const title = isEdit ? "Edit account" : "Create account";
   const description = isEdit ? "Edit account" : "Add a new account";
@@ -94,6 +92,12 @@ export const AccountForm: React.FC<FormProps<Account>> = ({ initialData }) => {
             fieldName="website"
             label="Website"
             placeholder="https://example.com"
+          />
+          <ExtInputField
+            form={form}
+            fieldName="phoneNumber"
+            label="Phone"
+            placeholder="Phone number"
           />
           <ValuesSelect
             form={form}

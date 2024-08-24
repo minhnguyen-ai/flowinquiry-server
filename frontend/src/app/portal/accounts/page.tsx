@@ -11,6 +11,8 @@ import { buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { getAccounts } from "@/lib/actions/accounts.action";
 import { cn } from "@/lib/utils";
+import { Account } from "@/types/accounts";
+import { PageableResult } from "@/types/commons";
 
 const breadcrumbItems = [
   { title: "Dashboard", link: "/portal" },
@@ -23,25 +25,22 @@ type paramsProps = {
   };
 };
 
-const Accounts = async ({ searchParams }: paramsProps) => {
+const AccountsPage = async ({ searchParams }: paramsProps) => {
   const session = await auth();
 
+  const pageableResult: PageableResult<Account> = await getAccounts();
+
   const page = Number(searchParams.page) || 1;
-  const pageLimit = Number(searchParams.limit) || 10;
-  const country = searchParams.search || null;
-  const offset = (page - 1) * pageLimit;
-
-  const accounts = await getAccounts();
-
-  const totalUsers = 100; //1000
-  const pageCount = Math.ceil(totalUsers / pageLimit);
+  const pageLimit = pageableResult.size;
+  const totalElements = pageableResult.totalElements;
+  const pageCount = Math.ceil(totalElements / pageLimit);
   return (
     <div className="space-y-4">
       <Breadcrumbs items={breadcrumbItems} />
 
       <div className="flex items-start justify-between">
         <Heading
-          title={`Accounts (${totalUsers})`}
+          title={`Accounts (${totalElements})`}
           description="Manage accounts"
         />
 
@@ -58,12 +57,12 @@ const Accounts = async ({ searchParams }: paramsProps) => {
         searchKey="name"
         pageNo={page}
         columns={columns}
-        totalUsers={totalUsers}
-        data={accounts}
+        totalUsers={totalElements}
+        data={pageableResult.content}
         pageCount={pageCount}
       />
     </div>
   );
 };
 
-export default Accounts;
+export default AccountsPage;

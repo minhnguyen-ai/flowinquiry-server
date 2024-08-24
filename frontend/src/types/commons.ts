@@ -25,6 +25,7 @@ export interface User {
 export type ActionResult = {
   status: "default" | "success" | "system_error" | "user_error";
   text?: string;
+  value?: string;
 };
 
 export interface PageableResult<Entity> {

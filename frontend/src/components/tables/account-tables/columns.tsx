@@ -40,6 +40,10 @@ export const columns: ColumnDef<Account>[] = [
     header: "Industry",
   },
   {
+    accessorKey: "status",
+    header: "Status",
+  },
+  {
     id: "actions",
     cell: ({ row }) => <CellAction data={row.original} />,
   },

@@ -22,7 +22,7 @@ interface ExtInputProps {
 }
 
 export interface FormProps<Entity> {
-  initialData: Entity | undefined;
+  initialData: Entity | null;
 }
 
 export const ExtInputField = ({

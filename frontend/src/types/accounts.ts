@@ -22,10 +22,12 @@ export interface Account {
 }
 
 export const accountSchema = z.object({
+  id: z.bigint().optional(),
   accountName: z.string().min(1),
   accountType: z.string().min(1),
   industry: z.string().min(1),
   website: z.string().url({ message: "Invalid url" }).optional(),
+  phoneNumber: z.string().optional(),
   status: z.string().min(1),
 });
 
