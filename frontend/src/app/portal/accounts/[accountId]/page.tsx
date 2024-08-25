@@ -15,8 +15,7 @@ export default async function Page({
 }: {
   params: { accountId: number | "new" };
 }) {
-  console.log(`Account id ${params.accountId}`);
-  let account: Account | null = null;
+  let account: Account | undefined;
 
   if (params.accountId == "new") {
   } else {

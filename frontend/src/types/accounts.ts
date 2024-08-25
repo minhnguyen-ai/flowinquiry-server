@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export interface Account {
-  id?: bigint;
+  id?: number;
   accountName?: string;
   accountType?: string;
   industry?: string;
@@ -12,7 +12,7 @@ export interface Account {
   addressLine2?: string;
   city?: string;
   state?: string;
-  postcode?: string;
+  postalCode?: string;
   country?: string;
   annualRevenue?: number;
   numberOfEmployees?: number;
@@ -22,12 +22,17 @@ export interface Account {
 }
 
 export const accountSchema = z.object({
-  id: z.bigint().optional(),
+  id: z.number().optional(),
   accountName: z.string().min(1),
   accountType: z.string().min(1),
   industry: z.string().min(1),
-  website: z.string().url({ message: "Invalid url" }).optional(),
+  addressLine1: z.string().min(1),
+  addressLine2: z.string().optional(),
+  city: z.string().min(1),
+  state: z.string().min(1),
+  postalCode: z.string().min(1),
   phoneNumber: z.string().optional(),
+  website: z.string().url({ message: "Invalid url" }).optional(),
   status: z.string().min(1),
 });
 

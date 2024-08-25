@@ -32,19 +32,16 @@ export const getAccounts = async (): Promise<PageableResult<Account>> => {
 export const saveOrUpdateAccount = async (
   prevState: ActionResult,
   isEdit: boolean,
-  formData: FormData,
+  account: Account,
 ): Promise<ActionResult> => {
-  const validation = accountSchema.safeParse(
-    Object.fromEntries(formData.entries()),
-  );
+  const validation = accountSchema.safeParse(account);
 
   if (validation.success) {
+    let response;
     const session = await auth();
     if (isEdit) {
-      console.log(
-        "Edit: " + JSON.stringify(Object.fromEntries(formData.entries())),
-      );
-      const response = await fetch(`${BACKEND_API}/api/accounts/`, {
+      console.log("Edit: " + JSON.stringify(account));
+      response = await fetch(`${BACKEND_API}/api/accounts/${account.id}`, {
         method: "PUT",
         headers: {
           Accept: "application/json",
@@ -52,10 +49,10 @@ export const saveOrUpdateAccount = async (
           "Access-Control-Allow-Origin": "*",
           Authorization: `Bearer ${session?.token}`,
         },
-        body: JSON.stringify(Object.fromEntries(formData.entries())),
+        body: JSON.stringify(account),
       });
     } else {
-      const response = await fetch(`${BACKEND_API}/api/accounts`, {
+      response = await fetch(`${BACKEND_API}/api/accounts`, {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -63,7 +60,7 @@ export const saveOrUpdateAccount = async (
           "Access-Control-Allow-Origin": "*",
           Authorization: `Bearer ${session?.token}`,
         },
-        body: JSON.stringify(Object.fromEntries(formData.entries())),
+        body: JSON.stringify(account),
       });
     }
 

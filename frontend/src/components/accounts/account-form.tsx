@@ -21,18 +21,14 @@ import { saveOrUpdateAccount } from "@/lib/actions/accounts.action";
 import { Account, AccountSchema, accountSchema } from "@/types/accounts";
 import { ActionResult } from "@/types/commons";
 
-export const AccountForm: React.FC<FormProps<Account>> = ({ initialData }) => {
+export const AccountForm: React.FC<FormProps<Account>> = ({
+  initialData,
+}: FormProps<Account>) => {
   const { toast } = useToast();
-
-  const defaultValues = initialData
-    ? initialData
-    : {
-        accountName: "",
-      };
 
   const form = useForm<AccountSchema>({
     resolver: zodResolver(accountSchema),
-    defaultValues,
+    defaultValues: initialData,
   });
 
   const saveAccountClientAction = async (
@@ -40,11 +36,16 @@ export const AccountForm: React.FC<FormProps<Account>> = ({ initialData }) => {
     formData: FormData,
   ) => {
     form.clearErrors();
-    const validation = accountSchema.safeParse(
-      Object.fromEntries(formData.entries()),
-    );
+
+    const account = {
+      ...initialData,
+      ...Object.fromEntries(formData.entries()),
+    };
+    console.log(`Accoount ${JSON.stringify(account)}`);
+    const validation = accountSchema.safeParse(account);
     if (validation.error) {
       validation.error.issues.forEach((issue) => {
+        console.log(`Isseue ${issue.path[0]} message ${issue.message}`);
         form.setError(issue.path[0], { message: issue.message });
       });
       setTimeout(() => {
@@ -57,7 +58,7 @@ export const AccountForm: React.FC<FormProps<Account>> = ({ initialData }) => {
       }, 2000);
     }
 
-    return await saveOrUpdateAccount(prevState, isEdit, formData);
+    return await saveOrUpdateAccount(prevState, isEdit, account);
   };
 
   const [formState, formAction] = useFormState(saveAccountClientAction, {
@@ -65,7 +66,9 @@ export const AccountForm: React.FC<FormProps<Account>> = ({ initialData }) => {
   });
 
   const isEdit = !!initialData;
-  const title = isEdit ? "Edit account" : "Create account";
+  const title = isEdit
+    ? `Edit account ${initialData?.accountName}`
+    : "Create account";
   const description = isEdit ? "Edit account" : "Add a new account";
   const submitText = isEdit ? "Save changes" : "Create";
   const submitTextWhileLoading = isEdit ? "Saving changes ..." : "Creating ...";
@@ -89,15 +92,49 @@ export const AccountForm: React.FC<FormProps<Account>> = ({ initialData }) => {
           <AccountIndustriesSelect form={form} required={true} />
           <ExtInputField
             form={form}
-            fieldName="website"
-            label="Website"
-            placeholder="https://example.com"
+            required={true}
+            fieldName="addressLine1"
+            label="Address 1"
+            placeholder="Address 1"
+          />
+          <ExtInputField
+            form={form}
+            fieldName="addressLine2"
+            label="Address 2"
+            placeholder="Address 2"
+          />
+          <ExtInputField
+            form={form}
+            required={true}
+            fieldName="city"
+            label="City"
+            placeholder="City"
+          />
+          <ExtInputField
+            form={form}
+            required={true}
+            fieldName="state"
+            label="State"
+            placeholder="State"
+          />
+          <ExtInputField
+            form={form}
+            required={true}
+            fieldName="postalCode"
+            label="Postal Code"
+            placeholder="Postal Code"
           />
           <ExtInputField
             form={form}
             fieldName="phoneNumber"
             label="Phone"
             placeholder="Phone number"
+          />
+          <ExtInputField
+            form={form}
+            fieldName="website"
+            label="Website"
+            placeholder="https://example.com"
           />
           <ValuesSelect
             form={form}
