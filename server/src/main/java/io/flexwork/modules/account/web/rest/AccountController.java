@@ -53,7 +53,6 @@ public class AccountController {
             account.setPostalCode(accountDetails.getPostalCode());
             account.setCountry(accountDetails.getCountry());
             account.setAnnualRevenue(accountDetails.getAnnualRevenue());
-            account.setNumberOfEmployees(accountDetails.getNumberOfEmployees());
             account.setParentAccount(accountDetails.getParentAccount());
             account.setStatus(accountDetails.getStatus());
             account.setAssignedToUser(accountDetails.getAssignedToUser());

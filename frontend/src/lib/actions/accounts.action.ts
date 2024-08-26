@@ -1,11 +1,13 @@
 "use server";
 
+import { redirect } from "next/navigation";
+
 import { auth } from "@/auth";
 import { BACKEND_API } from "@/lib/constants";
-import { Account, accountSchema } from "@/types/accounts";
+import { accountSchema, AccountType } from "@/types/accounts";
 import { ActionResult, PageableResult } from "@/types/commons";
 
-export const getAccounts = async (): Promise<PageableResult<Account>> => {
+export const getAccounts = async (): Promise<PageableResult<AccountType>> => {
   try {
     const session = await auth();
 
@@ -65,7 +67,7 @@ export const saveOrUpdateAccount = async (
     }
 
     if (response.ok) {
-      return { status: "success" };
+      redirect("/portal/accounts");
     } else {
       return { status: "system_error", text: response.statusText };
     }

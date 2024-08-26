@@ -1,8 +1,8 @@
 "use client";
 // import { AlertModal } from '@/components/modal/alert-modal';
-import { Edit, MoreHorizontal, Trash } from "lucide-react";
+import { Row } from "@tanstack/react-table";
+import { Edit, MoreHorizontal } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -12,27 +12,13 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Account } from "@/types/accounts";
+import { AccountType } from "@/types/accounts";
 
-interface CellActionProps {
-  data: Account;
-}
-
-export const CellAction: React.FC<CellActionProps> = ({ data }) => {
-  const [loading, setLoading] = useState(false);
-  const [open, setOpen] = useState(false);
+export function DataTableRowActions({ row }: { row: Row<AccountType> }) {
   const router = useRouter();
-
-  const onConfirm = async () => {};
 
   return (
     <>
-      {/*<AlertModal*/}
-      {/*    isOpen={open}*/}
-      {/*    onClose={() => setOpen(false)}*/}
-      {/*    onConfirm={onConfirm}*/}
-      {/*    loading={loading}*/}
-      {/*/>*/}
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="h-8 w-8 p-0">
@@ -44,15 +30,17 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
 
           <DropdownMenuItem
-            onClick={() => router.push(`/portal/accounts/${data.id}`)}
+            onClick={() =>
+              router.push(`/portal/accounts/${row.original.id}/edit`)
+            }
           >
             <Edit className="mr-2 h-4 w-4" /> Update
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setOpen(true)}>
-            <Trash className="mr-2 h-4 w-4" /> Delete
-          </DropdownMenuItem>
+          {/*<DropdownMenuItem onClick={() => setOpen(true)}>*/}
+          {/*  <Trash className="mr-2 h-4 w-4" /> Delete*/}
+          {/*</DropdownMenuItem>*/}
         </DropdownMenuContent>
       </DropdownMenu>
     </>
   );
-};
+}

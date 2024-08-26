@@ -14,7 +14,7 @@ import lombok.Setter;
 public class Account {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, updatable = false)
     private Long id;
 
@@ -54,11 +54,8 @@ public class Account {
     @Column(name = "country", length = 100)
     private String country;
 
-    @Column(name = "annual_revenue", precision = 15, scale = 2)
-    private BigDecimal annualRevenue;
-
-    @Column(name = "number_of_employees")
-    private Integer numberOfEmployees;
+    @Column(name = "annual_revenue", length = 100)
+    private String annualRevenue;
 
     @ManyToOne
     @JoinColumn(name = "parent_account_id")

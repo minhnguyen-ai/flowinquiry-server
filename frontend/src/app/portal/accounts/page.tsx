@@ -11,7 +11,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { getAccounts } from "@/lib/actions/accounts.action";
 import { cn } from "@/lib/utils";
-import { Account } from "@/types/accounts";
+import { AccountType } from "@/types/accounts";
 import { PageableResult } from "@/types/commons";
 
 const breadcrumbItems = [
@@ -28,7 +28,7 @@ type paramsProps = {
 const AccountsPage = async ({ searchParams }: paramsProps) => {
   const session = await auth();
 
-  const pageableResult: PageableResult<Account> = await getAccounts();
+  const pageableResult: PageableResult<AccountType> = await getAccounts();
   console.log(`Page ${JSON.stringify(pageableResult)}`);
   const page = Number(searchParams.page) || 1;
   const pageLimit = pageableResult.size || 1;
@@ -45,7 +45,7 @@ const AccountsPage = async ({ searchParams }: paramsProps) => {
         />
 
         <Link
-          href={"/portal/accounts/new"}
+          href={"/portal/accounts/new/edit"}
           className={cn(buttonVariants({ variant: "default" }))}
         >
           <Plus className="mr-2 h-4 w-4" /> Add New
@@ -53,15 +53,6 @@ const AccountsPage = async ({ searchParams }: paramsProps) => {
       </div>
       <Separator />
       <DataTable columns={columns} data={pageableResult.content} />
-
-      {/*<AccountTable*/}
-      {/*  searchKey="name"*/}
-      {/*  pageNo={page}*/}
-      {/*  columns={columns}*/}
-      {/*  totalUsers={totalElements}*/}
-      {/*  data={pageableResult.content}*/}
-      {/*  pageCount={pageCount}*/}
-      {/*/>*/}
     </div>
   );
 };

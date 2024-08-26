@@ -7,7 +7,7 @@
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
     <changeSet id="00000000000000" author="flexapp">
-        <createSequence sequenceName="sequence_generator" startValue="3" incrementBy="3"/>
+        <createSequence sequenceName="sequence_generator" minValue="1" startValue="3" incrementBy="3"/>
     </changeSet>
 
     <!--
@@ -16,7 +16,7 @@
     -->
     <changeSet id="00000000000001" author="flexapp">
         <createTable tableName="fw_user">
-            <column name="id" type="bigint">
+            <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="login" type="varchar(50)">

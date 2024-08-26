@@ -10,6 +10,7 @@ import AccountTypesSelect from "@/components/accounts/account-types-select";
 import { Heading } from "@/components/heading";
 import {
   ExtInputField,
+  ExtTextAreaField,
   FormProps,
   SubmitButton,
 } from "@/components/ui/ext-form";
@@ -18,12 +19,12 @@ import { Form } from "@/components/ui/form";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/components/ui/use-toast";
 import { saveOrUpdateAccount } from "@/lib/actions/accounts.action";
-import { Account, accountSchema,AccountType } from "@/types/accounts";
+import { accountSchema, AccountType } from "@/types/accounts";
 import { ActionResult } from "@/types/commons";
 
-export const AccountForm: React.FC<FormProps<Account>> = ({
+export const AccountForm: React.FC<FormProps<AccountType>> = ({
   initialData,
-}: FormProps<Account>) => {
+}: FormProps<AccountType>) => {
   const { toast } = useToast();
 
   const form = useForm<AccountType>({
@@ -41,11 +42,13 @@ export const AccountForm: React.FC<FormProps<Account>> = ({
       ...initialData,
       ...Object.fromEntries(formData.entries()),
     };
-    console.log(`Accoount ${JSON.stringify(account)}`);
+    console.log(
+      `Account ${JSON.stringify(account)}. Initial data ${JSON.stringify(initialData)}`,
+    );
     const validation = accountSchema.safeParse(account);
     if (validation.error) {
       validation.error.issues.forEach((issue) => {
-        console.log(`Isseue ${issue.path[0]} message ${issue.message}`);
+        console.log(`Issue ${issue.path[0]} message ${issue.message}`);
         form.setError(issue.path[0], { message: issue.message });
       });
       setTimeout(() => {
@@ -136,6 +139,12 @@ export const AccountForm: React.FC<FormProps<Account>> = ({
             label="Website"
             placeholder="https://example.com"
           />
+          <ExtInputField
+            form={form}
+            fieldName="annualRevenue"
+            label="Annual Revenue"
+            placeholder="Annual Revenue"
+          />
           <ValuesSelect
             form={form}
             fieldName="status"
@@ -144,6 +153,7 @@ export const AccountForm: React.FC<FormProps<Account>> = ({
             required={true}
             values={["Active", "Inactive"]}
           />
+          <ExtTextAreaField form={form} fieldName="notes" label="Notes" />
           <SubmitButton
             label={submitText}
             labelWhileLoading={submitTextWhileLoading}

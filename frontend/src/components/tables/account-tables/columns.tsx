@@ -3,19 +3,19 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Circle, HelpCircle } from "lucide-react";
 
+import { DataTableRowActions } from "@/components/tables/account-tables/cell-action";
 import { DataTableColumnHeader } from "@/components/tables/data-table-column-header";
-import { DataTableRowActions } from "@/components/tables/data-table-row-actions";
 import { Checkbox } from "@/components/ui/checkbox";
 import { AccountType } from "@/types/accounts";
 
 const status_options = [
   {
-    value: "active",
+    value: "Active",
     label: "Active",
     icon: HelpCircle,
   },
   {
-    value: "inactive",
+    value: "InActive",
     label: "InActive",
     icon: Circle,
   },
@@ -45,22 +45,34 @@ export const columns: ColumnDef<AccountType>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "id",
+    accessorKey: "accountName",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Name" />
     ),
-    cell: ({ row }) => <div className="w-[80px]">{row.getValue("id")}</div>,
-    enableSorting: false,
-    enableHiding: false,
+    cell: ({ row }) => <div>{row.getValue("accountName")}</div>,
   },
   {
-    accessorKey: "state",
+    accessorKey: "accountType",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="State" />
+      <DataTableColumnHeader column={column} title="Type" />
+    ),
+    cell: ({ row }) => <div>{row.getValue("accountType")}</div>,
+  },
+  {
+    accessorKey: "industry",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Industry" />
+    ),
+    cell: ({ row }) => <div>{row.getValue("industry")}</div>,
+  },
+  {
+    accessorKey: "status",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Status" />
     ),
     cell: ({ row }) => {
       const status = status_options.find(
-        (status) => status.value === row.getValue("state"),
+        (status) => status.value === row.getValue("status"),
       );
 
       if (!status) {
@@ -87,8 +99,7 @@ export const columns: ColumnDef<AccountType>[] = [
     ),
     cell: ({ row }) => {
       const field = row.getValue("createdAt") as Date;
-      // return (<div>{field.toDateString()}</div>);
-      return <div>Hello</div>;
+      return <div>{new Date(field).toDateString()}</div>;
     },
   },
   {
