@@ -18,7 +18,7 @@ import { Form } from "@/components/ui/form";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/components/ui/use-toast";
 import { saveOrUpdateAccount } from "@/lib/actions/accounts.action";
-import { Account, AccountSchema, accountSchema } from "@/types/accounts";
+import { Account, accountSchema,AccountType } from "@/types/accounts";
 import { ActionResult } from "@/types/commons";
 
 export const AccountForm: React.FC<FormProps<Account>> = ({
@@ -26,7 +26,7 @@ export const AccountForm: React.FC<FormProps<Account>> = ({
 }: FormProps<Account>) => {
   const { toast } = useToast();
 
-  const form = useForm<AccountSchema>({
+  const form = useForm<AccountType>({
     resolver: zodResolver(accountSchema),
     defaultValues: initialData,
   });

@@ -36,4 +36,4 @@ export const accountSchema = z.object({
   status: z.string().min(1),
 });
 
-export type AccountSchema = z.infer<typeof accountSchema>;
+export type AccountType = z.infer<typeof accountSchema>;

@@ -34,5 +34,5 @@ export interface PageableResult<Entity> {
   first: boolean;
   last: boolean;
   size: number;
-  content: Array<Entity>;
+  content: Entity[];
 }

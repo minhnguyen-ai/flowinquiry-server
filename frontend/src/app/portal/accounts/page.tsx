@@ -5,8 +5,8 @@ import React from "react";
 import { auth } from "@/auth";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { Heading } from "@/components/heading";
-import { AccountTable } from "@/components/tables/account-tables/account-table";
 import { columns } from "@/components/tables/account-tables/columns";
+import { DataTable } from "@/components/tables/data-table";
 import { buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { getAccounts } from "@/lib/actions/accounts.action";
@@ -29,9 +29,9 @@ const AccountsPage = async ({ searchParams }: paramsProps) => {
   const session = await auth();
 
   const pageableResult: PageableResult<Account> = await getAccounts();
-
+  console.log(`Page ${JSON.stringify(pageableResult)}`);
   const page = Number(searchParams.page) || 1;
-  const pageLimit = pageableResult.size;
+  const pageLimit = pageableResult.size || 1;
   const totalElements = pageableResult.totalElements;
   const pageCount = Math.ceil(totalElements / pageLimit);
   return (
@@ -52,15 +52,16 @@ const AccountsPage = async ({ searchParams }: paramsProps) => {
         </Link>
       </div>
       <Separator />
+      <DataTable columns={columns} data={pageableResult.content} />
 
-      <AccountTable
-        searchKey="name"
-        pageNo={page}
-        columns={columns}
-        totalUsers={totalElements}
-        data={pageableResult.content}
-        pageCount={pageCount}
-      />
+      {/*<AccountTable*/}
+      {/*  searchKey="name"*/}
+      {/*  pageNo={page}*/}
+      {/*  columns={columns}*/}
+      {/*  totalUsers={totalElements}*/}
+      {/*  data={pageableResult.content}*/}
+      {/*  pageCount={pageCount}*/}
+      {/*/>*/}
     </div>
   );
 };

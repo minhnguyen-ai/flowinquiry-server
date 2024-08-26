@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
-import ThemeToggler from "@/components/ThemeToggler";
+import ThemeToggler from "@/components/theme-toggler";
 import { Button } from "@/components/ui/button";
 import {
   Card,

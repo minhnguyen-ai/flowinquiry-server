@@ -1,4 +1,4 @@
-import ThemeToggler from "@/components/ThemeToggler";
+import ThemeToggler from "@/components/theme-toggler";
 
 const AuthLayout = ({ children }: { children: React.ReactNode }) => {
   return (
