@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -87,7 +88,6 @@ class UserResourceIT {
      */
     public static User createEntity(EntityManager em) {
         User persistUser = new User();
-        persistUser.setLogin(DEFAULT_LOGIN + RandomStringUtils.randomAlphabetic(5));
         persistUser.setPassword(RandomStringUtils.randomAlphanumeric(60));
         persistUser.setActivated(true);
         persistUser.setEmail(RandomStringUtils.randomAlphabetic(5) + DEFAULT_EMAIL);
@@ -101,7 +101,6 @@ class UserResourceIT {
     /** Setups the database with one user. */
     public static User initTestUser(EntityManager em) {
         User persistUser = createEntity(em);
-        persistUser.setLogin(DEFAULT_LOGIN);
         persistUser.setEmail(DEFAULT_EMAIL);
         return persistUser;
     }
@@ -115,7 +114,6 @@ class UserResourceIT {
     public void cleanupAndCheck() {
         userService.deleteUser(DEFAULT_LOGIN);
         userService.deleteUser(UPDATED_LOGIN);
-        userService.deleteUser(user.getLogin());
         userService.deleteUser("anotherlogin");
         assertThat(userRepository.count()).isEqualTo(numberOfUsers);
         numberOfUsers = null;
@@ -126,7 +124,6 @@ class UserResourceIT {
     void createUser() throws Exception {
         // Create the User
         AdminUserDTO userDTO = new AdminUserDTO();
-        userDTO.setLogin(DEFAULT_LOGIN);
         userDTO.setFirstName(DEFAULT_FIRSTNAME);
         userDTO.setLastName(DEFAULT_LASTNAME);
         userDTO.setEmail(DEFAULT_EMAIL);
@@ -150,7 +147,6 @@ class UserResourceIT {
 
         User convertedUser = userMapper.userDTOToUser(returnedUserDTO);
         // Validate the returned User
-        assertThat(convertedUser.getLogin()).isEqualTo(DEFAULT_LOGIN);
         assertThat(convertedUser.getFirstName()).isEqualTo(DEFAULT_FIRSTNAME);
         assertThat(convertedUser.getLastName()).isEqualTo(DEFAULT_LASTNAME);
         assertThat(convertedUser.getEmail()).isEqualTo(DEFAULT_EMAIL);
@@ -165,7 +161,6 @@ class UserResourceIT {
 
         AdminUserDTO userDTO = new AdminUserDTO();
         userDTO.setId(DEFAULT_ID);
-        userDTO.setLogin(DEFAULT_LOGIN);
         userDTO.setFirstName(DEFAULT_FIRSTNAME);
         userDTO.setLastName(DEFAULT_LASTNAME);
         userDTO.setEmail(DEFAULT_EMAIL);
@@ -194,7 +189,6 @@ class UserResourceIT {
         int databaseSizeBeforeCreate = userRepository.findAll().size();
 
         AdminUserDTO userDTO = new AdminUserDTO();
-        userDTO.setLogin(DEFAULT_LOGIN); // this login should already be used
         userDTO.setFirstName(DEFAULT_FIRSTNAME);
         userDTO.setLastName(DEFAULT_LASTNAME);
         userDTO.setEmail("anothermail@localhost");
@@ -223,7 +217,6 @@ class UserResourceIT {
         int databaseSizeBeforeCreate = userRepository.findAll().size();
 
         AdminUserDTO userDTO = new AdminUserDTO();
-        userDTO.setLogin("anotherlogin");
         userDTO.setFirstName(DEFAULT_FIRSTNAME);
         userDTO.setLastName(DEFAULT_LASTNAME);
         userDTO.setEmail(DEFAULT_EMAIL); // this email should already be used
@@ -271,10 +264,9 @@ class UserResourceIT {
 
         // Get the user
         restUserMockMvc
-                .perform(get("/api/admin/users/{login}", user.getLogin()))
+                .perform(get("/api/admin/users/{login}", user.getEmail()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(jsonPath("$.login").value(user.getLogin()))
                 .andExpect(jsonPath("$.firstName").value(DEFAULT_FIRSTNAME))
                 .andExpect(jsonPath("$.lastName").value(DEFAULT_LASTNAME))
                 .andExpect(jsonPath("$.email").value(DEFAULT_EMAIL))
@@ -298,20 +290,7 @@ class UserResourceIT {
         // Update the user
         User updatedUser = userRepository.findById(user.getId()).orElseThrow();
 
-        AdminUserDTO userDTO = new AdminUserDTO();
-        userDTO.setId(updatedUser.getId());
-        userDTO.setLogin(updatedUser.getLogin());
-        userDTO.setFirstName(UPDATED_FIRSTNAME);
-        userDTO.setLastName(UPDATED_LASTNAME);
-        userDTO.setEmail(UPDATED_EMAIL);
-        userDTO.setActivated(updatedUser.isActivated());
-        userDTO.setImageUrl(UPDATED_IMAGEURL);
-        userDTO.setLangKey(UPDATED_LANGKEY);
-        userDTO.setCreatedBy(updatedUser.getCreatedBy());
-        userDTO.setCreatedDate(updatedUser.getCreatedDate());
-        userDTO.setLastModifiedBy(updatedUser.getLastModifiedBy());
-        userDTO.setLastModifiedDate(updatedUser.getLastModifiedDate());
-        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        AdminUserDTO userDTO = getAdminUserDTO(updatedUser);
 
         restUserMockMvc
                 .perform(
@@ -337,6 +316,23 @@ class UserResourceIT {
                 });
     }
 
+    private static @NotNull AdminUserDTO getAdminUserDTO(User updatedUser) {
+        AdminUserDTO userDTO = new AdminUserDTO();
+        userDTO.setId(updatedUser.getId());
+        userDTO.setFirstName(UPDATED_FIRSTNAME);
+        userDTO.setLastName(UPDATED_LASTNAME);
+        userDTO.setEmail(UPDATED_EMAIL);
+        userDTO.setActivated(updatedUser.isActivated());
+        userDTO.setImageUrl(UPDATED_IMAGEURL);
+        userDTO.setLangKey(UPDATED_LANGKEY);
+        userDTO.setCreatedBy(updatedUser.getCreatedBy());
+        userDTO.setCreatedDate(updatedUser.getCreatedDate());
+        userDTO.setLastModifiedBy(updatedUser.getLastModifiedBy());
+        userDTO.setLastModifiedDate(updatedUser.getLastModifiedDate());
+        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        return userDTO;
+    }
+
     @Test
     @Transactional
     void updateUserLogin() throws Exception {
@@ -349,7 +345,6 @@ class UserResourceIT {
 
         AdminUserDTO userDTO = new AdminUserDTO();
         userDTO.setId(updatedUser.getId());
-        userDTO.setLogin(UPDATED_LOGIN);
         userDTO.setFirstName(UPDATED_FIRSTNAME);
         userDTO.setLastName(UPDATED_LASTNAME);
         userDTO.setEmail(UPDATED_EMAIL);
@@ -378,7 +373,6 @@ class UserResourceIT {
                                     .filter(usr -> usr.getId().equals(updatedUser.getId()))
                                     .findFirst()
                                     .orElseThrow();
-                    assertThat(testUser.getLogin()).isEqualTo(UPDATED_LOGIN);
                     assertThat(testUser.getFirstName()).isEqualTo(UPDATED_FIRSTNAME);
                     assertThat(testUser.getLastName()).isEqualTo(UPDATED_LASTNAME);
                     assertThat(testUser.getEmail()).isEqualTo(UPDATED_EMAIL);
@@ -394,7 +388,6 @@ class UserResourceIT {
         userRepository.saveAndFlush(user);
 
         User anotherUser = new User();
-        anotherUser.setLogin("flexwork");
         anotherUser.setPassword(RandomStringUtils.randomAlphanumeric(60));
         anotherUser.setActivated(true);
         anotherUser.setEmail("flexwork@localhost");
@@ -409,7 +402,6 @@ class UserResourceIT {
 
         AdminUserDTO userDTO = new AdminUserDTO();
         userDTO.setId(updatedUser.getId());
-        userDTO.setLogin(updatedUser.getLogin());
         userDTO.setFirstName(updatedUser.getFirstName());
         userDTO.setLastName(updatedUser.getLastName());
         userDTO.setEmail("flexwork@localhost"); // this email should already be used by anotherUser
@@ -437,7 +429,6 @@ class UserResourceIT {
         userRepository.saveAndFlush(user);
 
         User anotherUser = new User();
-        anotherUser.setLogin("flexwork");
         anotherUser.setPassword(RandomStringUtils.randomAlphanumeric(60));
         anotherUser.setActivated(true);
         anotherUser.setEmail("flexwork@localhost");
@@ -452,7 +443,6 @@ class UserResourceIT {
 
         AdminUserDTO userDTO = new AdminUserDTO();
         userDTO.setId(updatedUser.getId());
-        userDTO.setLogin("flexwork"); // this login should already be used by anotherUser
         userDTO.setFirstName(updatedUser.getFirstName());
         userDTO.setLastName(updatedUser.getLastName());
         userDTO.setEmail(updatedUser.getEmail());
@@ -483,7 +473,7 @@ class UserResourceIT {
         // Delete the user
         restUserMockMvc
                 .perform(
-                        delete("/api/admin/users/{login}", user.getLogin())
+                        delete("/api/admin/users/{login}", user.getEmail())
                                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
 

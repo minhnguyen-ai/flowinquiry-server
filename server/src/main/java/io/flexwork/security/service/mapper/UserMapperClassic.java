@@ -46,7 +46,6 @@ public class UserMapperClassic {
         } else {
             User user = new User();
             user.setId(userDTO.getId());
-            user.setLogin(userDTO.getLogin());
             user.setFirstName(userDTO.getFirstName());
             user.setLastName(userDTO.getLastName());
             user.setEmail(userDTO.getEmail());
@@ -128,7 +127,6 @@ public class UserMapperClassic {
         }
         UserDTO userDto = new UserDTO();
         userDto.setId(user.getId());
-        userDto.setLogin(user.getLogin());
         return userDto;
     }
 

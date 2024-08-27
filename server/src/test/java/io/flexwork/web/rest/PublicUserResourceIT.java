@@ -53,7 +53,7 @@ class PublicUserResourceIT {
 
     @AfterEach
     public void cleanupAndCheck() {
-        userService.deleteUser(user.getLogin());
+        userService.deleteUser(user.getEmail());
         assertThat(userRepository.count()).isEqualTo(numberOfUsers);
         numberOfUsers = null;
     }
@@ -69,7 +69,7 @@ class PublicUserResourceIT {
                 .perform(get("/api/users?sort=id,desc").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(jsonPath("$.[?(@.id == %d)].login", user.getId()).value(user.getLogin()))
+                .andExpect(jsonPath("$.[?(@.id == %d)].email", user.getId()).value(user.getEmail()))
                 .andExpect(
                         jsonPath("$.[?(@.id == %d)].keys()", user.getId())
                                 .value(Set.of("id", "login")))

@@ -98,7 +98,6 @@ class AccountResourceIT {
         authorities.add(AuthoritiesConstants.ADMIN);
 
         AdminUserDTO user = new AdminUserDTO();
-        user.setLogin(TEST_USER_LOGIN);
         user.setFirstName("john");
         user.setLastName("doe");
         user.setEmail("john.doe@jhipster.com");
@@ -133,7 +132,6 @@ class AccountResourceIT {
     @Transactional
     void testRegisterValid() throws Exception {
         ManagedUserVM validUser = new ManagedUserVM();
-        validUser.setLogin("test-register-valid");
         validUser.setPassword("password");
         validUser.setFirstName("Alice");
         validUser.setLastName("Test");
@@ -141,7 +139,7 @@ class AccountResourceIT {
         validUser.setImageUrl("http://placehold.it/50x50");
         validUser.setLangKey(Constants.DEFAULT_LANGUAGE);
         validUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
-        assertThat(userRepository.findOneByLogin("test-register-valid")).isEmpty();
+        assertThat(userRepository.findOneByEmailIgnoreCase("test-register-valid@example.com")).isEmpty();
 
         restAccountMockMvc
                 .perform(
@@ -150,16 +148,15 @@ class AccountResourceIT {
                                 .content(om.writeValueAsBytes(validUser)))
                 .andExpect(status().isCreated());
 
-        assertThat(userRepository.findOneByLogin("test-register-valid")).isPresent();
+        assertThat(userRepository.findOneByEmailIgnoreCase("test-register-valid@example.com")).isPresent();
 
-        userService.deleteUser("test-register-valid");
+        userService.deleteUser("test-register-valid@example.com");
     }
 
     @Test
     @Transactional
     void testRegisterInvalidLogin() throws Exception {
         ManagedUserVM invalidUser = new ManagedUserVM();
-        invalidUser.setLogin("funky-log(n"); // <-- invalid
         invalidUser.setPassword("password");
         invalidUser.setFirstName("Funky");
         invalidUser.setLastName("One");
@@ -212,7 +209,7 @@ class AccountResourceIT {
                                 .content(om.writeValueAsBytes(invalidUser)))
                 .andExpect(status().isBadRequest());
 
-        Optional<User> user = userRepository.findOneByLogin("bob");
+        Optional<User> user = userRepository.findOneByEmailIgnoreCase("bob");
         assertThat(user).isEmpty();
     }
 
@@ -224,7 +221,6 @@ class AccountResourceIT {
             String email,
             boolean activated) {
         ManagedUserVM invalidUser = new ManagedUserVM();
-        invalidUser.setLogin(login);
         invalidUser.setPassword(password);
         invalidUser.setFirstName(firstName);
         invalidUser.setLastName(lastName);
@@ -241,7 +237,6 @@ class AccountResourceIT {
     void testRegisterDuplicateLogin() throws Exception {
         // First registration
         ManagedUserVM firstUser = new ManagedUserVM();
-        firstUser.setLogin("alice");
         firstUser.setPassword("password");
         firstUser.setFirstName("Alice");
         firstUser.setLastName("Something");
@@ -252,7 +247,6 @@ class AccountResourceIT {
 
         // Duplicate login, different email
         ManagedUserVM secondUser = new ManagedUserVM();
-        secondUser.setLogin(firstUser.getLogin());
         secondUser.setPassword(firstUser.getPassword());
         secondUser.setFirstName(firstUser.getFirstName());
         secondUser.setLastName(firstUser.getLastName());
@@ -302,7 +296,6 @@ class AccountResourceIT {
     void testRegisterDuplicateEmail() throws Exception {
         // First user
         ManagedUserVM firstUser = new ManagedUserVM();
-        firstUser.setLogin("test-register-duplicate-email");
         firstUser.setPassword("password");
         firstUser.setFirstName("Alice");
         firstUser.setLastName("Test");
@@ -319,12 +312,11 @@ class AccountResourceIT {
                                 .content(om.writeValueAsBytes(firstUser)))
                 .andExpect(status().isCreated());
 
-        Optional<User> testUser1 = userRepository.findOneByLogin("test-register-duplicate-email");
+        Optional<User> testUser1 = userRepository.findOneByEmailIgnoreCase("test-register-duplicate-email@example.com");
         assertThat(testUser1).isPresent();
 
         // Duplicate email, different login
         ManagedUserVM secondUser = new ManagedUserVM();
-        secondUser.setLogin("test-register-duplicate-email-2");
         secondUser.setPassword(firstUser.getPassword());
         secondUser.setFirstName(firstUser.getFirstName());
         secondUser.setLastName(firstUser.getLastName());
@@ -341,16 +333,15 @@ class AccountResourceIT {
                                 .content(om.writeValueAsBytes(secondUser)))
                 .andExpect(status().isCreated());
 
-        Optional<User> testUser2 = userRepository.findOneByLogin("test-register-duplicate-email");
+        Optional<User> testUser2 = userRepository.findOneByEmailIgnoreCase("test-register-duplicate-email@example.com");
         assertThat(testUser2).isEmpty();
 
-        Optional<User> testUser3 = userRepository.findOneByLogin("test-register-duplicate-email-2");
+        Optional<User> testUser3 = userRepository.findOneByEmailIgnoreCase("test-register-duplicate-email-2@example.com");
         assertThat(testUser3).isPresent();
 
         // Duplicate email - with uppercase email address
         ManagedUserVM userWithUpperCaseEmail = new ManagedUserVM();
         userWithUpperCaseEmail.setId(firstUser.getId());
-        userWithUpperCaseEmail.setLogin("test-register-duplicate-email-3");
         userWithUpperCaseEmail.setPassword(firstUser.getPassword());
         userWithUpperCaseEmail.setFirstName(firstUser.getFirstName());
         userWithUpperCaseEmail.setLastName(firstUser.getLastName());
@@ -367,7 +358,7 @@ class AccountResourceIT {
                                 .content(om.writeValueAsBytes(userWithUpperCaseEmail)))
                 .andExpect(status().isCreated());
 
-        Optional<User> testUser4 = userRepository.findOneByLogin("test-register-duplicate-email-3");
+        Optional<User> testUser4 = userRepository.findOneByEmailIgnoreCase("test-register-duplicate-email-3@example.com");
         assertThat(testUser4).isPresent();
         assertThat(testUser4.orElseThrow().getEmail())
                 .isEqualTo("test-register-duplicate-email@example.com");
@@ -390,7 +381,6 @@ class AccountResourceIT {
     @Transactional
     void testRegisterAdminIsIgnored() throws Exception {
         ManagedUserVM validUser = new ManagedUserVM();
-        validUser.setLogin("badguy");
         validUser.setPassword("password");
         validUser.setFirstName("Bad");
         validUser.setLastName("Guy");
@@ -407,7 +397,7 @@ class AccountResourceIT {
                                 .content(om.writeValueAsBytes(validUser)))
                 .andExpect(status().isCreated());
 
-        Optional<User> userDup = userRepository.findOneWithAuthoritiesByLogin("badguy");
+        Optional<User> userDup = userRepository.findOneWithAuthoritiesByEmailIgnoreCase("badguy@example.com");
         assertThat(userDup).isPresent();
         assertThat(userDup.orElseThrow().getAuthorities())
                 .hasSize(1)
@@ -422,7 +412,6 @@ class AccountResourceIT {
     void testActivateAccount() throws Exception {
         final String activationKey = "some activation key";
         User user = new User();
-        user.setLogin("activate-account");
         user.setEmail("activate-account@example.com");
         user.setPassword(RandomStringUtils.randomAlphanumeric(60));
         user.setActivated(false);
@@ -434,7 +423,7 @@ class AccountResourceIT {
                 .perform(get("/api/activate?key={activationKey}", activationKey))
                 .andExpect(status().isOk());
 
-        user = userRepository.findOneByLogin(user.getLogin()).orElse(null);
+        user = userRepository.findOneByEmailIgnoreCase(user.getEmail()).orElse(null);
         assertThat(user.isActivated()).isTrue();
 
         userService.deleteUser("activate-account");
@@ -453,14 +442,12 @@ class AccountResourceIT {
     @WithMockUser("save-account")
     void testSaveAccount() throws Exception {
         User user = new User();
-        user.setLogin("save-account");
         user.setEmail("save-account@example.com");
         user.setPassword(RandomStringUtils.randomAlphanumeric(60));
         user.setActivated(true);
         userRepository.saveAndFlush(user);
 
         AdminUserDTO userDTO = new AdminUserDTO();
-        userDTO.setLogin("not-used");
         userDTO.setFirstName("firstname");
         userDTO.setLastName("lastname");
         userDTO.setEmail("save-account@example.com");
@@ -477,7 +464,7 @@ class AccountResourceIT {
                 .andExpect(status().isOk());
 
         User updatedUser =
-                userRepository.findOneWithAuthoritiesByLogin(user.getLogin()).orElse(null);
+                userRepository.findOneWithAuthoritiesByEmailIgnoreCase(user.getEmail()).orElse(null);
         assertThat(updatedUser.getFirstName()).isEqualTo(userDTO.getFirstName());
         assertThat(updatedUser.getLastName()).isEqualTo(userDTO.getLastName());
         assertThat(updatedUser.getEmail()).isEqualTo(userDTO.getEmail());
@@ -495,7 +482,6 @@ class AccountResourceIT {
     @WithMockUser("save-invalid-email")
     void testSaveInvalidEmail() throws Exception {
         User user = new User();
-        user.setLogin("save-invalid-email");
         user.setEmail("save-invalid-email@example.com");
         user.setPassword(RandomStringUtils.randomAlphanumeric(60));
         user.setActivated(true);
@@ -503,7 +489,6 @@ class AccountResourceIT {
         userRepository.saveAndFlush(user);
 
         AdminUserDTO userDTO = new AdminUserDTO();
-        userDTO.setLogin("not-used");
         userDTO.setFirstName("firstname");
         userDTO.setLastName("lastname");
         userDTO.setEmail("invalid email");
@@ -529,14 +514,12 @@ class AccountResourceIT {
     @WithMockUser("save-existing-email")
     void testSaveExistingEmail() throws Exception {
         User user = new User();
-        user.setLogin("save-existing-email");
         user.setEmail("save-existing-email@example.com");
         user.setPassword(RandomStringUtils.randomAlphanumeric(60));
         user.setActivated(true);
         userRepository.saveAndFlush(user);
 
         User anotherUser = new User();
-        anotherUser.setLogin("save-existing-email2");
         anotherUser.setEmail("save-existing-email2@example.com");
         anotherUser.setPassword(RandomStringUtils.randomAlphanumeric(60));
         anotherUser.setActivated(true);
@@ -544,7 +527,6 @@ class AccountResourceIT {
         userRepository.saveAndFlush(anotherUser);
 
         AdminUserDTO userDTO = new AdminUserDTO();
-        userDTO.setLogin("not-used");
         userDTO.setFirstName("firstname");
         userDTO.setLastName("lastname");
         userDTO.setEmail("save-existing-email2@example.com");
@@ -560,7 +542,7 @@ class AccountResourceIT {
                                 .content(om.writeValueAsBytes(userDTO)))
                 .andExpect(status().isBadRequest());
 
-        User updatedUser = userRepository.findOneByLogin("save-existing-email").orElseThrow();
+        User updatedUser = userRepository.findOneByEmailIgnoreCase("save-existing-email@example.com").orElseThrow();
         assertThat(updatedUser.getEmail()).isEqualTo("save-existing-email@example.com");
 
         userService.deleteUser("save-existing-email");
@@ -572,14 +554,12 @@ class AccountResourceIT {
     @WithMockUser("save-existing-email-and-login")
     void testSaveExistingEmailAndLogin() throws Exception {
         User user = new User();
-        user.setLogin("save-existing-email-and-login");
         user.setEmail("save-existing-email-and-login@example.com");
         user.setPassword(RandomStringUtils.randomAlphanumeric(60));
         user.setActivated(true);
         userRepository.saveAndFlush(user);
 
         AdminUserDTO userDTO = new AdminUserDTO();
-        userDTO.setLogin("not-used");
         userDTO.setFirstName("firstname");
         userDTO.setLastName("lastname");
         userDTO.setEmail("save-existing-email-and-login@example.com");
@@ -596,7 +576,7 @@ class AccountResourceIT {
                 .andExpect(status().isOk());
 
         User updatedUser =
-                userRepository.findOneByLogin("save-existing-email-and-login").orElse(null);
+                userRepository.findOneByEmailIgnoreCase("save-existing-email-and-login@example.com").orElse(null);
         assertThat(updatedUser.getEmail()).isEqualTo("save-existing-email-and-login@example.com");
 
         userService.deleteUser("save-existing-email-and-login");
@@ -609,7 +589,6 @@ class AccountResourceIT {
         User user = new User();
         String currentPassword = RandomStringUtils.randomAlphanumeric(60);
         user.setPassword(passwordEncoder.encode(currentPassword));
-        user.setLogin("change-password-wrong-existing-password");
         user.setEmail("change-password-wrong-existing-password@example.com");
         userRepository.saveAndFlush(user);
 
@@ -625,7 +604,7 @@ class AccountResourceIT {
 
         User updatedUser =
                 userRepository
-                        .findOneByLogin("change-password-wrong-existing-password")
+                        .findOneByEmailIgnoreCase("change-password-wrong-existing-password@example.com")
                         .orElse(null);
         assertThat(passwordEncoder.matches("new password", updatedUser.getPassword())).isFalse();
         assertThat(passwordEncoder.matches(currentPassword, updatedUser.getPassword())).isTrue();
@@ -640,7 +619,6 @@ class AccountResourceIT {
         User user = new User();
         String currentPassword = RandomStringUtils.randomAlphanumeric(60);
         user.setPassword(passwordEncoder.encode(currentPassword));
-        user.setLogin("change-password");
         user.setEmail("change-password@example.com");
         userRepository.saveAndFlush(user);
 
@@ -654,7 +632,7 @@ class AccountResourceIT {
                                                         currentPassword, "new password"))))
                 .andExpect(status().isOk());
 
-        User updatedUser = userRepository.findOneByLogin("change-password").orElse(null);
+        User updatedUser = userRepository.findOneByEmailIgnoreCase("change-password@example.com").orElse(null);
         assertThat(passwordEncoder.matches("new password", updatedUser.getPassword())).isTrue();
 
         userService.deleteUser("change-password");
@@ -667,7 +645,6 @@ class AccountResourceIT {
         User user = new User();
         String currentPassword = RandomStringUtils.randomAlphanumeric(60);
         user.setPassword(passwordEncoder.encode(currentPassword));
-        user.setLogin("change-password-too-small");
         user.setEmail("change-password-too-small@example.com");
         userRepository.saveAndFlush(user);
 
@@ -683,7 +660,7 @@ class AccountResourceIT {
                                                         currentPassword, newPassword))))
                 .andExpect(status().isBadRequest());
 
-        User updatedUser = userRepository.findOneByLogin("change-password-too-small").orElse(null);
+        User updatedUser = userRepository.findOneByEmailIgnoreCase("change-password-too-small@example.com").orElse(null);
         assertThat(updatedUser.getPassword()).isEqualTo(user.getPassword());
 
         userService.deleteUser("change-password-too-small");
@@ -696,7 +673,6 @@ class AccountResourceIT {
         User user = new User();
         String currentPassword = RandomStringUtils.randomAlphanumeric(60);
         user.setPassword(passwordEncoder.encode(currentPassword));
-        user.setLogin("change-password-too-long");
         user.setEmail("change-password-too-long@example.com");
         userRepository.saveAndFlush(user);
 
@@ -712,7 +688,7 @@ class AccountResourceIT {
                                                         currentPassword, newPassword))))
                 .andExpect(status().isBadRequest());
 
-        User updatedUser = userRepository.findOneByLogin("change-password-too-long").orElse(null);
+        User updatedUser = userRepository.findOneByEmailIgnoreCase("change-password-too-long@example.com").orElse(null);
         assertThat(updatedUser.getPassword()).isEqualTo(user.getPassword());
 
         userService.deleteUser("change-password-too-long");
@@ -725,7 +701,6 @@ class AccountResourceIT {
         User user = new User();
         String currentPassword = RandomStringUtils.randomAlphanumeric(60);
         user.setPassword(passwordEncoder.encode(currentPassword));
-        user.setLogin("change-password-empty");
         user.setEmail("change-password-empty@example.com");
         userRepository.saveAndFlush(user);
 
@@ -738,7 +713,7 @@ class AccountResourceIT {
                                                 new PasswordChangeDTO(currentPassword, ""))))
                 .andExpect(status().isBadRequest());
 
-        User updatedUser = userRepository.findOneByLogin("change-password-empty").orElse(null);
+        User updatedUser = userRepository.findOneByEmailIgnoreCase("change-password-empty@example.com").orElse(null);
         assertThat(updatedUser.getPassword()).isEqualTo(user.getPassword());
 
         userService.deleteUser("change-password-empty");
@@ -750,7 +725,6 @@ class AccountResourceIT {
         User user = new User();
         user.setPassword(RandomStringUtils.randomAlphanumeric(60));
         user.setActivated(true);
-        user.setLogin("password-reset");
         user.setEmail("password-reset@example.com");
         user.setLangKey("en");
         userRepository.saveAndFlush(user);
@@ -770,7 +744,6 @@ class AccountResourceIT {
         User user = new User();
         user.setPassword(RandomStringUtils.randomAlphanumeric(60));
         user.setActivated(true);
-        user.setLogin("password-reset-upper-case");
         user.setEmail("password-reset-upper-case@example.com");
         user.setLangKey("en");
         userRepository.saveAndFlush(user);
@@ -798,7 +771,6 @@ class AccountResourceIT {
     void testFinishPasswordReset() throws Exception {
         User user = new User();
         user.setPassword(RandomStringUtils.randomAlphanumeric(60));
-        user.setLogin("finish-password-reset");
         user.setEmail("finish-password-reset@example.com");
         user.setResetDate(Instant.now().plusSeconds(60));
         user.setResetKey("reset key");
@@ -815,7 +787,7 @@ class AccountResourceIT {
                                 .content(om.writeValueAsBytes(keyAndPassword)))
                 .andExpect(status().isOk());
 
-        User updatedUser = userRepository.findOneByLogin(user.getLogin()).orElse(null);
+        User updatedUser = userRepository.findOneByEmailIgnoreCase(user.getEmail()).orElse(null);
         assertThat(
                         passwordEncoder.matches(
                                 keyAndPassword.getNewPassword(), updatedUser.getPassword()))
@@ -829,7 +801,6 @@ class AccountResourceIT {
     void testFinishPasswordResetTooSmall() throws Exception {
         User user = new User();
         user.setPassword(RandomStringUtils.randomAlphanumeric(60));
-        user.setLogin("finish-password-reset-too-small");
         user.setEmail("finish-password-reset-too-small@example.com");
         user.setResetDate(Instant.now().plusSeconds(60));
         user.setResetKey("reset key too small");
@@ -846,7 +817,7 @@ class AccountResourceIT {
                                 .content(om.writeValueAsBytes(keyAndPassword)))
                 .andExpect(status().isBadRequest());
 
-        User updatedUser = userRepository.findOneByLogin(user.getLogin()).orElse(null);
+        User updatedUser = userRepository.findOneByEmailIgnoreCase(user.getEmail()).orElse(null);
         assertThat(
                         passwordEncoder.matches(
                                 keyAndPassword.getNewPassword(), updatedUser.getPassword()))

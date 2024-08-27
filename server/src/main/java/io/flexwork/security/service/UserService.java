@@ -97,7 +97,7 @@ public class UserService {
 
     public User registerUser(AdminUserDTO userDTO, String password) {
         userRepository
-                .findOneByLogin(userDTO.getLogin().toLowerCase())
+                .findOneByEmailIgnoreCase(userDTO.getEmail().toLowerCase())
                 .ifPresent(
                         existingUser -> {
                             boolean removed = removeNonActivatedUser(existingUser);
@@ -116,7 +116,6 @@ public class UserService {
                         });
         User newUser = new User();
         String encryptedPassword = passwordEncoder.encode(password);
-        newUser.setLogin(userDTO.getLogin().toLowerCase());
         // new user gets initially a generated password
         newUser.setPassword(encryptedPassword);
         newUser.setFirstName(userDTO.getFirstName());
@@ -149,7 +148,6 @@ public class UserService {
 
     public User createUser(AdminUserDTO userDTO) {
         User user = new User();
-        user.setLogin(userDTO.getLogin().toLowerCase());
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
         if (userDTO.getEmail() != null) {
@@ -192,7 +190,6 @@ public class UserService {
                 .map(Optional::get)
                 .map(
                         user -> {
-                            user.setLogin(userDTO.getLogin().toLowerCase());
                             user.setFirstName(userDTO.getFirstName());
                             user.setLastName(userDTO.getLastName());
                             if (userDTO.getEmail() != null) {
@@ -215,9 +212,9 @@ public class UserService {
                 .map(AdminUserDTO::new);
     }
 
-    public void deleteUser(String login) {
+    public void deleteUser(String email) {
         userRepository
-                .findOneByLogin(login)
+                .findOneByEmailIgnoreCase(email)
                 .ifPresent(
                         user -> {
                             userRepository.delete(user);
@@ -237,7 +234,7 @@ public class UserService {
     public void updateUser(
             String firstName, String lastName, String email, String langKey, String imageUrl) {
         SecurityUtils.getCurrentUserLogin()
-                .flatMap(userRepository::findOneByLogin)
+                .flatMap(userRepository::findOneByEmailIgnoreCase)
                 .ifPresent(
                         user -> {
                             user.setFirstName(firstName);
@@ -255,7 +252,7 @@ public class UserService {
     @Transactional
     public void changePassword(String currentClearTextPassword, String newPassword) {
         SecurityUtils.getCurrentUserLogin()
-                .flatMap(userRepository::findOneByLogin)
+                .flatMap(userRepository::findOneByEmailIgnoreCase)
                 .ifPresent(
                         user -> {
                             String currentEncryptedPassword = user.getPassword();
@@ -282,14 +279,14 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public Optional<User> getUserWithAuthoritiesByLogin(String login) {
-        return userRepository.findOneWithAuthoritiesByLogin(login);
+    public Optional<User> getUserWithAuthoritiesByEmail(String email) {
+        return userRepository.findOneWithAuthoritiesByEmailIgnoreCase(email);
     }
 
     @Transactional(readOnly = true)
     public Optional<User> getUserWithAuthorities() {
         return SecurityUtils.getCurrentUserLogin()
-                .flatMap(userRepository::findOneWithAuthoritiesByLogin);
+                .flatMap(userRepository::findOneWithAuthoritiesByEmailIgnoreCase);
     }
 
     //

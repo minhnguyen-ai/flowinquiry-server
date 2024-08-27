@@ -30,31 +30,22 @@ public class DomainUserDetailsService implements UserDetailsService {
 
     @Override
     @Transactional(readOnly = true)
-    public UserDetails loadUserByUsername(final String login) {
-        log.debug("Authenticating {}", login);
+    public UserDetails loadUserByUsername(final String email) {
+        log.debug("Authenticating {}", email);
 
-        if (new EmailValidator().isValid(login, null)) {
+        if (new EmailValidator().isValid(email, null)) {
             return userRepository
-                    .findOneWithAuthoritiesByEmailIgnoreCase(login)
-                    .map(user -> createSpringSecurityUser(login, user))
+                    .findOneWithAuthoritiesByEmailIgnoreCase(email)
+                    .map(user -> createSpringSecurityUser(email, user))
                     .orElseThrow(
                             () ->
                                     new UsernameNotFoundException(
                                             "User with email "
-                                                    + login
+                                                    + email
                                                     + " was not found in the database"));
+        } else {
+            throw new IllegalArgumentException("Invalid email: " + email);
         }
-
-        String lowercaseLogin = login.toLowerCase(Locale.ENGLISH);
-        return userRepository
-                .findOneWithAuthoritiesByLogin(lowercaseLogin)
-                .map(user -> createSpringSecurityUser(lowercaseLogin, user))
-                .orElseThrow(
-                        () ->
-                                new UsernameNotFoundException(
-                                        "User "
-                                                + lowercaseLogin
-                                                + " was not found in the database"));
     }
 
     private org.springframework.security.core.userdetails.User createSpringSecurityUser(
@@ -68,6 +59,6 @@ public class DomainUserDetailsService implements UserDetailsService {
                         .map(SimpleGrantedAuthority::new)
                         .toList();
         return new org.springframework.security.core.userdetails.User(
-                user.getLogin(), user.getPassword(), grantedAuthorities);
+                user.getEmail(), user.getPassword(), grantedAuthorities);
     }
 }

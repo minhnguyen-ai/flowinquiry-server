@@ -120,17 +120,15 @@ public class UserResource {
             throw new BadRequestAlertException(
                     "A new user cannot already have an ID", "userManagement", "idexists");
             // Lowercase the user login before comparing with database
-        } else if (userRepository.findOneByLogin(userDTO.getLogin().toLowerCase()).isPresent()) {
-            throw new LoginAlreadyUsedException();
-        } else if (userRepository.findOneByEmailIgnoreCase(userDTO.getEmail()).isPresent()) {
+        }else if (userRepository.findOneByEmailIgnoreCase(userDTO.getEmail()).isPresent()) {
             throw new EmailAlreadyUsedException();
         } else {
             User newUser = userService.createUser(userDTO);
             mailService.sendCreationEmail(newUser);
-            return ResponseEntity.created(new URI("/api/admin/users/" + newUser.getLogin()))
+            return ResponseEntity.created(new URI("/api/admin/users/" + newUser.getEmail()))
                     .headers(
                             HeaderUtil.createAlert(
-                                    applicationName, "userManagement.created", newUser.getLogin()))
+                                    applicationName, "userManagement.created", newUser.getEmail()))
                     .body(newUser);
         }
     }
@@ -142,13 +140,13 @@ public class UserResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated
      *     user.
      * @throws EmailAlreadyUsedException {@code 400 (Bad Request)} if the email is already in use.
-     * @throws LoginAlreadyUsedException {@code 400 (Bad Request)} if the login is already in use.
+     * @throws LoginAlreadyUsedException {@code 400 (Bad Request)} if the email is already in use.
      */
     @PutMapping({"/users", "/users/{login}"})
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<AdminUserDTO> updateUser(
             @PathVariable(name = "login", required = false) @Pattern(regexp = Constants.LOGIN_REGEX)
-                    String login,
+                    String email,
             @Valid @RequestBody AdminUserDTO userDTO) {
         log.debug("REST request to update User : {}", userDTO);
         Optional<User> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
@@ -156,7 +154,7 @@ public class UserResource {
                 && (!existingUser.orElseThrow().getId().equals(userDTO.getId()))) {
             throw new EmailAlreadyUsedException();
         }
-        existingUser = userRepository.findOneByLogin(userDTO.getLogin().toLowerCase());
+        existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail().toLowerCase());
         if (existingUser.isPresent()
                 && (!existingUser.orElseThrow().getId().equals(userDTO.getId()))) {
             throw new LoginAlreadyUsedException();
@@ -166,7 +164,7 @@ public class UserResource {
         return ResponseUtil.wrapOrNotFound(
                 updatedUser,
                 HeaderUtil.createAlert(
-                        applicationName, "userManagement.updated", userDTO.getLogin()));
+                        applicationName, "userManagement.updated", userDTO.getEmail()));
     }
 
     /**
@@ -211,7 +209,7 @@ public class UserResource {
             @PathVariable("login") @Pattern(regexp = Constants.LOGIN_REGEX) String login) {
         log.debug("REST request to get User : {}", login);
         return ResponseUtil.wrapOrNotFound(
-                userService.getUserWithAuthoritiesByLogin(login).map(AdminUserDTO::new));
+                userService.getUserWithAuthoritiesByEmail(login).map(AdminUserDTO::new));
     }
 
     /**

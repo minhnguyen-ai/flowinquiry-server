@@ -19,11 +19,6 @@ public class AdminUserDTO implements Serializable {
 
     private Long id;
 
-    @NotBlank
-    @Pattern(regexp = Constants.LOGIN_REGEX)
-    @Size(min = 1, max = 50)
-    private String login;
-
     @Size(max = 50)
     private String firstName;
 
@@ -58,7 +53,6 @@ public class AdminUserDTO implements Serializable {
 
     public AdminUserDTO(User user) {
         this.id = user.getId();
-        this.login = user.getLogin();
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
         this.email = user.getEmail();
@@ -79,14 +73,6 @@ public class AdminUserDTO implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
     }
 
     public String getFirstName() {
@@ -181,10 +167,7 @@ public class AdminUserDTO implements Serializable {
     @Override
     public String toString() {
         return "AdminUserDTO{"
-                + "login='"
-                + login
-                + '\''
-                + ", firstName='"
+                + "firstName='"
                 + firstName
                 + '\''
                 + ", lastName='"
