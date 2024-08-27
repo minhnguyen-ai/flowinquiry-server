@@ -1,12 +1,11 @@
 package io.flexwork.security.repository;
 
 import io.flexwork.domain.User;
+import jakarta.transaction.Transactional;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-
-import jakarta.transaction.Transactional;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

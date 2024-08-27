@@ -64,8 +64,7 @@ public class LoginController {
     @PostMapping("/login")
     public ResponseEntity<AdminUserDTO> authorize(@Valid @RequestBody LoginVM loginVM) {
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(
-                        loginVM.getEmail(), loginVM.getPassword());
+                new UsernamePasswordAuthenticationToken(loginVM.getEmail(), loginVM.getPassword());
 
         Authentication authentication =
                 authenticationManagerBuilder.getObject().authenticate(authenticationToken);
