@@ -34,7 +34,7 @@ export const getAccounts = async (): Promise<PageableResult<AccountType>> => {
 export const saveOrUpdateAccount = async (
   prevState: ActionResult,
   isEdit: boolean,
-  account: Account,
+  account: AccountType,
 ): Promise<ActionResult> => {
   const validation = accountSchema.safeParse(account);
 

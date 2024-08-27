@@ -4,8 +4,6 @@ import Link from "next/link";
 import { auth } from "@/auth";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { Heading } from "@/components/heading";
-import { columns } from "@/components/tables/user-tables/columns";
-import { UserTable } from "@/components/tables/user-tables/user-table";
 import { buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { BACKEND_API } from "@/lib/constants";
@@ -59,15 +57,6 @@ const Users = async ({ searchParams }: paramsProps) => {
           </Link>
         </div>
         <Separator />
-
-        <UserTable
-          searchKey="email"
-          pageNo={page}
-          columns={columns}
-          totalUsers={totalUsers}
-          data={users}
-          pageCount={pageCount}
-        />
       </div>
     );
   }

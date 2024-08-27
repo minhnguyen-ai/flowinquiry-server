@@ -2,6 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Circle, HelpCircle } from "lucide-react";
+import Link from "next/link";
 
 import { DataTableRowActions } from "@/components/tables/account-tables/cell-action";
 import { DataTableColumnHeader } from "@/components/tables/data-table-column-header";
@@ -49,7 +50,13 @@ export const columns: ColumnDef<AccountType>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Name" />
     ),
-    cell: ({ row }) => <div>{row.getValue("accountName")}</div>,
+    cell: ({ row }) => (
+      <div>
+        <Link href={`/portal/accounts/${row.original.id}`}>
+          {row.getValue("accountName")}
+        </Link>
+      </div>
+    ),
   },
   {
     accessorKey: "accountType",

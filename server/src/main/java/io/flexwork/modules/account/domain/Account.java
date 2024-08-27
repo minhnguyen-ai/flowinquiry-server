@@ -2,7 +2,6 @@ package io.flexwork.modules.account.domain;
 
 import io.flexwork.domain.User;
 import jakarta.persistence.*;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
