@@ -1,3 +1,4 @@
+import { formatDistanceToNow } from "date-fns";
 import Link from "next/link";
 
 import { Badge } from "@/components/ui/badge";
@@ -28,7 +29,7 @@ const Users = async ({ searchParams }: paramsProps) => {
   return (
     <div>
       {users?.map((user) => (
-        <Card>
+        <Card key={user.id}>
           <CardHeader>
             <CardTitle>
               {user.firstName}, {user.lastName}
@@ -37,6 +38,10 @@ const Users = async ({ searchParams }: paramsProps) => {
           <CardContent>
             Email: <Link href={`email:${user.email}`}>{user.email}</Link>
             Timezone: {user.timezone}
+            Last Login time:{" "}
+            {user.lastLoginTime
+              ? formatDistanceToNow(user.lastLoginTime, { addSuffix: true })
+              : ""}
             Authorities:{" "}
             {user.authorities?.map((authority) => (
               <Badge>{authority.name}</Badge>

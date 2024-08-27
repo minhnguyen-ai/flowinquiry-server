@@ -3,7 +3,9 @@ package io.flexwork.security.service.dto;
 import io.flexwork.domain.Authority;
 import io.flexwork.domain.User;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.Objects;
 import java.util.Set;
 import lombok.Data;
@@ -24,6 +26,8 @@ public class UserDTO implements Serializable {
 
     private String timezone;
 
+    private LocalDateTime lastLoginTime;
+
     private Set<Authority> authorities;
 
     public UserDTO() {
@@ -42,6 +46,16 @@ public class UserDTO implements Serializable {
 
     public void setTimezone(ZoneId timezone) {
         this.timezone = timezone.getId();
+    }
+
+    public LocalDateTime getLastLoginTime() {
+        if (lastLoginTime == null) return null;
+        ZoneId userZone = ZoneId.of(timezone);
+        return lastLoginTime.atZone(ZoneOffset.UTC).withZoneSameInstant(userZone).toLocalDateTime();
+    }
+
+    public void setLastLoginTime(LocalDateTime lastLoginTime) {
+        this.lastLoginTime = lastLoginTime;
     }
 
     @Override

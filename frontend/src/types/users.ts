@@ -10,6 +10,7 @@ export const userSchema = z.object({
   firstName: z.string().nullish(),
   lastName: z.string().nullish(),
   timezone: z.string().min(1),
+  lastLoginTime: z.string().nullish(),
   authorities: z.array(authoritySchema),
 });
 

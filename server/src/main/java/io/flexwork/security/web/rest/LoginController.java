@@ -4,11 +4,14 @@ import static io.flexwork.security.SecurityUtils.AUTHORITIES_KEY;
 import static io.flexwork.security.SecurityUtils.JWT_ALGORITHM;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.flexwork.security.repository.UserRepository;
 import io.flexwork.security.service.UserService;
 import io.flexwork.security.service.dto.AdminUserDTO;
 import io.flexwork.security.web.rest.errors.InvalidLoginException;
 import jakarta.validation.Valid;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
@@ -45,20 +48,24 @@ public class LoginController {
 
     private final UserService userService;
 
+    private final UserRepository userRepository;
+
     public LoginController(
             JwtEncoder jwtEncoder,
             AuthenticationManagerBuilder authenticationManagerBuilder,
-            UserService userService) {
+            UserService userService,
+            UserRepository userRepository) {
         this.jwtEncoder = jwtEncoder;
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.userService = userService;
+        this.userRepository = userRepository;
     }
 
     @PostMapping("/login")
     public ResponseEntity<AdminUserDTO> authorize(@Valid @RequestBody LoginVM loginVM) {
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(
-                        loginVM.getUsername(), loginVM.getPassword());
+                        loginVM.getEmail(), loginVM.getPassword());
 
         Authentication authentication =
                 authenticationManagerBuilder.getObject().authenticate(authenticationToken);
@@ -73,6 +80,9 @@ public class LoginController {
         String jwt = this.createToken(authentication, loginVM.isRememberMe());
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setBearerAuth(jwt);
+
+        // Update last login time for user
+        userRepository.updateLastLoginTime(loginVM.getEmail(), LocalDateTime.now(ZoneOffset.UTC));
         return new ResponseEntity<>(adminUserDTO, httpHeaders, HttpStatus.OK);
     }
 

@@ -7,19 +7,19 @@ import jakarta.validation.constraints.Size;
 public class LoginVM {
 
     @NotNull @Size(min = 1, max = 50)
-    private String username;
+    private String email;
 
     @NotNull @Size(min = 4, max = 100)
     private String password;
 
     private boolean rememberMe;
 
-    public String getUsername() {
-        return username;
+    public String getEmail() {
+        return email;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {
@@ -41,6 +41,6 @@ public class LoginVM {
     // prettier-ignore
     @Override
     public String toString() {
-        return "LoginVM{" + "username='" + username + '\'' + ", rememberMe=" + rememberMe + '}';
+        return "LoginVM{" + "username='" + email + '\'' + ", rememberMe=" + rememberMe + '}';
     }
 }

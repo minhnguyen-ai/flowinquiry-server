@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.HashSet;
 import java.util.Set;
 import org.hibernate.annotations.BatchSize;
@@ -178,6 +179,16 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
 
     public void setTimezone(ZoneId timezone) {
         this.timezone = timezone.getId();
+    }
+
+    public LocalDateTime getLastLoginTime() {
+        if (lastLoginTime == null) return null;
+        ZoneId userZone = ZoneId.of(timezone);
+        return lastLoginTime.atZone(ZoneOffset.UTC).withZoneSameInstant(userZone).toLocalDateTime();
+    }
+
+    public void setLastLoginTime(LocalDateTime lastLoginTime) {
+        this.lastLoginTime = lastLoginTime;
     }
 
     public Set<Authority> getAuthorities() {

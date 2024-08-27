@@ -11,6 +11,9 @@ importers:
       '@auth/core':
         specifier: ^0.34.2
         version: 0.34.2
+      date-fns:
+        specifier: ^3.6.0
+        version: 3.6.0
 
 packages:
 
@@ -37,6 +40,9 @@ packages:
   cookie@0.6.0:
     resolution: {integrity: sha512-U71cyTamuh1CRNCfpGY6to28lxvNwPG4Guz/EVjgf3Jmzv0vlDp1atT9eS5dDjMYHucpHbWns6Lwf3BKz6svdw==}
     engines: {node: '>= 0.6'}
+
+  date-fns@3.6.0:
+    resolution: {integrity: sha512-fRHTG8g/Gif+kSh50gaGEdToemgfj74aRX3swtiouboip5JDLAyDE9F11nHMIcvOaXeOC6D7SpNhi7uFyB7Uww==}
 
   jose@5.6.3:
     resolution: {integrity: sha512-1Jh//hEEwMhNYPDDLwXHa2ePWgWiFNNUadVmguAAw2IJ6sj9mNxV5tGXJNqlMkJAybF6Lgw1mISDxTePP/187g==}
@@ -72,6 +78,8 @@ snapshots:
   '@types/cookie@0.6.0': {}
 
   cookie@0.6.0: {}
+
+  date-fns@3.6.0: {}
 
   jose@5.6.3: {}
 

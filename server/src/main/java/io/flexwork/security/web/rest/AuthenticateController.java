@@ -53,7 +53,7 @@ public class AuthenticateController {
     public ResponseEntity<JWTToken> authorize(@Valid @RequestBody LoginVM loginVM) {
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(
-                        loginVM.getUsername(), loginVM.getPassword());
+                        loginVM.getEmail(), loginVM.getPassword());
 
         Authentication authentication =
                 authenticationManagerBuilder.getObject().authenticate(authenticationToken);
