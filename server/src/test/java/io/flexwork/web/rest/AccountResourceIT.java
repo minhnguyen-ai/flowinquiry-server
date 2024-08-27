@@ -139,7 +139,8 @@ class AccountResourceIT {
         validUser.setImageUrl("http://placehold.it/50x50");
         validUser.setLangKey(Constants.DEFAULT_LANGUAGE);
         validUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
-        assertThat(userRepository.findOneByEmailIgnoreCase("test-register-valid@example.com")).isEmpty();
+        assertThat(userRepository.findOneByEmailIgnoreCase("test-register-valid@example.com"))
+                .isEmpty();
 
         restAccountMockMvc
                 .perform(
@@ -148,7 +149,8 @@ class AccountResourceIT {
                                 .content(om.writeValueAsBytes(validUser)))
                 .andExpect(status().isCreated());
 
-        assertThat(userRepository.findOneByEmailIgnoreCase("test-register-valid@example.com")).isPresent();
+        assertThat(userRepository.findOneByEmailIgnoreCase("test-register-valid@example.com"))
+                .isPresent();
 
         userService.deleteUser("test-register-valid@example.com");
     }
@@ -312,7 +314,9 @@ class AccountResourceIT {
                                 .content(om.writeValueAsBytes(firstUser)))
                 .andExpect(status().isCreated());
 
-        Optional<User> testUser1 = userRepository.findOneByEmailIgnoreCase("test-register-duplicate-email@example.com");
+        Optional<User> testUser1 =
+                userRepository.findOneByEmailIgnoreCase(
+                        "test-register-duplicate-email@example.com");
         assertThat(testUser1).isPresent();
 
         // Duplicate email, different login
@@ -333,10 +337,14 @@ class AccountResourceIT {
                                 .content(om.writeValueAsBytes(secondUser)))
                 .andExpect(status().isCreated());
 
-        Optional<User> testUser2 = userRepository.findOneByEmailIgnoreCase("test-register-duplicate-email@example.com");
+        Optional<User> testUser2 =
+                userRepository.findOneByEmailIgnoreCase(
+                        "test-register-duplicate-email@example.com");
         assertThat(testUser2).isEmpty();
 
-        Optional<User> testUser3 = userRepository.findOneByEmailIgnoreCase("test-register-duplicate-email-2@example.com");
+        Optional<User> testUser3 =
+                userRepository.findOneByEmailIgnoreCase(
+                        "test-register-duplicate-email-2@example.com");
         assertThat(testUser3).isPresent();
 
         // Duplicate email - with uppercase email address
@@ -358,7 +366,9 @@ class AccountResourceIT {
                                 .content(om.writeValueAsBytes(userWithUpperCaseEmail)))
                 .andExpect(status().isCreated());
 
-        Optional<User> testUser4 = userRepository.findOneByEmailIgnoreCase("test-register-duplicate-email-3@example.com");
+        Optional<User> testUser4 =
+                userRepository.findOneByEmailIgnoreCase(
+                        "test-register-duplicate-email-3@example.com");
         assertThat(testUser4).isPresent();
         assertThat(testUser4.orElseThrow().getEmail())
                 .isEqualTo("test-register-duplicate-email@example.com");
@@ -397,7 +407,8 @@ class AccountResourceIT {
                                 .content(om.writeValueAsBytes(validUser)))
                 .andExpect(status().isCreated());
 
-        Optional<User> userDup = userRepository.findOneWithAuthoritiesByEmailIgnoreCase("badguy@example.com");
+        Optional<User> userDup =
+                userRepository.findOneWithAuthoritiesByEmailIgnoreCase("badguy@example.com");
         assertThat(userDup).isPresent();
         assertThat(userDup.orElseThrow().getAuthorities())
                 .hasSize(1)
@@ -464,7 +475,9 @@ class AccountResourceIT {
                 .andExpect(status().isOk());
 
         User updatedUser =
-                userRepository.findOneWithAuthoritiesByEmailIgnoreCase(user.getEmail()).orElse(null);
+                userRepository
+                        .findOneWithAuthoritiesByEmailIgnoreCase(user.getEmail())
+                        .orElse(null);
         assertThat(updatedUser.getFirstName()).isEqualTo(userDTO.getFirstName());
         assertThat(updatedUser.getLastName()).isEqualTo(userDTO.getLastName());
         assertThat(updatedUser.getEmail()).isEqualTo(userDTO.getEmail());
@@ -542,7 +555,10 @@ class AccountResourceIT {
                                 .content(om.writeValueAsBytes(userDTO)))
                 .andExpect(status().isBadRequest());
 
-        User updatedUser = userRepository.findOneByEmailIgnoreCase("save-existing-email@example.com").orElseThrow();
+        User updatedUser =
+                userRepository
+                        .findOneByEmailIgnoreCase("save-existing-email@example.com")
+                        .orElseThrow();
         assertThat(updatedUser.getEmail()).isEqualTo("save-existing-email@example.com");
 
         userService.deleteUser("save-existing-email");
@@ -576,7 +592,9 @@ class AccountResourceIT {
                 .andExpect(status().isOk());
 
         User updatedUser =
-                userRepository.findOneByEmailIgnoreCase("save-existing-email-and-login@example.com").orElse(null);
+                userRepository
+                        .findOneByEmailIgnoreCase("save-existing-email-and-login@example.com")
+                        .orElse(null);
         assertThat(updatedUser.getEmail()).isEqualTo("save-existing-email-and-login@example.com");
 
         userService.deleteUser("save-existing-email-and-login");
@@ -604,7 +622,8 @@ class AccountResourceIT {
 
         User updatedUser =
                 userRepository
-                        .findOneByEmailIgnoreCase("change-password-wrong-existing-password@example.com")
+                        .findOneByEmailIgnoreCase(
+                                "change-password-wrong-existing-password@example.com")
                         .orElse(null);
         assertThat(passwordEncoder.matches("new password", updatedUser.getPassword())).isFalse();
         assertThat(passwordEncoder.matches(currentPassword, updatedUser.getPassword())).isTrue();
@@ -632,7 +651,8 @@ class AccountResourceIT {
                                                         currentPassword, "new password"))))
                 .andExpect(status().isOk());
 
-        User updatedUser = userRepository.findOneByEmailIgnoreCase("change-password@example.com").orElse(null);
+        User updatedUser =
+                userRepository.findOneByEmailIgnoreCase("change-password@example.com").orElse(null);
         assertThat(passwordEncoder.matches("new password", updatedUser.getPassword())).isTrue();
 
         userService.deleteUser("change-password");
@@ -660,7 +680,10 @@ class AccountResourceIT {
                                                         currentPassword, newPassword))))
                 .andExpect(status().isBadRequest());
 
-        User updatedUser = userRepository.findOneByEmailIgnoreCase("change-password-too-small@example.com").orElse(null);
+        User updatedUser =
+                userRepository
+                        .findOneByEmailIgnoreCase("change-password-too-small@example.com")
+                        .orElse(null);
         assertThat(updatedUser.getPassword()).isEqualTo(user.getPassword());
 
         userService.deleteUser("change-password-too-small");
@@ -688,7 +711,10 @@ class AccountResourceIT {
                                                         currentPassword, newPassword))))
                 .andExpect(status().isBadRequest());
 
-        User updatedUser = userRepository.findOneByEmailIgnoreCase("change-password-too-long@example.com").orElse(null);
+        User updatedUser =
+                userRepository
+                        .findOneByEmailIgnoreCase("change-password-too-long@example.com")
+                        .orElse(null);
         assertThat(updatedUser.getPassword()).isEqualTo(user.getPassword());
 
         userService.deleteUser("change-password-too-long");
@@ -713,7 +739,10 @@ class AccountResourceIT {
                                                 new PasswordChangeDTO(currentPassword, ""))))
                 .andExpect(status().isBadRequest());
 
-        User updatedUser = userRepository.findOneByEmailIgnoreCase("change-password-empty@example.com").orElse(null);
+        User updatedUser =
+                userRepository
+                        .findOneByEmailIgnoreCase("change-password-empty@example.com")
+                        .orElse(null);
         assertThat(updatedUser.getPassword()).isEqualTo(user.getPassword());
 
         userService.deleteUser("change-password-empty");

@@ -120,7 +120,7 @@ public class UserResource {
             throw new BadRequestAlertException(
                     "A new user cannot already have an ID", "userManagement", "idexists");
             // Lowercase the user login before comparing with database
-        }else if (userRepository.findOneByEmailIgnoreCase(userDTO.getEmail()).isPresent()) {
+        } else if (userRepository.findOneByEmailIgnoreCase(userDTO.getEmail()).isPresent()) {
             throw new EmailAlreadyUsedException();
         } else {
             User newUser = userService.createUser(userDTO);

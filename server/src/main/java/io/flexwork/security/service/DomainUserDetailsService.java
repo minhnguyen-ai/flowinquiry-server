@@ -5,7 +5,6 @@ import io.flexwork.domain.User;
 import io.flexwork.security.UserNotActivatedException;
 import io.flexwork.security.repository.UserRepository;
 import java.util.List;
-import java.util.Locale;
 import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

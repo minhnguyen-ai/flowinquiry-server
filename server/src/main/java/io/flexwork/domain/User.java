@@ -1,18 +1,14 @@
 package io.flexwork.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import io.flexwork.security.Constants;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.HashSet;
-import java.util.Locale;
 import java.util.Set;
-import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.BatchSize;
 
 /** A user. */
