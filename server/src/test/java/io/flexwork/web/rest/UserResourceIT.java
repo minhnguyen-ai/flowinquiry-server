@@ -12,6 +12,7 @@ import io.flexwork.security.AuthoritiesConstants;
 import io.flexwork.security.repository.UserRepository;
 import io.flexwork.security.service.UserService;
 import io.flexwork.security.service.dto.AdminUserDTO;
+import io.flexwork.security.service.mapper.UserMapper;
 import io.flexwork.security.service.mapper.UserMapperClassic;
 import io.flexwork.security.web.rest.UserResource;
 import jakarta.persistence.EntityManager;

@@ -1,5 +1,7 @@
+import Link from "next/link";
 
-import { auth } from "@/auth";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getUsers } from "@/lib/actions/users.action";
 import { PageableResult } from "@/types/commons";
 import { UserType } from "@/types/users";
@@ -16,17 +18,34 @@ type paramsProps = {
 };
 
 const Users = async ({ searchParams }: paramsProps) => {
-  const session = await auth();
-
+  const pageableResult: PageableResult<UserType> = await getUsers();
   const page = Number(searchParams.page) || 1;
   const pageLimit = Number(searchParams.limit) || 10;
   const country = searchParams.search || null;
   const offset = (page - 1) * pageLimit;
-
-  const pageableResult: PageableResult<UserType> = await getUsers();
   console.log(`Page ${JSON.stringify(pageableResult)}`);
-
-  return <>Users</>;
+  const users: UserType[] = pageableResult.content;
+  return (
+    <div>
+      {users?.map((user) => (
+        <Card>
+          <CardHeader>
+            <CardTitle>
+              {user.firstName}, {user.lastName}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            Email: <Link href={`email:${user.email}`}>{user.email}</Link>
+            Timezone: {user.timezone}
+            Authorities:{" "}
+            {user.authorities?.map((authority) => (
+              <Badge>{authority.name}</Badge>
+            ))}
+          </CardContent>
+        </Card>
+      ))}
+    </div>
+  );
 };
 
 export default Users;

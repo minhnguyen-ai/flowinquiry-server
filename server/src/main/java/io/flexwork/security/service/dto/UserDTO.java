@@ -3,6 +3,7 @@ package io.flexwork.security.service.dto;
 import io.flexwork.domain.Authority;
 import io.flexwork.domain.User;
 import java.io.Serializable;
+import java.time.ZoneId;
 import java.util.Objects;
 import java.util.Set;
 import lombok.Data;
@@ -21,6 +22,8 @@ public class UserDTO implements Serializable {
 
     private String lastName;
 
+    private String timezone;
+
     private Set<Authority> authorities;
 
     public UserDTO() {
@@ -31,6 +34,14 @@ public class UserDTO implements Serializable {
         this.id = user.getId();
         this.email = user.getEmail();
         // Customize it here if you need, or not, firstName/lastName/etc
+    }
+
+    public ZoneId getTimezone() {
+        return ZoneId.of(timezone);
+    }
+
+    public void setTimezone(ZoneId timezone) {
+        this.timezone = timezone.getId();
     }
 
     @Override

@@ -7,6 +7,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.HashSet;
 import java.util.Set;
 import org.hibernate.annotations.BatchSize;
@@ -64,6 +66,12 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
 
     @Column(name = "reset_date")
     private Instant resetDate = null;
+
+    @Column(name = "timezone", nullable = false)
+    private String timezone;
+
+    @Column(name = "last_login_time")
+    private LocalDateTime lastLoginTime;
 
     @JsonIgnore
     @ManyToMany
@@ -162,6 +170,14 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
 
     public void setLangKey(String langKey) {
         this.langKey = langKey;
+    }
+
+    public ZoneId getTimezone() {
+        return ZoneId.of(timezone);
+    }
+
+    public void setTimezone(ZoneId timezone) {
+        this.timezone = timezone.getId();
     }
 
     public Set<Authority> getAuthorities() {

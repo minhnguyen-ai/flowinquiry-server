@@ -1,3 +1,3 @@
-id;password_hash;first_name;last_name;email;image_url;activated;lang_key;created_by;last_modified_by
-1;$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC;Administrator;Administrator;admin@localhost.io;;true;en;system;system
-2;$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K;User;User;user@localhost.io;;true;en;system;system
+id;password_hash;first_name;last_name;email;image_url;activated;lang_key;timezone;last_login_time;created_by;last_modified_by
+1;$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC;Administrator;Administrator;admin@localhost.io;;true;en;America/New_York;;system;system
+2;$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K;User;User;user@localhost.io;;true;en;America/New_York;;system;system
