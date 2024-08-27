@@ -1,13 +1,8 @@
 "use client";
 
 import {
-  Files,
-  Home,
   Menu,
   Package2,
-  Search,
-  Settings,
-  Users,
 } from "lucide-react";
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
@@ -37,7 +32,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
   Tooltip,
@@ -45,6 +39,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { menu_entries } from "@/lib/navigation";
 
 const Navbar = () => {
   const { data: session, status } = useSession();
@@ -67,34 +62,15 @@ const Navbar = () => {
               <Package2 className="h-6 w-6" />
               <span className="sr-only">Flexwork</span>
             </Link>
-            <Link
-              href="/"
-              className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
-            >
-              <Home className="h-5 w-5" />
-              Dashboard
-            </Link>
-            <Link
-              href="/files"
-              className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-            >
-              <Files className="h-4 w-4" />
-              Files
-            </Link>
-            <Link
-              href="/users"
-              className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-            >
-              <Users className="h-4 w-4" />
-              Users
-            </Link>
-            <Link
-              href="/settings"
-              className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-            >
-              <Settings className="h-4 w-4" />
-              Settings
-            </Link>
+            {menu_entries.map((menu_entry) => (
+              <Link
+                href={menu_entry.href}
+                className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+              >
+                {<menu_entry.icon className="h-4 w-4" />}
+                {menu_entry.label}
+              </Link>
+            ))}
           </nav>
           <div className="mt-auto">
             <Card>
@@ -114,18 +90,7 @@ const Navbar = () => {
           </div>
         </SheetContent>
       </Sheet>
-      <div className="w-full flex-1">
-        <form>
-          <div className="relative">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input
-              type="search"
-              placeholder="Search products..."
-              className="w-full appearance-none bg-background pl-8 shadow-none md:w-2/3 lg:w-1/3"
-            />
-          </div>
-        </form>
-      </div>
+      <div className="w-full flex-1" />
       <Dialog>
         <DropdownMenu>
           <DropdownMenuTrigger>

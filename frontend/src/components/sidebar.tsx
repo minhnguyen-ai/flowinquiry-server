@@ -1,10 +1,5 @@
 import {
-  Building2,
-  Files,
-  Home,
   Package2,
-  Settings,
-  Users,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -17,6 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { menu_entries } from "@/lib/navigation";
 
 const Sidebar = () => {
   return (
@@ -31,41 +27,16 @@ const Sidebar = () => {
         </div>
         <div className="flex-1">
           <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
-            <Link
-              href="/"
-              className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-            >
-              <Home className="h-4 w-4" />
-              Dashboard
-            </Link>
-            <Link
-              href="/portal/accounts"
-              className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-            >
-              <Building2 className="h-4 w-4" />
-              Accounts
-            </Link>
-            <Link
-              href="/portal/files"
-              className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-            >
-              <Files className="h-4 w-4" />
-              Files
-            </Link>
-            <Link
-              href="/portal/users"
-              className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-            >
-              <Users className="h-4 w-4" />
-              Users
-            </Link>
-            <Link
-              href="/portal/settings"
-              className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
-            >
-              <Settings className="h-4 w-4" />
-              Settings
-            </Link>
+            {menu_entries.map((menu_entry) => (
+              <Link
+                key={menu_entry.value}
+                href={menu_entry.href}
+                className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+              >
+                {<menu_entry.icon className="h-4 w-4" />}
+                {menu_entry.label}
+              </Link>
+            ))}
           </nav>
         </div>
         <div className="mt-auto p-4">
