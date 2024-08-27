@@ -2,7 +2,6 @@ import { Plus } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 
-import { auth } from "@/auth";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { Heading } from "@/components/heading";
 import { columns } from "@/components/tables/account-tables/columns";
@@ -26,10 +25,7 @@ type paramsProps = {
 };
 
 const AccountsPage = async ({ searchParams }: paramsProps) => {
-  const session = await auth();
-
   const pageableResult: PageableResult<AccountType> = await getAccounts();
-  console.log(`Page ${JSON.stringify(pageableResult)}`);
   const page = Number(searchParams.page) || 1;
   const pageLimit = pageableResult.size || 1;
   const totalElements = pageableResult.totalElements;

@@ -1,13 +1,8 @@
-import { Plus } from "lucide-react";
-import Link from "next/link";
 
 import { auth } from "@/auth";
-import { Breadcrumbs } from "@/components/breadcrumbs";
-import { Heading } from "@/components/heading";
-import { buttonVariants } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { BACKEND_API } from "@/lib/constants";
-import { cn } from "@/lib/utils";
+import { getUsers } from "@/lib/actions/users.action";
+import { PageableResult } from "@/types/commons";
+import { UserType } from "@/types/users";
 
 const breadcrumbItems = [
   { title: "Dashboard", link: "/portal" },
@@ -28,38 +23,10 @@ const Users = async ({ searchParams }: paramsProps) => {
   const country = searchParams.search || null;
   const offset = (page - 1) * pageLimit;
 
-  const res = await fetch(`${BACKEND_API}/api/users`, {
-    headers: {
-      "Content-Type": "application/json",
-      "Access-Control-Allow-Origin": "*",
-      Authorization: `Bearer ${session.token}`,
-    },
-  }).catch((error) => console.error("Error fetching data", error));
+  const pageableResult: PageableResult<UserType> = await getUsers();
+  console.log(`Page ${JSON.stringify(pageableResult)}`);
 
-  if (!res) {
-    return <div>Users: Can not load data</div>;
-  } else {
-    const users = res.json();
-    const totalUsers = 100; //1000
-    const pageCount = Math.ceil(totalUsers / pageLimit);
-    return (
-      <div className="space-y-4">
-        <Breadcrumbs items={breadcrumbItems} />
-
-        <div className="flex items-start justify-between">
-          <Heading title={`Users (${totalUsers})`} description="Manage users" />
-
-          <Link
-            href={"/portal/users/new"}
-            className={cn(buttonVariants({ variant: "default" }))}
-          >
-            <Plus className="mr-2 h-4 w-4" /> Add New
-          </Link>
-        </div>
-        <Separator />
-      </div>
-    );
-  }
+  return <>Users</>;
 };
 
 export default Users;

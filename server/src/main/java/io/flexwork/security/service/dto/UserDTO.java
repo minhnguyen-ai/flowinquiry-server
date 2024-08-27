@@ -15,8 +15,6 @@ public class UserDTO implements Serializable {
 
     private Long id;
 
-    private String login;
-
     private String email;
 
     private String firstName;
@@ -31,6 +29,7 @@ public class UserDTO implements Serializable {
 
     public UserDTO(User user) {
         this.id = user.getId();
+        this.email = user.getEmail();
         // Customize it here if you need, or not, firstName/lastName/etc
     }
 
@@ -39,11 +38,11 @@ public class UserDTO implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserDTO userDTO = (UserDTO) o;
-        return Objects.equals(id, userDTO.id) && Objects.equals(login, userDTO.login);
+        return Objects.equals(id, userDTO.id) && Objects.equals(email, userDTO.email);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, login);
+        return Objects.hash(id, email);
     }
 }

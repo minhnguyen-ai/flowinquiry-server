@@ -2,15 +2,16 @@
 
 import { auth } from "@/auth";
 import { BACKEND_API } from "@/lib/constants";
-import { AccountType } from "@/types/accounts";
 import { PageableResult } from "@/types/commons";
+import { UserType } from "@/types/users";
 
-export const getUsers = async (): Promise<PageableResult<AccountType>> => {
+export const getUsers = async (): Promise<PageableResult<UserType>> => {
   try {
     const session = await auth();
 
     console.log(`Token ${JSON.stringify(session)}`);
-    const res = await fetch(`${BACKEND_API}/api/accounts`, {
+    const res = await fetch(`${BACKEND_API}/api/users`, {
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",
