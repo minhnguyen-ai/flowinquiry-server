@@ -2,11 +2,10 @@ package io.flexwork.modules.account.service;
 
 import io.flexwork.modules.account.domain.Contact;
 import io.flexwork.modules.account.repository.ContactRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class ContactService {

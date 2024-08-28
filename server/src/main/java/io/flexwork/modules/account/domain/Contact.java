@@ -1,10 +1,9 @@
 package io.flexwork.modules.account.domain;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "fw_crm_contact")
