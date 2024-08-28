@@ -34,7 +34,7 @@ const AccountsPage = async ({ searchParams }: paramsProps) => {
     <div className="space-y-4">
       <Breadcrumbs items={breadcrumbItems} />
 
-      <div className="flex items-start justify-between">
+      <div className="flex flex-row justify-between">
         <Heading
           title={`Accounts (${totalElements})`}
           description="Manage accounts"

@@ -36,7 +36,7 @@ const AccountTypesSelect = ({
       control={form.control}
       name="accountType"
       render={({ field }) => (
-        <FormItem className="flex flex-col">
+        <FormItem>
           <FormLabel>
             Type
             {required && <span className="text-destructive"> *</span>}

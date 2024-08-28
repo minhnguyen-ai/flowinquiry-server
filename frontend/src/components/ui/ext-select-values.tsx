@@ -37,7 +37,7 @@ const ValuesSelect = ({
       control={form.control}
       name={fieldName}
       render={({ field }) => (
-        <FormItem className="flex flex-col">
+        <FormItem>
           <FormLabel>
             {label}
             {required && <span className="text-destructive"> *</span>}

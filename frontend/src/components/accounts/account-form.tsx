@@ -83,7 +83,10 @@ export const AccountForm: React.FC<FormProps<AccountType>> = ({
       </div>
       <Separator />
       <Form {...form}>
-        <form className="space-y-6" action={formAction}>
+        <form
+          className="grid grid-cols-1 gap-6 sm:grid-cols-2 max-w-[72rem]"
+          action={formAction}
+        >
           <ExtInputField
             form={form}
             required={true}

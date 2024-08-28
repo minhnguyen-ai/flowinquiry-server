@@ -61,22 +61,24 @@ export const ExtTextAreaField = ({
   required,
 }: ExtInputProps & UiAttributes) => {
   return (
-    <FormField
-      control={form.control}
-      name={fieldName}
-      render={({ field }) => (
-        <FormItem>
-          <FormLabel>
-            {label}
-            {required && <span className="text-destructive"> *</span>}
-          </FormLabel>
-          <FormControl>
-            <Textarea placeholder={placeholder} {...field} />
-          </FormControl>
-          <FormMessage />
-        </FormItem>
-      )}
-    />
+    <div className="w-full sm:col-span-2">
+      <FormField
+        control={form.control}
+        name={fieldName}
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>
+              {label}
+              {required && <span className="text-destructive"> *</span>}
+            </FormLabel>
+            <FormControl>
+              <Textarea placeholder={placeholder} {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+    </div>
   );
 };
 
@@ -84,6 +86,7 @@ interface SubmitButtonProps {
   label: string;
   labelWhileLoading: string;
 }
+
 export const SubmitButton = ({
   label,
   labelWhileLoading,
@@ -91,7 +94,11 @@ export const SubmitButton = ({
   const { pending } = useFormStatus();
 
   return (
-    <Button type="submit" disabled={pending}>
+    <Button
+      type="submit"
+      disabled={pending}
+      className="px-4 py-2 sm:col-span-2"
+    >
       {!pending ? label : labelWhileLoading}
     </Button>
   );

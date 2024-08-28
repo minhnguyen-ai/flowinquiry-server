@@ -34,7 +34,7 @@ const AccountIndustriesSelect = ({
       control={form.control}
       name="industry"
       render={({ field }) => (
-        <FormItem className="flex flex-col">
+        <FormItem>
           <FormLabel>
             Industry
             {required && <span className="text-destructive"> *</span>}

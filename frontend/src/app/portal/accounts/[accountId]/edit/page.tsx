@@ -1,7 +1,7 @@
 import AccountForm from "@/components/accounts/account-form";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { findAccount } from "@/lib/actions/accounts.action";
-import { Account } from "@/types/accounts";
+import { AccountType } from "@/types/accounts";
 import { ActionResult } from "@/types/commons";
 
 const breadcrumbItems = [
@@ -15,13 +15,13 @@ export default async function Page({
 }: {
   params: { accountId: number | "new" };
 }) {
-  let account: Account | undefined;
+  let account: AccountType | undefined;
 
   if (params.accountId == "new") {
   } else {
     const result: ActionResult = await findAccount(params.accountId);
     if (result.status == "success") {
-      account = result.value as Account;
+      account = result.value as AccountType;
     }
   }
 
