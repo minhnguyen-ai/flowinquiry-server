@@ -10,9 +10,7 @@ import { z } from "zod";
 import { Heading } from "@/components/heading";
 import { Button } from "@/components/ui/button";
 import { ExtInputField, ExtTextAreaField } from "@/components/ui/ext-form";
-import {
-  Form,
-} from "@/components/ui/form";
+import { Form } from "@/components/ui/form";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/components/ui/use-toast";
 import AuthoritiesSelect from "@/components/users/authorities-select";

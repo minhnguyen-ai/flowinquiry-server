@@ -108,6 +108,23 @@
                 onDelete="CASCADE"
                 constraintName="fk_authority_permissions_role"/>
 
+        <createTable tableName="fw_resource_authority">
+            <column name="resource_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="permission" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <constraints primaryKey="true" primaryKeyName="pk_resource_permissions"/>
+            <addForeignKeyConstraint
+                    baseTableName="Resource_Permissions"
+                    baseColumnNames="resource_id"
+                    referencedTableName="Resources"
+                    referencedColumnNames="id"
+                    onDelete="CASCADE"
+                    constraintName="fk_resource_permissions_resource"/>
+        </createTable>
+
         <loadData
                 file="config/liquibase/tenant/data/authority.csv"
                 separator=";"
