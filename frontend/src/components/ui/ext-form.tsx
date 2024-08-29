@@ -20,6 +20,7 @@ interface ExtInputProps {
   fieldName: string;
   label: string;
   placeholder?: string;
+  type?: string;
 }
 
 export interface FormProps<Entity> {
@@ -32,6 +33,7 @@ export const ExtInputField = ({
   label,
   placeholder,
   required,
+  type = undefined,
 }: ExtInputProps & UiAttributes) => {
   return (
     <FormField
@@ -44,7 +46,7 @@ export const ExtInputField = ({
             {required && <span className="text-destructive"> *</span>}
           </FormLabel>
           <FormControl>
-            <Input placeholder={placeholder} {...field} />
+            {<Input type={type} placeholder={placeholder} {...field} />}
           </FormControl>
           <FormMessage />
         </FormItem>

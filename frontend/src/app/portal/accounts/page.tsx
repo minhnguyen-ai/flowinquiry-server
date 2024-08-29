@@ -44,7 +44,7 @@ const AccountsPage = async ({ searchParams }: paramsProps) => {
           href={"/portal/accounts/new/edit"}
           className={cn(buttonVariants({ variant: "default" }))}
         >
-          <Plus className="mr-2 h-4 w-4" /> Add New
+          <Plus className="mr-2 h-4 w-4" /> New Account
         </Link>
       </div>
       <Separator />

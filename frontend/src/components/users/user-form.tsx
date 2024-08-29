@@ -9,18 +9,13 @@ import { z } from "zod";
 
 import { Heading } from "@/components/heading";
 import { Button } from "@/components/ui/button";
+import { ExtInputField, ExtTextAreaField } from "@/components/ui/ext-form";
 import {
   Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
+import AuthoritiesSelect from "@/components/users/authorities-select";
 
 interface UserFormProps {
   initialData: any | null;
@@ -28,9 +23,6 @@ interface UserFormProps {
 
 const userSchema = z.object({
   email: z.string().email({ message: "Email is required" }),
-  password: z
-    .string()
-    .min(6, { message: "Password must be at least 6 characters" }),
   firstName: z.string().min(1, { message: "First name is required" }),
   lastName: z.string().min(1, { message: "Last name is required" }),
   description: z.string().optional(),
@@ -96,74 +88,42 @@ export const UserForm: React.FC<UserFormProps> = ({ initialData }) => {
       </div>
       <Separator />
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Username</FormLabel>
-                <FormControl>
-                  <Input placeholder="Email" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="grid grid-cols-1 gap-6 sm:grid-cols-2 max-w-[72rem]"
+        >
+          <ExtInputField
+            form={form}
+            required={true}
+            fieldName="email"
+            label="Email"
+            placeholder="Email"
           />
-          <FormField
-            control={form.control}
-            name="password"
-            disabled={isEdit}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Password</FormLabel>
-                <FormControl>
-                  <Input type="password" placeholder="Password" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+          <AuthoritiesSelect form={form} label="Authority" />
+          <ExtInputField
+            form={form}
+            required={true}
+            fieldName="firstName"
+            label="First Name"
+            placeholder="First Name"
           />
-          <FormField
-            control={form.control}
-            name="firstName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>First Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="First Name" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+          <ExtInputField
+            form={form}
+            required={true}
+            fieldName="lastName"
+            label="Last Name"
+            placeholder="Last Name"
           />
-          <FormField
-            control={form.control}
-            name="lastName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Last Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="Last Name" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+          <ExtTextAreaField
+            form={form}
+            fieldName="description"
+            label="Description"
           />
-          <FormField
-            control={form.control}
-            name="description"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Description</FormLabel>
-                <FormControl>
-                  <Textarea placeholder="Description" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <Button type="submit" disabled={loading}>
+          <Button
+            type="submit"
+            disabled={loading}
+            className="px-4 py-2 sm:col-span-2"
+          >
             {action}
           </Button>
         </form>

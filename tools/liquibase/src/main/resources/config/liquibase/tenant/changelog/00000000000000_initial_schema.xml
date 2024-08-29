@@ -51,6 +51,8 @@
             <column name="name" type="varchar(50)">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
+            <column name="systemRole" type="BOOLEAN" defaultValueBoolean="false"/>
+            <column name="description" type="VARCHAR(255)"/>
         </createTable>
 
         <createTable tableName="fw_user_authority">
@@ -79,6 +81,33 @@
         <addNotNullConstraint   columnName="password_hash"
                                 columnDataType="varchar(60)"
                                 tableName="fw_user"/>
+
+        <createTable tableName="fw_resources">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="pk_resources" nullable="false"/>
+            </column>
+            <column name="resource_name" type="VARCHAR(50)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="description" type="VARCHAR(255)"/>
+        </createTable>
+
+        <createTable tableName="fw_authority_permission">
+            <column name="authority_name" type="VARCHAR(50)">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="permission" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint
+                baseTableName="fw_authority_permission"
+                baseColumnNames="authority_name"
+                referencedTableName="fw_authority"
+                referencedColumnNames="role_name"
+                onDelete="CASCADE"
+                constraintName="fk_authority_permissions_role"/>
+
         <loadData
                 file="config/liquibase/tenant/data/authority.csv"
                 separator=";"

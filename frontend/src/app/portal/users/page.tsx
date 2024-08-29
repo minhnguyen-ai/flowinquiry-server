@@ -1,9 +1,15 @@
 import { formatDistanceToNow } from "date-fns";
+import { Plus } from "lucide-react";
 import Link from "next/link";
 
+import { Breadcrumbs } from "@/components/breadcrumbs";
+import { Heading } from "@/components/heading";
 import { Badge } from "@/components/ui/badge";
+import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 import { getUsers } from "@/lib/actions/users.action";
+import { cn } from "@/lib/utils";
 import { PageableResult } from "@/types/commons";
 import { UserType } from "@/types/users";
 
@@ -27,39 +33,53 @@ const Users = async ({ searchParams }: paramsProps) => {
   console.log(`Page ${JSON.stringify(pageableResult)}`);
   const users: UserType[] = pageableResult.content;
   return (
-    <div className="flex flex-row flex-wrap space-x-4 space-y-4 content-around">
-      {users?.map((user) => (
-        <Card key={user.id} className="w-[28rem]">
-          <CardContent className="p-5">
-            <div className="flex flex-col">
-              <div className="text-2xl text-amber-500">
-                {user.firstName}, {user.lastName}
-              </div>
-              <div>
-                <b>Email:</b>{" "}
-                <Link href={`mailto:${user.email}`}>{user.email}</Link>
-              </div>
-              <div>Timezone: {user.timezone}</div>
-              <div>
-                Last login time:{" "}
-                {user.lastLoginTime
-                  ? formatDistanceToNow(new Date(user.lastLoginTime), {
-                      addSuffix: true,
-                    })
-                  : ""}
-              </div>
-              <div className="flex flex-row space-x-1">
-                Authorities:{" "}
-                <div className="flex flex-row flex-wrap space-x-1">
-                  {user.authorities?.map((authority) => (
-                    <Badge key={authority.name}>{authority.name}</Badge>
-                  ))}
+    <div className="space-y-4">
+      <Breadcrumbs items={breadcrumbItems} />
+      <div className="flex flex-row justify-between">
+        <Heading title={`Users (0})`} description="Manage users" />
+
+        <Link
+          href={"/portal/users/new"}
+          className={cn(buttonVariants({ variant: "default" }))}
+        >
+          <Plus className="mr-2 h-4 w-4" /> New User
+        </Link>
+      </div>
+      <Separator />
+      <div className="flex flex-row flex-wrap space-x-4 space-y-4 content-around">
+        {users?.map((user) => (
+          <Card key={user.id} className="w-[28rem]">
+            <CardContent className="p-5">
+              <div className="flex flex-col">
+                <div className="text-2xl text-amber-500">
+                  {user.firstName}, {user.lastName}
+                </div>
+                <div>
+                  <b>Email:</b>{" "}
+                  <Link href={`mailto:${user.email}`}>{user.email}</Link>
+                </div>
+                <div>Timezone: {user.timezone}</div>
+                <div>
+                  Last login time:{" "}
+                  {user.lastLoginTime
+                    ? formatDistanceToNow(new Date(user.lastLoginTime), {
+                        addSuffix: true,
+                      })
+                    : ""}
+                </div>
+                <div className="flex flex-row space-x-1">
+                  Authorities:{" "}
+                  <div className="flex flex-row flex-wrap space-x-1">
+                    {user.authorities?.map((authority) => (
+                      <Badge key={authority.name}>{authority.name}</Badge>
+                    ))}
+                  </div>
                 </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
-      ))}
+            </CardContent>
+          </Card>
+        ))}
+      </div>
     </div>
   );
 };
