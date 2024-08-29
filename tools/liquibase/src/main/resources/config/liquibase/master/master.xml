@@ -10,5 +10,5 @@
     <property name="uuidType" value="uuid" dbms="postgresql"/>
     <property name="datetimeType" value="datetime" dbms="postgresql"/>
 
-    <includeAll path="/config/liquibase/master/changelog" relativeToChangelogFile="false"/>
+    <includeAll path="changelog" relativeToChangelogFile="true"/>
 </databaseChangeLog>

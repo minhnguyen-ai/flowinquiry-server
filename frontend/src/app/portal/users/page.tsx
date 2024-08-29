@@ -43,7 +43,9 @@ const Users = async ({ searchParams }: paramsProps) => {
               <div>
                 Last login time:{" "}
                 {user.lastLoginTime
-                  ? formatDistanceToNow(user.lastLoginTime, { addSuffix: true })
+                  ? formatDistanceToNow(new Date(user.lastLoginTime), {
+                      addSuffix: true,
+                    })
                   : ""}
               </div>
               <div className="flex flex-row space-x-1">

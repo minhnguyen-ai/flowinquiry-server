@@ -9,7 +9,7 @@ export const getUsers = async (): Promise<PageableResult<UserType>> => {
   try {
     const session = await auth();
 
-    console.log(`Token ${JSON.stringify(session)}`);
+    console.log(`User action: Token ${JSON.stringify(session)}`);
     const res = await fetch(`${BACKEND_API}/api/users`, {
       method: "GET",
       headers: {
@@ -21,7 +21,7 @@ export const getUsers = async (): Promise<PageableResult<UserType>> => {
     if (res.ok) {
       return await res.json();
     } else {
-      console.log("Failed " + res);
+      console.log("Failed " + JSON.stringify(res));
       // throw new Error("");
     }
   } catch (error) {
