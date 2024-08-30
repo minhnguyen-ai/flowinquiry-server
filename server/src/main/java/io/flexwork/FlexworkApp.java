@@ -5,7 +5,7 @@ import static io.flexwork.db.DbConstants.MASTER_SCHEMA;
 import io.flexwork.config.ApplicationProperties;
 import io.flexwork.db.TenantContext;
 import io.flexwork.db.service.LiquibaseService;
-import io.flexwork.domain.Tenant;
+import io.flexwork.security.domain.Tenant;
 import io.flexwork.security.service.TenantService;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;

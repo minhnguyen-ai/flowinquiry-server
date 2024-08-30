@@ -1,6 +1,6 @@
 package io.flexwork.modules.usermanagement.web.rest;
 
-import io.flexwork.domain.Tenant;
+import io.flexwork.security.domain.Tenant;
 import io.flexwork.security.service.TenantService;
 import io.flexwork.security.service.dto.TenantDTO;
 import io.flexwork.security.service.mapper.TenantMapper;

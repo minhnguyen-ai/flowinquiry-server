@@ -1,6 +1,6 @@
 package io.flexwork.security.repository;
 
-import io.flexwork.domain.User;
+import io.flexwork.security.domain.User;
 import jakarta.transaction.Transactional;
 import java.time.Instant;
 import java.time.LocalDateTime;

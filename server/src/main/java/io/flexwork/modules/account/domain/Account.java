@@ -1,6 +1,6 @@
 package io.flexwork.modules.account.domain;
 
-import io.flexwork.domain.User;
+import io.flexwork.security.domain.User;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import lombok.Getter;

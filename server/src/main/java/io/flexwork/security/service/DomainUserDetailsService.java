@@ -1,8 +1,8 @@
 package io.flexwork.security.service;
 
-import io.flexwork.domain.Authority;
-import io.flexwork.domain.User;
 import io.flexwork.security.UserNotActivatedException;
+import io.flexwork.security.domain.Authority;
+import io.flexwork.security.domain.User;
 import io.flexwork.security.repository.UserRepository;
 import java.util.List;
 import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;

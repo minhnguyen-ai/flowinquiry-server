@@ -92,38 +92,32 @@
             <column name="description" type="VARCHAR(255)"/>
         </createTable>
 
-        <createTable tableName="fw_authority_permission">
+        <createTable tableName="fw_authority_resource_permissions">
             <column name="authority_name" type="VARCHAR(50)">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="permission" type="VARCHAR(20)">
                 <constraints nullable="false"/>
             </column>
-        </createTable>
-        <addForeignKeyConstraint
-                baseTableName="fw_authority_permission"
-                baseColumnNames="authority_name"
-                referencedTableName="fw_authority"
-                referencedColumnNames="role_name"
-                onDelete="CASCADE"
-                constraintName="fk_authority_permissions_role"/>
-
-        <createTable tableName="fw_resource_authority">
             <column name="resource_id" type="BIGINT">
                 <constraints nullable="false"/>
             </column>
             <column name="permission" type="VARCHAR(20)">
                 <constraints nullable="false"/>
             </column>
-            <constraints primaryKey="true" primaryKeyName="pk_resource_permissions"/>
-            <addForeignKeyConstraint
-                    baseTableName="Resource_Permissions"
-                    baseColumnNames="resource_id"
-                    referencedTableName="Resources"
-                    referencedColumnNames="id"
-                    onDelete="CASCADE"
-                    constraintName="fk_resource_permissions_resource"/>
         </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="fw_role_resource_permissions"
+                baseColumnNames="authority_name"
+                referencedTableName="fw_authority"
+                referencedColumnNames="authority_name"
+                onDelete="CASCADE"
+                constraintName="fk_authority_resource_permissions_role"/>
+        <addForeignKeyConstraint
+                baseTableName="fw_role_resource_permissions"
+                baseColumnNames="resource_id"
+                referencedTableName="fw_resources"
+                referencedColumnNames="id"
+                onDelete="CASCADE"
+                constraintName="fk_authority_resource_permissions_resource"/>
 
         <loadData
                 file="config/liquibase/tenant/data/authority.csv"

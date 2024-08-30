@@ -1,7 +1,7 @@
 package io.flexwork.security.service.dto;
 
-import io.flexwork.domain.Authority;
-import io.flexwork.domain.User;
+import io.flexwork.security.domain.Authority;
+import io.flexwork.security.domain.User;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.ZoneId;

@@ -1,4 +1,4 @@
-package io.flexwork.domain;
+package io.flexwork.security.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;

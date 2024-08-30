@@ -1,6 +1,6 @@
 package io.flexwork.modules.fss.domain;
 
-import io.flexwork.domain.AbstractAuditingEntity;
+import io.flexwork.security.domain.AbstractAuditingEntity;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;

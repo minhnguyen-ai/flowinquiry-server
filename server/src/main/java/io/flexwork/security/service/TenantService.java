@@ -3,7 +3,7 @@ package io.flexwork.security.service;
 import static io.flexwork.db.DbConstants.DEFAULT_TENANT;
 
 import io.flexwork.db.service.LiquibaseService;
-import io.flexwork.domain.Tenant;
+import io.flexwork.security.domain.Tenant;
 import io.flexwork.security.repository.TenantRepository;
 import io.flexwork.security.service.dto.TenantDTO;
 import io.flexwork.security.service.mapper.TenantMapper;
