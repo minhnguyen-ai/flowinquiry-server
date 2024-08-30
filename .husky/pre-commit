@@ -5,4 +5,4 @@
 npx prettier "$(dirname "$0")/../frontend" --ignore-path ".next"  --write
 
 cd  "$(dirname "$0")/../frontend" && npx eslint --fix
-git add -A .
+git add -A
