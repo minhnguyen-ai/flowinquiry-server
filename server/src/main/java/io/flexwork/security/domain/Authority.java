@@ -5,7 +5,10 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
+
 import org.springframework.data.domain.Persistable;
 
 /** A Authority. */
@@ -21,6 +24,10 @@ public class Authority implements Serializable, Persistable<String> {
     @Id
     @Column(name = "name", length = 50, nullable = false)
     private String name;
+
+    @NotNull @Size(max = 50)
+    @Column(name = "descriptiveName", length = 50, nullable = false, unique = true)
+    private String roleName;
 
     @Transient private boolean isPersisted;
 
@@ -57,6 +64,14 @@ public class Authority implements Serializable, Persistable<String> {
     public Authority setIsPersisted() {
         this.isPersisted = true;
         return this;
+    }
+
+    public @NotNull @Size(max = 50) String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(@NotNull @Size(max = 50) String roleName) {
+        this.roleName = roleName;
     }
 
     @Override
