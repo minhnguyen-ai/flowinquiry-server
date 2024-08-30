@@ -97,13 +97,13 @@
 
         <createTable tableName="fw_authority_resource_permissions">
             <column name="authority_name" type="VARCHAR(50)">
-                <constraints nullable="false"/>
+                <constraints nullable="false" primaryKey="true"/>
             </column>
             <column name="resource_id" type="BIGINT">
-                <constraints nullable="false"/>
+                <constraints nullable="false" primaryKey="true"/>
             </column>
             <column name="permission" type="VARCHAR(20)">
-                <constraints nullable="false"/>
+                <constraints nullable="false" primaryKey="true"/>
             </column>
         </createTable>
 
