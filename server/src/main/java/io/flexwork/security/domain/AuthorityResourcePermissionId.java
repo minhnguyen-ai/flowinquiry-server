@@ -3,7 +3,6 @@ package io.flexwork.security.domain;
 import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-
 import java.io.Serializable;
 
 public class AuthorityResourcePermissionId implements Serializable {

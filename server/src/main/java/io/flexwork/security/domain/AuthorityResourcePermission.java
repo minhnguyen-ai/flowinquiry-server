@@ -6,8 +6,7 @@ import jakarta.persistence.*;
 @Table(name = "Role_Resource_Permissions")
 public class AuthorityResourcePermission {
 
-    @EmbeddedId
-    private AuthorityResourcePermissionId id = new AuthorityResourcePermissionId();
+    @EmbeddedId private AuthorityResourcePermissionId id = new AuthorityResourcePermissionId();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("roleName")
