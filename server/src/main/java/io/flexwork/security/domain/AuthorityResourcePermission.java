@@ -1,26 +1,24 @@
 package io.flexwork.security.domain;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 @Entity
-@Table(name = "Role_Resource_Permissions")
-@Getter
-@Setter
+@Table(name = "fw_authority_resource_permissions")
+@Data
 public class AuthorityResourcePermission {
 
     @EmbeddedId private AuthorityResourcePermissionId id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("name")
-    private Authority role;
+    @MapsId("authorityName")
+    private Authority authority;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId(value = "id")
+    @MapsId(value = "resourceId")
     private Resource resource;
 
-    @Column(name = "permission", nullable = false)
+    @Column(name = "permission", nullable = false, insertable = false, updatable = false)
     @Enumerated(EnumType.STRING)
     private Permission permission;
 }

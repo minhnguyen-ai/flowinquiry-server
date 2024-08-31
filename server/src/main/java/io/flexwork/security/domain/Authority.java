@@ -23,8 +23,8 @@ public class Authority implements Serializable, Persistable<String> {
     private String name;
 
     @NotNull @Size(max = 50)
-    @Column(name = "descriptiveName", length = 50, nullable = false, unique = true)
-    private String roleName;
+    @Column(name = "descriptive_name", length = 50, nullable = false, unique = true)
+    private String descriptiveName;
 
     @Transient private boolean isPersisted;
 
@@ -63,12 +63,12 @@ public class Authority implements Serializable, Persistable<String> {
         return this;
     }
 
-    public @NotNull @Size(max = 50) String getRoleName() {
-        return roleName;
+    public @NotNull @Size(max = 50) String getDescriptiveName() {
+        return descriptiveName;
     }
 
-    public void setRoleName(@NotNull @Size(max = 50) String roleName) {
-        this.roleName = roleName;
+    public void setDescriptiveName(@NotNull @Size(max = 50) String roleName) {
+        this.descriptiveName = roleName;
     }
 
     @Override

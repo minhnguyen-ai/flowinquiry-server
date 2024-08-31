@@ -51,7 +51,7 @@
             <column name="name" type="varchar(50)">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="descriptiveName" type="varchar(50)">
+            <column name="descriptive_name" type="varchar(50)">
                 <constraints unique="true" nullable="false"/>
             </column>
             <column name="systemRole" type="BOOLEAN" defaultValueBoolean="false"/>
@@ -108,14 +108,14 @@
         </createTable>
 
         <addForeignKeyConstraint
-                baseTableName="fw_role_resource_permissions"
+                baseTableName="fw_authority_resource_permissions"
                 baseColumnNames="authority_name"
                 referencedTableName="fw_authority"
                 referencedColumnNames="name"
                 onDelete="CASCADE"
                 constraintName="fk_authority_resource_permissions_role"/>
         <addForeignKeyConstraint
-                baseTableName="fw_role_resource_permissions"
+                baseTableName="fw_authority_resource_permissions"
                 baseColumnNames="resource_id"
                 referencedTableName="fw_resources"
                 referencedColumnNames="id"

@@ -3,11 +3,11 @@ package io.flexwork.security.domain;
 import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Entity
+@Table(name = "Resources")
+@Data
 public class Resource {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

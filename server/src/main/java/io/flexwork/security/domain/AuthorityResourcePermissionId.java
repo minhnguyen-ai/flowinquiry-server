@@ -9,8 +9,8 @@ import lombok.Data;
 @Data
 public class AuthorityResourcePermissionId implements Serializable {
 
-    @Column(name = "role_name")
-    private String roleName;
+    @Column(name = "authority_name")
+    private String authorityName;
 
     @Column(name = "resource_id")
     private Long resourceId;

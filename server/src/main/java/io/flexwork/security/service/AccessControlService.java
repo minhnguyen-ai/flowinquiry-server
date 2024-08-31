@@ -19,20 +19,20 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class AccessControlService {
     private final UserRepository userRepository;
-    private final AuthorityRepository roleRepository;
+    private final AuthorityRepository authorityRepository;
     private final ResourceRepository resourceRepository;
-    private final AuthorityResourcePermissionRepository roleResourcePermissionRepository;
+    private final AuthorityResourcePermissionRepository authorityResourcePermissionRepository;
 
     @Autowired
     public AccessControlService(
             UserRepository userRepository,
-            AuthorityRepository roleRepository,
+            AuthorityRepository authorityRepository,
             ResourceRepository resourceRepository,
-            AuthorityResourcePermissionRepository roleResourcePermissionRepository) {
+            AuthorityResourcePermissionRepository authorityResourcePermissionRepository) {
         this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
+        this.authorityRepository = authorityRepository;
         this.resourceRepository = resourceRepository;
-        this.roleResourcePermissionRepository = roleResourcePermissionRepository;
+        this.authorityResourcePermissionRepository = authorityResourcePermissionRepository;
     }
 
     @Transactional(readOnly = true)
@@ -47,8 +47,9 @@ public class AccessControlService {
 
         for (Authority role : roles) {
             Optional<AuthorityResourcePermission> rolePermissionOpt =
-                    roleResourcePermissionRepository.findByAuthorityAndResourceAndPermission(
-                            role.getRoleName(), resourceId, permission);
+                    authorityResourcePermissionRepository
+                            .findByAuthorityNameAndResourceIdAndPermission(
+                                    role.getDescriptiveName(), resourceId, permission);
 
             if (rolePermissionOpt.isPresent()) {
                 return true; // Permission found
@@ -59,27 +60,28 @@ public class AccessControlService {
     }
 
     @Transactional
-    public void assignRoleToUser(Long userId, String roleName) {
+    public void assignAuthorityToUser(Long userId, String authorityName) {
         User user =
                 userRepository
                         .findById(userId)
                         .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
         Authority role =
-                roleRepository
-                        .findById(roleName)
-                        .orElseThrow(() -> new IllegalArgumentException("Role not found"));
+                authorityRepository
+                        .findById(authorityName)
+                        .orElseThrow(() -> new IllegalArgumentException("Authority not found"));
 
         user.getAuthorities().add(role);
         userRepository.save(user);
     }
 
     @Transactional
-    public void addPermissionToRole(String roleName, Long resourceId, Permission permission) {
-        Authority role =
-                roleRepository
-                        .findById(roleName)
-                        .orElseThrow(() -> new IllegalArgumentException("Role not found"));
+    public void addPermissionToAuthority(
+            String authorityName, Long resourceId, Permission permission) {
+        Authority authority =
+                authorityRepository
+                        .findById(authorityName)
+                        .orElseThrow(() -> new IllegalArgumentException("Authority not found"));
 
         Resource resource =
                 resourceRepository
@@ -87,31 +89,32 @@ public class AccessControlService {
                         .orElseThrow(() -> new IllegalArgumentException("Resource not found"));
 
         AuthorityResourcePermissionId id = new AuthorityResourcePermissionId();
-        id.setRoleName(role.getRoleName());
+        id.setAuthorityName(authority.getDescriptiveName());
         id.setResourceId(resource.getId());
         id.setPermission(permission);
 
         AuthorityResourcePermission roleResourcePermission = new AuthorityResourcePermission();
         roleResourcePermission.setId(id);
-        roleResourcePermission.setRole(role);
+        roleResourcePermission.setAuthority(authority);
         roleResourcePermission.setResource(resource);
         roleResourcePermission.setPermission(permission);
 
-        roleResourcePermissionRepository.save(roleResourcePermission);
+        authorityResourcePermissionRepository.save(roleResourcePermission);
     }
 
     @Transactional
-    public void removePermissionFromRole(String roleName, Long resourceId, Permission permission) {
+    public void removePermissionFromAuthority(
+            String authorityName, Long resourceId, Permission permission) {
         AuthorityResourcePermissionId id = new AuthorityResourcePermissionId();
-        id.setRoleName(roleName);
+        id.setAuthorityName(authorityName);
         id.setResourceId(resourceId);
         id.setPermission(permission);
 
-        roleResourcePermissionRepository.deleteById(id);
+        authorityResourcePermissionRepository.deleteById(id);
     }
 
     @Transactional(readOnly = true)
-    public Set<AuthorityResourcePermission> getPermissionsForRole(String roleName) {
-        return roleResourcePermissionRepository.findByAuthorityName(roleName);
+    public Set<AuthorityResourcePermission> getPermissionsForAuthority(String authorityName) {
+        return authorityResourcePermissionRepository.findByAuthorityName(authorityName);
     }
 }
