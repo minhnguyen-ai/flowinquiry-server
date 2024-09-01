@@ -2,6 +2,7 @@ import { z } from "zod";
 
 export const authoritySchema = z.object({
   name: z.string().min(1),
+  descriptiveName: z.string().min(1),
 });
 
 export const userSchema = z.object({

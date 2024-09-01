@@ -71,7 +71,9 @@ const Users = async ({ searchParams }: paramsProps) => {
                   Authorities:{" "}
                   <div className="flex flex-row flex-wrap space-x-1">
                     {user.authorities?.map((authority) => (
-                      <Badge key={authority.name}>{authority.name}</Badge>
+                      <Badge key={authority.name}>
+                        {authority.descriptiveName}
+                      </Badge>
                     ))}
                   </div>
                 </div>

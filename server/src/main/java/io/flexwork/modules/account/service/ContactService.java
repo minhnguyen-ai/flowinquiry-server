@@ -2,34 +2,49 @@ package io.flexwork.modules.account.service;
 
 import io.flexwork.modules.account.domain.Contact;
 import io.flexwork.modules.account.repository.ContactRepository;
-import java.util.List;
 import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ContactService {
 
-    private final ContactRepository contactRepository;
+    private ContactRepository contactRepository;
 
-    @Autowired
     public ContactService(ContactRepository contactRepository) {
         this.contactRepository = contactRepository;
     }
 
-    public List<Contact> findAll() {
-        return contactRepository.findAll();
+    public Page<Contact> getAllContacts(Pageable pageable) {
+        return contactRepository.findAll(pageable);
     }
 
-    public Optional<Contact> findById(Long id) {
+    public Optional<Contact> getContactById(Long id) {
         return contactRepository.findById(id);
     }
 
-    public Contact save(Contact contact) {
+    public Contact createContact(Contact contact) {
         return contactRepository.save(contact);
     }
 
-    public void deleteById(Long id) {
+    public Contact updateContact(Long id, Contact contactDetails) {
+        Contact contact =
+                contactRepository
+                        .findById(id)
+                        .orElseThrow(() -> new RuntimeException("Contact not found with id " + id));
+
+        contact.setFirstName(contactDetails.getFirstName());
+        contact.setLastName(contactDetails.getLastName());
+        contact.setEmail(contactDetails.getEmail());
+        contact.setPhone(contactDetails.getPhone());
+        contact.setPosition(contactDetails.getPosition());
+        contact.setNotes(contactDetails.getNotes());
+
+        return contactRepository.save(contact);
+    }
+
+    public void deleteContact(Long id) {
         contactRepository.deleteById(id);
     }
 }
