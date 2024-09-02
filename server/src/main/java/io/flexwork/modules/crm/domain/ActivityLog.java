@@ -10,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedNativeQuery;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -20,6 +21,17 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Entity
 @Table(name = "fw_crm_activity_log")
 @Data
+@NamedNativeQuery(
+        name = "findAccessibleLogs",
+        query =
+                """
+    SELECT * FROM fw_crm_activity_log
+    JOIN fw_authority_resource_permission ON fw_crm_activity_log.entity_type = fw_authority_resource_permission.resource_name AND fw_authority_resource_permission.permission IN ('READ', 'WRITE','ACCESS')
+    JOIN fw_user_authority ON fw_authority_resource_permission.authority_name = fw_user_authority.authority_name AND fw_user_authority.user_id=:userId
+    ORDER BY fw_crm_activity_log.activityDate DESC
+
+""",
+        resultClass = ActivityLog.class)
 public class ActivityLog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

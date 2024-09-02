@@ -12,7 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/crm/activity-logs")
 public class ActivityLogController {
+
     private ActivityLogService activityLogService;
+
+    public ActivityLogController(ActivityLogService activityLogService) {
+        this.activityLogService = activityLogService;
+    }
 
     @GetMapping("/accessible")
     public Page<ActivityLog> getAccessibleActivityLogs(

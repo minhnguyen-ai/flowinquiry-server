@@ -21,10 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
  * and time types across different databases. The tests focus on ensuring that the stored values are
  * correctly transformed and stored according to the configured timezone. Timezone is environment
  * specific, and can be adjusted according to your needs.
- *
- * <p>For more context, refer to: - GitHub Issue:
- * https://github.com/jhipster/generator-jhipster/issues/22579 - Pull Request:
- * https://github.com/jhipster/generator-jhipster/pull/22946
  */
 @IntegrationTest
 class HibernateTimeZoneIT {
