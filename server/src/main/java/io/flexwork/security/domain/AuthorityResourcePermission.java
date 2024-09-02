@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
-@Table(name = "fw_authority_resource_permissions")
+@Table(name = "fw_authority_resource_permission")
 @Data
 public class AuthorityResourcePermission {
 
@@ -15,7 +15,7 @@ public class AuthorityResourcePermission {
     private Authority authority;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId(value = "resourceId")
+    @MapsId(value = "resourceName")
     private Resource resource;
 
     @Column(name = "permission", nullable = false, insertable = false, updatable = false)

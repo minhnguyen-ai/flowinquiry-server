@@ -1,0 +1,4 @@
+authority_name;resource_name;permission
+ROLE_USER;user;READ
+ROLE_USER;account;READ
+ROLE_USER;contact;READ

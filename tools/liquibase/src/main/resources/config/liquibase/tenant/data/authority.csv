@@ -1,3 +1,3 @@
 name;descriptive_name;systemRole
-ROLE_ADMIN;ADMIN;true
-ROLE_USER;USER;false
+ROLE_ADMIN;Administrator;true
+ROLE_USER;User;false

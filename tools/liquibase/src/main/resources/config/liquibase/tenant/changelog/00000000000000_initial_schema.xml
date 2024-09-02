@@ -6,15 +6,8 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    <changeSet id="00000000000000" author="flexapp">
-        <createSequence sequenceName="sequence_generator" minValue="1" startValue="3" incrementBy="3"/>
-    </changeSet>
 
-    <!--
-        flexapp core tables.
-        The initial schema has the '00000000000001' id, so that it is over-written if we re-generate it.
-    -->
-    <changeSet id="00000000000001" author="flexapp">
+    <changeSet id="00000000000000:core-tables" author="flexapp">
         <createTable tableName="fw_user">
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
@@ -85,21 +78,18 @@
                                 columnDataType="varchar(60)"
                                 tableName="fw_user"/>
 
-        <createTable tableName="fw_resources">
-            <column name="id" type="BIGINT" autoIncrement="true">
-                <constraints primaryKey="true" primaryKeyName="pk_resources" nullable="false"/>
-            </column>
-            <column name="resource_name" type="VARCHAR(50)">
-                <constraints nullable="false" unique="true"/>
+        <createTable tableName="fw_resource">
+            <column name="name" type="VARCHAR(50)">
+                <constraints nullable="false" primaryKey="true"/>
             </column>
             <column name="description" type="VARCHAR(255)"/>
         </createTable>
 
-        <createTable tableName="fw_authority_resource_permissions">
+        <createTable tableName="fw_authority_resource_permission">
             <column name="authority_name" type="VARCHAR(50)">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
-            <column name="resource_id" type="BIGINT">
+            <column name="resource_name" type="VARCHAR(50)">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
             <column name="permission" type="VARCHAR(20)">
@@ -108,17 +98,17 @@
         </createTable>
 
         <addForeignKeyConstraint
-                baseTableName="fw_authority_resource_permissions"
+                baseTableName="fw_authority_resource_permission"
                 baseColumnNames="authority_name"
                 referencedTableName="fw_authority"
                 referencedColumnNames="name"
                 onDelete="CASCADE"
                 constraintName="fk_authority_resource_permissions_role"/>
         <addForeignKeyConstraint
-                baseTableName="fw_authority_resource_permissions"
-                baseColumnNames="resource_id"
-                referencedTableName="fw_resources"
-                referencedColumnNames="id"
+                baseTableName="fw_authority_resource_permission"
+                baseColumnNames="resource_name"
+                referencedTableName="fw_resource"
+                referencedColumnNames="name"
                 onDelete="CASCADE"
                 constraintName="fk_authority_resource_permissions_resource"/>
 
@@ -145,10 +135,21 @@
                 usePreparedStatements="true">
             <column name="user_id" type="numeric"/>
         </loadData>
+        <loadData
+                file="config/liquibase/tenant/data/resource.csv"
+                separator=";"
+                tableName="fw_resource"
+                usePreparedStatements="true"/>
+        <loadData
+                file="config/liquibase/tenant/data/authority_resource_permission.csv"
+                separator=";"
+                tableName="fw_authority_resource_permission"
+                usePreparedStatements="true"/>
+
         <dropDefaultValue tableName="fw_user" columnName="created_date" columnDataType="${datetimeType}"/>
     </changeSet>
 
-    <changeSet author="flexapp" id="00000000000002" context="test">
+    <changeSet author="flexapp" id="00000000000000:2-table-for-tests" context="test">
         <createTable tableName="fw_date_time_wrapper">
             <column  name="id" type="BIGINT">
                 <constraints primaryKey="true" primaryKeyName="fw_date_time_wrapperPK"/>

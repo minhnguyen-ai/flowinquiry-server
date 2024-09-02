@@ -36,7 +36,7 @@ public class AccessControlService {
     }
 
     @Transactional(readOnly = true)
-    public boolean hasPermission(Long userId, Long resourceId, Permission permission) {
+    public boolean hasPermission(Long userId, String resourceName, Permission permission) {
         Optional<User> userOpt = userRepository.findById(userId);
         if (userOpt.isEmpty()) {
             return false; // User not found
@@ -48,8 +48,8 @@ public class AccessControlService {
         for (Authority role : roles) {
             Optional<AuthorityResourcePermission> rolePermissionOpt =
                     authorityResourcePermissionRepository
-                            .findByAuthorityNameAndResourceIdAndPermission(
-                                    role.getDescriptiveName(), resourceId, permission);
+                            .findByAuthorityNameAndResourceNameAndPermission(
+                                    role.getDescriptiveName(), resourceName, permission);
 
             if (rolePermissionOpt.isPresent()) {
                 return true; // Permission found
@@ -77,7 +77,7 @@ public class AccessControlService {
 
     @Transactional
     public void addPermissionToAuthority(
-            String authorityName, Long resourceId, Permission permission) {
+            String authorityName, String resourceName, Permission permission) {
         Authority authority =
                 authorityRepository
                         .findById(authorityName)
@@ -85,12 +85,12 @@ public class AccessControlService {
 
         Resource resource =
                 resourceRepository
-                        .findById(resourceId)
+                        .findById(resourceName)
                         .orElseThrow(() -> new IllegalArgumentException("Resource not found"));
 
         AuthorityResourcePermissionId id = new AuthorityResourcePermissionId();
         id.setAuthorityName(authority.getDescriptiveName());
-        id.setResourceId(resource.getId());
+        id.setResourceName(resource.getName());
         id.setPermission(permission);
 
         AuthorityResourcePermission roleResourcePermission = new AuthorityResourcePermission();
@@ -104,10 +104,10 @@ public class AccessControlService {
 
     @Transactional
     public void removePermissionFromAuthority(
-            String authorityName, Long resourceId, Permission permission) {
+            String authorityName, String resourceName, Permission permission) {
         AuthorityResourcePermissionId id = new AuthorityResourcePermissionId();
         id.setAuthorityName(authorityName);
-        id.setResourceId(resourceId);
+        id.setResourceName(resourceName);
         id.setPermission(permission);
 
         authorityResourcePermissionRepository.deleteById(id);

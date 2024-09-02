@@ -12,8 +12,8 @@ public class AuthorityResourcePermissionId implements Serializable {
     @Column(name = "authority_name")
     private String authorityName;
 
-    @Column(name = "resource_id")
-    private Long resourceId;
+    @Column(name = "resource_name")
+    private String resourceName;
 
     @Column(name = "permission", nullable = false)
     @Enumerated(EnumType.STRING)

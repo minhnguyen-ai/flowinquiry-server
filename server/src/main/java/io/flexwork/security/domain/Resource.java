@@ -6,17 +6,15 @@ import java.util.Set;
 import lombok.Data;
 
 @Entity
-@Table(name = "Resources")
+@Table(name = "fw_resource")
 @Data
 public class Resource {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "name", nullable = false, unique = true, length = 50)
+    private String name;
 
-    @Column(nullable = false, unique = true, length = 50)
-    private String resourceName;
-
-    @Column(length = 255)
+    @Column(name = "description", length = 255)
     private String description;
 
     @OneToMany(mappedBy = "resource", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

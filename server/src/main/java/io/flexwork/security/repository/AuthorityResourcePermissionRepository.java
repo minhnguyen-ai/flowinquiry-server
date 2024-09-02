@@ -10,8 +10,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface AuthorityResourcePermissionRepository
         extends JpaRepository<AuthorityResourcePermission, AuthorityResourcePermissionId> {
 
-    Optional<AuthorityResourcePermission> findByAuthorityNameAndResourceIdAndPermission(
-            String authority, Long resourceId, Permission permission);
+    Optional<AuthorityResourcePermission> findByAuthorityNameAndResourceNameAndPermission(
+            String authority, String resourceName, Permission permission);
 
     Set<AuthorityResourcePermission> findByAuthorityName(String authority);
 }
