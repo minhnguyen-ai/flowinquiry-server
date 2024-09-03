@@ -10,7 +10,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { getUsers } from "@/lib/actions/users.action";
 import { cn } from "@/lib/utils";
-import { PageableResult } from "@/types/commons";
 import { UserType } from "@/types/users";
 
 const breadcrumbItems = [
@@ -25,7 +24,12 @@ type paramsProps = {
 };
 
 const Users = async ({ searchParams }: paramsProps) => {
-  const pageableResult: PageableResult<UserType> = await getUsers();
+  const result = await getUsers();
+  if (!result.ok) {
+    console.log("Failed123" + result.message);
+  } else {
+    console.log("Success");
+  }
   const page = Number(searchParams.page) || 1;
   const pageLimit = Number(searchParams.limit) || 10;
   const country = searchParams.search || null;

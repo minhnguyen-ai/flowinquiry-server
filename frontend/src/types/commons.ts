@@ -1,5 +1,3 @@
-import { User } from "@auth/core/src/types";
-
 /**
  * FW Commons data. Get the session data with code
  * const gwSession = useSession();
@@ -24,8 +22,10 @@ export interface User {
 
 export type ActionResult = {
   status: "default" | "success" | "system_error" | "user_error";
-  text?: string;
+  message?: string;
   value?: string;
+  data?: any;
+  ok?: boolean;
 };
 
 export interface PageableResult<Entity> {

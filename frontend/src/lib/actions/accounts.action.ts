@@ -69,7 +69,7 @@ export const saveOrUpdateAccount = async (
     if (response.ok) {
       redirect("/portal/accounts");
     } else {
-      return { status: "system_error", text: response.statusText };
+      return { status: "system_error", message: response.statusText };
     }
   } else {
     return { status: "user_error" };
@@ -90,6 +90,6 @@ export const findAccount = async (accountId: number): Promise<ActionResult> => {
   if (response.ok) {
     return { status: "success", value: await response.json() };
   } else {
-    return { status: "system_error", text: response.statusText };
+    return { status: "system_error", message: response.statusText };
   }
 };

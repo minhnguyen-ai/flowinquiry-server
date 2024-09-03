@@ -2,30 +2,30 @@
 
 import { auth } from "@/auth";
 import { BACKEND_API } from "@/lib/constants";
-import { PageableResult } from "@/types/commons";
-import { UserType } from "@/types/users";
+import { ActionResult } from "@/types/commons";
 
-export const getUsers = async (): Promise<PageableResult<UserType>> => {
-  try {
-    const session = await auth();
+export const getUsers = async (): Promise<ActionResult> => {
+  const session = await auth();
 
-    console.log(`User action: Token ${JSON.stringify(session)}`);
-    const res = await fetch(`${BACKEND_API}/api/users`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        Authorization: `Bearer ${session.token}`,
-      },
-    });
-    if (res.ok) {
-      return await res.json();
-    } else {
-      console.log("Failed " + JSON.stringify(res));
-      // throw new Error("");
-    }
-  } catch (error) {
-    // throw new Error("Server error");
-    console.log("Error " + error);
+  const res = await fetch(`${BACKEND_API}/api/users`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      Authorization: `Bearer ${session.token}`,
+    },
+  });
+  if (res.ok) {
+    return {
+      ok: true,
+      status: "success",
+      data: await res.json(),
+    };
+  } else {
+    return {
+      ok: false,
+      status: "user_error",
+      message: `Can not get the users ${res.status}`,
+    };
   }
 };
