@@ -13,11 +13,10 @@ export default async function Page({
   let account: AccountType | undefined;
   const result: ActionResult = await findAccount(params.accountId);
   if (result.status == "success") {
-    account = result.value as AccountType;
+    account = result.data as AccountType;
   } else {
     notFound();
   }
-  console.log(`Account ${JSON.stringify(account)}`);
 
   const breadcrumbItems = [
     { title: "Dashboard", link: "/portal" },

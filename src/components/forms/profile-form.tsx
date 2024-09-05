@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSession } from "next-auth/react";
-import React from "react";
+import React, { useRef } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -18,7 +18,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { BACKEND_API } from "@/lib/constants";
 
 interface ProfileFormProps {
   initialData: any | null;
@@ -48,18 +47,21 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ initialData }) => {
     },
   });
 
-  const handleFileUpload = async (event) => {
-    console.log(`Start upload file ${BACKEND_API}`);
-    const file = event.target.files[0];
+  const fileInput = useRef<HTMLInputElement>(null);
+
+  const handleFileUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    event.preventDefault();
+
     const formData = new FormData();
-    formData.append("file", file);
-    console.log("Upload file " + file);
+    formData.append("file", fileInput?.current?.files?.[0]!);
 
     const response = await fetch(`/api/files/singleUpload?type=avatar`, {
       method: "POST",
       headers: {
         "Access-Control-Allow-Origin": "*",
-        Authorization: `Bearer ${session?.token}`,
+        Authorization: `Bearer ${session?.user?.accessToken}`,
       },
       body: formData,
     }).catch((error) => console.error("Error uploading file", error));
@@ -76,7 +78,7 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ initialData }) => {
           <AvatarImage />
           <AvatarFallback>HN</AvatarFallback>
         </Avatar>
-        <input type="file" onChange={handleFileUpload} />
+        <input type="file" onChange={handleFileUpload} ref={fileInput} />
       </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">

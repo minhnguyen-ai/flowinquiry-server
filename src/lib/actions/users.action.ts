@@ -12,9 +12,10 @@ export const getUsers = async (): Promise<ActionResult> => {
     headers: {
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*",
-      Authorization: `Bearer ${session.token}`,
+      Authorization: `Bearer ${session?.user?.accessToken}`,
     },
   });
+  console.log("User token " + JSON.stringify(session?.user));
   if (res.ok) {
     return {
       ok: true,

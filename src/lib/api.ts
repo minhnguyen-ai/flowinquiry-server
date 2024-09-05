@@ -1,33 +1,25 @@
-import axios, { AxiosResponse } from "axios";
-
 import { BACKEND_API } from "./constants";
 
 export default async function apiAuthSignIn(
-  credentials: Record<"email" | "password", string> | undefined,
+  credentials: Partial<Record<"email" | "password", unknown>> | undefined,
 ) {
-  try {
-    const response = await axios
-      .post(`${BACKEND_API}/api/login`, JSON.stringify(credentials), {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-      .catch((error: AxiosResponse) => {
-        console.log(error);
-      });
+  const response = await fetch(`${BACKEND_API}/api/login`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(credentials),
+  });
 
-    //verify jwt access token
-
-    const bearerToken = response?.headers?.authorization;
+  if (response.ok) {
+    const bearerToken = response.headers.get("authorization");
     const jwt =
       bearerToken && bearerToken.slice(0, 7) === "Bearer "
         ? bearerToken.slice(7, bearerToken.length)
         : "";
-
-    const remoteUser = response.data;
+    const remoteUser = await response.json();
     return { ...remoteUser, accessToken: jwt };
-  } catch (error) {
-    console.log(error);
-    return { error: error };
+  } else {
+    throw new Error("Can not login " + response.status);
   }
 }

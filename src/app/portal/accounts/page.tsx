@@ -10,8 +10,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { getAccounts } from "@/lib/actions/accounts.action";
 import { cn } from "@/lib/utils";
-import { AccountType } from "@/types/accounts";
-import { PageableResult } from "@/types/commons";
+import { ActionResult } from "@/types/commons";
 
 const breadcrumbItems = [
   { title: "Dashboard", link: "/portal" },
@@ -25,7 +24,8 @@ type paramsProps = {
 };
 
 const AccountsPage = async ({ searchParams }: paramsProps) => {
-  const pageableResult: PageableResult<AccountType> = await getAccounts();
+  const result: ActionResult = await getAccounts();
+  const pageableResult = result.data;
   const page = Number(searchParams.page) || 1;
   const pageLimit = pageableResult.size || 1;
   const totalElements = pageableResult.totalElements;

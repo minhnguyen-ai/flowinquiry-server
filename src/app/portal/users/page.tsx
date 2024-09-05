@@ -34,6 +34,7 @@ const Users = async ({ searchParams }: paramsProps) => {
   const pageLimit = Number(searchParams.limit) || 10;
   const country = searchParams.search || null;
   const offset = (page - 1) * pageLimit;
+  const pageableResult = result.data;
   console.log(`Page ${JSON.stringify(pageableResult)}`);
   const users: UserType[] = pageableResult.content;
   return (

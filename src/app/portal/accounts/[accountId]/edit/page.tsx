@@ -21,7 +21,7 @@ export default async function Page({
   } else {
     const result: ActionResult = await findAccount(params.accountId);
     if (result.status == "success") {
-      account = result.value as AccountType;
+      account = result.data as AccountType;
     }
   }
 
