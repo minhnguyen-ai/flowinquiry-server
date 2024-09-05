@@ -26,6 +26,7 @@ type paramsProps = {
 
 const AccountsPage = async ({ searchParams }: paramsProps) => {
   const pageableResult: PageableResult<AccountType> = await getAccounts();
+  console.log(`Accounts ${JSON.stringify(pageableResult)}`)
   const page = Number(searchParams.page) || 1;
   const pageLimit = pageableResult.size || 1;
   const totalElements = pageableResult.totalElements;

@@ -5,14 +5,12 @@ import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { BACKEND_API } from "@/lib/constants";
 import { accountSchema, AccountType } from "@/types/accounts";
-import { ActionResult, PageableResult } from "@/types/commons";
+import { ActionResult } from "@/types/commons";
 
-export const getAccounts = async (): Promise<PageableResult<AccountType>> => {
-  try {
+export const getAccounts = async (): Promise<ActionResult> => {
     const session = await auth();
 
-    console.log(`Token ${JSON.stringify(session)}`);
-    const res = await fetch(`${BACKEND_API}/api/accounts`, {
+    const res = await fetch(`${BACKEND_API}/api/crm/accounts`, {
       headers: {
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",
@@ -20,15 +18,18 @@ export const getAccounts = async (): Promise<PageableResult<AccountType>> => {
       },
     });
     if (res.ok) {
-      return await res.json();
+      return {
+        ok: true,
+        status: "success",
+        data: await res.json(),
+      };
     } else {
-      console.log("Failed " + res);
-      // throw new Error("");
+      return {
+        ok: false,
+        status: "user_error",
+        message: `Can not get the users ${res.status}`,
+      };
     }
-  } catch (error) {
-    // throw new Error("Server error");
-    console.log("Error " + error);
-  }
 };
 
 export const saveOrUpdateAccount = async (
@@ -43,7 +44,7 @@ export const saveOrUpdateAccount = async (
     const session = await auth();
     if (isEdit) {
       console.log("Edit: " + JSON.stringify(account));
-      response = await fetch(`${BACKEND_API}/api/accounts/${account.id}`, {
+      response = await fetch(`${BACKEND_API}/api/crm/accounts/${account.id}`, {
         method: "PUT",
         headers: {
           Accept: "application/json",
@@ -54,7 +55,7 @@ export const saveOrUpdateAccount = async (
         body: JSON.stringify(account),
       });
     } else {
-      response = await fetch(`${BACKEND_API}/api/accounts`, {
+      response = await fetch(`${BACKEND_API}/api/crm/accounts`, {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -78,7 +79,7 @@ export const saveOrUpdateAccount = async (
 
 export const findAccount = async (accountId: number): Promise<ActionResult> => {
   const session = await auth();
-  const response = await fetch(`${BACKEND_API}/api/accounts/${accountId}`, {
+  const response = await fetch(`${BACKEND_API}/api/crm/accounts/${accountId}`, {
     method: "GET",
     headers: {
       Accept: "application/json",
