@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
-/** REST controller for managing {@link com.mycompany.myapp.domain.Authority}. */
 @RestController
 @RequestMapping("/api/authorities")
 @Transactional
