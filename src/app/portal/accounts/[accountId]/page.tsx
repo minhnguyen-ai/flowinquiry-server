@@ -13,7 +13,7 @@ export default async function Page({
   let account: AccountType | undefined;
   const result: ActionResult = await findAccount(params.accountId);
   if (result.status == "success") {
-    account = result.value as AccountType;
+    account = result.data as AccountType;
   } else {
     notFound();
   }

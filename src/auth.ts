@@ -25,6 +25,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   callbacks: {
     async jwt({ token, account, user }) {
       // Persist the OAuth access_token to the token right after signin
+      console.log(`User ${JSON.stringify(user)} ---  ${JSON.stringify(account?.access_token)}`);
       if (user) {
         token.accessToken = user?.accessToken;
         token.id = user.id;
@@ -41,6 +42,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     strategy: "jwt",
     maxAge: 30 * 24 * 60 * 60, // Maximum session age in seconds (30 days)
   },
-  secret: process.env.NEXTAUTH_SECRET as string,
+  secret: process.env.NEXTAUTH_SECRET,
   debug: process.env.NODE_ENV !== "production",
 });

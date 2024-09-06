@@ -3,7 +3,7 @@ import axios, { AxiosResponse } from "axios";
 import { BACKEND_API } from "./constants";
 
 export default async function apiAuthSignIn(
-  credentials: Record<"email" | "password", string> | undefined,
+  credentials: Partial<Record<"email" | "password", unknown>> | undefined,
 ) {
   try {
     const response = await axios
