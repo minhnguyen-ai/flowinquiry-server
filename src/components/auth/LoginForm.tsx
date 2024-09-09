@@ -55,14 +55,14 @@ const LoginForm = () => {
       redirect: false,
     });
 
-    console.log("Return  " + JSON.stringify(response));
     if (response?.error === null) {
       router.push("/portal");
     } else {
       toast({
         variant: "destructive",
-        title: "Uh oh! Something went wrong.",
-        description: "Invalid credientials",
+        title: "Sign-in failure",
+        description:
+          "Unable to authenticate using the account details provided.",
       });
     }
   };

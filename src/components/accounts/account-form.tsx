@@ -42,9 +42,6 @@ export const AccountForm: React.FC<FormProps<AccountType>> = ({
       ...initialData,
       ...Object.fromEntries(formData.entries()),
     }!;
-    console.log(
-      `Account ${JSON.stringify(account)}. Initial data ${JSON.stringify(initialData)}`,
-    );
     const validation = accountSchema.safeParse(account);
     if (validation.error) {
       validation.error.issues.forEach((issue) => {

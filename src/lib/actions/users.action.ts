@@ -15,7 +15,6 @@ export const getUsers = async (): Promise<ActionResult> => {
       Authorization: `Bearer ${session?.user?.accessToken}`,
     },
   });
-  console.log("User token " + JSON.stringify(session?.user));
   if (res.ok) {
     return {
       ok: true,

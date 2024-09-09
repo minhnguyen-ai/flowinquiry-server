@@ -24,10 +24,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   ],
   callbacks: {
     async jwt({ token, account, user }) {
-      // Persist the OAuth access_token to the token right after signin
-      console.log(
-        `User ${JSON.stringify(user)} ---  ${JSON.stringify(account?.access_token)}`,
-      );
       if (user) {
         token.accessToken = user?.accessToken;
         token.id = user.id;
@@ -36,11 +32,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return token;
     },
     async session({ session, token, user }) {
-      // Send properties to the client, like an access_token from a provider.
-      console.log(
-        "Session " + JSON.stringify(session) + " User " + JSON.stringify(user),
-      );
-      return { ...session };
+      return { ...session, user: token.user };
     },
   },
   session: {
