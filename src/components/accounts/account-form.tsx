@@ -41,7 +41,7 @@ export const AccountForm: React.FC<FormProps<AccountType>> = ({
     const account = {
       ...initialData,
       ...Object.fromEntries(formData.entries()),
-    };
+    }!;
     console.log(
       `Account ${JSON.stringify(account)}. Initial data ${JSON.stringify(initialData)}`,
     );
@@ -49,7 +49,7 @@ export const AccountForm: React.FC<FormProps<AccountType>> = ({
     if (validation.error) {
       validation.error.issues.forEach((issue) => {
         console.log(`Issue ${issue.path[0]} message ${issue.message}`);
-        form.setError(issue.path[0], { message: issue.message });
+        // form.setError(issue.path[0], { message: issue.message });
       });
       setTimeout(() => {
         toast({
@@ -61,7 +61,7 @@ export const AccountForm: React.FC<FormProps<AccountType>> = ({
       }, 2000);
     }
 
-    return await saveOrUpdateAccount(prevState, isEdit, account);
+    return await saveOrUpdateAccount(prevState, isEdit, account as AccountType);
   };
 
   const [formState, formAction] = useFormState(saveAccountClientAction, {

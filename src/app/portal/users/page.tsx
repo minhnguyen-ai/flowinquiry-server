@@ -68,8 +68,8 @@ const Users = async ({ searchParams }: paramsProps) => {
                   Last login time:{" "}
                   {user.lastLoginTime
                     ? formatDistanceToNow(new Date(user.lastLoginTime), {
-                      addSuffix: true,
-                    })
+                        addSuffix: true,
+                      })
                     : ""}
                 </div>
                 <div className="flex flex-row space-x-1">

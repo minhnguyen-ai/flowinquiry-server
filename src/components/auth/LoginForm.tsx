@@ -25,6 +25,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
+import { toast } from "../ui/use-toast";
+
 const formSchema = z.object({
   email: z
     .string()
@@ -45,20 +47,23 @@ const LoginForm = () => {
   });
 
   const handleSubmit = async (data: z.infer<typeof formSchema>) => {
-    try {
-      console.log(`Start signin ${data.email} and ${data.password}`);
-      const response = await signIn("credentials", {
-        username: data.email,
-        email: data.email,
-        password: data.password,
-        callbackUrl: "/",
-        redirect: false,
-      });
-      console.log("Login success " + JSON.stringify(response));
+    const response = await signIn("credentials", {
+      username: data.email,
+      email: data.email,
+      password: data.password,
+      callbackUrl: "/portal",
+      redirect: false,
+    });
+
+    console.log("Return  " + JSON.stringify(response));
+    if (response?.error === null) {
       router.push("/portal");
-    } catch (error) {
-      console.log("ERROR" + error);
-      // setError("Invalid credentials");
+    } else {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: "Invalid credientials",
+      });
     }
   };
 

@@ -17,7 +17,6 @@ export default async function Page({
   } else {
     notFound();
   }
-  console.log(`Account ${JSON.stringify(account)}`);
 
   const breadcrumbItems = [
     { title: "Dashboard", link: "/portal" },

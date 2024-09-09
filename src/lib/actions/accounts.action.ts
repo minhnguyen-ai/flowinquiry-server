@@ -8,28 +8,28 @@ import { accountSchema, AccountType } from "@/types/accounts";
 import { ActionResult } from "@/types/commons";
 
 export const getAccounts = async (): Promise<ActionResult> => {
-    const session = await auth();
+  const session = await auth();
 
-    const res = await fetch(`${BACKEND_API}/api/crm/accounts`, {
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        Authorization: `Bearer ${session.token}`,
-      },
-    });
-    if (res.ok) {
-      return {
-        ok: true,
-        status: "success",
-        data: await res.json(),
-      };
-    } else {
-      return {
-        ok: false,
-        status: "user_error",
-        message: `Can not get the users ${res.status}`,
-      };
-    }
+  const res = await fetch(`${BACKEND_API}/api/crm/accounts`, {
+    headers: {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      Authorization: `Bearer ${session?.user?.accessToken}`,
+    },
+  });
+  if (res.ok) {
+    return {
+      ok: true,
+      status: "success",
+      data: await res.json(),
+    };
+  } else {
+    return {
+      ok: false,
+      status: "user_error",
+      message: `Can not get the users ${res.status}`,
+    };
+  }
 };
 
 export const saveOrUpdateAccount = async (
@@ -43,14 +43,13 @@ export const saveOrUpdateAccount = async (
     let response;
     const session = await auth();
     if (isEdit) {
-      console.log("Edit: " + JSON.stringify(account));
       response = await fetch(`${BACKEND_API}/api/crm/accounts/${account.id}`, {
         method: "PUT",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
-          Authorization: `Bearer ${session?.token}`,
+          Authorization: `Bearer ${session?.user?.accessToken}`,
         },
         body: JSON.stringify(account),
       });
@@ -61,7 +60,7 @@ export const saveOrUpdateAccount = async (
           Accept: "application/json",
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
-          Authorization: `Bearer ${session?.token}`,
+          Authorization: `Bearer ${session?.user?.accessToken}`,
         },
         body: JSON.stringify(account),
       });
@@ -85,7 +84,7 @@ export const findAccount = async (accountId: number): Promise<ActionResult> => {
       Accept: "application/json",
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*",
-      Authorization: `Bearer ${session?.token}`,
+      Authorization: `Bearer ${session?.user?.accessToken}`,
     },
   });
   if (response.ok) {
