@@ -18,6 +18,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import {toast} from "@/components/ui/use-toast";
+import {ExtInputField} from "@/components/ui/ext-form";
 
 interface ProfileFormProps {
   initialData: any | null;
@@ -36,7 +38,7 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ initialData }) => {
     lastName: z.string().min(1),
   });
 
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -64,9 +66,17 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ initialData }) => {
         Authorization: `Bearer ${session?.user?.accessToken}`,
       },
       body: formData,
-    }).catch((error) => console.error("Error uploading file", error));
-
-    console.log(" uploading file successfully");
+    });
+    if (response.ok) {
+        console.log("Uploading file successfully " + JSON.stringify(response.body));
+    } else {
+     toast({
+         variant: "destructive",
+         title: "Error",
+         description:
+             "Can not upload the profile picture. Please try again",
+     })
+    }
   };
 
   return (
@@ -95,32 +105,20 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ initialData }) => {
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="firstName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>First Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="aaa ${session}" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="lastName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Last Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="Last Name" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <ExtInputField
+                form={form}
+                required={true}
+                fieldName="firstName"
+                label="First Name"
+                placeholder="First Name"
+            />
+            <ExtInputField
+                form={form}
+                required={true}
+                fieldName="lastName"
+                label="Last Name"
+                placeholder="Last Name"
+            />
           <Button type="submit">Submit</Button>
         </form>
       </Form>

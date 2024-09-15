@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { BACKEND_API } from "@/lib/constants";
 import { accountSchema, AccountType } from "@/types/accounts";
-import { ActionResult } from "@/types/commons";
+import {ActionResult, PageableResult} from "@/types/commons";
 
 export const getAccounts = async (): Promise<ActionResult> => {
   const session = await auth();
@@ -21,7 +21,7 @@ export const getAccounts = async (): Promise<ActionResult> => {
     return {
       ok: true,
       status: "success",
-      data: await res.json(),
+      data: await res.json() as PageableResult<AccountType>,
     };
   } else {
     return {
@@ -69,10 +69,10 @@ export const saveOrUpdateAccount = async (
     if (response.ok) {
       redirect("/portal/accounts");
     } else {
-      return { status: "system_error", message: response.statusText };
+      return { ok: true, status: "system_error", message: response.statusText };
     }
   } else {
-    return { status: "user_error" };
+    return { ok: false, status: "user_error" };
   }
 };
 
@@ -88,8 +88,8 @@ export const findAccount = async (accountId: number): Promise<ActionResult> => {
     },
   });
   if (response.ok) {
-    return { status: "success", value: await response.json() };
+    return { ok: true, status: "success", data: await response.json() as AccountType };
   } else {
-    return { status: "system_error", message: response.statusText };
+    return { ok:false, status: "system_error", message: response.statusText };
   }
 };
