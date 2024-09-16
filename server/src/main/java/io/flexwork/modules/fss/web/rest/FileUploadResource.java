@@ -3,6 +3,7 @@ package io.flexwork.modules.fss.web.rest;
 import io.flexwork.modules.fss.service.FsObjectService;
 import io.flexwork.modules.fss.service.IStorageService;
 import io.flexwork.security.SecurityUtils;
+import jakarta.json.Json;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -56,7 +57,11 @@ public class FileUploadResource {
 
         storageService.uploadFile(
                 prefixPath, file.getOriginalFilename(), file.getInputStream(), file.getSize());
-
-        return ResponseEntity.ok("Upload file successfully");
+        String pathRes =
+                Json.createObjectBuilder()
+                        .add("path", prefixPath + "/" + file.getOriginalFilename())
+                        .build()
+                        .toString();
+        return ResponseEntity.ok(pathRes);
     }
 }

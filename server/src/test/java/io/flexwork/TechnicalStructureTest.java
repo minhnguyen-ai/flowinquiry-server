@@ -43,7 +43,7 @@ class TechnicalStructureTest {
                     .mayOnlyBeAccessedByLayers("Service", "Security", "Web", "Config")
                     .whereLayer("Domain")
                     .mayOnlyBeAccessedByLayers(
-                            "Persistence", "Service", "Security", "Web", "Config")
+                            "Persistence", "Service", "Security", "Web", "Config", "Domain")
                     .ignoreDependency(belongToAnyOf(FlexworkApp.class), alwaysTrue())
                     .ignoreDependency(
                             alwaysTrue(),

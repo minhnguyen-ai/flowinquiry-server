@@ -89,6 +89,9 @@ dependencies {
     implementation("com.github.ben-manes.caffeine:caffeine")
     implementation("com.zaxxer:HikariCP")
     implementation("io.micrometer:micrometer-registry-prometheus-simpleclient")
+    implementation("jakarta.json:jakarta.json-api:2.1.3")
+    implementation("org.eclipse.parsson:parsson:1.1.7")
+
     implementation("jakarta.annotation:jakarta.annotation-api")
     implementation(libs.jhipster.framework)
     implementation(libs.springdoc.openapi.starter.webmvc.api)
