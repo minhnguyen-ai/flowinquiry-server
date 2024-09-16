@@ -24,9 +24,16 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
-import {DataTableToolbar} from "@/components/ui/ext-data-table-toolbar";
+
 import {DataTablePagination} from "@/components/ui/ext-data-table-pagination";
 
+const DataTableToolbar = React.forwardRef<
+    HTMLDivElement,
+    React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+    <div ref={ref}>
+    </div>
+));
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
