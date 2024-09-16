@@ -1,9 +1,9 @@
+import { fixupPluginRules } from "@eslint/compat";
 import typescriptParser from "@typescript-eslint/parser";
+import reactHooksPlugin from "eslint-plugin-react-hooks";
 // import pluginReact from "eslint-plugin-react";
 import simpleImportSort from "eslint-plugin-simple-import-sort";
 import unusedImports from "eslint-plugin-unused-imports";
-import reactHooksPlugin from "eslint-plugin-react-hooks";
-import { fixupPluginRules } from "@eslint/compat";
 import globals from "globals";
 // import eslint from '@eslint/js';
 // import tseslint from "typescript-eslint";

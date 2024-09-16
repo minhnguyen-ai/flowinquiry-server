@@ -2,13 +2,14 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSession } from "next-auth/react";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { ExtInputField } from "@/components/ui/ext-form";
 import {
   Form,
   FormControl,
@@ -18,8 +19,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import {toast} from "@/components/ui/use-toast";
-import {ExtInputField} from "@/components/ui/ext-form";
+import { toast } from "@/components/ui/use-toast";
 
 interface ProfileFormProps {
   initialData: any | null;
@@ -49,6 +49,8 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ initialData }) => {
     },
   });
 
+  const [avatarPath, setAvatarPath] = useState("");
+
   const fileInput = useRef<HTMLInputElement>(null);
 
   const handleFileUpload = async (
@@ -68,14 +70,15 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ initialData }) => {
       body: formData,
     });
     if (response.ok) {
-        console.log("Uploading file successfully " + JSON.stringify(response.body));
+      const uploadFileResult = await response.json();
+      console.log("Set avatar file " + uploadFileResult["path"]);
+      setAvatarPath(uploadFileResult["path"]);
     } else {
-     toast({
-         variant: "destructive",
-         title: "Error",
-         description:
-             "Can not upload the profile picture. Please try again",
-     })
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Can not upload the profile picture. Please try again",
+      });
     }
   };
 
@@ -85,7 +88,7 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ initialData }) => {
 
       <div className="profile-picture-section">
         <Avatar>
-          <AvatarImage />
+          <AvatarImage src={avatarPath} />
           <AvatarFallback>HN</AvatarFallback>
         </Avatar>
         <input type="file" onChange={handleFileUpload} ref={fileInput} />
@@ -105,20 +108,20 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ initialData }) => {
               </FormItem>
             )}
           />
-            <ExtInputField
-                form={form}
-                required={true}
-                fieldName="firstName"
-                label="First Name"
-                placeholder="First Name"
-            />
-            <ExtInputField
-                form={form}
-                required={true}
-                fieldName="lastName"
-                label="Last Name"
-                placeholder="Last Name"
-            />
+          <ExtInputField
+            form={form}
+            required={true}
+            fieldName="firstName"
+            label="First Name"
+            placeholder="First Name"
+          />
+          <ExtInputField
+            form={form}
+            required={true}
+            fieldName="lastName"
+            label="Last Name"
+            placeholder="Last Name"
+          />
           <Button type="submit">Submit</Button>
         </form>
       </Form>

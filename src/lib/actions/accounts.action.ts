@@ -3,9 +3,10 @@
 import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
+import { fetchData } from "@/lib/actions/commons.action";
 import { BACKEND_API } from "@/lib/constants";
 import { accountSchema, AccountType } from "@/types/accounts";
-import {ActionResult, PageableResult} from "@/types/commons";
+import { ActionResult, PageableResult } from "@/types/commons";
 
 export const getAccounts = async (): Promise<ActionResult> => {
   const session = await auth();
@@ -21,7 +22,7 @@ export const getAccounts = async (): Promise<ActionResult> => {
     return {
       ok: true,
       status: "success",
-      data: await res.json() as PageableResult<AccountType>,
+      data: (await res.json()) as PageableResult<AccountType>,
     };
   } else {
     return {
@@ -76,20 +77,6 @@ export const saveOrUpdateAccount = async (
   }
 };
 
-export const findAccount = async (accountId: number): Promise<ActionResult> => {
-  const session = await auth();
-  const response = await fetch(`${BACKEND_API}/api/crm/accounts/${accountId}`, {
-    method: "GET",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-      "Access-Control-Allow-Origin": "*",
-      Authorization: `Bearer ${session?.user?.accessToken}`,
-    },
-  });
-  if (response.ok) {
-    return { ok: true, status: "success", data: await response.json() as AccountType };
-  } else {
-    return { ok:false, status: "system_error", message: response.statusText };
-  }
+export const findAccount = async (accountId: number) => {
+  return fetchData<AccountType>(`${BACKEND_API}/api/crm/accounts/${accountId}`);
 };

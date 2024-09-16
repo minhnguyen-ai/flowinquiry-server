@@ -20,11 +20,11 @@ export interface User {
   authorities?: string[] | null;
 }
 
-export type ActionResult = {
+export type ActionResult<DValue> = {
   status: "default" | "success" | "system_error" | "user_error";
   message?: string;
   value?: string;
-  data?: any;
+  data?: DValue;
   ok?: boolean;
 };
 
