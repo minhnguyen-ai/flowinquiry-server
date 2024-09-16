@@ -18,9 +18,9 @@ public class NewSignUpAction implements Action<SignupStates, SignupEvents> {
 
     private static final Logger log = LoggerFactory.getLogger(NewSignUpAction.class);
 
-    private JavaMailSender mailSender;
+    private final JavaMailSender mailSender;
 
-    private SpringTemplateEngine templateEngine;
+    private final SpringTemplateEngine templateEngine;
 
     public NewSignUpAction(JavaMailSender mailSender, SpringTemplateEngine templateEngine) {
         this.mailSender = mailSender;

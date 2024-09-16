@@ -12,9 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class FsObjectService {
-    private FsObjectRepository fsObjectRepository;
+    private final FsObjectRepository fsObjectRepository;
 
-    private FsObjectPathRepository fsObjectPathRepository;
+    private final FsObjectPathRepository fsObjectPathRepository;
 
     public FsObjectService(
             FsObjectRepository fsObjectRepository, FsObjectPathRepository fsObjectPathRepository) {

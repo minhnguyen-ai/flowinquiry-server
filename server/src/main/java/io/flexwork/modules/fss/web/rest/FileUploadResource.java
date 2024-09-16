@@ -20,18 +20,20 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/api/files")
 public class FileUploadResource {
 
-    private static Logger log = LoggerFactory.getLogger(FileUploadResource.class);
+    private static final Logger log = LoggerFactory.getLogger(FileUploadResource.class);
 
-    private Map<String, String> typeRelativePaths =
+    private static final String AVATAR_TYPE = "avatar";
+
+    private final Map<String, String> typeRelativePaths =
             new HashMap<>() {
                 {
-                    put("avatar", "avatar");
+                    put(AVATAR_TYPE, AVATAR_TYPE);
                 }
             };
 
-    private FsObjectService fsObjectService;
+    private final FsObjectService fsObjectService;
 
-    private IStorageService storageService;
+    private final IStorageService storageService;
 
     public FileUploadResource(FsObjectService fsObjectService, IStorageService storageService) {
         this.fsObjectService = fsObjectService;

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class NewSignupVerificationAction implements Action<SignupStates, SignupEvents> {
 
-    private static Logger log = LoggerFactory.getLogger(NewSignupVerificationAction.class);
+    private static final Logger log = LoggerFactory.getLogger(NewSignupVerificationAction.class);
 
     @Override
     public void execute(StateContext<SignupStates, SignupEvents> context) {

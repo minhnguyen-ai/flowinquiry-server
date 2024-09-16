@@ -70,6 +70,8 @@ public class SecurityConfiguration {
                                         .permitAll()
                                         .requestMatchers(mvc.pattern("/api/register"))
                                         .permitAll()
+                                        .requestMatchers(mvc.pattern("/api/files/**"))
+                                        .permitAll()
                                         .requestMatchers(mvc.pattern("/api/activate"))
                                         .permitAll()
                                         .requestMatchers(

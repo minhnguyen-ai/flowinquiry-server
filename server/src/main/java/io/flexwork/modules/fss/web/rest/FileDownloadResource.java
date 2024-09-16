@@ -1,10 +1,10 @@
 package io.flexwork.modules.fss.web.rest;
 
 import io.flexwork.modules.fss.service.IStorageService;
+import jakarta.servlet.http.HttpServletRequest;
 import java.io.ByteArrayOutputStream;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -12,16 +12,24 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/files")
 public class FileDownloadResource {
 
-    private IStorageService storageService;
+    private final IStorageService storageService;
 
     public FileDownloadResource(IStorageService storageService) {
         this.storageService = storageService;
     }
 
-    @GetMapping(value = "/{fileName}")
-    public ResponseEntity<byte[]> downloadFile(@PathVariable String fileName) throws Exception {
+    @GetMapping(value = "/**")
+    public ResponseEntity<byte[]> downloadFile(HttpServletRequest request) throws Exception {
+        String requestUrl = request.getRequestURI();
+        int fileIndex = requestUrl.lastIndexOf("/");
+        if (fileIndex == -1) {
+            throw new IllegalArgumentException("Invalid request. Miss the file container");
+        }
+        String fileName = requestUrl.substring(fileIndex + 1);
+        String container = requestUrl.substring("/api/files".length() + 1, fileIndex);
+
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        storageService.downloadFile("avatar", fileName, byteArrayOutputStream);
+        storageService.downloadFile(container, fileName, byteArrayOutputStream);
 
         final HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(

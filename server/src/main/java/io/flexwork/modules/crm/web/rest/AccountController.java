@@ -82,4 +82,20 @@ public class AccountController {
         Page<Account> accounts = accountService.findAllAccounts(pageable);
         return new ResponseEntity<>(accounts, HttpStatus.OK);
     }
+
+    @GetMapping("/next/{currentId}")
+    public ResponseEntity<Account> getNextEntity(@PathVariable Long currentId) {
+        return accountService
+                .getNextEntity(currentId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/previous/{currentId}")
+    public ResponseEntity<Account> getPreviousEntity(@PathVariable Long currentId) {
+        return accountService
+                .getPreviousEntity(currentId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
 }

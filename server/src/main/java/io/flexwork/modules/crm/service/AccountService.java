@@ -34,4 +34,12 @@ public class AccountService {
     public Page<Account> findAllAccounts(Pageable pageable) {
         return accountRepository.findAll(pageable);
     }
+
+    public Optional<Account> getNextEntity(Long currentId) {
+        return accountRepository.findNextEntity(currentId);
+    }
+
+    public Optional<Account> getPreviousEntity(Long currentId) {
+        return accountRepository.findPreviousEntity(currentId);
+    }
 }
