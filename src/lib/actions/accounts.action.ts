@@ -80,3 +80,15 @@ export const saveOrUpdateAccount = async (
 export const findAccount = async (accountId: number) => {
   return fetchData<AccountType>(`${BACKEND_API}/api/crm/accounts/${accountId}`);
 };
+
+export const findPreviousAccount = async (accountId: number) => {
+  return fetchData<AccountType>(
+    `${BACKEND_API}/api/crm/accounts/previous/${accountId}`,
+  );
+};
+
+export const findNextAccount = async (accountId: number) => {
+  return fetchData<AccountType>(
+    `${BACKEND_API}/api/crm/accounts/next/${accountId}`,
+  );
+};

@@ -9,6 +9,11 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { toast } from "@/components/ui/use-toast";
+import {
+  findNextAccount,
+  findPreviousAccount,
+} from "@/lib/actions/accounts.action";
 import { AccountType } from "@/types/accounts";
 
 import { Button } from "../ui/button";
@@ -20,7 +25,27 @@ export const AccountView: React.FC<ViewProps<AccountType>> = ({
 }: ViewProps<AccountType>) => {
   const [account, setAccount] = useState<AccountType>(initialData);
 
-  const navigateToPreviousRecord = () => {};
+  const navigateToPreviousRecord = async () => {
+    const { ok, data } = await findPreviousAccount(account.id!);
+    if (ok) {
+      setAccount(data!);
+    } else {
+      toast({
+        description: "You reach the first record",
+      });
+    }
+  };
+
+  const navigateToNextRecord = async () => {
+    const { ok, data } = await findNextAccount(account.id!);
+    if (ok) {
+      setAccount(data!);
+    } else {
+      toast({
+        description: "You reach the last record",
+      });
+    }
+  };
 
   return (
     <>
@@ -28,7 +53,7 @@ export const AccountView: React.FC<ViewProps<AccountType>> = ({
         <ChevronLeft />
       </Button>
       <div className="text-2xl">{account.accountName}</div>
-      <Button>
+      <Button onClick={navigateToNextRecord}>
         <ChevronRight />
       </Button>
       <Card>
