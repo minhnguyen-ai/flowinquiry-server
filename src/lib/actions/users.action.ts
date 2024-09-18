@@ -1,31 +1,10 @@
 "use server";
 
-import { auth } from "@/auth";
+import { fetchData } from "@/lib/actions/commons.action";
 import { BACKEND_API } from "@/lib/constants";
-import { ActionResult } from "@/types/commons";
+import { PageableResult } from "@/types/commons";
+import { UserType } from "@/types/users";
 
-export const getUsers = async (): Promise<ActionResult> => {
-  const session = await auth();
-
-  const res = await fetch(`${BACKEND_API}/api/users`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      "Access-Control-Allow-Origin": "*",
-      Authorization: `Bearer ${session?.user?.accessToken}`,
-    },
-  });
-  if (res.ok) {
-    return {
-      ok: true,
-      status: "success",
-      data: await res.json(),
-    };
-  } else {
-    return {
-      ok: false,
-      status: "user_error",
-      message: `Can not get the users ${res.status}`,
-    };
-  }
+export const getUsers = async () => {
+  return fetchData<PageableResult<UserType>>(`${BACKEND_API}/api/users`);
 };

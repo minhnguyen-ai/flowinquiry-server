@@ -24,23 +24,25 @@ type paramsProps = {
 };
 
 const Users = async ({ searchParams }: paramsProps) => {
-  const result = await getUsers();
-  if (!result.ok) {
-    console.log("Failed123" + result.message);
-  } else {
-    console.log("Success");
+  const { ok, data } = await getUsers();
+  if (!ok) {
+    throw new Error("Can not load users"); // TODO: fixit
   }
+
   const page = Number(searchParams.page) || 1;
   const pageLimit = Number(searchParams.limit) || 10;
   const country = searchParams.search || null;
   const offset = (page - 1) * pageLimit;
-  const pageableResult = result.data;
+  const pageableResult = data!;
   const users: UserType[] = pageableResult.content;
   return (
     <div className="space-y-4">
       <Breadcrumbs items={breadcrumbItems} />
       <div className="flex flex-row justify-between">
-        <Heading title={`Users (0})`} description="Manage users" />
+        <Heading
+          title={`Users (${pageableResult.totalElements})`}
+          description="Manage users"
+        />
 
         <Link
           href={"/portal/users/new"}
