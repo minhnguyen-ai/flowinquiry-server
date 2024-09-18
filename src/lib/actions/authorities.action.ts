@@ -1,30 +1,9 @@
 "use server";
 
-import { auth } from "@/auth";
+import { fetchData } from "@/lib/actions/commons.action";
 import { BACKEND_API } from "@/lib/constants";
+import { AuthorityType } from "@/types/users";
 
 export const getAuthorities = async () => {
-  const session = await auth();
-
-  const res = await fetch(`${BACKEND_API}/api/authorities`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      "Access-Control-Allow-Origin": "*",
-      Authorization: `Bearer ${session?.user?.accessToken}`,
-    },
-  });
-  if (res.ok) {
-    return {
-      ok: true,
-      status: "success",
-      data: await res.json(),
-    };
-  } else {
-    return {
-      ok: false,
-      status: "user_error",
-      message: `Can not get the authorities ${res.status}`,
-    };
-  }
+  return fetchData<Array<AuthorityType>>(`${BACKEND_API}/api/authorities`);
 };
