@@ -4,6 +4,8 @@ import io.flexwork.modules.fss.service.FsObjectService;
 import io.flexwork.modules.fss.service.IStorageService;
 import io.flexwork.security.SecurityUtils;
 import jakarta.json.Json;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -57,11 +59,11 @@ public class FileUploadResource {
             return ResponseEntity.badRequest().body("Not support upload with type " + type);
         String prefixPath = typeRelativePaths.get(type);
 
-        storageService.uploadFile(
-                prefixPath, file.getOriginalFilename(), file.getInputStream(), file.getSize());
+        String fileName = URLEncoder.encode(file.getOriginalFilename(), StandardCharsets.UTF_8);
+        storageService.uploadFile(prefixPath, fileName, file.getInputStream(), file.getSize());
         String pathRes =
                 Json.createObjectBuilder()
-                        .add("path", prefixPath + "/" + file.getOriginalFilename())
+                        .add("path", prefixPath + "/" + fileName)
                         .build()
                         .toString();
         return ResponseEntity.ok(pathRes);
