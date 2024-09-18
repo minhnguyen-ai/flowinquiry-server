@@ -2,7 +2,6 @@ import AccountForm from "@/components/accounts/account-form";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { findAccount } from "@/lib/actions/accounts.action";
 import { AccountType } from "@/types/accounts";
-import { ActionResult } from "@/types/commons";
 
 const breadcrumbItems = [
   { title: "Dashboard", link: "/portal" },
@@ -19,9 +18,9 @@ export default async function Page({
 
   if (params.accountId == "new") {
   } else {
-    const result: ActionResult = await findAccount(params.accountId);
-    if (result.status == "success") {
-      account = result.data as AccountType;
+    const { ok, data } = await findAccount(params.accountId);
+    if (ok) {
+      account = data as AccountType;
     }
   }
 

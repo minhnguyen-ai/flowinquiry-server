@@ -55,6 +55,7 @@ export const UserForm: React.FC<UserFormProps> = ({ initialData }) => {
 
   const onSubmit = async (data: z.infer<typeof userSchema>) => {
     try {
+      console.log(`Add new user ${JSON.stringify(data)}`);
       setLoading(true);
       router.refresh();
       router.push(`/portal/users`);

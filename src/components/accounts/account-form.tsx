@@ -17,16 +17,14 @@ import {
 import ValuesSelect from "@/components/ui/ext-select-values";
 import { Form } from "@/components/ui/form";
 import { Separator } from "@/components/ui/separator";
-import { useToast } from "@/components/ui/use-toast";
 import { saveOrUpdateAccount } from "@/lib/actions/accounts.action";
+import { validateForm } from "@/lib/validator";
 import { accountSchema, AccountType } from "@/types/accounts";
 import { ActionResult } from "@/types/commons";
 
 export const AccountForm: React.FC<FormProps<AccountType>> = ({
   initialData,
 }: FormProps<AccountType>) => {
-  const { toast } = useToast();
-
   const form = useForm<AccountType>({
     resolver: zodResolver(accountSchema),
     defaultValues: initialData,
@@ -36,29 +34,19 @@ export const AccountForm: React.FC<FormProps<AccountType>> = ({
     prevState: ActionResult,
     formData: FormData,
   ) => {
-    form.clearErrors();
-
     const account = {
       ...initialData,
       ...Object.fromEntries(formData.entries()),
     }!;
-    const validation = accountSchema.safeParse(account);
-    if (validation.error) {
-      validation.error.issues.forEach((issue) => {
-        console.log(`Issue ${issue.path[0]} message ${issue.message}`);
-        // form.setError(issue.path[0], { message: issue.message });
-      });
-      setTimeout(() => {
-        toast({
-          variant: "destructive",
-          title: "Error",
-          description:
-            "Invalid values. Please fix them before submitting again",
-        });
-      }, 2000);
-    }
 
-    return await saveOrUpdateAccount(prevState, isEdit, account as AccountType);
+    const validatedData = validateForm(account, accountSchema, form);
+    if (validatedData) {
+      return await saveOrUpdateAccount(
+        prevState,
+        isEdit,
+        account as AccountType,
+      );
+    }
   };
 
   const [formState, formAction] = useFormState(saveAccountClientAction, {

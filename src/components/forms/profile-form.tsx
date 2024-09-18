@@ -22,10 +22,10 @@ import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
 
 interface ProfileFormProps {
-  initialData: any | null;
+  resourceServer: String;
 }
 
-export const ProfileForm: React.FC<ProfileFormProps> = ({ initialData }) => {
+export const ProfileForm: React.FC<ProfileFormProps> = ({ resourceServer }) => {
   const handleSubmit = async (data: z.infer<typeof formSchema>) => {
     // Handle form submission logic here
   };
@@ -39,6 +39,8 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ initialData }) => {
   });
 
   const { data: session, status } = useSession();
+
+  console.log(`Session ${JSON.stringify(session)}`);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -71,8 +73,7 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ initialData }) => {
     });
     if (response.ok) {
       const uploadFileResult = await response.json();
-      console.log("Set avatar file " + uploadFileResult["path"]);
-      setAvatarPath(uploadFileResult["path"]);
+      setAvatarPath(`${resourceServer}/${uploadFileResult["path"]}`);
     } else {
       toast({
         variant: "destructive",

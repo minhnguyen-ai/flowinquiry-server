@@ -1,5 +1,6 @@
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { ProfileForm } from "@/components/forms/profile-form";
+import { BACKEND_API } from "@/lib/constants";
 
 const breadcrumbItems = [
   { title: "Dashboard", link: "/portal" },
@@ -7,10 +8,11 @@ const breadcrumbItems = [
 ];
 
 const ProfilePage = () => {
+  console.log(`Resource server ${BACKEND_API}`);
   return (
     <div className="space-y-4">
       <Breadcrumbs items={breadcrumbItems} />
-      <ProfileForm initialData={null} key={null} />
+      <ProfileForm resourceServer={`${BACKEND_API}/api/files`} key={null} />
     </div>
   );
 };
