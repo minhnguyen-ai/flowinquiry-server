@@ -11,4 +11,9 @@ declare module "next-auth" {
     firstName?: string;
     lastName?: string;
   }
+
+  interface Session {
+    user: User;
+    expires: ISODateString;
+  }
 }

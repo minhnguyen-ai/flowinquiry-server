@@ -1,16 +1,16 @@
 import { redirect } from "next/navigation";
+import { SessionProvider } from "next-auth/react";
 
 import { auth } from "@/auth";
 import Navbar from "@/components/navbar";
 import Sidebar from "@/components/sidebar";
 
-import AuthProvider from "../auth-provider";
-
 const MainLayout = async ({ children }: { children: React.ReactNode }) => {
   const session = await auth();
   if (!session) redirect("/login");
+
   return (
-    <AuthProvider>
+    <SessionProvider basePath={"/portal"} session={session}>
       <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
         <Sidebar />
         <div className="flex flex-col">
@@ -20,7 +20,7 @@ const MainLayout = async ({ children }: { children: React.ReactNode }) => {
           </main>
         </div>
       </div>
-    </AuthProvider>
+    </SessionProvider>
   );
 };
 
