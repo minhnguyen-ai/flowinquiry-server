@@ -5,11 +5,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import io.flexwork.IntegrationTest;
-import io.flexwork.domain.User;
-import io.flexwork.security.AuthoritiesConstants;
-import io.flexwork.security.repository.UserRepository;
-import io.flexwork.security.service.UserService;
-import io.flexwork.security.web.rest.PublicUserResource;
+import io.flexwork.modules.usermanagement.AuthoritiesConstants;
+import io.flexwork.modules.usermanagement.domain.User;
+import io.flexwork.modules.usermanagement.repository.UserRepository;
+import io.flexwork.modules.usermanagement.service.UserService;
+import io.flexwork.modules.usermanagement.web.rest.PublicUserResource;
 import jakarta.persistence.EntityManager;
 import java.util.Set;
 import org.junit.jupiter.api.AfterEach;

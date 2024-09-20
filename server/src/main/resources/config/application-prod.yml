@@ -74,6 +74,9 @@ server:
 # ===================================================================
 
 flexwork:
+  mail:
+    from: <Replace_Me>
+    base-url: <Replace_Me>
   security:
     authentication:
       jwt:

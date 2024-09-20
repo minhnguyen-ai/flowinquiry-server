@@ -4,7 +4,7 @@ import static io.flexwork.security.domain.AuthorityTestSamples.getAuthoritySampl
 import static io.flexwork.security.domain.AuthorityTestSamples.getAuthoritySample2;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.flexwork.domain.Authority;
+import io.flexwork.modules.usermanagement.domain.Authority;
 import io.flexwork.web.rest.TestUtil;
 import org.junit.jupiter.api.Test;
 

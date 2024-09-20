@@ -1,6 +1,5 @@
 package io.flexwork.db;
 
-import static io.flexwork.db.DbConstants.MASTER_SCHEMA;
 import static org.hibernate.cfg.MultiTenancySettings.MULTI_TENANT_CONNECTION_PROVIDER;
 
 import java.sql.Connection;
@@ -27,7 +26,7 @@ public class TenantConnectionProvider<T>
 
     @Override
     public Connection getAnyConnection() throws SQLException {
-        return getConnection(MASTER_SCHEMA);
+        return getConnection("flexwork");
     }
 
     @Override
@@ -47,7 +46,7 @@ public class TenantConnectionProvider<T>
     public void releaseConnection(String tenantIdentifier, Connection connection)
             throws SQLException {
         log.info("Release connection for tenant {}", tenantIdentifier);
-        connection.setSchema(MASTER_SCHEMA);
+        connection.setSchema("flexwork");
         releaseAnyConnection(connection);
     }
 

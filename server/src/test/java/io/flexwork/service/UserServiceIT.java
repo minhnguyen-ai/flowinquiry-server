@@ -4,9 +4,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 import io.flexwork.IntegrationTest;
-import io.flexwork.domain.User;
-import io.flexwork.security.repository.UserRepository;
-import io.flexwork.security.service.UserService;
+import io.flexwork.modules.usermanagement.domain.User;
+import io.flexwork.modules.usermanagement.repository.UserRepository;
+import io.flexwork.modules.usermanagement.service.UserService;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;

@@ -1,8 +1,8 @@
 package io.flexwork.service;
 
 import io.flexwork.IntegrationTest;
-import io.flexwork.domain.Tenant;
-import io.flexwork.security.service.TenantService;
+import io.flexwork.modules.usermanagement.domain.Tenant;
+import io.flexwork.modules.usermanagement.service.TenantService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

@@ -6,10 +6,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.flexwork.IntegrationTest;
-import io.flexwork.domain.User;
-import io.flexwork.security.repository.UserRepository;
-import io.flexwork.security.web.rest.AuthenticateController;
-import io.flexwork.security.web.rest.LoginVM;
+import io.flexwork.modules.usermanagement.domain.User;
+import io.flexwork.modules.usermanagement.repository.UserRepository;
+import io.flexwork.modules.usermanagement.web.rest.AuthenticateController;
+import io.flexwork.modules.usermanagement.web.rest.LoginVM;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;

@@ -1,5 +1,6 @@
 package io.flexwork.security;
 
+import io.flexwork.modules.usermanagement.AuthoritiesConstants;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.stream.Stream;

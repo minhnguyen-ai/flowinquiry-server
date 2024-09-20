@@ -1,6 +1,6 @@
 package io.flexwork.service.mapper;
 
-import io.flexwork.security.service.mapper.TenantMapper;
+import io.flexwork.modules.usermanagement.service.mapper.TenantMapper;
 import org.junit.jupiter.api.Test;
 
 /** Unit tests for {@link TenantMapper}. */

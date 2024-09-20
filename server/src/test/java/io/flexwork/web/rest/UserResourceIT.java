@@ -7,13 +7,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.flexwork.IntegrationTest;
-import io.flexwork.domain.User;
-import io.flexwork.security.AuthoritiesConstants;
-import io.flexwork.security.repository.UserRepository;
-import io.flexwork.security.service.UserService;
-import io.flexwork.security.service.dto.AdminUserDTO;
-import io.flexwork.security.service.mapper.UserMapperClassic;
-import io.flexwork.security.web.rest.UserResource;
+import io.flexwork.modules.usermanagement.AuthoritiesConstants;
+import io.flexwork.modules.usermanagement.domain.User;
+import io.flexwork.modules.usermanagement.repository.UserRepository;
+import io.flexwork.modules.usermanagement.service.UserService;
+import io.flexwork.modules.usermanagement.service.dto.AdminUserDTO;
+import io.flexwork.modules.usermanagement.service.mapper.UserMapperClassic;
+import io.flexwork.modules.usermanagement.web.rest.UserResource;
 import jakarta.persistence.EntityManager;
 import java.util.Collections;
 import java.util.List;

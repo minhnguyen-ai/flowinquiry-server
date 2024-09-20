@@ -7,17 +7,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.flexwork.IntegrationTest;
-import io.flexwork.domain.User;
-import io.flexwork.security.AuthoritiesConstants;
+import io.flexwork.modules.usermanagement.AuthoritiesConstants;
+import io.flexwork.modules.usermanagement.domain.User;
+import io.flexwork.modules.usermanagement.repository.AuthorityRepository;
+import io.flexwork.modules.usermanagement.repository.UserRepository;
+import io.flexwork.modules.usermanagement.service.UserService;
+import io.flexwork.modules.usermanagement.service.dto.AdminUserDTO;
+import io.flexwork.modules.usermanagement.service.dto.PasswordChangeDTO;
+import io.flexwork.modules.usermanagement.web.rest.AccountResource;
+import io.flexwork.modules.usermanagement.web.rest.KeyAndPasswordVM;
+import io.flexwork.modules.usermanagement.web.rest.ManagedUserVM;
 import io.flexwork.security.Constants;
-import io.flexwork.security.repository.AuthorityRepository;
-import io.flexwork.security.repository.UserRepository;
-import io.flexwork.security.service.UserService;
-import io.flexwork.security.service.dto.AdminUserDTO;
-import io.flexwork.security.service.dto.PasswordChangeDTO;
-import io.flexwork.security.web.rest.AccountResource;
-import io.flexwork.security.web.rest.KeyAndPasswordVM;
-import io.flexwork.security.web.rest.ManagedUserVM;
 import java.time.Instant;
 import java.util.Collections;
 import java.util.HashSet;

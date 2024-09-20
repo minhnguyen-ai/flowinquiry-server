@@ -1,6 +1,6 @@
 package io.flexwork.modules.crm.domain;
 
-import io.flexwork.domain.User;
+import io.flexwork.modules.usermanagement.domain.User;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;

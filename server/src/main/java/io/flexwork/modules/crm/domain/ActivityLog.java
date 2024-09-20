@@ -1,6 +1,6 @@
 package io.flexwork.modules.crm.domain;
 
-import io.flexwork.domain.User;
+import io.flexwork.modules.usermanagement.domain.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

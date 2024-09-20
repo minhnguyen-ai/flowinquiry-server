@@ -1,6 +1,6 @@
 package io.flexwork.modules.usermanagement.stateMachine.actions;
 
-import io.flexwork.domain.User;
+import io.flexwork.modules.usermanagement.domain.User;
 import io.flexwork.modules.usermanagement.stateMachine.SignupEvents;
 import io.flexwork.modules.usermanagement.stateMachine.SignupStates;
 import org.slf4j.Logger;

@@ -2,7 +2,7 @@ package io.flexwork.config;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
-import io.flexwork.security.AuthoritiesConstants;
+import io.flexwork.modules.usermanagement.AuthoritiesConstants;
 import io.flexwork.web.filter.SpaWebFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

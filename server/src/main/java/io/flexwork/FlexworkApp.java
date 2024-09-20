@@ -3,10 +3,11 @@ package io.flexwork;
 import static io.flexwork.db.DbConstants.MASTER_SCHEMA;
 
 import io.flexwork.config.ApplicationProperties;
+import io.flexwork.config.FlexworkProperties;
 import io.flexwork.db.TenantContext;
 import io.flexwork.db.service.LiquibaseService;
-import io.flexwork.domain.Tenant;
-import io.flexwork.security.service.TenantService;
+import io.flexwork.modules.usermanagement.domain.Tenant;
+import io.flexwork.modules.usermanagement.service.TenantService;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import java.net.InetAddress;
@@ -28,7 +29,11 @@ import tech.jhipster.config.DefaultProfileUtil;
 import tech.jhipster.config.JHipsterConstants;
 
 @SpringBootApplication
-@EnableConfigurationProperties({LiquibaseProperties.class, ApplicationProperties.class})
+@EnableConfigurationProperties({
+    LiquibaseProperties.class,
+    ApplicationProperties.class,
+    FlexworkProperties.class
+})
 @EntityScan("io.flexwork")
 public class FlexworkApp implements CommandLineRunner {
 

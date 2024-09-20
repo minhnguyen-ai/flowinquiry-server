@@ -1,8 +1,8 @@
 package io.flexwork.modules.usermanagement.web.rest;
 
-import io.flexwork.domain.User;
+import io.flexwork.modules.usermanagement.domain.User;
 import io.flexwork.modules.usermanagement.service.SignupService;
-import io.flexwork.security.service.UserService;
+import io.flexwork.modules.usermanagement.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;

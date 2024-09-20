@@ -1,9 +1,9 @@
 package io.flexwork.modules.usermanagement.web.rest;
 
-import io.flexwork.domain.Tenant;
-import io.flexwork.security.service.TenantService;
-import io.flexwork.security.service.dto.TenantDTO;
-import io.flexwork.security.service.mapper.TenantMapper;
+import io.flexwork.modules.usermanagement.domain.Tenant;
+import io.flexwork.modules.usermanagement.service.TenantService;
+import io.flexwork.modules.usermanagement.service.dto.TenantDTO;
+import io.flexwork.modules.usermanagement.service.mapper.TenantMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
