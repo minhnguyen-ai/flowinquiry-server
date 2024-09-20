@@ -1,4 +1,4 @@
-package io.flexwork.security.domain;
+package io.flexwork.domain;
 
 public enum Permission {
     READ,

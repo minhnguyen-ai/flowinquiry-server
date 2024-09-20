@@ -1,6 +1,6 @@
 package io.flexwork.security.service;
 
-import io.flexwork.security.domain.User;
+import io.flexwork.domain.User;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import java.nio.charset.StandardCharsets;

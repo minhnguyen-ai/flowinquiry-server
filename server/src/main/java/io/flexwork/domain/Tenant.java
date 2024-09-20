@@ -1,4 +1,4 @@
-package io.flexwork.security.domain;
+package io.flexwork.domain;
 
 import static io.flexwork.db.DbConstants.MASTER_SCHEMA;
 

@@ -1,7 +1,7 @@
 package io.flexwork.security.service.mapper;
 
-import io.flexwork.security.domain.Authority;
-import io.flexwork.security.domain.User;
+import io.flexwork.domain.Authority;
+import io.flexwork.domain.User;
 import io.flexwork.security.service.dto.AdminUserDTO;
 import io.flexwork.security.service.dto.UserDTO;
 import java.util.*;

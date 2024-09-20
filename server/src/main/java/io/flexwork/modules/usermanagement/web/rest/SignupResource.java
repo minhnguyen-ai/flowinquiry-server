@@ -1,7 +1,7 @@
 package io.flexwork.modules.usermanagement.web.rest;
 
+import io.flexwork.domain.User;
 import io.flexwork.modules.usermanagement.service.SignupService;
-import io.flexwork.security.domain.User;
 import io.flexwork.security.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -8,7 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.flexwork.IntegrationTest;
-import io.flexwork.security.domain.Authority;
+import io.flexwork.domain.Authority;
 import io.flexwork.security.repository.AuthorityRepository;
 import io.flexwork.security.web.rest.AuthorityResource;
 import jakarta.persistence.EntityManager;

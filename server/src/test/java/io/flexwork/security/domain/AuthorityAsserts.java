@@ -2,6 +2,8 @@ package io.flexwork.security.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import io.flexwork.domain.Authority;
+
 public class AuthorityAsserts {
 
     /**

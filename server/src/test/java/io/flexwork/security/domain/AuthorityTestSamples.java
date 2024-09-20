@@ -1,5 +1,6 @@
 package io.flexwork.security.domain;
 
+import io.flexwork.domain.Authority;
 import java.util.UUID;
 
 public class AuthorityTestSamples {

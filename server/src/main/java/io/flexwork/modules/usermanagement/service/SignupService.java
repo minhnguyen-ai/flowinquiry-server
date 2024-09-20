@@ -1,8 +1,8 @@
 package io.flexwork.modules.usermanagement.service;
 
+import io.flexwork.domain.User;
 import io.flexwork.modules.usermanagement.stateMachine.SignupEvents;
 import io.flexwork.modules.usermanagement.stateMachine.SignupStates;
-import io.flexwork.security.domain.User;
 import io.flexwork.security.repository.UserRepository;
 import java.util.Optional;
 import lombok.SneakyThrows;

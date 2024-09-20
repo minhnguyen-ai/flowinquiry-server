@@ -1,8 +1,8 @@
 package io.flexwork.security.repository;
 
-import io.flexwork.security.domain.AuthorityResourcePermission;
-import io.flexwork.security.domain.AuthorityResourcePermissionId;
-import io.flexwork.security.domain.Permission;
+import io.flexwork.domain.AuthorityResourcePermission;
+import io.flexwork.domain.AuthorityResourcePermissionId;
+import io.flexwork.domain.Permission;
 import java.util.Optional;
 import java.util.Set;
 import org.springframework.data.jpa.repository.JpaRepository;

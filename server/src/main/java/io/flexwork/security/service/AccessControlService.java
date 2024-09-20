@@ -1,11 +1,11 @@
 package io.flexwork.security.service;
 
-import io.flexwork.security.domain.Authority;
-import io.flexwork.security.domain.AuthorityResourcePermission;
-import io.flexwork.security.domain.AuthorityResourcePermissionId;
-import io.flexwork.security.domain.Permission;
-import io.flexwork.security.domain.Resource;
-import io.flexwork.security.domain.User;
+import io.flexwork.domain.Authority;
+import io.flexwork.domain.AuthorityResourcePermission;
+import io.flexwork.domain.AuthorityResourcePermissionId;
+import io.flexwork.domain.Permission;
+import io.flexwork.domain.Resource;
+import io.flexwork.domain.User;
 import io.flexwork.security.repository.AuthorityRepository;
 import io.flexwork.security.repository.AuthorityResourcePermissionRepository;
 import io.flexwork.security.repository.ResourceRepository;

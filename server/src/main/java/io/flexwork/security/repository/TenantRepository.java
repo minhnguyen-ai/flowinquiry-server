@@ -1,6 +1,6 @@
 package io.flexwork.security.repository;
 
-import io.flexwork.security.domain.Tenant;
+import io.flexwork.domain.Tenant;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
