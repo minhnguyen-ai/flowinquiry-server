@@ -3,6 +3,7 @@ package io.flexwork;
 import static io.flexwork.db.DbConstants.MASTER_SCHEMA;
 
 import io.flexwork.config.ApplicationProperties;
+import io.flexwork.config.FlexworkProfiles;
 import io.flexwork.config.FlexworkProperties;
 import io.flexwork.db.TenantContext;
 import io.flexwork.db.service.LiquibaseService;
@@ -26,7 +27,6 @@ import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.core.env.Environment;
 import tech.jhipster.config.DefaultProfileUtil;
-import tech.jhipster.config.JHipsterConstants;
 
 @SpringBootApplication
 @EnableConfigurationProperties({
@@ -61,14 +61,14 @@ public class FlexworkApp implements CommandLineRunner {
     @PostConstruct
     public void initApplication() {
         Collection<String> activeProfiles = Arrays.asList(env.getActiveProfiles());
-        if (activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT)
-                && activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_PRODUCTION)) {
+        if (activeProfiles.contains(FlexworkProfiles.SPRING_PROFILE_DEVELOPMENT)
+                && activeProfiles.contains(FlexworkProfiles.SPRING_PROFILE_PRODUCTION)) {
             log.error(
                     "You have misconfigured your application! It should not run "
                             + "with both the 'dev' and 'prod' profiles at the same time.");
         }
-        if (activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT)
-                && activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_CLOUD)) {
+        if (activeProfiles.contains(FlexworkProfiles.SPRING_PROFILE_DEVELOPMENT)
+                && activeProfiles.contains(FlexworkProfiles.SPRING_PROFILE_CLOUD)) {
             log.error(
                     "You have misconfigured your application! It should not "
                             + "run with both the 'dev' and 'cloud' profiles at the same time.");

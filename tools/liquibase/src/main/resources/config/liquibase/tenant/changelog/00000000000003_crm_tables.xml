@@ -1,318 +1,319 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <databaseChangeLog
-        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
-    <!-- ChangeSet for creating the 'account' table -->
-    <changeSet id="00000000000003:crm_module" author="flexapp">
-        <createSequence sequenceName="fw_crm_account_seq" minValue="1" startValue="1" incrementBy="1"/>
-        <createTable tableName="fw_crm_account">
-            <column name="id" type="bigint" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="account_name" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="account_type" type="VARCHAR(50)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="industry" type="VARCHAR(100)"/>
-            <column name="website" type="VARCHAR(255)"/>
-            <column name="phone_number" type="VARCHAR(20)"/>
-            <column name="email" type="VARCHAR(255)"/>
-            <column name="address_line1" type="VARCHAR(255)"/>
-            <column name="address_line2" type="VARCHAR(255)"/>
-            <column name="city" type="VARCHAR(100)"/>
-            <column name="state" type="VARCHAR(100)"/>
-            <column name="postal_code" type="VARCHAR(20)"/>
-            <column name="country" type="VARCHAR(100)"/>
-            <column name="annual_revenue" type="VARCHAR(100)"/>
-            <column name="parent_account_id" type="bigint"/>
-            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
-                <constraints nullable="false"/>
-            </column>
-            <column name="updated_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
-            <column name="status" type="VARCHAR(50)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="assigned_to_user_id" type="bigint"/>
-            <column name="notes" type="TEXT"/>
-        </createTable>
+	<!-- ChangeSet for creating the 'account' table -->
+	<changeSet id="00000000000003:crm_module" author="flexapp">
+		<createSequence sequenceName="fw_crm_account_seq"
+			minValue="1" startValue="1" incrementBy="1" />
+		<createTable tableName="fw_crm_account">
+			<column name="id" type="bigint" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="account_name" type="VARCHAR(256)">
+				<constraints nullable="false" />
+			</column>
+			<column name="account_type" type="VARCHAR(50)">
+				<constraints nullable="false" />
+			</column>
+			<column name="industry" type="VARCHAR(100)" />
+			<column name="website" type="VARCHAR(256)" />
+			<column name="phone_number" type="VARCHAR(20)" />
+			<column name="email" type="VARCHAR(256)" />
+			<column name="address_line1" type="VARCHAR(256)" />
+			<column name="address_line2" type="VARCHAR(256)" />
+			<column name="city" type="VARCHAR(100)" />
+			<column name="state" type="VARCHAR(100)" />
+			<column name="postal_code" type="VARCHAR(20)" />
+			<column name="country" type="VARCHAR(100)" />
+			<column name="annual_revenue" type="VARCHAR(100)" />
+			<column name="parent_account_id" type="bigint" />
+			<column name="created_at" type="TIMESTAMP"
+				defaultValueComputed="CURRENT_TIMESTAMP">
+				<constraints nullable="false" />
+			</column>
+			<column name="updated_at" type="TIMESTAMP"
+				defaultValueComputed="CURRENT_TIMESTAMP" />
+			<column name="status" type="VARCHAR(50)">
+				<constraints nullable="false" />
+			</column>
+			<column name="assigned_to_user_id" type="bigint" />
+			<column name="notes" type="TEXT" />
+		</createTable>
 
-        <!-- Add foreign key constraint for parent_account_id -->
-        <addForeignKeyConstraint
-                baseTableName="fw_crm_account"
-                baseColumnNames="parent_account_id"
-                referencedTableName="fw_crm_account"
-                referencedColumnNames="id"
-                constraintName="fk_account_parent_account"
-                deferrable="true"
-                initiallyDeferred="true"/>
+		<!-- Add foreign key constraint for parent_account_id -->
+		<addForeignKeyConstraint
+			baseTableName="fw_crm_account" baseColumnNames="parent_account_id"
+			referencedTableName="fw_crm_account" referencedColumnNames="id"
+			constraintName="fk_account_parent_account" deferrable="true"
+			initiallyDeferred="true" />
 
-        <addForeignKeyConstraint
-                baseTableName="fw_crm_account"
-                baseColumnNames="assigned_to_user_id"
-                referencedTableName="fw_user"
-                referencedColumnNames="id"
-                constraintName="fk_account_user"
-                deferrable="true"
-                initiallyDeferred="true"/>
+		<addForeignKeyConstraint
+			baseTableName="fw_crm_account" baseColumnNames="assigned_to_user_id"
+			referencedTableName="fw_user" referencedColumnNames="id"
+			constraintName="fk_account_user" deferrable="true"
+			initiallyDeferred="true" />
 
-        <!-- Add indexes -->
-        <createIndex indexName="idx_account_name" tableName="fw_crm_account">
-            <column name="account_name"/>
-        </createIndex>
-        <createIndex indexName="idx_email" tableName="fw_crm_account">
-            <column name="email"/>
-        </createIndex>
-        <createIndex indexName="idx_phone_number" tableName="fw_crm_account">
-            <column name="phone_number"/>
-        </createIndex>
-        <createIndex indexName="idx_assigned_to_user_id" tableName="fw_crm_account">
-            <column name="assigned_to_user_id"/>
-        </createIndex>
+		<!-- Add indexes -->
+		<createIndex indexName="idx_account_name"
+			tableName="fw_crm_account">
+			<column name="account_name" />
+		</createIndex>
+		<createIndex indexName="idx_email"
+			tableName="fw_crm_account">
+			<column name="email" />
+		</createIndex>
+		<createIndex indexName="idx_phone_number"
+			tableName="fw_crm_account">
+			<column name="phone_number" />
+		</createIndex>
+		<createIndex indexName="idx_assigned_to_user_id"
+			tableName="fw_crm_account">
+			<column name="assigned_to_user_id" />
+		</createIndex>
 
-        <createTable tableName="fw_crm_contact">
-            <column name="id" type="BIGINT" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="account_id" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
-            <column name="first_name" type="VARCHAR(100)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="last_name" type="VARCHAR(100)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="email" type="VARCHAR(255)">
-                <constraints nullable="false" unique="true"/>
-            </column>
-            <column name="phone" type="VARCHAR(20)"/>
-            <column name="address" type="VARCHAR(255)"/>
-            <column name="city" type="VARCHAR(100)"/>
-            <column name="state" type="VARCHAR(100)"/>
-            <column name="postal_code" type="VARCHAR(20)"/>
-            <column name="country" type="VARCHAR(100)"/>
-            <column name="position" type="VARCHAR(100)"/>
-            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
-                <constraints nullable="false"/>
-            </column>
-            <column name="updated_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
-            <column name="notes" type="TEXT"/>
-            <column name="status" type="VARCHAR(50)"/>
-        </createTable>
+		<createTable tableName="fw_crm_contact">
+			<column name="id" type="BIGINT" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="account_id" type="BIGINT">
+				<constraints nullable="false" />
+			</column>
+			<column name="first_name" type="VARCHAR(100)">
+				<constraints nullable="false" />
+			</column>
+			<column name="last_name" type="VARCHAR(100)">
+				<constraints nullable="false" />
+			</column>
+			<column name="email" type="VARCHAR(256)">
+				<constraints nullable="false" unique="true" />
+			</column>
+			<column name="phone" type="VARCHAR(20)" />
+			<column name="address" type="VARCHAR(256)" />
+			<column name="city" type="VARCHAR(100)" />
+			<column name="state" type="VARCHAR(100)" />
+			<column name="postal_code" type="VARCHAR(20)" />
+			<column name="country" type="VARCHAR(100)" />
+			<column name="position" type="VARCHAR(100)" />
+			<column name="created_at" type="TIMESTAMP"
+				defaultValueComputed="CURRENT_TIMESTAMP">
+				<constraints nullable="false" />
+			</column>
+			<column name="updated_at" type="TIMESTAMP"
+				defaultValueComputed="CURRENT_TIMESTAMP" />
+			<column name="notes" type="TEXT" />
+			<column name="status" type="VARCHAR(50)" />
+		</createTable>
 
-        <!-- Add foreign key constraint -->
-        <addForeignKeyConstraint
-                constraintName="fk_contact_account"
-                baseTableName="fw_crm_contact"
-                baseColumnNames="account_id"
-                referencedTableName="fw_crm_account"
-                referencedColumnNames="id"
-                onDelete="CASCADE"/>
+		<!-- Add foreign key constraint -->
+		<addForeignKeyConstraint
+			constraintName="fk_contact_account" baseTableName="fw_crm_contact"
+			baseColumnNames="account_id" referencedTableName="fw_crm_account"
+			referencedColumnNames="id" onDelete="CASCADE" />
 
-        <createTable tableName="fw_crm_activity">
-            <column name="id" type="BIGINT">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="entity_type" type="VARCHAR(20)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="entity_id" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
-            <column name="user_id" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
-            <column name="activity_type" type="VARCHAR(20)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="activity_id" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
-            <column name="activity_date" type="DATE">
-                <constraints nullable="false"/>
-            </column>
-            <column name="notes" type="TEXT"/>
-            <column name="created_at" type="TIMESTAMP">
-                <constraints nullable="false"/>
-            </column>
-            <column name="updated_at" type="TIMESTAMP">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-        <addForeignKeyConstraint baseTableName="fw_crm_activity"
-                                 baseColumnNames="user_id"
-                                 constraintName="fk_activity_user"
-                                 referencedTableName="fw_user"
-                                 referencedColumnNames="id"/>
+		<createTable tableName="fw_crm_activity">
+			<column name="id" type="BIGINT">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="entity_type" type="VARCHAR(20)">
+				<constraints nullable="false" />
+			</column>
+			<column name="entity_id" type="BIGINT">
+				<constraints nullable="false" />
+			</column>
+			<column name="user_id" type="BIGINT">
+				<constraints nullable="false" />
+			</column>
+			<column name="activity_type" type="VARCHAR(20)">
+				<constraints nullable="false" />
+			</column>
+			<column name="activity_id" type="BIGINT">
+				<constraints nullable="false" />
+			</column>
+			<column name="activity_date" type="DATE">
+				<constraints nullable="false" />
+			</column>
+			<column name="notes" type="TEXT" />
+			<column name="created_at" type="TIMESTAMP">
+				<constraints nullable="false" />
+			</column>
+			<column name="updated_at" type="TIMESTAMP">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+		<addForeignKeyConstraint
+			baseTableName="fw_crm_activity" baseColumnNames="user_id"
+			constraintName="fk_activity_user" referencedTableName="fw_user"
+			referencedColumnNames="id" />
 
 
-        <createTable tableName="fw_crm_call">
-            <column name="id" type="BIGINT">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="duration" type="INT"/>
-            <column name="call_result" type="VARCHAR(20)"/>
-            <column name="phone_number" type="VARCHAR(20)"/>
-            <column name="created_at" type="TIMESTAMP">
-                <constraints nullable="false"/>
-            </column>
-            <column name="updated_at" type="TIMESTAMP">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
+		<createTable tableName="fw_crm_call">
+			<column name="id" type="BIGINT">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="duration" type="INT" />
+			<column name="call_result" type="VARCHAR(20)" />
+			<column name="phone_number" type="VARCHAR(20)" />
+			<column name="created_at" type="TIMESTAMP">
+				<constraints nullable="false" />
+			</column>
+			<column name="updated_at" type="TIMESTAMP">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
 
-        <createTable tableName="fw_crm_email">
-            <column name="id" type="BIGINT">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="subject" type="VARCHAR(255)"/>
-            <column name="recipient" type="VARCHAR(255)"/>
-            <column name="cc" type="TEXT"/>
-            <column name="bcc" type="TEXT"/>
-            <column name="email_body" type="TEXT"/>
-            <column name="attachment" type="BOOLEAN" defaultValue="FALSE"/>
-            <column name="created_at" type="TIMESTAMP">
-                <constraints nullable="false"/>
-            </column>
-            <column name="updated_at" type="TIMESTAMP">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
+		<createTable tableName="fw_crm_email">
+			<column name="id" type="BIGINT">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="subject" type="VARCHAR(256)" />
+			<column name="recipient" type="VARCHAR(256)" />
+			<column name="cc" type="TEXT" />
+			<column name="bcc" type="TEXT" />
+			<column name="email_body" type="TEXT" />
+			<column name="attachment" type="BOOLEAN" defaultValue="FALSE" />
+			<column name="created_at" type="TIMESTAMP">
+				<constraints nullable="false" />
+			</column>
+			<column name="updated_at" type="TIMESTAMP">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
 
-        <createTable tableName="fw_crm_meeting">
-            <column name="id" type="BIGINT">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="location" type="VARCHAR(255)"/>
-            <column name="meeting_date" type="DATE"/>
-            <column name="start_time" type="TIME"/>
-            <column name="end_time" type="TIME"/>
-            <column name="agenda" type="TEXT"/>
-            <column name="participants" type="TEXT"/>
-            <column name="created_at" type="TIMESTAMP">
-                <constraints nullable="false"/>
-            </column>
-            <column name="updated_at" type="TIMESTAMP">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
+		<createTable tableName="fw_crm_meeting">
+			<column name="id" type="BIGINT">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="location" type="VARCHAR(256)" />
+			<column name="meeting_date" type="DATE" />
+			<column name="start_time" type="TIME" />
+			<column name="end_time" type="TIME" />
+			<column name="agenda" type="TEXT" />
+			<column name="participants" type="TEXT" />
+			<column name="created_at" type="TIMESTAMP">
+				<constraints nullable="false" />
+			</column>
+			<column name="updated_at" type="TIMESTAMP">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
 
-        <createTable tableName="fw_crm_task">
-            <column name="id" type="BIGINT">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="due_date" type="DATE"/>
-            <column name="priority" type="VARCHAR(20)"/>
-            <column name="status" type="VARCHAR(20)"/>
-            <column name="description" type="TEXT"/>
-            <column name="created_at" type="TIMESTAMP">
-                <constraints nullable="false"/>
-            </column>
-            <column name="updated_at" type="TIMESTAMP">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
+		<createTable tableName="fw_crm_task">
+			<column name="id" type="BIGINT">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="due_date" type="DATE" />
+			<column name="priority" type="VARCHAR(20)" />
+			<column name="status" type="VARCHAR(20)" />
+			<column name="description" type="TEXT" />
+			<column name="created_at" type="TIMESTAMP">
+				<constraints nullable="false" />
+			</column>
+			<column name="updated_at" type="TIMESTAMP">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
 
-        <createTable tableName="fw_crm_case">
-            <column name="id" type="BIGINT" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="case_number" type="VARCHAR(50)">
-                <constraints nullable="false" unique="true"/>
-            </column>
-            <column name="title" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="description" type="TEXT"/>
-            <column name="status" type="VARCHAR(20)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="priority" type="VARCHAR(20)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="account_id" type="BIGINT"/>
-            <column name="contact_id" type="BIGINT"/>
-            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
-            <column name="updated_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
-        </createTable>
+		<createTable tableName="fw_crm_case">
+			<column name="id" type="BIGINT" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="case_number" type="VARCHAR(50)">
+				<constraints nullable="false" unique="true" />
+			</column>
+			<column name="title" type="VARCHAR(256)">
+				<constraints nullable="false" />
+			</column>
+			<column name="description" type="TEXT" />
+			<column name="status" type="VARCHAR(20)">
+				<constraints nullable="false" />
+			</column>
+			<column name="priority" type="VARCHAR(20)">
+				<constraints nullable="false" />
+			</column>
+			<column name="account_id" type="BIGINT" />
+			<column name="contact_id" type="BIGINT" />
+			<column name="created_at" type="TIMESTAMP"
+				defaultValueComputed="CURRENT_TIMESTAMP" />
+			<column name="updated_at" type="TIMESTAMP"
+				defaultValueComputed="CURRENT_TIMESTAMP" />
+		</createTable>
 
-        <addForeignKeyConstraint baseTableName="fw_crm_case"
-                                 baseColumnNames="account_id"
-                                 constraintName="fk_cases_account"
-                                 referencedTableName="fw_crm_account"
-                                 referencedColumnNames="id"/>
-        <addForeignKeyConstraint baseTableName="fw_crm_case"
-                                 baseColumnNames="contact_id"
-                                 constraintName="fk_cases_contact"
-                                 referencedTableName="fw_crm_contact"
-                                 referencedColumnNames="id"/>
+		<addForeignKeyConstraint
+			baseTableName="fw_crm_case" baseColumnNames="account_id"
+			constraintName="fk_cases_account"
+			referencedTableName="fw_crm_account" referencedColumnNames="id" />
+		<addForeignKeyConstraint
+			baseTableName="fw_crm_case" baseColumnNames="contact_id"
+			constraintName="fk_cases_contact"
+			referencedTableName="fw_crm_contact" referencedColumnNames="id" />
 
-        <createTable tableName="fw_crm_comment">
-            <column name="id" type="BIGINT" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="content" type="TEXT">
-                <constraints nullable="false"/>
-            </column>
-            <column name="created_by" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
-            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
-            <column name="updated_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
-            <column name="entity_type" type="VARCHAR(20)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="entity_id" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
+		<createTable tableName="fw_crm_comment">
+			<column name="id" type="BIGINT" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="content" type="TEXT">
+				<constraints nullable="false" />
+			</column>
+			<column name="created_by" type="BIGINT">
+				<constraints nullable="false" />
+			</column>
+			<column name="created_at" type="TIMESTAMP"
+				defaultValueComputed="CURRENT_TIMESTAMP" />
+			<column name="updated_at" type="TIMESTAMP"
+				defaultValueComputed="CURRENT_TIMESTAMP" />
+			<column name="entity_type" type="VARCHAR(20)">
+				<constraints nullable="false" />
+			</column>
+			<column name="entity_id" type="BIGINT">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
 
-        <addForeignKeyConstraint baseTableName="fw_crm_comment"
-                                 baseColumnNames="created_by"
-                                 constraintName="fk_comment_user"
-                                 referencedTableName="fw_user"
-                                 referencedColumnNames="id"/>
+		<addForeignKeyConstraint
+			baseTableName="fw_crm_comment" baseColumnNames="created_by"
+			constraintName="fk_comment_user" referencedTableName="fw_user"
+			referencedColumnNames="id" />
 
-        <createTable tableName="fw_crm_activity_log">
-            <column name="id" type="BIGINT" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="entity_type" type="VARCHAR(20)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="entity_id" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
-            <column name="activity_type" type="VARCHAR(20)">
-                <constraints nullable="true"/>
-            </column>
-            <column name="activity_id" type="BIGINT">
-                <constraints nullable="true"/>
-            </column>
-            <column name="activity_date" type="DATE">
-                <constraints nullable="false"/>
-            </column>
-            <column name="action" type="VARCHAR(20)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="user_id" type="BIGINT">
-                <constraints nullable="false"/>
-            </column>
-            <column name="notes" type="TEXT"/>
-            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
-            <column name="updated_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
-        </createTable>
+		<createTable tableName="fw_crm_activity_log">
+			<column name="id" type="BIGINT" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="entity_type" type="VARCHAR(20)">
+				<constraints nullable="false" />
+			</column>
+			<column name="entity_id" type="BIGINT">
+				<constraints nullable="false" />
+			</column>
+			<column name="activity_type" type="VARCHAR(20)">
+				<constraints nullable="true" />
+			</column>
+			<column name="activity_id" type="BIGINT">
+				<constraints nullable="true" />
+			</column>
+			<column name="activity_date" type="DATE">
+				<constraints nullable="false" />
+			</column>
+			<column name="action" type="VARCHAR(20)">
+				<constraints nullable="false" />
+			</column>
+			<column name="user_id" type="BIGINT">
+				<constraints nullable="false" />
+			</column>
+			<column name="notes" type="TEXT" />
+			<column name="created_at" type="TIMESTAMP"
+				defaultValueComputed="CURRENT_TIMESTAMP" />
+			<column name="updated_at" type="TIMESTAMP"
+				defaultValueComputed="CURRENT_TIMESTAMP" />
+		</createTable>
 
-        <addForeignKeyConstraint baseTableName="fw_crm_activity_log"
-                                 baseColumnNames="user_id"
-                                 constraintName="fk_activity_log_user"
-                                 referencedTableName="fw_user"
-                                 referencedColumnNames="id"/>
-    </changeSet>
+		<addForeignKeyConstraint
+			baseTableName="fw_crm_activity_log" baseColumnNames="user_id"
+			constraintName="fk_activity_log_user" referencedTableName="fw_user"
+			referencedColumnNames="id" />
+	</changeSet>
 
 </databaseChangeLog>

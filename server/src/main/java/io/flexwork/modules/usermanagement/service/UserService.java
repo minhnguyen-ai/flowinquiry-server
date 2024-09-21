@@ -212,7 +212,7 @@ public class UserService {
                 .map(AdminUserDTO::new);
     }
 
-    public void deleteUser(String email) {
+    public void deleteUserByEmail(String email) {
         userRepository
                 .findOneByEmailIgnoreCase(email)
                 .ifPresent(

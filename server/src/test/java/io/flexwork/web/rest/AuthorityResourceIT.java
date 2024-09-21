@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.flexwork.DefaultTenantContext;
 import io.flexwork.IntegrationTest;
 import io.flexwork.modules.usermanagement.domain.Authority;
 import io.flexwork.modules.usermanagement.repository.AuthorityRepository;
@@ -27,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 @IntegrationTest
 @AutoConfigureMockMvc
 @WithMockUser(authorities = {"ROLE_ADMIN"})
+@DefaultTenantContext
 class AuthorityResourceIT {
 
     private static final String ENTITY_API_URL = "/api/authorities";
@@ -51,7 +53,11 @@ class AuthorityResourceIT {
      * entity which requires the current entity.
      */
     public static Authority createEntity(EntityManager em) {
-        Authority authority = new Authority().name(UUID.randomUUID().toString());
+        Authority authority =
+                Authority.builder()
+                        .name(UUID.randomUUID().toString())
+                        .descriptiveName(UUID.randomUUID().toString())
+                        .build();
         return authority;
     }
 
@@ -62,7 +68,11 @@ class AuthorityResourceIT {
      * entity which requires the current entity.
      */
     public static Authority createUpdatedEntity(EntityManager em) {
-        Authority authority = new Authority().name(UUID.randomUUID().toString());
+        Authority authority =
+                Authority.builder()
+                        .name(UUID.randomUUID().toString())
+                        .descriptiveName(UUID.randomUUID().toString())
+                        .build();
         return authority;
     }
 

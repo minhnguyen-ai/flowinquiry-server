@@ -7,11 +7,9 @@ import org.springframework.http.CacheControl;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import tech.jhipster.config.JHipsterConstants;
-import tech.jhipster.config.JHipsterProperties;
 
 @Configuration
-@Profile({JHipsterConstants.SPRING_PROFILE_PRODUCTION})
+@Profile({FlexworkProfiles.SPRING_PROFILE_PRODUCTION})
 public class StaticResourcesWebConfiguration implements WebMvcConfigurer {
 
     protected static final String[] RESOURCE_LOCATIONS = {
@@ -21,10 +19,10 @@ public class StaticResourcesWebConfiguration implements WebMvcConfigurer {
         "/*.js", "/*.css", "/*.svg", "/*.png", "*.ico", "/content/**", "/i18n/*"
     };
 
-    private final JHipsterProperties jhipsterProperties;
+    private final FlexworkProperties flexworkProperties;
 
-    public StaticResourcesWebConfiguration(JHipsterProperties jHipsterProperties) {
-        this.jhipsterProperties = jHipsterProperties;
+    public StaticResourcesWebConfiguration(FlexworkProperties flexworkProperties) {
+        this.flexworkProperties = flexworkProperties;
     }
 
     @Override
@@ -49,6 +47,6 @@ public class StaticResourcesWebConfiguration implements WebMvcConfigurer {
     }
 
     private int getJHipsterHttpCacheProperty() {
-        return jhipsterProperties.getHttp().getCache().getTimeToLiveInDays();
+        return flexworkProperties.getHttp().getCache().getTimeToLiveInDays();
     }
 }

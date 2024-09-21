@@ -220,7 +220,7 @@ public class UserResource {
     public ResponseEntity<Void> deleteUser(
             @PathVariable("login") @Pattern(regexp = Constants.LOGIN_REGEX) String login) {
         log.debug("REST request to delete User: {}", login);
-        userService.deleteUser(login);
+        userService.deleteUserByEmail(login);
         return ResponseEntity.noContent()
                 .headers(HeaderUtil.createAlert(applicationName, "userManagement.deleted", login))
                 .build();

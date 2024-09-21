@@ -17,7 +17,7 @@ public class Tenant extends AbstractAuditingEntity<Long> implements Serializable
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @Size(max = 255)
+    @Size(max = 256)
     @NotNull @Column
     private String name;
 
@@ -29,11 +29,11 @@ public class Tenant extends AbstractAuditingEntity<Long> implements Serializable
     @Column
     private String description;
 
-    @Size(max = 255)
-    @Column(length = 255, name = "logo_url")
+    @Size(max = 256)
+    @Column(length = 256, name = "logo_url")
     private String logoUrl;
 
-    @Size(max = 255)
+    @Size(max = 256)
     @NotNull @Column
     private String domain;
 }

@@ -2,6 +2,7 @@ package io.flexwork.modules.usermanagement.web.rest.errors;
 
 import static org.springframework.core.annotation.AnnotatedElementUtils.findMergedAnnotation;
 
+import io.flexwork.config.FlexworkProfiles;
 import io.flexwork.modules.usermanagement.service.UsernameAlreadyUsedException;
 import jakarta.servlet.http.HttpServletRequest;
 import java.net.URI;
@@ -28,7 +29,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import tech.jhipster.config.JHipsterConstants;
 import tech.jhipster.web.rest.errors.ProblemDetailWithCause;
 import tech.jhipster.web.rest.errors.ProblemDetailWithCause.ProblemDetailWithCauseBuilder;
 import tech.jhipster.web.util.HeaderUtil;
@@ -216,7 +216,7 @@ public class ExceptionTranslator extends ResponseEntityExceptionHandler {
 
     private String getCustomizedErrorDetails(Throwable err) {
         Collection<String> activeProfiles = Arrays.asList(env.getActiveProfiles());
-        if (activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_PRODUCTION)) {
+        if (activeProfiles.contains(FlexworkProfiles.SPRING_PROFILE_PRODUCTION)) {
             if (err instanceof HttpMessageConversionException)
                 return "Unable to convert http message";
             if (err instanceof DataAccessException) return "Failure during data access";

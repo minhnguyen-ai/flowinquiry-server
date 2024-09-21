@@ -14,4 +14,9 @@ spotless {
     kotlin {
         ktfmt()
     }
+
+    format 'xml', {
+        target 'src/**/*.xml' // must specify target
+        eclipseWtp('xml')
+    }
 }

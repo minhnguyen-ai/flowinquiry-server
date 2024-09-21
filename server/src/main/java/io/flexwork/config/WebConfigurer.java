@@ -19,7 +19,6 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
-import tech.jhipster.config.JHipsterProperties;
 
 /** Configuration of web application with Servlet 3.0 APIs. */
 @Configuration
@@ -30,11 +29,11 @@ public class WebConfigurer
 
     private final Environment env;
 
-    private final JHipsterProperties jHipsterProperties;
+    private final FlexworkProperties flexworkProperties;
 
-    public WebConfigurer(Environment env, JHipsterProperties jHipsterProperties) {
+    public WebConfigurer(Environment env, FlexworkProperties flexworkProperties) {
         this.env = env;
-        this.jHipsterProperties = jHipsterProperties;
+        this.flexworkProperties = flexworkProperties;
     }
 
     @Override
@@ -82,7 +81,7 @@ public class WebConfigurer
     @Bean
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        CorsConfiguration config = jHipsterProperties.getCors();
+        CorsConfiguration config = flexworkProperties.getCors();
         if (!CollectionUtils.isEmpty(config.getAllowedOrigins())
                 || !CollectionUtils.isEmpty(config.getAllowedOriginPatterns())) {
             log.debug("Registering CORS filter");

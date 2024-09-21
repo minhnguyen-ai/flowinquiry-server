@@ -15,7 +15,7 @@ public class FsObject extends AbstractAuditingEntity<Long> implements Serializab
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "name", length = 255, unique = true)
+    @Column(name = "name", length = 256, unique = true)
     private String name;
 
     @Column(name = "description", length = 4000)

@@ -27,8 +27,6 @@ import tech.jhipster.security.RandomUtil;
 @Transactional
 class UserServiceIT {
 
-    private static final String DEFAULT_LOGIN = "johndoe_service";
-
     private static final String DEFAULT_EMAIL = "johndoe_service@localhost";
 
     private static final String DEFAULT_FIRSTNAME = "john";
@@ -73,7 +71,7 @@ class UserServiceIT {
 
     @AfterEach
     public void cleanupAndCheck() {
-        userService.deleteUser(DEFAULT_LOGIN);
+        userService.deleteUserByEmail(DEFAULT_EMAIL);
         assertThat(userRepository.count()).isEqualTo(numberOfUsers);
         numberOfUsers = null;
     }

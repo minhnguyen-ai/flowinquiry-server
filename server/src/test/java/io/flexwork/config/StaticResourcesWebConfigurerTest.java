@@ -14,7 +14,6 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import tech.jhipster.config.JHipsterDefaults;
-import tech.jhipster.config.JHipsterProperties;
 
 class StaticResourcesWebConfigurerTest {
 
@@ -23,7 +22,7 @@ class StaticResourcesWebConfigurerTest {
     private ResourceHandlerRegistry resourceHandlerRegistry;
     private MockServletContext servletContext;
     private WebApplicationContext applicationContext;
-    private JHipsterProperties props;
+    private FlexworkProperties props;
 
     @BeforeEach
     void setUp() {
@@ -31,7 +30,7 @@ class StaticResourcesWebConfigurerTest {
         applicationContext = mock(WebApplicationContext.class);
         resourceHandlerRegistry =
                 spy(new ResourceHandlerRegistry(applicationContext, servletContext));
-        props = new JHipsterProperties();
+        props = new FlexworkProperties();
         staticResourcesWebConfiguration = spy(new StaticResourcesWebConfiguration(props));
     }
 

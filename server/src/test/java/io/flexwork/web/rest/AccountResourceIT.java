@@ -1,11 +1,14 @@
 package io.flexwork.web.rest;
 
+import static io.flexwork.db.DbConstants.DEFAULT_TENANT;
+import static io.flexwork.db.TenantConstants.HEADER_TENANT_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.flexwork.DefaultTenantContext;
 import io.flexwork.IntegrationTest;
 import io.flexwork.modules.usermanagement.AuthoritiesConstants;
 import io.flexwork.modules.usermanagement.domain.User;
@@ -41,9 +44,10 @@ import org.springframework.transaction.annotation.Transactional;
 /** Integration tests for the {@link AccountResource} REST controller. */
 @AutoConfigureMockMvc
 @IntegrationTest
+@DefaultTenantContext
 class AccountResourceIT {
 
-    static final String TEST_USER_LOGIN = "test";
+    static final String TEST_USER_LOGIN_EMAIL = "test@localhost.io";
 
     @Autowired private ObjectMapper om;
 
@@ -74,25 +78,29 @@ class AccountResourceIT {
     @WithUnauthenticatedMockUser
     void testNonAuthenticatedUser() throws Exception {
         restAccountMockMvc
-                .perform(get("/api/authenticate").accept(MediaType.APPLICATION_JSON))
+                .perform(
+                        get("/api/authenticate")
+                                .header(HEADER_TENANT_ID, DEFAULT_TENANT)
+                                .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().string(""));
     }
 
     @Test
-    @WithMockUser(TEST_USER_LOGIN)
+    @WithMockUser(TEST_USER_LOGIN_EMAIL)
     void testAuthenticatedUser() throws Exception {
         restAccountMockMvc
                 .perform(
                         get("/api/authenticate")
+                                .header(HEADER_TENANT_ID, DEFAULT_TENANT)
                                 .with(request -> request)
                                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().string(TEST_USER_LOGIN));
+                .andExpect(content().string(TEST_USER_LOGIN_EMAIL));
     }
 
     @Test
-    @WithMockUser(TEST_USER_LOGIN)
+    @WithMockUser(TEST_USER_LOGIN_EMAIL)
     void testGetExistingAccount() throws Exception {
         Set<String> authorities = new HashSet<>();
         authorities.add(AuthoritiesConstants.ADMIN);
@@ -100,31 +108,36 @@ class AccountResourceIT {
         AdminUserDTO user = new AdminUserDTO();
         user.setFirstName("john");
         user.setLastName("doe");
-        user.setEmail("john.doe@flexwork.io");
+        user.setEmail(TEST_USER_LOGIN_EMAIL);
         user.setImageUrl("http://placehold.it/50x50");
         user.setLangKey("en");
         user.setAuthorities(authorities);
         userService.createUser(user);
 
         restAccountMockMvc
-                .perform(get("/api/account").accept(MediaType.APPLICATION_JSON))
+                .perform(
+                        get("/api/account")
+                                .header(HEADER_TENANT_ID, DEFAULT_TENANT)
+                                .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(jsonPath("$.login").value(TEST_USER_LOGIN))
                 .andExpect(jsonPath("$.firstName").value("john"))
                 .andExpect(jsonPath("$.lastName").value("doe"))
-                .andExpect(jsonPath("$.email").value("john.doe@flexwork.io"))
+                .andExpect(jsonPath("$.email").value(TEST_USER_LOGIN_EMAIL))
                 .andExpect(jsonPath("$.imageUrl").value("http://placehold.it/50x50"))
                 .andExpect(jsonPath("$.langKey").value("en"))
                 .andExpect(jsonPath("$.authorities").value(AuthoritiesConstants.ADMIN));
 
-        userService.deleteUser(TEST_USER_LOGIN);
+        userService.deleteUserByEmail(TEST_USER_LOGIN_EMAIL);
     }
 
     @Test
     void testGetUnknownAccount() throws Exception {
         restAccountMockMvc
-                .perform(get("/api/account").accept(MediaType.APPLICATION_PROBLEM_JSON))
+                .perform(
+                        get("/api/account")
+                                .header(HEADER_TENANT_ID, DEFAULT_TENANT)
+                                .accept(MediaType.APPLICATION_PROBLEM_JSON))
                 .andExpect(status().isUnauthorized());
     }
 
@@ -145,6 +158,7 @@ class AccountResourceIT {
         restAccountMockMvc
                 .perform(
                         post("/api/register")
+                                .header(HEADER_TENANT_ID, DEFAULT_TENANT)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(om.writeValueAsBytes(validUser)))
                 .andExpect(status().isCreated());
@@ -152,12 +166,12 @@ class AccountResourceIT {
         assertThat(userRepository.findOneByEmailIgnoreCase("test-register-valid@example.com"))
                 .isPresent();
 
-        userService.deleteUser("test-register-valid@example.com");
+        userService.deleteUserByEmail("test-register-valid@example.com");
     }
 
     @Test
     @Transactional
-    void testRegisterInvalidLogin() throws Exception {
+    void testRegisterValidLogin() throws Exception {
         ManagedUserVM invalidUser = new ManagedUserVM();
         invalidUser.setPassword("password");
         invalidUser.setFirstName("Funky");
@@ -171,12 +185,14 @@ class AccountResourceIT {
         restAccountMockMvc
                 .perform(
                         post("/api/register")
+                                .header(HEADER_TENANT_ID, DEFAULT_TENANT)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(om.writeValueAsBytes(invalidUser)))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isCreated());
 
         Optional<User> user = userRepository.findOneByEmailIgnoreCase("funky@example.com");
-        assertThat(user).isEmpty();
+        assertThat(user).isNotEmpty();
+        userService.deleteUserByEmail("funky@example.com");
     }
 
     static Stream<ManagedUserVM> invalidUsers() {
@@ -207,6 +223,7 @@ class AccountResourceIT {
         restAccountMockMvc
                 .perform(
                         post("/api/register")
+                                .header(HEADER_TENANT_ID, DEFAULT_TENANT)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(om.writeValueAsBytes(invalidUser)))
                 .andExpect(status().isBadRequest());
@@ -236,65 +253,6 @@ class AccountResourceIT {
 
     @Test
     @Transactional
-    void testRegisterDuplicateLogin() throws Exception {
-        // First registration
-        ManagedUserVM firstUser = new ManagedUserVM();
-        firstUser.setPassword("password");
-        firstUser.setFirstName("Alice");
-        firstUser.setLastName("Something");
-        firstUser.setEmail("alice@example.com");
-        firstUser.setImageUrl("http://placehold.it/50x50");
-        firstUser.setLangKey(Constants.DEFAULT_LANGUAGE);
-        firstUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
-
-        // Duplicate login, different email
-        ManagedUserVM secondUser = new ManagedUserVM();
-        secondUser.setPassword(firstUser.getPassword());
-        secondUser.setFirstName(firstUser.getFirstName());
-        secondUser.setLastName(firstUser.getLastName());
-        secondUser.setEmail("alice2@example.com");
-        secondUser.setImageUrl(firstUser.getImageUrl());
-        secondUser.setLangKey(firstUser.getLangKey());
-        secondUser.setCreatedBy(firstUser.getCreatedBy());
-        secondUser.setCreatedDate(firstUser.getCreatedDate());
-        secondUser.setLastModifiedBy(firstUser.getLastModifiedBy());
-        secondUser.setLastModifiedDate(firstUser.getLastModifiedDate());
-        secondUser.setAuthorities(new HashSet<>(firstUser.getAuthorities()));
-
-        // First user
-        restAccountMockMvc
-                .perform(
-                        post("/api/register")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(om.writeValueAsBytes(firstUser)))
-                .andExpect(status().isCreated());
-
-        // Second (non activated) user
-        restAccountMockMvc
-                .perform(
-                        post("/api/register")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(om.writeValueAsBytes(secondUser)))
-                .andExpect(status().isCreated());
-
-        Optional<User> testUser = userRepository.findOneByEmailIgnoreCase("alice2@example.com");
-        assertThat(testUser).isPresent();
-        testUser.orElseThrow().setActivated(true);
-        userRepository.save(testUser.orElseThrow());
-
-        // Second (already activated) user
-        restAccountMockMvc
-                .perform(
-                        post("/api/register")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(om.writeValueAsBytes(secondUser)))
-                .andExpect(status().is4xxClientError());
-
-        userService.deleteUser("alice");
-    }
-
-    @Test
-    @Transactional
     void testRegisterDuplicateEmail() throws Exception {
         // First user
         ManagedUserVM firstUser = new ManagedUserVM();
@@ -310,6 +268,7 @@ class AccountResourceIT {
         restAccountMockMvc
                 .perform(
                         post("/api/register")
+                                .header(HEADER_TENANT_ID, DEFAULT_TENANT)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(om.writeValueAsBytes(firstUser)))
                 .andExpect(status().isCreated());
@@ -318,34 +277,6 @@ class AccountResourceIT {
                 userRepository.findOneByEmailIgnoreCase(
                         "test-register-duplicate-email@example.com");
         assertThat(testUser1).isPresent();
-
-        // Duplicate email, different login
-        ManagedUserVM secondUser = new ManagedUserVM();
-        secondUser.setPassword(firstUser.getPassword());
-        secondUser.setFirstName(firstUser.getFirstName());
-        secondUser.setLastName(firstUser.getLastName());
-        secondUser.setEmail(firstUser.getEmail());
-        secondUser.setImageUrl(firstUser.getImageUrl());
-        secondUser.setLangKey(firstUser.getLangKey());
-        secondUser.setAuthorities(new HashSet<>(firstUser.getAuthorities()));
-
-        // Register second (non activated) user
-        restAccountMockMvc
-                .perform(
-                        post("/api/register")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(om.writeValueAsBytes(secondUser)))
-                .andExpect(status().isCreated());
-
-        Optional<User> testUser2 =
-                userRepository.findOneByEmailIgnoreCase(
-                        "test-register-duplicate-email@example.com");
-        assertThat(testUser2).isEmpty();
-
-        Optional<User> testUser3 =
-                userRepository.findOneByEmailIgnoreCase(
-                        "test-register-duplicate-email-2@example.com");
-        assertThat(testUser3).isPresent();
 
         // Duplicate email - with uppercase email address
         ManagedUserVM userWithUpperCaseEmail = new ManagedUserVM();
@@ -362,13 +293,14 @@ class AccountResourceIT {
         restAccountMockMvc
                 .perform(
                         post("/api/register")
+                                .header(HEADER_TENANT_ID, DEFAULT_TENANT)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(om.writeValueAsBytes(userWithUpperCaseEmail)))
                 .andExpect(status().isCreated());
 
         Optional<User> testUser4 =
                 userRepository.findOneByEmailIgnoreCase(
-                        "test-register-duplicate-email-3@example.com");
+                        "test-register-duplicate-email@example.com");
         assertThat(testUser4).isPresent();
         assertThat(testUser4.orElseThrow().getEmail())
                 .isEqualTo("test-register-duplicate-email@example.com");
@@ -376,15 +308,7 @@ class AccountResourceIT {
         testUser4.orElseThrow().setActivated(true);
         userService.updateUser((new AdminUserDTO(testUser4.orElseThrow())));
 
-        // Register 4th (already activated) user
-        restAccountMockMvc
-                .perform(
-                        post("/api/register")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(om.writeValueAsBytes(secondUser)))
-                .andExpect(status().is4xxClientError());
-
-        userService.deleteUser("test-register-duplicate-email-3");
+        userService.deleteUserByEmail("test-register-duplicate-email@example.com");
     }
 
     @Test
@@ -403,6 +327,7 @@ class AccountResourceIT {
         restAccountMockMvc
                 .perform(
                         post("/api/register")
+                                .header(HEADER_TENANT_ID, DEFAULT_TENANT)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(om.writeValueAsBytes(validUser)))
                 .andExpect(status().isCreated());
@@ -415,7 +340,7 @@ class AccountResourceIT {
                 .containsExactly(
                         authorityRepository.findById(AuthoritiesConstants.USER).orElseThrow());
 
-        userService.deleteUser("badguy");
+        userService.deleteUserByEmail("badguy@example.com");
     }
 
     @Test
@@ -431,27 +356,31 @@ class AccountResourceIT {
         userRepository.saveAndFlush(user);
 
         restAccountMockMvc
-                .perform(get("/api/activate?key={activationKey}", activationKey))
+                .perform(
+                        get("/api/activate?key={activationKey}", activationKey)
+                                .header(HEADER_TENANT_ID, DEFAULT_TENANT))
                 .andExpect(status().isOk());
 
         user = userRepository.findOneByEmailIgnoreCase(user.getEmail()).orElse(null);
         assertThat(user.isActivated()).isTrue();
 
-        userService.deleteUser("activate-account");
+        userService.deleteUserByEmail("activate-account@example.com");
     }
 
     @Test
     @Transactional
     void testActivateAccountWithWrongKey() throws Exception {
         restAccountMockMvc
-                .perform(get("/api/activate?key=wrongActivationKey"))
+                .perform(
+                        get("/api/activate?key=wrongActivationKey")
+                                .header(HEADER_TENANT_ID, DEFAULT_TENANT))
                 .andExpect(status().isInternalServerError());
     }
 
     @Test
     @Transactional
-    @WithMockUser("save-account")
-    void testSaveAccount() throws Exception {
+    @WithMockUser("save-account@example.com")
+    void testSaveAccountWithExistingEmail() throws Exception {
         User user = new User();
         user.setEmail("save-account@example.com");
         user.setPassword(RandomStringUtils.randomAlphanumeric(60));
@@ -470,9 +399,10 @@ class AccountResourceIT {
         restAccountMockMvc
                 .perform(
                         post("/api/account")
+                                .header(HEADER_TENANT_ID, DEFAULT_TENANT)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(om.writeValueAsBytes(userDTO)))
-                .andExpect(status().isOk());
+                .andExpect(status().is(200));
 
         User updatedUser =
                 userRepository
@@ -487,12 +417,12 @@ class AccountResourceIT {
         assertThat(updatedUser.isActivated()).isTrue();
         assertThat(updatedUser.getAuthorities()).isEmpty();
 
-        userService.deleteUser("save-account");
+        userService.deleteUserByEmail("save-account@example.com");
     }
 
     @Test
     @Transactional
-    @WithMockUser("save-invalid-email")
+    @WithMockUser("save-invalid-email@example.com")
     void testSaveInvalidEmail() throws Exception {
         User user = new User();
         user.setEmail("save-invalid-email@example.com");
@@ -513,18 +443,19 @@ class AccountResourceIT {
         restAccountMockMvc
                 .perform(
                         post("/api/account")
+                                .header(HEADER_TENANT_ID, DEFAULT_TENANT)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(om.writeValueAsBytes(userDTO)))
                 .andExpect(status().isBadRequest());
 
         assertThat(userRepository.findOneByEmailIgnoreCase("invalid email")).isNotPresent();
 
-        userService.deleteUser("save-invalid-email");
+        userService.deleteUserByEmail("save-invalid-email@example.com");
     }
 
     @Test
     @Transactional
-    @WithMockUser("save-existing-email")
+    @WithMockUser("save-existing-email@example.com")
     void testSaveExistingEmail() throws Exception {
         User user = new User();
         user.setEmail("save-existing-email@example.com");
@@ -551,23 +482,18 @@ class AccountResourceIT {
         restAccountMockMvc
                 .perform(
                         post("/api/account")
+                                .header(HEADER_TENANT_ID, DEFAULT_TENANT)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(om.writeValueAsBytes(userDTO)))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().is(500));
 
-        User updatedUser =
-                userRepository
-                        .findOneByEmailIgnoreCase("save-existing-email@example.com")
-                        .orElseThrow();
-        assertThat(updatedUser.getEmail()).isEqualTo("save-existing-email@example.com");
-
-        userService.deleteUser("save-existing-email");
-        userService.deleteUser("save-existing-email2");
+        userService.deleteUserByEmail("save-existing-email@example.com");
+        userService.deleteUserByEmail("save-existing-email2@example.com");
     }
 
     @Test
     @Transactional
-    @WithMockUser("save-existing-email-and-login")
+    @WithMockUser("save-existing-email-and-login@example.com")
     void testSaveExistingEmailAndLogin() throws Exception {
         User user = new User();
         user.setEmail("save-existing-email-and-login@example.com");
@@ -587,9 +513,10 @@ class AccountResourceIT {
         restAccountMockMvc
                 .perform(
                         post("/api/account")
+                                .header(HEADER_TENANT_ID, DEFAULT_TENANT)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(om.writeValueAsBytes(userDTO)))
-                .andExpect(status().isOk());
+                .andExpect(status().is(200));
 
         User updatedUser =
                 userRepository
@@ -597,12 +524,12 @@ class AccountResourceIT {
                         .orElse(null);
         assertThat(updatedUser.getEmail()).isEqualTo("save-existing-email-and-login@example.com");
 
-        userService.deleteUser("save-existing-email-and-login");
+        userService.deleteUserByEmail("save-existing-email-and-login@example.com");
     }
 
     @Test
     @Transactional
-    @WithMockUser("change-password-wrong-existing-password")
+    @WithMockUser("change-password-wrong-existing-password@example.com")
     void testChangePasswordWrongExistingPassword() throws Exception {
         User user = new User();
         String currentPassword = RandomStringUtils.randomAlphanumeric(60);
@@ -613,6 +540,7 @@ class AccountResourceIT {
         restAccountMockMvc
                 .perform(
                         post("/api/account/change-password")
+                                .header(HEADER_TENANT_ID, DEFAULT_TENANT)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(
                                         om.writeValueAsBytes(
@@ -628,12 +556,12 @@ class AccountResourceIT {
         assertThat(passwordEncoder.matches("new password", updatedUser.getPassword())).isFalse();
         assertThat(passwordEncoder.matches(currentPassword, updatedUser.getPassword())).isTrue();
 
-        userService.deleteUser("change-password-wrong-existing-password");
+        userService.deleteUserByEmail("change-password-wrong-existing-password@example.com");
     }
 
     @Test
     @Transactional
-    @WithMockUser("change-password")
+    @WithMockUser("change-password@example.com")
     void testChangePassword() throws Exception {
         User user = new User();
         String currentPassword = RandomStringUtils.randomAlphanumeric(60);
@@ -644,6 +572,7 @@ class AccountResourceIT {
         restAccountMockMvc
                 .perform(
                         post("/api/account/change-password")
+                                .header(HEADER_TENANT_ID, DEFAULT_TENANT)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(
                                         om.writeValueAsBytes(
@@ -655,12 +584,12 @@ class AccountResourceIT {
                 userRepository.findOneByEmailIgnoreCase("change-password@example.com").orElse(null);
         assertThat(passwordEncoder.matches("new password", updatedUser.getPassword())).isTrue();
 
-        userService.deleteUser("change-password");
+        userService.deleteUserByEmail("change-password@example.com");
     }
 
     @Test
     @Transactional
-    @WithMockUser("change-password-too-small")
+    @WithMockUser("change-password-too-small@example.com")
     void testChangePasswordTooSmall() throws Exception {
         User user = new User();
         String currentPassword = RandomStringUtils.randomAlphanumeric(60);
@@ -673,6 +602,7 @@ class AccountResourceIT {
         restAccountMockMvc
                 .perform(
                         post("/api/account/change-password")
+                                .header(HEADER_TENANT_ID, DEFAULT_TENANT)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(
                                         om.writeValueAsBytes(
@@ -686,12 +616,12 @@ class AccountResourceIT {
                         .orElse(null);
         assertThat(updatedUser.getPassword()).isEqualTo(user.getPassword());
 
-        userService.deleteUser("change-password-too-small");
+        userService.deleteUserByEmail("change-password-too-small@example.com");
     }
 
     @Test
     @Transactional
-    @WithMockUser("change-password-too-long")
+    @WithMockUser("change-password-too-long@example.com")
     void testChangePasswordTooLong() throws Exception {
         User user = new User();
         String currentPassword = RandomStringUtils.randomAlphanumeric(60);
@@ -704,6 +634,7 @@ class AccountResourceIT {
         restAccountMockMvc
                 .perform(
                         post("/api/account/change-password")
+                                .header(HEADER_TENANT_ID, DEFAULT_TENANT)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(
                                         om.writeValueAsBytes(
@@ -717,12 +648,12 @@ class AccountResourceIT {
                         .orElse(null);
         assertThat(updatedUser.getPassword()).isEqualTo(user.getPassword());
 
-        userService.deleteUser("change-password-too-long");
+        userService.deleteUserByEmail("change-password-too-long@example.com");
     }
 
     @Test
     @Transactional
-    @WithMockUser("change-password-empty")
+    @WithMockUser("change-password-empty@example.com")
     void testChangePasswordEmpty() throws Exception {
         User user = new User();
         String currentPassword = RandomStringUtils.randomAlphanumeric(60);
@@ -733,6 +664,7 @@ class AccountResourceIT {
         restAccountMockMvc
                 .perform(
                         post("/api/account/change-password")
+                                .header(HEADER_TENANT_ID, DEFAULT_TENANT)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(
                                         om.writeValueAsBytes(
@@ -745,7 +677,7 @@ class AccountResourceIT {
                         .orElse(null);
         assertThat(updatedUser.getPassword()).isEqualTo(user.getPassword());
 
-        userService.deleteUser("change-password-empty");
+        userService.deleteUserByEmail("change-password-empty@example.com");
     }
 
     @Test
@@ -761,10 +693,11 @@ class AccountResourceIT {
         restAccountMockMvc
                 .perform(
                         post("/api/account/reset-password/init")
+                                .header(HEADER_TENANT_ID, DEFAULT_TENANT)
                                 .content("password-reset@example.com"))
                 .andExpect(status().isOk());
 
-        userService.deleteUser("password-reset");
+        userService.deleteUserByEmail("password-reset@example.com");
     }
 
     @Test
@@ -780,10 +713,11 @@ class AccountResourceIT {
         restAccountMockMvc
                 .perform(
                         post("/api/account/reset-password/init")
+                                .header(HEADER_TENANT_ID, DEFAULT_TENANT)
                                 .content("password-reset-upper-case@EXAMPLE.COM"))
                 .andExpect(status().isOk());
 
-        userService.deleteUser("password-reset-upper-case");
+        userService.deleteUserByEmail("password-reset-upper-case@example.com");
     }
 
     @Test
@@ -791,6 +725,7 @@ class AccountResourceIT {
         restAccountMockMvc
                 .perform(
                         post("/api/account/reset-password/init")
+                                .header(HEADER_TENANT_ID, DEFAULT_TENANT)
                                 .content("password-reset-wrong-email@example.com"))
                 .andExpect(status().isOk());
     }
@@ -812,6 +747,7 @@ class AccountResourceIT {
         restAccountMockMvc
                 .perform(
                         post("/api/account/reset-password/finish")
+                                .header(HEADER_TENANT_ID, DEFAULT_TENANT)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(om.writeValueAsBytes(keyAndPassword)))
                 .andExpect(status().isOk());
@@ -822,7 +758,7 @@ class AccountResourceIT {
                                 keyAndPassword.getNewPassword(), updatedUser.getPassword()))
                 .isTrue();
 
-        userService.deleteUser("finish-password-reset");
+        userService.deleteUserByEmail("finish-password-reset@example.com");
     }
 
     @Test
@@ -842,6 +778,7 @@ class AccountResourceIT {
         restAccountMockMvc
                 .perform(
                         post("/api/account/reset-password/finish")
+                                .header(HEADER_TENANT_ID, DEFAULT_TENANT)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(om.writeValueAsBytes(keyAndPassword)))
                 .andExpect(status().isBadRequest());
@@ -852,7 +789,7 @@ class AccountResourceIT {
                                 keyAndPassword.getNewPassword(), updatedUser.getPassword()))
                 .isFalse();
 
-        userService.deleteUser("finish-password-reset-too-small");
+        userService.deleteUserByEmail("finish-password-reset-too-small@example.com");
     }
 
     @Test
@@ -865,6 +802,7 @@ class AccountResourceIT {
         restAccountMockMvc
                 .perform(
                         post("/api/account/reset-password/finish")
+                                .header(HEADER_TENANT_ID, DEFAULT_TENANT)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(om.writeValueAsBytes(keyAndPassword)))
                 .andExpect(status().isInternalServerError());

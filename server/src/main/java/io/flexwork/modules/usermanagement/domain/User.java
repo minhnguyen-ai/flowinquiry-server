@@ -87,14 +87,6 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
     @BatchSize(size = 20)
     private Set<Authority> authorities = new HashSet<>();
 
-    public ZoneId getTimezone() {
-        return ZoneId.of(timezone);
-    }
-
-    public void setTimezone(ZoneId timezone) {
-        this.timezone = timezone.getId();
-    }
-
     public LocalDateTime getLastLoginTime() {
         if (lastLoginTime == null) return null;
         ZoneId userZone = ZoneId.of(timezone);

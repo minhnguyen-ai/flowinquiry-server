@@ -1,48 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <databaseChangeLog
-        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
 
-    <changeSet id="00000000000000:1-create-schema" author="flexapp">
-        <sql>
-            CREATE SCHEMA IF NOT EXISTS flexwork_master;
-        </sql>
-    </changeSet>
-    <changeSet id="00000000000000:2-tenant-tables" author="flexapp">
-        <createTable tableName="fw_tenant" schemaName="flexwork_master">
-            <column name="id" type="bigint" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false" />
-            </column>
-            <column name="name" type="varchar(255)">
-                <constraints nullable="false" unique="true"/>
-            </column>
-            <column name="name_id" type="varchar(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="description" type="varchar(4000)"/>
-            <column name="logo_url" type="varchar(255)"/>
-            <column name="domain" type="varchar(255)">
-                <constraints nullable="false" unique="true"/>
-            </column>
-            <column name="created_by" type="varchar(50)">
-                <constraints nullable="true"/>
-            </column>
-            <column name="created_date" type="timestamp"/>
-            <column name="last_modified_by" type="varchar(50)"/>
-            <column name="last_modified_date" type="timestamp"/>
-        </createTable>
-    </changeSet>
-    <changeSet id="00000000000003" author="flexapp">
-        <insert tableName="fw_tenant" schemaName="flexwork_master">
-            <column name="name" value="flexwork"/>
-            <column name="name_id" value="flexwork"/>
-            <column name="description" value="Default tenant"/>
-            <column name="domain" value=""/>
-            <column name="created_by" value="Hai Nguyen"/>
-        </insert>
-    </changeSet>
+	<changeSet id="00000000000000:1-create-schema"
+		author="flexapp">
+		<sql>
+			CREATE SCHEMA IF NOT EXISTS flexwork_master;
+		</sql>
+	</changeSet>
+	<changeSet id="00000000000000:2-tenant-tables"
+		author="flexapp">
+		<createTable tableName="fw_tenant"
+			schemaName="flexwork_master">
+			<column name="id" type="bigint" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="name" type="varchar(256)">
+				<constraints nullable="false" unique="true" />
+			</column>
+			<column name="name_id" type="varchar(256)">
+				<constraints nullable="false" />
+			</column>
+			<column name="description" type="varchar(4000)" />
+			<column name="logo_url" type="varchar(256)" />
+			<column name="domain" type="varchar(256)">
+				<constraints nullable="false" unique="true" />
+			</column>
+			<column name="created_by" type="varchar(50)">
+				<constraints nullable="true" />
+			</column>
+			<column name="created_date" type="timestamp" />
+			<column name="last_modified_by" type="varchar(50)" />
+			<column name="last_modified_date" type="timestamp" />
+		</createTable>
+	</changeSet>
+	<changeSet id="00000000000003" author="flexapp">
+		<insert tableName="fw_tenant" schemaName="flexwork_master">
+			<column name="name" value="flexwork" />
+			<column name="name_id" value="flexwork" />
+			<column name="description" value="Default tenant" />
+			<column name="domain" value="" />
+			<column name="created_by" value="Hai Nguyen" />
+		</insert>
+	</changeSet>
 </databaseChangeLog>

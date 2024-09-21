@@ -14,7 +14,7 @@ public class Resource {
     @Column(name = "name", nullable = false, unique = true, length = 50)
     private String name;
 
-    @Column(name = "description", length = 255)
+    @Column(name = "description", length = 256)
     private String description;
 
     @OneToMany(mappedBy = "resource", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

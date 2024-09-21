@@ -19,7 +19,7 @@ public class Account {
     @Column(name = "id", nullable = false, updatable = false)
     private Long id;
 
-    @Column(name = "account_name", nullable = false, length = 255)
+    @Column(name = "account_name", nullable = false, length = 256)
     private String accountName;
 
     @Column(name = "account_type", nullable = false, length = 50)
@@ -28,19 +28,19 @@ public class Account {
     @Column(name = "industry", length = 100)
     private String industry;
 
-    @Column(name = "website", length = 255)
+    @Column(name = "website", length = 256)
     private String website;
 
     @Column(name = "phone_number", length = 20)
     private String phoneNumber;
 
-    @Column(name = "email", length = 255)
+    @Column(name = "email", length = 256)
     private String email;
 
-    @Column(name = "address_line1", length = 255)
+    @Column(name = "address_line1", length = 256)
     private String addressLine1;
 
-    @Column(name = "address_line2", length = 255)
+    @Column(name = "address_line2", length = 256)
     private String addressLine2;
 
     @Column(name = "city", length = 100)

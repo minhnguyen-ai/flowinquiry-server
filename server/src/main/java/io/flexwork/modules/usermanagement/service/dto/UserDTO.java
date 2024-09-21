@@ -40,14 +40,6 @@ public class UserDTO implements Serializable {
         // Customize it here if you need, or not, firstName/lastName/etc
     }
 
-    public ZoneId getTimezone() {
-        return ZoneId.of(timezone);
-    }
-
-    public void setTimezone(ZoneId timezone) {
-        this.timezone = timezone.getId();
-    }
-
     public LocalDateTime getLastLoginTime() {
         if (lastLoginTime == null) return null;
         ZoneId userZone = ZoneId.of(timezone);

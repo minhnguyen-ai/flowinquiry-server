@@ -6,12 +6,22 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Objects;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.domain.Persistable;
 
 /** A Authority. */
 @Entity
 @Table(name = "fw_authority")
 @JsonIgnoreProperties(value = {"new", "id"})
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class Authority implements Serializable, Persistable<String> {
 
@@ -27,19 +37,6 @@ public class Authority implements Serializable, Persistable<String> {
     private String descriptiveName;
 
     @Transient private boolean isPersisted;
-
-    public String getName() {
-        return this.name;
-    }
-
-    public Authority name(String name) {
-        this.setName(name);
-        return this;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     @PostLoad
     @PostPersist
@@ -61,14 +58,6 @@ public class Authority implements Serializable, Persistable<String> {
     public Authority setIsPersisted() {
         this.isPersisted = true;
         return this;
-    }
-
-    public @NotNull @Size(max = 50) String getDescriptiveName() {
-        return descriptiveName;
-    }
-
-    public void setDescriptiveName(@NotNull @Size(max = 50) String roleName) {
-        this.descriptiveName = roleName;
     }
 
     @Override

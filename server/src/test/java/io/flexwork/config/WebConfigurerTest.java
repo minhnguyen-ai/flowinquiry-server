@@ -25,8 +25,6 @@ import org.springframework.mock.env.MockEnvironment;
 import org.springframework.mock.web.MockServletContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import tech.jhipster.config.JHipsterConstants;
-import tech.jhipster.config.JHipsterProperties;
 
 /** Unit tests for the {@link WebConfigurer} class. */
 class WebConfigurerTest {
@@ -37,7 +35,7 @@ class WebConfigurerTest {
 
     private MockEnvironment env;
 
-    private JHipsterProperties props;
+    private FlexworkProperties props;
 
     @BeforeEach
     public void setup() {
@@ -50,14 +48,14 @@ class WebConfigurerTest {
                 .addServlet(anyString(), any(Servlet.class));
 
         env = new MockEnvironment();
-        props = new JHipsterProperties();
+        props = new FlexworkProperties();
 
         webConfigurer = new WebConfigurer(env, props);
     }
 
     @Test
     void shouldCustomizeServletContainer() {
-        env.setActiveProfiles(JHipsterConstants.SPRING_PROFILE_PRODUCTION);
+        env.setActiveProfiles(FlexworkProfiles.SPRING_PROFILE_PRODUCTION);
         UndertowServletWebServerFactory container = new UndertowServletWebServerFactory();
         webConfigurer.customize(container);
         assertThat(container.getMimeMappings().get("abs")).isEqualTo("audio/x-mpeg");

@@ -27,13 +27,13 @@ public class Contact {
     @Column(name = "last_name", nullable = false, length = 100)
     private String lastName;
 
-    @Column(name = "email", nullable = false, unique = true, length = 255)
+    @Column(name = "email", nullable = false, unique = true, length = 256)
     private String email;
 
     @Column(name = "phone", length = 20)
     private String phone;
 
-    @Column(name = "address", length = 255)
+    @Column(name = "address", length = 256)
     private String address;
 
     @Column(name = "city", length = 100)

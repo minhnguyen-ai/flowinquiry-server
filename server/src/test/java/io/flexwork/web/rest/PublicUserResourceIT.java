@@ -4,6 +4,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import io.flexwork.DefaultTenantContext;
 import io.flexwork.IntegrationTest;
 import io.flexwork.modules.usermanagement.AuthoritiesConstants;
 import io.flexwork.modules.usermanagement.domain.User;
@@ -11,7 +12,6 @@ import io.flexwork.modules.usermanagement.repository.UserRepository;
 import io.flexwork.modules.usermanagement.service.UserService;
 import io.flexwork.modules.usermanagement.web.rest.PublicUserResource;
 import jakarta.persistence.EntityManager;
-import java.util.Set;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,9 +26,8 @@ import org.springframework.transaction.annotation.Transactional;
 @AutoConfigureMockMvc
 @WithMockUser(authorities = AuthoritiesConstants.ADMIN)
 @IntegrationTest
+@DefaultTenantContext
 class PublicUserResourceIT {
-
-    private static final String DEFAULT_LOGIN = "johndoe";
 
     @Autowired private UserRepository userRepository;
 
@@ -53,7 +52,7 @@ class PublicUserResourceIT {
 
     @AfterEach
     public void cleanupAndCheck() {
-        userService.deleteUser(user.getEmail());
+        userService.deleteUserByEmail(user.getEmail());
         assertThat(userRepository.count()).isEqualTo(numberOfUsers);
         numberOfUsers = null;
     }
@@ -69,13 +68,9 @@ class PublicUserResourceIT {
                 .perform(get("/api/users?sort=id,desc").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(jsonPath("$.[?(@.id == %d)].email", user.getId()).value(user.getEmail()))
                 .andExpect(
-                        jsonPath("$.[?(@.id == %d)].keys()", user.getId())
-                                .value(Set.of("id", "login")))
-                .andExpect(jsonPath("$.[*].email").doesNotHaveJsonPath())
-                .andExpect(jsonPath("$.[*].imageUrl").doesNotHaveJsonPath())
-                .andExpect(jsonPath("$.[*].langKey").doesNotHaveJsonPath());
+                        jsonPath("$.content[?(@.id == %d)].email", user.getId())
+                                .value(user.getEmail()));
     }
 
     @Test

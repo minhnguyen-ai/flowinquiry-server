@@ -1,166 +1,156 @@
 <?xml version="1.0" encoding="utf-8"?>
 <databaseChangeLog
-        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
 
-    <changeSet id="00000000000000:core-tables" author="flexapp">
-        <createTable tableName="fw_user">
-            <column name="id" type="bigint" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="password_hash" type="varchar(60)"/>
-            <column name="first_name" type="varchar(50)"/>
-            <column name="last_name" type="varchar(50)"/>
-            <column name="email" type="varchar(191)">
-                <constraints unique="true" nullable="true" uniqueConstraintName="ux_user_email"/>
-            </column>
-            <column name="timezone" type="VARCHAR(100)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="last_login_time" type="TIMESTAMP"/>
-            <column name="image_url" type="varchar(256)"/>
-            <column name="activated" type="boolean" valueBoolean="false">
-                <constraints nullable="false" />
-            </column>
-            <column name="lang_key" type="varchar(10)"/>
-            <column name="activation_key" type="varchar(20)"/>
-            <column name="reset_key" type="varchar(20)"/>
-            <column name="created_by" type="varchar(50)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="created_date" type="timestamp"/>
-            <column name="reset_date" type="timestamp">
-                <constraints nullable="true"/>
-            </column>
-            <column name="last_modified_by" type="varchar(50)"/>
-            <column name="last_modified_date" type="timestamp"/>
-        </createTable>
+	<changeSet id="00000000000000:1-core-tables" author="flexapp">
+		<createSequence sequenceName="sequence_generator"
+			minValue="1" startValue="3" incrementBy="3" />
+		<createTable tableName="fw_user">
+			<column name="id" type="bigint" autoIncrement="true">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="password_hash" type="varchar(60)" />
+			<column name="first_name" type="varchar(50)" />
+			<column name="last_name" type="varchar(50)" />
+			<column name="email" type="varchar(256)">
+				<constraints unique="true" nullable="true"
+					uniqueConstraintName="ux_user_email" />
+			</column>
+			<column name="timezone" type="VARCHAR(100)"
+				defaultValue="America/Los_Angeles">
+				<constraints nullable="true" />
+			</column>
+			<column name="last_login_time" type="TIMESTAMP" />
+			<column name="image_url" type="varchar(256)" />
+			<column name="activated" type="boolean" valueBoolean="false">
+				<constraints nullable="false" />
+			</column>
+			<column name="lang_key" type="varchar(10)" />
+			<column name="activation_key" type="varchar(20)" />
+			<column name="reset_key" type="varchar(20)" />
+			<column name="created_by" type="varchar(256)">
+				<constraints nullable="false" />
+			</column>
+			<column name="created_date" type="timestamp" />
+			<column name="reset_date" type="timestamp">
+				<constraints nullable="true" />
+			</column>
+			<column name="last_modified_by" type="varchar(256)" />
+			<column name="last_modified_date" type="timestamp" />
+		</createTable>
 
-        <createTable tableName="fw_authority">
-            <column name="name" type="varchar(50)">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="descriptive_name" type="varchar(50)">
-                <constraints unique="true" nullable="false"/>
-            </column>
-            <column name="systemRole" type="BOOLEAN" defaultValueBoolean="false"/>
-            <column name="description" type="VARCHAR(255)"/>
-        </createTable>
+		<createTable tableName="fw_authority">
+			<column name="name" type="varchar(50)">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="descriptive_name" type="varchar(50)">
+				<constraints unique="true" nullable="false" />
+			</column>
+			<column name="systemRole" type="BOOLEAN"
+				defaultValueBoolean="false" />
+			<column name="description" type="VARCHAR(256)" />
+		</createTable>
 
-        <createTable tableName="fw_user_authority">
-            <column name="user_id" type="bigint">
-                <constraints nullable="false"/>
-            </column>
-            <column name="authority_name" type="varchar(50)">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
+		<createTable tableName="fw_user_authority">
+			<column name="user_id" type="bigint">
+				<constraints nullable="false" />
+			</column>
+			<column name="authority_name" type="varchar(50)">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
 
-        <addPrimaryKey columnNames="user_id, authority_name" tableName="fw_user_authority"/>
+		<addPrimaryKey columnNames="user_id, authority_name"
+			tableName="fw_user_authority" />
 
-        <addForeignKeyConstraint baseColumnNames="authority_name"
-                                 baseTableName="fw_user_authority"
-                                 constraintName="fk_authority_name"
-                                 referencedColumnNames="name"
-                                 referencedTableName="fw_authority"/>
+		<addForeignKeyConstraint
+			baseColumnNames="authority_name" baseTableName="fw_user_authority"
+			constraintName="fk_authority_name" referencedColumnNames="name"
+			referencedTableName="fw_authority" />
 
-        <addForeignKeyConstraint baseColumnNames="user_id"
-                                 baseTableName="fw_user_authority"
-                                 constraintName="fk_user_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="fw_user"/>
+		<addForeignKeyConstraint
+			baseColumnNames="user_id" baseTableName="fw_user_authority"
+			constraintName="fk_user_id" referencedColumnNames="id"
+			referencedTableName="fw_user" />
 
-        <addNotNullConstraint   columnName="password_hash"
-                                columnDataType="varchar(60)"
-                                tableName="fw_user"/>
+		<addNotNullConstraint columnName="password_hash"
+			columnDataType="varchar(60)" tableName="fw_user" />
 
-        <createTable tableName="fw_resource">
-            <column name="name" type="VARCHAR(50)">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="description" type="VARCHAR(255)"/>
-        </createTable>
+		<createTable tableName="fw_resource">
+			<column name="name" type="VARCHAR(50)">
+				<constraints nullable="false" primaryKey="true" />
+			</column>
+			<column name="description" type="VARCHAR(256)" />
+		</createTable>
 
-        <createTable tableName="fw_authority_resource_permission">
-            <column name="authority_name" type="VARCHAR(50)">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="resource_name" type="VARCHAR(50)">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="permission" type="VARCHAR(20)">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-        </createTable>
+		<createTable tableName="fw_authority_resource_permission">
+			<column name="authority_name" type="VARCHAR(50)">
+				<constraints nullable="false" primaryKey="true" />
+			</column>
+			<column name="resource_name" type="VARCHAR(50)">
+				<constraints nullable="false" primaryKey="true" />
+			</column>
+			<column name="permission" type="VARCHAR(20)">
+				<constraints nullable="false" primaryKey="true" />
+			</column>
+		</createTable>
 
-        <addForeignKeyConstraint
-                baseTableName="fw_authority_resource_permission"
-                baseColumnNames="authority_name"
-                referencedTableName="fw_authority"
-                referencedColumnNames="name"
-                onDelete="CASCADE"
-                constraintName="fk_authority_resource_permissions_role"/>
-        <addForeignKeyConstraint
-                baseTableName="fw_authority_resource_permission"
-                baseColumnNames="resource_name"
-                referencedTableName="fw_resource"
-                referencedColumnNames="name"
-                onDelete="CASCADE"
-                constraintName="fk_authority_resource_permissions_resource"/>
+		<addForeignKeyConstraint
+			baseTableName="fw_authority_resource_permission"
+			baseColumnNames="authority_name" referencedTableName="fw_authority"
+			referencedColumnNames="name" onDelete="CASCADE"
+			constraintName="fk_authority_resource_permissions_role" />
+		<addForeignKeyConstraint
+			baseTableName="fw_authority_resource_permission"
+			baseColumnNames="resource_name" referencedTableName="fw_resource"
+			referencedColumnNames="name" onDelete="CASCADE"
+			constraintName="fk_authority_resource_permissions_resource" />
 
-        <loadData
-                file="config/liquibase/tenant/data/authority.csv"
-                separator=";"
-                tableName="fw_authority"
-                usePreparedStatements="true">
-            <column name="name" type="string"/>
-        </loadData>
-        <loadData
-                file="config/liquibase/tenant/data/user.csv"
-                separator=";"
-                tableName="fw_user"
-                usePreparedStatements="true">
-            <column name="id" type="numeric"/>
-            <column name="activated" type="boolean"/>
-            <column name="created_date" type="timestamp"/>
-        </loadData>
-        <loadData
-                file="config/liquibase/tenant/data/user_authority.csv"
-                separator=";"
-                tableName="fw_user_authority"
-                usePreparedStatements="true">
-            <column name="user_id" type="numeric"/>
-        </loadData>
-        <loadData
-                file="config/liquibase/tenant/data/resource.csv"
-                separator=";"
-                tableName="fw_resource"
-                usePreparedStatements="true"/>
-        <loadData
-                file="config/liquibase/tenant/data/authority_resource_permission.csv"
-                separator=";"
-                tableName="fw_authority_resource_permission"
-                usePreparedStatements="true"/>
+		<loadData file="config/liquibase/tenant/data/authority.csv"
+			separator=";" tableName="fw_authority" usePreparedStatements="true">
+			<column name="name" type="string" />
+		</loadData>
+		<loadData file="config/liquibase/tenant/data/user.csv"
+			separator=";" tableName="fw_user" usePreparedStatements="true">
+			<column name="id" type="numeric" />
+			<column name="activated" type="boolean" />
+			<column name="created_date" type="timestamp" />
+		</loadData>
+		<loadData
+			file="config/liquibase/tenant/data/user_authority.csv" separator=";"
+			tableName="fw_user_authority" usePreparedStatements="true">
+			<column name="user_id" type="numeric" />
+		</loadData>
+		<loadData file="config/liquibase/tenant/data/resource.csv"
+			separator=";" tableName="fw_resource" usePreparedStatements="true" />
+		<loadData
+			file="config/liquibase/tenant/data/authority_resource_permission.csv"
+			separator=";" tableName="fw_authority_resource_permission"
+			usePreparedStatements="true" />
 
-        <dropDefaultValue tableName="fw_user" columnName="created_date" columnDataType="${datetimeType}"/>
-    </changeSet>
+		<dropDefaultValue tableName="fw_user"
+			columnName="created_date" columnDataType="${datetimeType}" />
+	</changeSet>
 
-    <changeSet author="flexapp" id="00000000000000:2-table-for-tests" context="test">
-        <createTable tableName="fw_date_time_wrapper">
-            <column  name="id" type="BIGINT">
-                <constraints primaryKey="true" primaryKeyName="fw_date_time_wrapperPK"/>
-            </column>
-            <column name="instant" type="timestamp"/>
-            <column name="local_date_time" type="timestamp"/>
-            <column name="offset_date_time" type="timestamp"/>
-            <column name="zoned_date_time" type="timestamp"/>
-            <column name="local_time" type="time"/>
-            <column name="offset_time" type="time"/>
-            <column name="local_date" type="date"/>
-        </createTable>
-    </changeSet>
+	<changeSet author="flexapp"
+		id="00000000000000:2-table-for-tests" context="test">
+		<createTable tableName="fw_date_time_wrapper">
+			<column name="id" type="BIGINT">
+				<constraints primaryKey="true"
+					primaryKeyName="fw_date_time_wrapperPK" />
+			</column>
+			<column name="instant" type="timestamp" />
+			<column name="local_date_time" type="timestamp" />
+			<column name="offset_date_time" type="timestamp" />
+			<column name="zoned_date_time" type="timestamp" />
+			<column name="local_time" type="time" />
+			<column name="offset_time" type="time" />
+			<column name="local_date" type="date" />
+		</createTable>
+	</changeSet>
 </databaseChangeLog>
