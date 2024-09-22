@@ -23,14 +23,14 @@ type paramsProps = {
 };
 
 const AccountsPage = async ({ searchParams }: paramsProps) => {
-  const { ok, data } = await getAccounts();
+  const { ok, data: accountPageResult } = await getAccounts();
   if (!ok) {
     throw new Error("Failed to load accounts");
   }
   const page = Number(searchParams.page) || 1;
-  console.log("Data " + JSON.stringify(data));
-  const pageLimit = data.size || 1;
-  const totalElements = data.totalElements;
+  console.log("Data " + JSON.stringify(accountPageResult));
+  const pageLimit = accountPageResult!.size || 1;
+  const totalElements = accountPageResult!.totalElements;
   const pageCount = Math.ceil(totalElements / pageLimit);
   return (
     <div className="space-y-4">
@@ -50,7 +50,7 @@ const AccountsPage = async ({ searchParams }: paramsProps) => {
         </Link>
       </div>
       <Separator />
-      <DataTable columns={columns} data={data.content} />
+      <DataTable columns={columns} data={accountPageResult!.content} />
     </div>
   );
 };

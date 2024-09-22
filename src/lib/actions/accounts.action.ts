@@ -8,7 +8,9 @@ import { BACKEND_API } from "@/lib/constants";
 import { accountSchema, AccountType } from "@/types/accounts";
 import { ActionResult, PageableResult } from "@/types/commons";
 
-export const getAccounts = async (): Promise<ActionResult> => {
+export const getAccounts = async (): Promise<
+  ActionResult<PageableResult<AccountType>>
+> => {
   const session = await auth();
 
   const res = await fetch(`${BACKEND_API}/api/crm/accounts`, {
@@ -34,10 +36,10 @@ export const getAccounts = async (): Promise<ActionResult> => {
 };
 
 export const saveOrUpdateAccount = async (
-  prevState: ActionResult,
+  prevState: String,
   isEdit: boolean,
   account: AccountType,
-): Promise<ActionResult> => {
+): Promise<ActionResult<AccountType>> => {
   const validation = accountSchema.safeParse(account);
 
   if (validation.success) {
@@ -61,7 +63,7 @@ export const saveOrUpdateAccount = async (
           Accept: "application/json",
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
-          Authorization: `Bearer ${session?.user?.accessToken}`,
+          Authorization: `Bearer ${session?.user?.firstName}`,
         },
         body: JSON.stringify(account),
       });

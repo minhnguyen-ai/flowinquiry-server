@@ -3,7 +3,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 
 import apiAuthSignIn from "@/lib/api";
 
-export const { handlers, signIn, signOut, auth } = NextAuth({
+export const { handlers, auth } = NextAuth({
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -23,7 +23,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }),
   ],
   callbacks: {
-    async jwt({ token, account, user }) {
+    jwt({ token, account, user }) {
       if (user) {
         token.accessToken = user?.accessToken;
         token.id = user.id;
@@ -31,8 +31,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       }
       return token;
     },
-    async session({ session, token, user }) {
-      return { ...session, user: token.user };
+    session({ session, token }) {
+      // session.user = token.user;
+      return session;
     },
   },
   session: {

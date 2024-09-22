@@ -104,7 +104,8 @@ const Navbar = () => {
                   </Avatar>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>{session?.user?.firstName}</p>
+                  {/*<p>{session?.user?.firstName}</p>*/}
+                  <p>Fix me</p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>

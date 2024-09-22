@@ -20,7 +20,6 @@ import { Separator } from "@/components/ui/separator";
 import { saveOrUpdateAccount } from "@/lib/actions/accounts.action";
 import { validateForm } from "@/lib/validator";
 import { accountSchema, AccountType } from "@/types/accounts";
-import { ActionResult } from "@/types/commons";
 
 export const AccountForm: React.FC<FormProps<AccountType>> = ({
   initialData,
@@ -30,10 +29,7 @@ export const AccountForm: React.FC<FormProps<AccountType>> = ({
     defaultValues: initialData,
   });
 
-  const saveAccountClientAction = async (
-    prevState: ActionResult,
-    formData: FormData,
-  ) => {
+  const saveAccountClientAction = async (state: any, formData: FormData) => {
     const account = {
       ...initialData,
       ...Object.fromEntries(formData.entries()),
@@ -41,12 +37,9 @@ export const AccountForm: React.FC<FormProps<AccountType>> = ({
 
     const validatedData = validateForm(account, accountSchema, form);
     if (validatedData) {
-      return await saveOrUpdateAccount(
-        prevState,
-        isEdit,
-        account as AccountType,
-      );
+      await saveOrUpdateAccount(state, isEdit, account as AccountType);
     }
+    return { status: "success" };
   };
 
   const [formState, formAction] = useFormState(saveAccountClientAction, {

@@ -40,8 +40,6 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ resourceServer }) => {
 
   const { data: session, status } = useSession();
 
-  console.log(`Session ${JSON.stringify(session)}`);
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
