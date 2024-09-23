@@ -2,6 +2,7 @@ import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 import apiAuthSignIn from "@/lib/api";
+import {AdapterUser} from "@auth/core/adapters";
 
 export const { handlers, auth } = NextAuth({
   providers: [
@@ -32,7 +33,7 @@ export const { handlers, auth } = NextAuth({
       return token;
     },
     session({ session, token }) {
-      // session.user = token.user;
+      session.user = token.user;
       return session;
     },
   },

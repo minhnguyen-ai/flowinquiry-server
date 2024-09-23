@@ -1,6 +1,6 @@
 import AccountForm from "@/components/accounts/account-form";
 import { Breadcrumbs } from "@/components/breadcrumbs";
-import { findAccount } from "@/lib/actions/accounts.action";
+import { findAccountByName } from "@/lib/actions/accounts.action";
 import { AccountType } from "@/types/accounts";
 
 const breadcrumbItems = [
@@ -18,7 +18,7 @@ export default async function Page({
 
   if (params.accountId == "new") {
   } else {
-    const { ok, data } = await findAccount(params.accountId);
+    const { ok, data } = await findAccountByName(params.accountId);
     if (ok) {
       account = data as AccountType;
     }

@@ -18,14 +18,24 @@ declare module "next-auth" {
     authorities: Array<AuthorityType>;
   }
 
+  export interface AdapterUser extends User {}
+
   export interface DefaultSession {
     user?: User;
     expires: ISODateString;
   }
 }
 
-// declare module "next-auth/jwt" {
-//   interface JWT {
-//     user?: User
-//   }
-// }
+declare module "next-auth/jwt" {
+  import {AdapterUser} from "@/types/next-auth";
+  interface JWT {
+    name?: string | null
+    email?: string | null
+    picture?: string | null
+    sub?: string
+    iat?: number
+    exp?: number
+    jti?: string
+    user?: AdapterUser
+  }
+}

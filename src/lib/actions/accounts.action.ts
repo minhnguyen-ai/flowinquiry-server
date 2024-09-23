@@ -2,8 +2,7 @@
 
 import { redirect } from "next/navigation";
 
-import { auth } from "@/auth";
-import { fetchData } from "@/lib/actions/commons.action";
+import {get, post, put} from "@/lib/actions/commons.action";
 import { BACKEND_API } from "@/lib/constants";
 import { accountSchema, AccountType } from "@/types/accounts";
 import { ActionResult, PageableResult } from "@/types/commons";
@@ -11,86 +10,48 @@ import { ActionResult, PageableResult } from "@/types/commons";
 export const getAccounts = async (): Promise<
   ActionResult<PageableResult<AccountType>>
 > => {
-  const session = await auth();
-
-  const res = await fetch(`${BACKEND_API}/api/crm/accounts`, {
-    headers: {
-      "Content-Type": "application/json",
-      "Access-Control-Allow-Origin": "*",
-      Authorization: `Bearer ${session?.user?.accessToken}`,
-    },
-  });
-  if (res.ok) {
-    return {
-      ok: true,
-      status: "success",
-      data: (await res.json()) as PageableResult<AccountType>,
-    };
-  } else {
-    return {
-      ok: false,
-      status: "user_error",
-      message: `Can not get the users ${res.status}`,
-    };
-  }
+  return get<PageableResult<AccountType>>(
+      `${BACKEND_API}/api/crm/accounts`,
+  );
 };
 
 export const saveOrUpdateAccount = async (
   prevState: String,
   isEdit: boolean,
   account: AccountType,
-): Promise<ActionResult<AccountType>> => {
+): Promise<ActionResult<string>> => {
   const validation = accountSchema.safeParse(account);
 
   if (validation.success) {
-    let response;
-    const session = await auth();
+    let response: ActionResult<string>;
     if (isEdit) {
-      response = await fetch(`${BACKEND_API}/api/crm/accounts/${account.id}`, {
-        method: "PUT",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          Authorization: `Bearer ${session?.user?.accessToken}`,
-        },
-        body: JSON.stringify(account),
-      });
+      response = await put<AccountType, string>(`${BACKEND_API}/api/crm/accounts/${account.id}`, account);
     } else {
-      response = await fetch(`${BACKEND_API}/api/crm/accounts`, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-          Authorization: `Bearer ${session?.user?.firstName}`,
-        },
-        body: JSON.stringify(account),
-      });
+      response = await post<AccountType, string>(`${BACKEND_API}/api/crm/accounts`, account);
     }
 
     if (response.ok) {
       redirect("/portal/accounts");
     } else {
-      return { ok: true, status: "system_error", message: response.statusText };
+      return response;
     }
   } else {
-    return { ok: false, status: "user_error" };
+    return { ok: false, status: "user_error", message: "Validation failed" };
   }
 };
 
-export const findAccount = async (accountId: number) => {
-  return fetchData<AccountType>(`${BACKEND_API}/api/crm/accounts/${accountId}`);
+export const findAccountByName = async (accountId: number) => {
+  return get<AccountType>(`${BACKEND_API}/api/crm/accounts/${accountId}`);
 };
 
 export const findPreviousAccount = async (accountId: number) => {
-  return fetchData<AccountType>(
+  return get<AccountType>(
     `${BACKEND_API}/api/crm/accounts/previous/${accountId}`,
   );
 };
 
 export const findNextAccount = async (accountId: number) => {
-  return fetchData<AccountType>(
+  return get<AccountType>(
     `${BACKEND_API}/api/crm/accounts/next/${accountId}`,
   );
 };

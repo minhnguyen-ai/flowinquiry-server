@@ -3,13 +3,13 @@
 import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
-import { fetchData } from "@/lib/actions/commons.action";
+import { get } from "@/lib/actions/commons.action";
 import { BACKEND_API } from "@/lib/constants";
 import { PageableResult } from "@/types/commons";
 import { userSchema, UserType } from "@/types/users";
 
 export const getUsers = async () => {
-  return fetchData<PageableResult<UserType>>(`${BACKEND_API}/api/users`);
+  return get<PageableResult<UserType>>(`${BACKEND_API}/api/users`);
 };
 
 export const createUser = async (user: UserType) => {

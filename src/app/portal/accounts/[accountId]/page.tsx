@@ -2,14 +2,14 @@ import { notFound } from "next/navigation";
 
 import { AccountView } from "@/components/accounts/account-view";
 import { Breadcrumbs } from "@/components/breadcrumbs";
-import { findAccount } from "@/lib/actions/accounts.action";
+import { findAccountByName } from "@/lib/actions/accounts.action";
 
 export default async function Page({
   params,
 }: {
   params: { accountId: number };
 }) {
-  const { ok, data: account } = await findAccount(params.accountId);
+  const { ok, data: account } = await findAccountByName(params.accountId);
   if (!ok) {
     notFound();
   }
