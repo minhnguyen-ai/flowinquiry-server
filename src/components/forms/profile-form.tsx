@@ -6,6 +6,7 @@ import React, { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import TimezoneSelect from "@/components/shared/timezones-select";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -121,6 +122,7 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ resourceServer }) => {
             label="Last Name"
             placeholder="Last Name"
           />
+          <TimezoneSelect form={form} required={true} />
           <Button type="submit">Submit</Button>
         </form>
       </Form>

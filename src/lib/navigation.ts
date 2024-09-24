@@ -2,33 +2,33 @@ import { Building2, Files, Home, Settings, Users } from "lucide-react";
 
 export const menu_entries = [
   {
-    value: "dashboard",
-    label: "Dashboard",
+    title: "Dashboard",
     href: "/",
     icon: Home,
+    variant: "default" as const,
   },
   {
-    value: "accounts",
-    label: "Accounts",
+    title: "Accounts",
     href: "/portal/accounts",
     icon: Building2,
+    variant: "ghost" as const,
   },
   {
-    value: "files",
-    label: "Files",
+    title: "Files",
     href: "/portal/files",
     icon: Files,
+    variant: "ghost" as const,
   },
   {
-    value: "users",
-    label: "Users",
+    title: "Users",
     href: "/portal/users",
     icon: Users,
+    variant: "ghost" as const,
   },
   {
-    value: "settings",
-    label: "Settings",
+    title: "Settings",
     href: "/portal/settings",
     icon: Settings,
+    variant: "ghost" as const,
   },
 ];

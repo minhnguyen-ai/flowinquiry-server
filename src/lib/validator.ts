@@ -8,7 +8,7 @@ export const validateForm = <T>(
   form: any,
 ) => {
   form.clearErrors(); // Clear existing errors
-
+  console.log(`Form data ${JSON.stringify(formDataObject)}`);
   // Validate against schema
   const validation = schema.safeParse(formDataObject);
 
@@ -16,6 +16,7 @@ export const validateForm = <T>(
     // If validation fails, set errors on the form
     validation.error.issues.forEach((issue) => {
       const field = issue.path[0] as string;
+      console.log(`Error ${field} message ${issue.message}`);
       form.setError(field, { message: issue.message });
     });
 

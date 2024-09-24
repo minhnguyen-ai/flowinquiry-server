@@ -5,8 +5,6 @@ import React from "react";
 import { useFormState } from "react-dom";
 import { useForm } from "react-hook-form";
 
-import AccountIndustriesSelect from "@/components/accounts/account-industries-select";
-import AccountTypesSelect from "@/components/accounts/account-types-select";
 import { Heading } from "@/components/heading";
 import {
   ExtInputField,
@@ -17,42 +15,50 @@ import {
 import ValuesSelect from "@/components/ui/ext-select-values";
 import { Form } from "@/components/ui/form";
 import { Separator } from "@/components/ui/separator";
-import { saveOrUpdateAccount } from "@/lib/actions/accounts.action";
+import { saveOrUpdateContact } from "@/lib/actions/contacts.action";
 import { validateForm } from "@/lib/validator";
-import { accountSchema, AccountType } from "@/types/accounts";
+import { contactSchema, ContactType } from "@/types/contacts";
 
-export const AccountForm: React.FC<FormProps<AccountType>> = ({
+export const ContactForm: React.FC<FormProps<ContactType>> = ({
   initialData,
-}: FormProps<AccountType>) => {
-  const form = useForm<AccountType>({
-    resolver: zodResolver(accountSchema),
+}: FormProps<ContactType>) => {
+  const form = useForm<ContactType>({
+    resolver: zodResolver(contactSchema),
     defaultValues: initialData,
   });
 
-  const saveAccountClientAction = async (state: any, formData: FormData) => {
-    const account = {
+  const isEdit = !!initialData;
+  const title = isEdit
+    ? `Edit contact ${initialData?.firstName} ${initialData?.lastName}`
+    : "Create contact";
+  const description = isEdit ? "Edit contact" : "Add a new contact";
+  const submitText = isEdit ? "Save changes" : "Create";
+  const submitTextWhileLoading = isEdit ? "Saving changes ..." : "Creating ...";
+
+  const saveContactClientAction = async (state: any, formData: FormData) => {
+    const contact = {
       ...initialData,
       ...Object.fromEntries(formData.entries()),
     }!;
 
-    if (validateForm(account, accountSchema, form)) {
-      await saveOrUpdateAccount(state, isEdit, account as AccountType);
+    contact.account = {
+      id: 1,
+      accountName: "a",
+      accountType: "x",
+      industry: "s",
+      status: "d",
+    }; // FIX ME
+    console.log(`After assign account ${JSON.stringify(contact)}`);
+    if (validateForm(contact, contactSchema, form)) {
+      await saveOrUpdateContact(state, isEdit, contact as ContactType);
     }
 
     return { status: "success" };
   };
 
-  const [formState, formAction] = useFormState(saveAccountClientAction, {
+  const [formState, formAction] = useFormState(saveContactClientAction, {
     status: "default",
   });
-
-  const isEdit = !!initialData;
-  const title = isEdit
-    ? `Edit account ${initialData?.accountName}`
-    : "Create account";
-  const description = isEdit ? "Edit account" : "Add a new account";
-  const submitText = isEdit ? "Save changes" : "Create";
-  const submitTextWhileLoading = isEdit ? "Saving changes ..." : "Creating ...";
 
   return (
     <>
@@ -68,42 +74,44 @@ export const AccountForm: React.FC<FormProps<AccountType>> = ({
           <ExtInputField
             form={form}
             required={true}
-            fieldName="accountName"
-            label="Name"
-            placeholder="Account Name"
-          />
-          <AccountTypesSelect form={form} required={true} />
-          <AccountIndustriesSelect form={form} required={true} />
-          <ExtInputField
-            form={form}
-            required={true}
-            fieldName="addressLine1"
-            label="Address 1"
-            placeholder="Address 1"
-          />
-          <ExtInputField
-            form={form}
-            fieldName="addressLine2"
-            label="Address 2"
-            placeholder="Address 2"
+            fieldName="firstName"
+            label="First Name"
+            placeholder="First Name"
           />
           <ExtInputField
             form={form}
             required={true}
+            fieldName="lastName"
+            label="Last Name"
+            placeholder="Last Name"
+          />
+          <ExtInputField
+            form={form}
+            required={true}
+            fieldName="email"
+            label="Email"
+            placeholder="Email"
+          />
+          <ExtInputField
+            form={form}
+            fieldName="address"
+            label="Address"
+            placeholder="Address"
+          />
+          <ExtInputField
+            form={form}
             fieldName="city"
             label="City"
             placeholder="City"
           />
           <ExtInputField
             form={form}
-            required={true}
             fieldName="state"
             label="State"
             placeholder="State"
           />
           <ExtInputField
             form={form}
-            required={true}
             fieldName="postalCode"
             label="Postal Code"
             placeholder="Postal Code"
@@ -111,20 +119,14 @@ export const AccountForm: React.FC<FormProps<AccountType>> = ({
           <ExtInputField
             form={form}
             fieldName="phoneNumber"
-            label="Phone"
-            placeholder="Phone number"
+            label="Phone Number"
+            placeholder="Phone Number"
           />
           <ExtInputField
             form={form}
-            fieldName="website"
-            label="Website"
-            placeholder="https://example.com"
-          />
-          <ExtInputField
-            form={form}
-            fieldName="annualRevenue"
-            label="Annual Revenue"
-            placeholder="Annual Revenue"
+            fieldName="position"
+            label="Position"
+            placeholder="Position"
           />
           <ValuesSelect
             form={form}
@@ -145,4 +147,4 @@ export const AccountForm: React.FC<FormProps<AccountType>> = ({
   );
 };
 
-export default AccountForm;
+export default ContactForm;

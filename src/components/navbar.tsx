@@ -2,10 +2,12 @@
 
 import { Menu, Package2 } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
 
+import ThemeToggler from "@/components/theme-toggler";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -37,9 +39,11 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { menu_entries } from "@/lib/navigation";
+import { cn } from "@/lib/utils";
 
 const Navbar = () => {
   const { data: session, status } = useSession();
+  const pathName = usePathname();
 
   return (
     <header className="flex h-14 items-center gap-4 border-b bg-muted/40 px-4 lg:h-[60px] lg:px-6">
@@ -59,14 +63,22 @@ const Navbar = () => {
               <Package2 className="h-6 w-6" />
               <span className="sr-only">Flexwork</span>
             </Link>
-            {menu_entries.map((menu_entry) => (
+            {menu_entries.map((menu_entry, index) => (
               <Link
-                key={menu_entry.label}
+                key={index}
                 href={menu_entry.href}
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+                className={cn(
+                  buttonVariants({
+                    variant: menu_entry.href === pathName ? "default" : "ghost",
+                    size: "sm",
+                  }),
+                  menu_entry.variant === "default" &&
+                    "dark:bg-muted dark:text-white dark:hover:bg-muted dark:hover:text-white",
+                  "justify-start",
+                )}
               >
-                {<menu_entry.icon className="h-4 w-4" />}
-                {menu_entry.label}
+                <menu_entry.icon className="mr-2 h-4 w-4" />
+                {menu_entry.title}
               </Link>
             ))}
           </nav>
@@ -89,6 +101,7 @@ const Navbar = () => {
         </SheetContent>
       </Sheet>
       <div className="w-full flex-1" />
+      <ThemeToggler className="ml-auto h-8 w-8" />
       <Dialog>
         <DropdownMenu>
           <DropdownMenuTrigger>

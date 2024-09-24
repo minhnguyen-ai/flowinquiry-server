@@ -27,15 +27,15 @@ declare module "next-auth" {
 }
 
 declare module "next-auth/jwt" {
-  import {AdapterUser} from "@/types/next-auth";
+  import { AdapterUser } from "@/types/next-auth";
   interface JWT {
-    name?: string | null
-    email?: string | null
-    picture?: string | null
-    sub?: string
-    iat?: number
-    exp?: number
-    jti?: string
-    user?: AdapterUser
+    name?: string | null;
+    email?: string | null;
+    picture?: string | null;
+    sub?: string;
+    iat?: number;
+    exp?: number;
+    jti?: string;
+    user?: AdapterUser;
   }
 }

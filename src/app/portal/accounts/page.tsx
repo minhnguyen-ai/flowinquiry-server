@@ -2,13 +2,13 @@ import { Plus } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 
-import { columns } from "@/components/accounts/account-table-columns";
+import { accounts_columns_def } from "@/components/accounts/account-table-columns";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { Heading } from "@/components/heading";
 import { buttonVariants } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/ext-data-table";
 import { Separator } from "@/components/ui/separator";
-import { getAccounts } from "@/lib/actions/accounts.action";
+import { findAccounts } from "@/lib/actions/accounts.action";
 import { cn } from "@/lib/utils";
 
 const breadcrumbItems = [
@@ -23,12 +23,11 @@ type paramsProps = {
 };
 
 const AccountsPage = async ({ searchParams }: paramsProps) => {
-  const { ok, data: accountPageResult } = await getAccounts();
+  const { ok, data: accountPageResult } = await findAccounts();
   if (!ok) {
     throw new Error("Failed to load accounts");
   }
   const page = Number(searchParams.page) || 1;
-  console.log("Data " + JSON.stringify(accountPageResult));
   const pageLimit = accountPageResult!.size || 1;
   const totalElements = accountPageResult!.totalElements;
   const pageCount = Math.ceil(totalElements / pageLimit);
@@ -50,7 +49,10 @@ const AccountsPage = async ({ searchParams }: paramsProps) => {
         </Link>
       </div>
       <Separator />
-      <DataTable columns={columns} data={accountPageResult!.content} />
+      <DataTable
+        columns={accounts_columns_def}
+        data={accountPageResult!.content}
+      />
     </div>
   );
 };

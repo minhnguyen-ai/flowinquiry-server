@@ -4,10 +4,10 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Circle, HelpCircle } from "lucide-react";
 import Link from "next/link";
 
-import { DataTableRowActions } from "@/components/accounts/account-table-cell-action";
+import { DataTableRowActions } from "@/components/contacts/contact-table-cell-action";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DataTableColumnHeader } from "@/components/ui/ext-data-table-column-header";
-import { AccountType } from "@/types/accounts";
+import { ContactType } from "@/types/contacts";
 
 const status_options = [
   {
@@ -21,7 +21,7 @@ const status_options = [
     icon: Circle,
   },
 ];
-export const accounts_columns_def: ColumnDef<AccountType>[] = [
+export const contacts_columns_def: ColumnDef<ContactType>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -46,31 +46,17 @@ export const accounts_columns_def: ColumnDef<AccountType>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "accountName",
+    accessorKey: "firstName",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Name" />
     ),
     cell: ({ row }) => (
       <div>
-        <Link href={`/portal/accounts/${row.original.id}`}>
-          {row.getValue("accountName")}
+        <Link href={`/portal/contacts/${row.original.id}`}>
+          {row.getValue("firstName")} {row.getValue("lastName")}
         </Link>
       </div>
     ),
-  },
-  {
-    accessorKey: "accountType",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Type" />
-    ),
-    cell: ({ row }) => <div>{row.getValue("accountType")}</div>,
-  },
-  {
-    accessorKey: "industry",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Industry" />
-    ),
-    cell: ({ row }) => <div>{row.getValue("industry")}</div>,
   },
   {
     accessorKey: "status",
