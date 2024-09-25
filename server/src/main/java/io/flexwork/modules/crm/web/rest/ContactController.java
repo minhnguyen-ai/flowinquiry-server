@@ -3,7 +3,6 @@ package io.flexwork.modules.crm.web.rest;
 import io.flexwork.modules.crm.domain.Contact;
 import io.flexwork.modules.crm.service.ContactService;
 import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -13,11 +12,20 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/crm/contacts")
 public class ContactController {
 
-    @Autowired private ContactService contactService;
+    private ContactService contactService;
+
+    public ContactController(ContactService contactService) {
+        this.contactService = contactService;
+    }
 
     @GetMapping
     public Page<Contact> getAllContacts(Pageable pageable) {
         return contactService.getAllContacts(pageable);
+    }
+
+    @GetMapping("/account/{accountId}")
+    public Page<Contact> getContacts(@PathVariable Long accountId, Pageable pageable) {
+        return contactService.findByAccountId(accountId, pageable);
     }
 
     @GetMapping("/{id}")

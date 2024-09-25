@@ -13,7 +13,7 @@ jib {
         }
     }
     to {
-        image = "flexwork-app:latest"
+        image = "theflexwork/flexwork-server-community:latest"
     }
     container {
         entrypoint = ["bash", "-c", "/entrypoint.sh"]
@@ -26,7 +26,7 @@ jib {
         user = 1000
     }
     extraDirectories {
-      paths = file("src/main/docker/jib")
+      paths = file("../docker/jib")
       permissions = ["/entrypoint.sh": "755"]
     }
 }

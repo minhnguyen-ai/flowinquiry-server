@@ -16,6 +16,10 @@ public class ContactService {
         this.contactRepository = contactRepository;
     }
 
+    public Page<Contact> findByAccountId(Long accountId, Pageable pageable) {
+        return contactRepository.findByAccountId(accountId, pageable);
+    }
+
     public Page<Contact> getAllContacts(Pageable pageable) {
         return contactRepository.findAll(pageable);
     }

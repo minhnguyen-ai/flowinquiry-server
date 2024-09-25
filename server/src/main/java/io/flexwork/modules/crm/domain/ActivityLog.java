@@ -12,7 +12,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedNativeQuery;
 import jakarta.persistence.Table;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
@@ -48,12 +47,15 @@ public class ActivityLog {
     @Column(name = "activity_type", nullable = false)
     private ActivityType activityType;
 
-    @Column(name = "activity_date", nullable = false)
-    private LocalDate activityDate;
+    @Column(name = "activity_id", nullable = false)
+    private Long activityId;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "action", nullable = false)
     private Action action;
+
+    @Column(name = "changes")
+    private String changes;
 
     @Column(name = "notes")
     private String notes;

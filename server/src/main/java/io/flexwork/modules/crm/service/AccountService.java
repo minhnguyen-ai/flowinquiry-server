@@ -1,8 +1,10 @@
 package io.flexwork.modules.crm.service;
 
 import io.flexwork.modules.crm.domain.Account;
+import io.flexwork.modules.crm.event.ActivityLogEvent;
 import io.flexwork.modules.crm.repository.AccountRepository;
 import java.util.Optional;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -12,8 +14,12 @@ public class AccountService {
 
     private final AccountRepository accountRepository;
 
-    public AccountService(AccountRepository accountRepository) {
+    private final ApplicationEventPublisher eventPublisher;
+
+    public AccountService(
+            AccountRepository accountRepository, ApplicationEventPublisher eventPublisher) {
         this.accountRepository = accountRepository;
+        this.eventPublisher = eventPublisher;
     }
 
     // Find an account by its ID
@@ -23,7 +29,11 @@ public class AccountService {
 
     // Save a new account or update an existing one
     public Account saveAccount(Account account) {
-        return accountRepository.save(account);
+        Account savedAccount = accountRepository.save(account);
+
+        ActivityLogEvent activityLogEvent = new ActivityLogEvent(this);
+        eventPublisher.publishEvent(activityLogEvent);
+        return savedAccount;
     }
 
     // Delete an account by its ID
