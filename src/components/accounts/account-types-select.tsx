@@ -1,66 +1,29 @@
 import React from "react";
 
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-} from "@/components/ui/form";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { UiAttributes } from "@/types/ui-components";
+import ValuesQuerySelect from "@/components/shared/values-query-select";
+import { findAccountTypes } from "@/lib/actions/accounts.action";
+import { EntityValueDefinition } from "@/types/commons";
+import { FormFieldProps } from "@/types/ui-components";
 
-interface AccountTypesSelectProps {
-  form: any;
-}
-
-const accountTypes = [
-  { label: "Customer-Direct" },
-  { label: "Customer-Channel" },
-  { label: "Reseller" },
-  { label: "Prospect" },
-  { label: "Other" },
-];
-
-const AccountTypesSelect = ({
-  form,
-  required,
-}: AccountTypesSelectProps & UiAttributes) => {
+const AccountTypesSelect = ({ form, required }: FormFieldProps) => {
   return (
-    <FormField
-      control={form.control}
-      name="accountType"
-      render={({ field }) => (
-        <FormItem>
-          <FormLabel>
-            Type
-            {required && <span className="text-destructive"> *</span>}
-          </FormLabel>
-          <Select
-            onValueChange={field.onChange}
-            defaultValue={accountTypes[0].label}
-            {...field}
-          >
-            <FormControl>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-            </FormControl>
-            <SelectContent>
-              {accountTypes?.map((accountType) => (
-                <SelectItem key={accountType.label} value={accountType.label}>
-                  {accountType.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </FormItem>
-      )}
+    <ValuesQuerySelect<EntityValueDefinition>
+      form={form}
+      queryName="accountTypes"
+      fieldName="accountType"
+      fieldLabel="Type"
+      fetchDataFn={findAccountTypes}
+      valueKey="value"
+      renderTooltip={(entityValueDef: EntityValueDefinition) =>
+        `${entityValueDef.description}`
+      }
+      renderOption={(entityValueDef: EntityValueDefinition) =>
+        `${entityValueDef.value}`
+      }
+      required={required}
+      placeholder="Select type"
+      noDataMessage="No type found"
+      searchPlaceholder="Search type..."
     />
   );
 };

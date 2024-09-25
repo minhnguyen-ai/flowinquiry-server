@@ -4,7 +4,11 @@ import { redirect } from "next/navigation";
 
 import { get, post, put } from "@/lib/actions/commons.action";
 import { BACKEND_API } from "@/lib/constants";
-import { ActionResult, PageableResult } from "@/types/commons";
+import {
+  ActionResult,
+  EntityValueDefinition,
+  PageableResult,
+} from "@/types/commons";
 import { contactSchema, ContactType } from "@/types/contacts";
 
 export const findContactById = async (
@@ -21,8 +25,15 @@ export const findContactsByAccountId = async (
   );
 };
 
+export const findContactStatuses = async (): Promise<
+  ActionResult<Array<EntityValueDefinition>>
+> => {
+  return get<Array<EntityValueDefinition>>(
+    `${BACKEND_API}/api/crm/values?entityType=contact&&valueKey=status`,
+  );
+};
+
 export const saveOrUpdateContact = async (
-  prevState: String,
   isEdit: boolean,
   contact: ContactType,
 ): Promise<ActionResult<string>> => {

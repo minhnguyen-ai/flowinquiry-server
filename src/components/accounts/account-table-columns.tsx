@@ -1,26 +1,14 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { Circle, HelpCircle } from "lucide-react";
 import Link from "next/link";
 
 import { DataTableRowActions } from "@/components/accounts/account-table-cell-action";
+import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DataTableColumnHeader } from "@/components/ui/ext-data-table-column-header";
 import { AccountType } from "@/types/accounts";
 
-const status_options = [
-  {
-    value: "Active",
-    label: "Active",
-    icon: HelpCircle,
-  },
-  {
-    value: "InActive",
-    label: "InActive",
-    icon: Circle,
-  },
-];
 export const accounts_columns_def: ColumnDef<AccountType>[] = [
   {
     id: "select",
@@ -51,11 +39,11 @@ export const accounts_columns_def: ColumnDef<AccountType>[] = [
       <DataTableColumnHeader column={column} title="Name" />
     ),
     cell: ({ row }) => (
-      <div>
+      <Button variant="link" asChild>
         <Link href={`/portal/accounts/${row.original.id}`}>
           {row.getValue("accountName")}
         </Link>
-      </div>
+      </Button>
     ),
   },
   {
@@ -77,27 +65,7 @@ export const accounts_columns_def: ColumnDef<AccountType>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Status" />
     ),
-    cell: ({ row }) => {
-      const status = status_options.find(
-        (status) => status.value === row.getValue("status"),
-      );
-
-      if (!status) {
-        return null;
-      }
-
-      return (
-        <div className="flex w-[100px] items-center">
-          {status.icon && (
-            <status.icon className="mr-2 h-4 w-4 text-muted-foreground" />
-          )}
-          <span>{status.label}</span>
-        </div>
-      );
-    },
-    filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id));
-    },
+    cell: ({ row }) => <div>{row.getValue("status")}</div>,
   },
   {
     accessorKey: "createdAt",

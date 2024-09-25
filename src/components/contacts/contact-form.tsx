@@ -2,9 +2,9 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
-import { useFormState } from "react-dom";
 import { useForm } from "react-hook-form";
 
+import ContactStatusSelect from "@/components/contacts/contact-status-select";
 import { Heading } from "@/components/heading";
 import {
   ExtInputField,
@@ -12,7 +12,6 @@ import {
   FormProps,
   SubmitButton,
 } from "@/components/ui/ext-form";
-import ValuesSelect from "@/components/ui/ext-select-values";
 import { Form } from "@/components/ui/form";
 import { Separator } from "@/components/ui/separator";
 import { saveOrUpdateContact } from "@/lib/actions/contacts.action";
@@ -35,12 +34,8 @@ export const ContactForm: React.FC<FormProps<ContactType>> = ({
   const submitText = isEdit ? "Save changes" : "Create";
   const submitTextWhileLoading = isEdit ? "Saving changes ..." : "Creating ...";
 
-  const saveContactClientAction = async (state: any, formData: FormData) => {
-    const contact = {
-      ...initialData,
-      ...Object.fromEntries(formData.entries()),
-    }!;
-
+  async function onSubmit(contact: ContactType) {
+    console.log(`SAubmit ${contact}`);
     contact.account = {
       id: 1,
       accountName: "a",
@@ -48,17 +43,10 @@ export const ContactForm: React.FC<FormProps<ContactType>> = ({
       industry: "s",
       status: "d",
     }; // FIX ME
-    console.log(`After assign account ${JSON.stringify(contact)}`);
     if (validateForm(contact, contactSchema, form)) {
-      await saveOrUpdateContact(state, isEdit, contact as ContactType);
+      await saveOrUpdateContact(isEdit, contact);
     }
-
-    return { status: "success" };
-  };
-
-  const [formState, formAction] = useFormState(saveContactClientAction, {
-    status: "default",
-  });
+  }
 
   return (
     <>
@@ -69,7 +57,7 @@ export const ContactForm: React.FC<FormProps<ContactType>> = ({
       <Form {...form}>
         <form
           className="grid grid-cols-1 gap-6 sm:grid-cols-2 max-w-[72rem]"
-          action={formAction}
+          onSubmit={form.handleSubmit(onSubmit)}
         >
           <ExtInputField
             form={form}
@@ -128,14 +116,7 @@ export const ContactForm: React.FC<FormProps<ContactType>> = ({
             label="Position"
             placeholder="Position"
           />
-          <ValuesSelect
-            form={form}
-            fieldName="status"
-            label="Status"
-            placeholder="Select status"
-            required={true}
-            values={["Active", "Inactive"]}
-          />
+          <ContactStatusSelect form={form} required={true} />
           <ExtTextAreaField form={form} fieldName="notes" label="Notes" />
           <SubmitButton
             label={submitText}

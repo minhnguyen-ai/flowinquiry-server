@@ -5,7 +5,11 @@ import { redirect } from "next/navigation";
 import { get, post, put } from "@/lib/actions/commons.action";
 import { BACKEND_API } from "@/lib/constants";
 import { accountSchema, AccountType } from "@/types/accounts";
-import { ActionResult, PageableResult } from "@/types/commons";
+import {
+  ActionResult,
+  EntityValueDefinition,
+  PageableResult,
+} from "@/types/commons";
 
 export const findAccounts = async (): Promise<
   ActionResult<PageableResult<AccountType>>
@@ -13,8 +17,31 @@ export const findAccounts = async (): Promise<
   return get<PageableResult<AccountType>>(`${BACKEND_API}/api/crm/accounts`);
 };
 
+export const findAccountStatuses = async (): Promise<
+  ActionResult<Array<EntityValueDefinition>>
+> => {
+  return get<Array<EntityValueDefinition>>(
+    `${BACKEND_API}/api/crm/values?entityType=account&&valueKey=status`,
+  );
+};
+
+export const findAccountTypes = async (): Promise<
+  ActionResult<Array<EntityValueDefinition>>
+> => {
+  return get<Array<EntityValueDefinition>>(
+    `${BACKEND_API}/api/crm/values?entityType=account&&valueKey=type`,
+  );
+};
+
+export const findAccountIndustries = async (): Promise<
+  ActionResult<Array<EntityValueDefinition>>
+> => {
+  return get<Array<EntityValueDefinition>>(
+    `${BACKEND_API}/api/crm/values?entityType=account&&valueKey=industry`,
+  );
+};
+
 export const saveOrUpdateAccount = async (
-  prevState: String,
   isEdit: boolean,
   account: AccountType,
 ): Promise<ActionResult<string>> => {

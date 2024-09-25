@@ -2,10 +2,10 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
-import { useFormState } from "react-dom";
 import { useForm } from "react-hook-form";
 
 import AccountIndustriesSelect from "@/components/accounts/account-industries-select";
+import AccountStatusSelect from "@/components/accounts/account-status-select";
 import AccountTypesSelect from "@/components/accounts/account-types-select";
 import { Heading } from "@/components/heading";
 import {
@@ -14,7 +14,6 @@ import {
   FormProps,
   SubmitButton,
 } from "@/components/ui/ext-form";
-import ValuesSelect from "@/components/ui/ext-select-values";
 import { Form } from "@/components/ui/form";
 import { Separator } from "@/components/ui/separator";
 import { saveOrUpdateAccount } from "@/lib/actions/accounts.action";
@@ -29,22 +28,11 @@ export const AccountForm: React.FC<FormProps<AccountType>> = ({
     defaultValues: initialData,
   });
 
-  const saveAccountClientAction = async (state: any, formData: FormData) => {
-    const account = {
-      ...initialData,
-      ...Object.fromEntries(formData.entries()),
-    }!;
-
+  async function onSubmit(account: AccountType) {
     if (validateForm(account, accountSchema, form)) {
-      await saveOrUpdateAccount(state, isEdit, account as AccountType);
+      await saveOrUpdateAccount(isEdit, account);
     }
-
-    return { status: "success" };
-  };
-
-  const [formState, formAction] = useFormState(saveAccountClientAction, {
-    status: "default",
-  });
+  }
 
   const isEdit = !!initialData;
   const title = isEdit
@@ -63,7 +51,7 @@ export const AccountForm: React.FC<FormProps<AccountType>> = ({
       <Form {...form}>
         <form
           className="grid grid-cols-1 gap-6 sm:grid-cols-2 max-w-[72rem]"
-          action={formAction}
+          onSubmit={form.handleSubmit(onSubmit)}
         >
           <ExtInputField
             form={form}
@@ -76,7 +64,6 @@ export const AccountForm: React.FC<FormProps<AccountType>> = ({
           <AccountIndustriesSelect form={form} required={true} />
           <ExtInputField
             form={form}
-            required={true}
             fieldName="addressLine1"
             label="Address 1"
             placeholder="Address 1"
@@ -89,21 +76,18 @@ export const AccountForm: React.FC<FormProps<AccountType>> = ({
           />
           <ExtInputField
             form={form}
-            required={true}
             fieldName="city"
             label="City"
             placeholder="City"
           />
           <ExtInputField
             form={form}
-            required={true}
             fieldName="state"
             label="State"
             placeholder="State"
           />
           <ExtInputField
             form={form}
-            required={true}
             fieldName="postalCode"
             label="Postal Code"
             placeholder="Postal Code"
@@ -126,14 +110,7 @@ export const AccountForm: React.FC<FormProps<AccountType>> = ({
             label="Annual Revenue"
             placeholder="Annual Revenue"
           />
-          <ValuesSelect
-            form={form}
-            fieldName="status"
-            label="Status"
-            placeholder="Select status"
-            required={true}
-            values={["Active", "Inactive"]}
-          />
+          <AccountStatusSelect form={form} required={true} />
           <ExtTextAreaField form={form} fieldName="notes" label="Notes" />
           <SubmitButton
             label={submitText}

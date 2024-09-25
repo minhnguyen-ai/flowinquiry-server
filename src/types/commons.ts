@@ -36,3 +36,8 @@ export interface PageableResult<Entity> {
   size: number;
   content: Entity[];
 }
+
+export interface EntityValueDefinition {
+  value: string;
+  description?: string;
+}
