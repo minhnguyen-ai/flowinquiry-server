@@ -20,9 +20,7 @@ import { saveOrUpdateAccount } from "@/lib/actions/accounts.action";
 import { validateForm } from "@/lib/validator";
 import { accountSchema, AccountType } from "@/types/accounts";
 
-export const AccountForm: React.FC<FormProps<AccountType>> = ({
-  initialData,
-}: FormProps<AccountType>) => {
+export const AccountForm = ({ initialData }: FormProps<AccountType>) => {
   const form = useForm<AccountType>({
     resolver: zodResolver(accountSchema),
     defaultValues: initialData,

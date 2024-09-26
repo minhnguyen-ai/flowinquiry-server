@@ -14,20 +14,15 @@ export default async function Page({
 }: {
   params: { accountId: number | "new" };
 }) {
-  let account: AccountType | undefined;
-
-  if (params.accountId == "new") {
-  } else {
-    const { ok, data } = await findAccountById(params.accountId);
-    if (ok) {
-      account = data as AccountType;
-    }
-  }
+  const { data: account } =
+    params.accountId !== "new"
+      ? await findAccountById(params.accountId)
+      : { data: undefined as AccountType | undefined };
 
   return (
     <div className="space-y-4">
       <Breadcrumbs items={breadcrumbItems} />
-      <AccountForm initialData={account} key={null} />
+      <AccountForm initialData={account} />
     </div>
   );
 }

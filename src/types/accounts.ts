@@ -5,7 +5,7 @@ export const accountSchema = z.object({
   accountName: z.string().min(1),
   accountType: z.string().min(1),
   industry: z.string().min(1),
-  email: z.string().nullish(),
+  email: z.string().email().nullish(),
   addressLine1: z.string().nullish(),
   addressLine2: z.string().nullish(),
   city: z.string().nullish(),

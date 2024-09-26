@@ -12,6 +12,7 @@ import Link from "next/link";
 import React, { useState } from "react";
 
 import { contacts_columns_def } from "@/components/contacts/contact-table-columns";
+import { Badge } from "@/components/ui/badge";
 import {
   Collapsible,
   CollapsibleContent,
@@ -100,15 +101,13 @@ export const AccountView: React.FC<ViewProps<AccountType>> = ({
             <div>Industry: {account.industry}</div>
             <div>Address Line: {account.addressLine1}</div>
             <div>Phone number: {account.phoneNumber}</div>
-            <div>Status: {account.status}</div>
+            <div>
+              Status: <Badge variant="outline">{account.status}</Badge>
+            </div>
           </div>
         </CardContent>
       </Card>
-      <Collapsible
-        open={isOpen}
-        onOpenChange={setIsOpen}
-        className="w-[350px] space-y-2"
-      >
+      <Collapsible open={isOpen} onOpenChange={setIsOpen} className="space-y-2">
         <div className="flex items-center justify-between space-x-4 px-4">
           <h4 className="text-sm font-semibold">Details</h4>
           <div className="flex items-center justify-between space-x-4 px-4">
@@ -125,12 +124,21 @@ export const AccountView: React.FC<ViewProps<AccountType>> = ({
           </div>
         </div>
         <CollapsibleContent>
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-            <div>Type: {account.accountType}</div>
-            <div>Industry: {account.industry}</div>
-            <div>Address Line: {account.addressLine1}</div>
-            <div>Phone number: {account.phoneNumber}</div>
-            <div>Status: {account.status}</div>
+          <div className="grid grid-cols-4 gap-2 w-full max-w-full">
+            <div className="w-[200px] content-end">Type: </div>
+            <Badge variant="outline">{account.accountType}</Badge>
+            <div className="w-[200px]">Industry: </div>
+            <Badge variant="outline" className="bg-amber-300">
+              {account.industry}
+            </Badge>
+            <div className="w-[200px]">Address Line:</div>
+            <div> {account.addressLine1}</div>
+            <div className="w-[200px]">Phone number: </div>
+            <div>{account.phoneNumber}</div>
+            <div className="w-[200px]">Status:</div>{" "}
+            <Badge variant="outline" className="bg-amber-300">
+              {account.status}
+            </Badge>
           </div>
         </CollapsibleContent>
       </Collapsible>

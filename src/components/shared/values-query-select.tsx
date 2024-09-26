@@ -30,7 +30,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { toast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
 import { ActionResult } from "@/types/commons";
 import { UiAttributes } from "@/types/ui-components";
@@ -72,9 +71,6 @@ const ValuesQuerySelect = <T,>({
   });
 
   if (isError || !optionsResult) {
-    toast({
-      description: noDataMessage,
-    });
     return <div>{noDataMessage}</div>;
   }
 

@@ -14,20 +14,15 @@ export default async function Page({
 }: {
   params: { contactId: number | "new" };
 }) {
-  let contact: ContactType | undefined;
-
-  if (params.contactId == "new") {
-  } else {
-    const { ok, data } = await findContactById(params.contactId);
-    if (ok) {
-      contact = data as ContactType;
-    }
-  }
+  const { data: contact } =
+    params.contactId !== "new"
+      ? await findContactById(params.contactId)
+      : { data: undefined as ContactType | undefined };
 
   return (
     <div className="space-y-4">
       <Breadcrumbs items={breadcrumbItems} />
-      <ContactForm initialData={contact} key={null} />
+      <ContactForm initialData={contact} />
     </div>
   );
 }
