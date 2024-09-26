@@ -7,8 +7,7 @@ services:
       - ./volumes/postgresql/:/var/lib/postgresql/data/
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password
       - POSTGRES_HOST_AUTH_METHOD=trust
     healthcheck:
       test: ['CMD-SHELL', 'pg_isready -U $${POSTGRES_USER}']
@@ -21,3 +20,6 @@ services:
       - 127.0.0.1:5432:5432
     networks:
       - theflexwork_nw
+secrets:
+  postgres_password:
+    external: true
