@@ -24,7 +24,7 @@ spring:
     type: com.zaxxer.hikari.HikariDataSource
     url: jdbc:postgresql://localhost:5432/flexwork
     username: flexwork
-    password: flexwork_db_123
+    password: 123grehrehrehrehreher
     hikari:
       poolName: Hikari
       auto-commit: false
