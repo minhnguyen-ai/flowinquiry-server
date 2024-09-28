@@ -18,8 +18,6 @@ declare module "next-auth" {
     authorities: Array<AuthorityType>;
   }
 
-  export interface AdapterUser extends User {}
-
   export interface DefaultSession {
     user?: User;
     expires: ISODateString;

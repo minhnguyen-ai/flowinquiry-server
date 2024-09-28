@@ -1,10 +1,9 @@
 import { z } from "zod";
 
-import { accountSchema } from "@/types/accounts";
 
 export const contactSchema = z.object({
   id: z.number().nullish(),
-  account: accountSchema,
+  account_id: z.number(),
   firstName: z.string().min(1),
   lastName: z.string().min(1),
   email: z.string().email().nullish(),

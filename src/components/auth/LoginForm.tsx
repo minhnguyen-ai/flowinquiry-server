@@ -26,6 +26,7 @@ import {
 import { Input } from "@/components/ui/input";
 
 import { toast } from "../ui/use-toast";
+import {Checkbox} from "@/components/ui/checkbox";
 
 const formSchema = z.object({
   email: z
@@ -33,6 +34,7 @@ const formSchema = z.object({
     .email({ message: "Invalid email" })
     .min(1, { message: "Email is required" }),
   password: z.string().min(1, { message: "Password is required" }),
+  isRemembered: z.oboolean()
 });
 
 const LoginForm = () => {
@@ -43,12 +45,12 @@ const LoginForm = () => {
     defaultValues: {
       email: "",
       password: "",
+        isRemembered: false
     },
   });
 
   const handleSubmit = async (data: z.infer<typeof formSchema>) => {
     const response = await signIn("credentials", {
-      username: data.email,
       email: data.email,
       password: data.password,
       callbackUrl: "/portal",
@@ -78,50 +80,69 @@ const LoginForm = () => {
       <CardContent className="space-y-2">
         <Form {...form}>
           <form
-            onSubmit={form.handleSubmit(handleSubmit)}
-            className="space-y-6"
+              onSubmit={form.handleSubmit(handleSubmit)}
+              className="space-y-6"
           >
             <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="uppercase text-xs font-bold text-zinc-500 dark:text-white">
-                    Email
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      autoComplete="email"
-                      className="bg-slate-100 dark:bg-slate-300 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0"
-                      placeholder="Enter email"
-                      {...field}
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
+                control={form.control}
+                name="email"
+                render={({field}) => (
+                    <FormItem>
+                      <FormLabel className="uppercase text-xs font-bold text-zinc-500 dark:text-white">
+                        Email
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                            autoComplete="email"
+                            className="bg-slate-100 dark:bg-slate-300 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0"
+                            placeholder="Enter email"
+                            {...field}
+                        />
+                      </FormControl>
+                    </FormItem>
+                )}
             ></FormField>
             <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="uppercase text-xs font-bold text-zinc-500 dark:text-white">
-                    Password
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      autoComplete="current-password"
-                      type="password"
-                      className="bg-slate-100 dark:bg-slate-300 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0"
-                      placeholder="Enter password"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+                control={form.control}
+                name="password"
+                render={({field}) => (
+                    <FormItem>
+                      <FormLabel className="uppercase text-xs font-bold text-zinc-500 dark:text-white">
+                        Password
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                            autoComplete="current-password"
+                            type="password"
+                            className="bg-slate-100 dark:bg-slate-300 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0"
+                            placeholder="Enter password"
+                            {...field}
+                        />
+                      </FormControl>
+                      <FormMessage/>
+                    </FormItem>
+                )}
             />
-            <Button className="w-full">Sign In</Button>
+
+            <FormField
+                control={form.control}
+                name="isRemembered"
+                render={({ field }) => (
+                    <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                      <FormControl>
+                        <Checkbox
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                      <div className="space-y-1 leading-none">
+                        <FormLabel>
+                          Remember me
+                        </FormLabel>
+                      </div>
+                    </FormItem>
+                    )}/>
+              <Button className="w-full">Sign In</Button>
           </form>
         </Form>
         <div className="mt-4 text-center text-sm">
@@ -132,7 +153,7 @@ const LoginForm = () => {
         </div>
       </CardContent>
     </Card>
-  );
+);
 };
 
 export default LoginForm;

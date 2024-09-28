@@ -46,14 +46,14 @@ export const contacts_columns_def: ColumnDef<ContactType>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "firstName",
+    id: "name",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Name" />
     ),
     cell: ({ row }) => (
       <div>
         <Link href={`/portal/contacts/${row.original.id}`}>
-          {row.getValue("firstName")} {row.getValue("lastName")}
+          {row.getValue("firstName")} fff {row.getValue("lastName")}brert
         </Link>
       </div>
     ),
@@ -64,20 +64,9 @@ export const contacts_columns_def: ColumnDef<ContactType>[] = [
       <DataTableColumnHeader column={column} title="Status" />
     ),
     cell: ({ row }) => {
-      const status = status_options.find(
-        (status) => status.value === row.getValue("status"),
-      );
-
-      if (!status) {
-        return null;
-      }
-
       return (
-        <div className="flex w-[100px] items-center">
-          {status.icon && (
-            <status.icon className="mr-2 h-4 w-4 text-muted-foreground" />
-          )}
-          <span>{status.label}</span>
+        <div>
+          {row.getValue("status")}
         </div>
       );
     },
