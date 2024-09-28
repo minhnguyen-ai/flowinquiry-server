@@ -2,6 +2,8 @@ package io.flexwork.modules.crm.web.rest;
 
 import io.flexwork.modules.crm.domain.Account;
 import io.flexwork.modules.crm.service.AccountService;
+import io.flexwork.modules.crm.service.dto.AccountDTO;
+import io.flexwork.modules.crm.service.mapper.AccountMapper;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,48 +17,54 @@ public class AccountController {
 
     private final AccountService accountService;
 
-    public AccountController(AccountService accountService) {
+    private AccountMapper accountMapper;
+
+    public AccountController(AccountService accountService, AccountMapper accountMapper) {
         this.accountService = accountService;
+        this.accountMapper = accountMapper;
     }
 
     // Get an account by ID
     @GetMapping("/{id}")
-    public ResponseEntity<Account> getAccountById(@PathVariable Long id) {
+    public ResponseEntity<AccountDTO> getAccountById(@PathVariable Long id) {
         Optional<Account> account = accountService.findAccountById(id);
-        return account.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        return account.map(value -> ResponseEntity.ok(accountMapper.accountToAccountDTO(value)))
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     // Create a new account
     @PostMapping
-    public ResponseEntity<Account> createAccount(@RequestBody Account account) {
-        Account savedAccount = accountService.saveAccount(account);
-        return new ResponseEntity<>(savedAccount, HttpStatus.CREATED);
+    public ResponseEntity<AccountDTO> createAccount(@RequestBody AccountDTO account) {
+        Account savedAccount =
+                accountService.saveAccount(accountMapper.accountDTOToAccount(account));
+        return new ResponseEntity<>(
+                accountMapper.accountToAccountDTO(savedAccount), HttpStatus.CREATED);
     }
 
     // Update an existing account
     @PutMapping("/{id}")
     public ResponseEntity<Account> updateAccount(
-            @PathVariable Long id, @RequestBody Account accountDetails) {
+            @PathVariable Long id, @RequestBody Account accountDTO) {
         Optional<Account> accountOptional = accountService.findAccountById(id);
         if (accountOptional.isPresent()) {
             Account account = accountOptional.get();
-            account.setAccountName(accountDetails.getAccountName());
-            account.setAccountType(accountDetails.getAccountType());
-            account.setIndustry(accountDetails.getIndustry());
-            account.setWebsite(accountDetails.getWebsite());
-            account.setPhoneNumber(accountDetails.getPhoneNumber());
-            account.setEmail(accountDetails.getEmail());
-            account.setAddressLine1(accountDetails.getAddressLine1());
-            account.setAddressLine2(accountDetails.getAddressLine2());
-            account.setCity(accountDetails.getCity());
-            account.setState(accountDetails.getState());
-            account.setPostalCode(accountDetails.getPostalCode());
-            account.setCountry(accountDetails.getCountry());
-            account.setAnnualRevenue(accountDetails.getAnnualRevenue());
-            account.setParentAccount(accountDetails.getParentAccount());
-            account.setStatus(accountDetails.getStatus());
-            account.setAssignedToUser(accountDetails.getAssignedToUser());
-            account.setNotes(accountDetails.getNotes());
+            account.setAccountName(accountDTO.getAccountName());
+            account.setAccountType(accountDTO.getAccountType());
+            account.setIndustry(accountDTO.getIndustry());
+            account.setWebsite(accountDTO.getWebsite());
+            account.setPhoneNumber(accountDTO.getPhoneNumber());
+            account.setEmail(accountDTO.getEmail());
+            account.setAddressLine1(accountDTO.getAddressLine1());
+            account.setAddressLine2(accountDTO.getAddressLine2());
+            account.setCity(accountDTO.getCity());
+            account.setState(accountDTO.getState());
+            account.setPostalCode(accountDTO.getPostalCode());
+            account.setCountry(accountDTO.getCountry());
+            account.setAnnualRevenue(accountDTO.getAnnualRevenue());
+            account.setParentAccount(accountDTO.getParentAccount());
+            account.setStatus(accountDTO.getStatus());
+            account.setAssignedToUser(accountDTO.getAssignedToUser());
+            account.setNotes(accountDTO.getNotes());
 
             Account updatedAccount = accountService.saveAccount(account);
             return new ResponseEntity<>(updatedAccount, HttpStatus.OK);
@@ -78,24 +86,25 @@ public class AccountController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<Account>> getAllAccounts(Pageable pageable) {
+    public ResponseEntity<Page<AccountDTO>> getAllAccounts(Pageable pageable) {
         Page<Account> accounts = accountService.findAllAccounts(pageable);
-        return new ResponseEntity<>(accounts, HttpStatus.OK);
+        return new ResponseEntity<>(
+                accounts.map(accountMapper::accountToAccountDTO), HttpStatus.OK);
     }
 
     @GetMapping("/next/{currentId}")
-    public ResponseEntity<Account> getNextEntity(@PathVariable Long currentId) {
+    public ResponseEntity<AccountDTO> getNextEntity(@PathVariable Long currentId) {
         return accountService
                 .getNextEntity(currentId)
-                .map(ResponseEntity::ok)
+                .map(value -> ResponseEntity.ok(accountMapper.accountToAccountDTO(value)))
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/previous/{currentId}")
-    public ResponseEntity<Account> getPreviousEntity(@PathVariable Long currentId) {
+    public ResponseEntity<AccountDTO> getPreviousEntity(@PathVariable Long currentId) {
         return accountService
                 .getPreviousEntity(currentId)
-                .map(ResponseEntity::ok)
+                .map(value -> ResponseEntity.ok(accountMapper.accountToAccountDTO(value)))
                 .orElse(ResponseEntity.notFound().build());
     }
 }

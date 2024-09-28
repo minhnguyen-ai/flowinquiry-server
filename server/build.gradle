@@ -80,7 +80,7 @@ dependencies {
     api project(":tools:liquibase")
 
     compileOnly("org.projectlombok:lombok:${lombokVersion}")
-    compileOnly("org.mapstruct:mapstruct:${mapstructVersion}")
+
 
     implementation("com.fasterxml.jackson.module:jackson-module-jaxb-annotations")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-hppc")
@@ -147,6 +147,7 @@ dependencies {
     annotationProcessor("org.glassfish.jaxb:jaxb-runtime")
     annotationProcessor("org.projectlombok:lombok:${lombokVersion}")
     // Keep mapstruct dependency below the lombok
+    compileOnly("org.mapstruct:mapstruct:${mapstructVersion}")
     annotationProcessor("org.mapstruct:mapstruct-processor:${mapstructVersion}")
 }
 

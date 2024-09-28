@@ -14,12 +14,12 @@ update_or_add() {
   local file=$3
 
   # Check if the key already exists
-  if grep -q "^export $key=" "$file"; then
+  if grep -q "^$key=" "$file"; then
     # Key exists, overwrite the value using sed
-    sed -i.bak "s|^export $key=.*|export $key='$value'|" "$file"
+    sed -i.bak "s|^$key=.*|$key='$value'|" "$file"
   else
     # Key doesn't exist, append the key-value pair
-    echo "export $key='$value'" >> "$file"
+    echo "$key='$value'" >> "$file"
   fi
 }
 

@@ -2,6 +2,8 @@ package io.flexwork.modules.crm.web.rest;
 
 import io.flexwork.modules.crm.domain.Contact;
 import io.flexwork.modules.crm.service.ContactService;
+import io.flexwork.modules.crm.service.dto.ContactDTO;
+import io.flexwork.modules.crm.service.mapper.ContactMapper;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,38 +14,39 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/crm/contacts")
 public class ContactController {
 
+    private ContactMapper contactMapper;
+
     private ContactService contactService;
 
-    public ContactController(ContactService contactService) {
+    public ContactController(ContactService contactService, ContactMapper contactMapper) {
         this.contactService = contactService;
-    }
-
-    @GetMapping
-    public Page<Contact> getAllContacts(Pageable pageable) {
-        return contactService.getAllContacts(pageable);
+        this.contactMapper = contactMapper;
     }
 
     @GetMapping("/account/{accountId}")
-    public Page<Contact> getContacts(@PathVariable Long accountId, Pageable pageable) {
-        return contactService.findByAccountId(accountId, pageable);
+    public Page<ContactDTO> getContacts(@PathVariable Long accountId, Pageable pageable) {
+        return contactService
+                .findByAccountId(accountId, pageable)
+                .map(value -> contactMapper.contactToContactDTO(value));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Contact> getContactById(@PathVariable Long id) {
+    public ResponseEntity<ContactDTO> getContactById(@PathVariable Long id) {
         Optional<Contact> contact = contactService.getContactById(id);
-        return contact.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        return contact.map(value -> ResponseEntity.ok(contactMapper.contactToContactDTO(value)))
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public Contact createContact(@RequestBody Contact contact) {
-        return contactService.createContact(contact);
+    public ContactDTO createContact(@RequestBody ContactDTO contactDTO) {
+        return contactService.createContact(contactMapper.contactDTOToContact(contactDTO));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Contact> updateContact(
+    public ResponseEntity<ContactDTO> updateContact(
             @PathVariable Long id, @RequestBody Contact contactDetails) {
         Contact updatedContact = contactService.updateContact(id, contactDetails);
-        return ResponseEntity.ok(updatedContact);
+        return ResponseEntity.ok(contactMapper.contactToContactDTO(updatedContact));
     }
 
     @DeleteMapping("/{id}")

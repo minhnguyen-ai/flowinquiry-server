@@ -12,13 +12,19 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.HashSet;
 import java.util.Set;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.BatchSize;
 
 /** A user. */
 @Entity
 @Table(name = "fw_user")
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class User extends AbstractAuditingEntity<Long> implements Serializable {
 
     private static final long serialVersionUID = 1L;
