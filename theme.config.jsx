@@ -22,5 +22,17 @@ export default {
     },
     feedback: {
       content: null
+    },
+    gitTimestamp: null, 
+    footer: {
+      text: (
+        <span>
+          MIT {new Date().getFullYear()} ©{' '}
+          <a href="https://theflexwork.io" target="_blank">
+            TheFlexwork
+          </a>
+          .
+        </span>
+      )
     }
   }
