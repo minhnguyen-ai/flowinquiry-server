@@ -64,11 +64,7 @@ export const contacts_columns_def: ColumnDef<ContactType>[] = [
       <DataTableColumnHeader column={column} title="Status" />
     ),
     cell: ({ row }) => {
-      return (
-        <div>
-          {row.getValue("status")}
-        </div>
-      );
+      return <div>{row.getValue("status")}</div>;
     },
     filterFn: (row, id, value) => {
       return value.includes(row.getValue(id));

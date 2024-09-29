@@ -26,7 +26,7 @@ export const ContactForm = ({ initialData }: FormProps<ContactType>) => {
 
   async function onSubmit(contact: ContactType) {
     contact.account_id = 1;
-    console.log("Error")
+    console.log("Error");
     if (validateForm(contact, contactSchema, form)) {
       await saveOrUpdateContact(isEdit, contact);
     }

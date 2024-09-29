@@ -1,6 +1,5 @@
 import { z } from "zod";
 
-
 export const contactSchema = z.object({
   id: z.number().nullish(),
   account_id: z.number(),

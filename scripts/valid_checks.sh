@@ -3,25 +3,11 @@
 # Initialize an empty array to hold the names of failed scripts
 failed_scripts=()
 
-# Function to run a script and capture its status
-run_script() {
-    local script_name="$1"
-    echo "Running $script_name..."
-
-    # Run the script
-    ./"$script_name"
-
-    # Check if the script failed
-    if [ $? -ne 0 ]; then
-        echo "$script_name failed."
-        failed_scripts+=("$script_name")  # Add to the failed scripts list
-    else
-        echo "$script_name succeeded."
-    fi
-}
+source scripts/shared.sh
 
 # Run the scripts sequentially
-run_script "node_check.sh"
+run_script "node_check.sh" failed_scripts
+run_script "pnpm_check.sh" failed_scripts
 
 # After running all scripts, check if any failed
 if [ ${#failed_scripts[@]} -eq 0 ]; then

@@ -2,7 +2,6 @@
 
 <!-- Please include a summary of the change and what issue is fixed. Include relevant motivation and context. List any dependencies that are required for this change. -->
 
-
 ### ✨ Type of change
 
 <!-- Please delete options that are not relevant. -->
@@ -12,11 +11,9 @@
 - [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
 - [ ] This change requires a documentation update
 
-
 ### 🧠 Rationale behind the change
 
 Why did you choose to make these changes? Were there any trade-offs you had to consider?
-
 
 ### ✅ How Has This Been Tested?
 
@@ -24,7 +21,6 @@ Why did you choose to make these changes? Were there any trade-offs you had to c
 
 - [ ] Test A
 - [ ] Test B
-
 
 ### 📝 Checklist:
 
