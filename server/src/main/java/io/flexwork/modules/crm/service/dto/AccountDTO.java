@@ -1,9 +1,11 @@
 package io.flexwork.modules.crm.service.dto;
 
 import java.time.LocalDateTime;
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 public class AccountDTO {
 
     private Long id; // Unique identifier for the account

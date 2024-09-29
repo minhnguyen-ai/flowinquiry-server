@@ -12,16 +12,14 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.HashSet;
 import java.util.Set;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.BatchSize;
 
 /** A user. */
 @Entity
 @Table(name = "fw_user")
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

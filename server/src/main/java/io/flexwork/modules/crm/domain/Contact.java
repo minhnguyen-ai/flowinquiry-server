@@ -2,8 +2,7 @@ package io.flexwork.modules.crm.domain;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -11,6 +10,9 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Table(name = "fw_crm_contact")
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Contact {
 
     @Id

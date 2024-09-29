@@ -8,8 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table(
@@ -17,6 +16,9 @@ import lombok.Setter;
         indexes = {@Index(name = "idx_entity_type_key", columnList = "entity_type, value_key")})
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ValueDefinition {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

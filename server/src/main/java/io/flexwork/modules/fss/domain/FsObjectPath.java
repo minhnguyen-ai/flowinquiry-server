@@ -2,11 +2,15 @@ package io.flexwork.modules.fss.domain;
 
 import jakarta.persistence.*;
 import java.io.Serializable;
-import lombok.Data;
+import lombok.*;
 
 @Entity
 @Table(name = "fw_fss_object_paths")
-@Data
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class FsObjectPath implements Serializable {
 
     @EmbeddedId private FsObjectPathId id;

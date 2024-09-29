@@ -2,13 +2,17 @@ package io.flexwork.modules.crm.domain;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import lombok.Data;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Table(name = "fw_crm_email")
-@Data
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Email {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
