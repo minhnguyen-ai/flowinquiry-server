@@ -2,9 +2,13 @@ package io.flexwork.modules.fss.domain;
 
 import jakarta.persistence.Embeddable;
 import java.io.Serializable;
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Embeddable
 public class FsObjectPathId implements Serializable {
     private Long ancestorId;

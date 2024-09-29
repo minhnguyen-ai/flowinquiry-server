@@ -2,8 +2,6 @@ package io.flexwork.modules.crm.service;
 
 import io.flexwork.modules.crm.domain.Contact;
 import io.flexwork.modules.crm.repository.ContactRepository;
-import io.flexwork.modules.crm.service.dto.ContactDTO;
-import io.flexwork.modules.crm.service.mapper.ContactMapper;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,12 +10,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class ContactService {
 
-    private ContactMapper contactMapper;
     private ContactRepository contactRepository;
 
-    public ContactService(ContactRepository contactRepository, ContactMapper contactMapper) {
+    public ContactService(ContactRepository contactRepository) {
         this.contactRepository = contactRepository;
-        this.contactMapper = contactMapper;
     }
 
     public Page<Contact> findByAccountId(Long accountId, Pageable pageable) {
@@ -32,8 +28,8 @@ public class ContactService {
         return contactRepository.findById(id);
     }
 
-    public ContactDTO createContact(Contact contact) {
-        return contactMapper.contactToContactDTO(contactRepository.save(contact));
+    public Contact createContact(Contact contact) {
+        return contactRepository.save(contact);
     }
 
     public Contact updateContact(Long id, Contact contactDetails) {

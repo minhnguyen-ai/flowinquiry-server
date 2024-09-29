@@ -3,13 +3,17 @@ package io.flexwork.modules.crm.domain;
 import io.flexwork.modules.usermanagement.domain.User;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import lombok.Data;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Table(name = "fw_crm_comments")
-@Data
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Comment {
 
     @Id

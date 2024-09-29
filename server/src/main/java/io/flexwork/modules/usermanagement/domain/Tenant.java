@@ -6,11 +6,15 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.io.Serializable;
-import lombok.Data;
+import lombok.*;
 
 @Entity
 @Table(name = "fw_tenant", schema = MASTER_SCHEMA)
-@Data
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Tenant extends AbstractAuditingEntity<Long> implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")

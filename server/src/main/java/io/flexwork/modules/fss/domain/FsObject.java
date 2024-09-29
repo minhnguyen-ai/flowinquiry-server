@@ -5,11 +5,15 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-import lombok.Data;
+import lombok.*;
 
 @Entity
 @Table(name = "fw_fss_object")
-@Data
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class FsObject extends AbstractAuditingEntity<Long> implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

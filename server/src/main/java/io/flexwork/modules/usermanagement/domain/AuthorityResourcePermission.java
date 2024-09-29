@@ -1,11 +1,15 @@
 package io.flexwork.modules.usermanagement.domain;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 @Entity
 @Table(name = "fw_authority_resource_permission")
-@Data
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class AuthorityResourcePermission {
 
     @EmbeddedId private AuthorityResourcePermissionId id;

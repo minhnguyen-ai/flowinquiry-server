@@ -4,9 +4,13 @@ import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import java.io.Serializable;
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class AuthorityResourcePermissionId implements Serializable {
 
     @Column(name = "authority_name")

@@ -5,7 +5,7 @@ import io.flexwork.modules.usermanagement.service.dto.TenantDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface TenantMapper {
 
     TenantMapper instance = Mappers.getMapper(TenantMapper.class);

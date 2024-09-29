@@ -22,18 +22,21 @@ public class TenantResource {
 
     private final TenantService tenantService;
 
-    public TenantResource(TenantService tenantService) {
+    private final TenantMapper tenantMapper;
+
+    public TenantResource(TenantService tenantService, TenantMapper tenantMapper) {
         this.tenantService = tenantService;
+        this.tenantMapper = tenantMapper;
     }
 
     @PostMapping("/tenants")
-    public String createTenant(@RequestBody TenantDTO tenantDTO) {
+    public TenantDTO createTenant(@RequestBody TenantDTO tenantDTO) {
         Tenant tenant = TenantMapper.instance.tenantDtoToTenant(tenantDTO);
-        return tenantService.registerNewTenant(tenant);
+        return tenantMapper.tenantToTenantDto(tenantService.registerNewTenant(tenant));
     }
 
     @GetMapping("/tenants")
     public Page<TenantDTO> findAllTenants(Pageable pageable) {
-        return tenantService.findAllTenants(pageable);
+        return tenantService.findAllTenants(pageable).map(tenantMapper::tenantToTenantDto);
     }
 }

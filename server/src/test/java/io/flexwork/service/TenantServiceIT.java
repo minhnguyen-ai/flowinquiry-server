@@ -1,5 +1,9 @@
 package io.flexwork.service;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import io.flexwork.IntegrationTest;
 import io.flexwork.modules.usermanagement.domain.Tenant;
 import io.flexwork.modules.usermanagement.service.TenantService;
@@ -13,19 +17,12 @@ public class TenantServiceIT {
 
     @Test
     public void testRegisterNewTenantSuccessfully() {
-        Tenant tenant = new Tenant();
-        tenant.setName("Test Tenant");
-        tenant.setNameId("realm123");
-        tenant.setDomain("domain12111111113");
-        tenantService.registerNewTenant(tenant);
-    }
+        Tenant tenant = Tenant.builder().name("tenant_name").domain("tenant_domain").build();
 
-    @Test
-    public void testRegisterNewTenant2Successfully() {
-        Tenant tenant = new Tenant();
-        tenant.setName("Test Tenant 2");
-        tenant.setNameId("realm1234");
-        tenant.setDomain("domain1234");
-        tenantService.registerNewTenant(tenant);
+        Tenant savedTenant = tenantService.registerNewTenant(tenant);
+        assertAll(
+                () -> assertEquals(tenant.getName(), savedTenant.getName()),
+                () -> assertEquals(tenant.getDomain(), savedTenant.getDomain()),
+                () -> assertNotNull(savedTenant.getNameId()));
     }
 }

@@ -3,11 +3,15 @@ package io.flexwork.modules.usermanagement.domain;
 import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
-import lombok.Data;
+import lombok.*;
 
 @Entity
 @Table(name = "fw_resource")
-@Data
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Resource {
 
     @Id

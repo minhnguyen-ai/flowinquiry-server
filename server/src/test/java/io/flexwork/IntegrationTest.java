@@ -10,6 +10,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 
 /** Base composite annotation for integration tests. */
 @Target(ElementType.TYPE)
@@ -18,4 +19,5 @@ import org.springframework.boot.test.context.SpringBootTest;
         classes = {FlexworkApp.class, JacksonConfiguration.class, AsyncSyncConfiguration.class})
 @EnableConfigurationProperties({FlexworkProperties.class})
 @EmbeddedSQL
+@Import(TestDataLoaderConfig.class)
 public @interface IntegrationTest {}

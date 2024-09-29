@@ -43,34 +43,11 @@ public class AccountController {
 
     // Update an existing account
     @PutMapping("/{id}")
-    public ResponseEntity<Account> updateAccount(
-            @PathVariable Long id, @RequestBody Account accountDTO) {
-        Optional<Account> accountOptional = accountService.findAccountById(id);
-        if (accountOptional.isPresent()) {
-            Account account = accountOptional.get();
-            account.setAccountName(accountDTO.getAccountName());
-            account.setAccountType(accountDTO.getAccountType());
-            account.setIndustry(accountDTO.getIndustry());
-            account.setWebsite(accountDTO.getWebsite());
-            account.setPhoneNumber(accountDTO.getPhoneNumber());
-            account.setEmail(accountDTO.getEmail());
-            account.setAddressLine1(accountDTO.getAddressLine1());
-            account.setAddressLine2(accountDTO.getAddressLine2());
-            account.setCity(accountDTO.getCity());
-            account.setState(accountDTO.getState());
-            account.setPostalCode(accountDTO.getPostalCode());
-            account.setCountry(accountDTO.getCountry());
-            account.setAnnualRevenue(accountDTO.getAnnualRevenue());
-            account.setParentAccount(accountDTO.getParentAccount());
-            account.setStatus(accountDTO.getStatus());
-            account.setAssignedToUser(accountDTO.getAssignedToUser());
-            account.setNotes(accountDTO.getNotes());
-
-            Account updatedAccount = accountService.saveAccount(account);
-            return new ResponseEntity<>(updatedAccount, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<AccountDTO> updateAccount(
+            @PathVariable Long id, @RequestBody AccountDTO accountDTO) {
+        Account updatedAccount =
+                accountService.updateAccount(id, accountMapper.accountDTOToAccount(accountDTO));
+        return ResponseEntity.ok(accountMapper.accountToAccountDTO(updatedAccount));
     }
 
     // Delete an account by ID
