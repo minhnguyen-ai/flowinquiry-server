@@ -1,17 +1,10 @@
 package io.flexwork.modules.crm.service;
 
 import io.flexwork.modules.crm.domain.Account;
-import io.flexwork.modules.crm.domain.Contact;
 import io.flexwork.modules.crm.event.ActivityLogEvent;
 import io.flexwork.modules.crm.repository.AccountRepository;
-<<<<<<< HEAD
-
-        =======
 import jakarta.persistence.EntityNotFoundException;
->>>>>>> 1968e609cd687b3eb57bd14674886bd0566d94b9
 import java.util.Optional;
-
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

@@ -1,16 +1,15 @@
 package io.flexwork.modules.crm.service;
 
-import io.flexwork.IntegrationTest;
-import io.flexwork.modules.crm.domain.Account;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.Optional;
-
 import static io.flexwork.TestDataLoaderConfig.accountMap;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import io.flexwork.IntegrationTest;
+import io.flexwork.modules.crm.domain.Account;
+import java.util.Optional;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @IntegrationTest
 public class AccountServiceIT {
@@ -30,11 +29,9 @@ public class AccountServiceIT {
                 () -> assertEquals(savedAccount.getAccountType(), account.getAccountType()),
                 () -> assertEquals(savedAccount.getIndustry(), account.getIndustry()),
                 () -> assertEquals(savedAccount.getStatus(), account.getStatus()),
-                ()-> assertEquals(savedAccount.getId(), account.getId())
-        );
+                () -> assertEquals(savedAccount.getId(), account.getId()));
     }
 
     @Test
-    public void testUpdatedAccount() {
-    }
+    public void testUpdatedAccount() {}
 }
