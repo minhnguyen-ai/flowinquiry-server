@@ -12,8 +12,9 @@ import io.flexwork.modules.usermanagement.AuthoritiesConstants;
 import io.flexwork.modules.usermanagement.domain.User;
 import io.flexwork.modules.usermanagement.repository.UserRepository;
 import io.flexwork.modules.usermanagement.service.UserService;
-import io.flexwork.modules.usermanagement.service.dto.AdminUserDTO;
-import io.flexwork.modules.usermanagement.service.mapper.UserMapperClassic;
+import io.flexwork.modules.usermanagement.service.dto.AuthorityDTO;
+import io.flexwork.modules.usermanagement.service.dto.UserDTO;
+import io.flexwork.modules.usermanagement.service.mapper.UserMapper;
 import io.flexwork.modules.usermanagement.web.rest.UserResource;
 import jakarta.persistence.EntityManager;
 import java.util.Collections;
@@ -64,7 +65,7 @@ class UserResourceIT {
 
     @Autowired private UserService userService;
 
-    @Autowired private UserMapperClassic userMapper;
+    @Autowired private UserMapper userMapper;
 
     @Autowired private EntityManager em;
 
@@ -122,14 +123,15 @@ class UserResourceIT {
     @Transactional
     void createUser() throws Exception {
         // Create the User
-        AdminUserDTO userDTO = new AdminUserDTO();
+        UserDTO userDTO = new UserDTO();
         userDTO.setFirstName(DEFAULT_FIRSTNAME);
         userDTO.setLastName(DEFAULT_LASTNAME);
         userDTO.setEmail(DEFAULT_EMAIL);
         userDTO.setActivated(true);
         userDTO.setImageUrl(DEFAULT_IMAGEURL);
         userDTO.setLangKey(DEFAULT_LANGKEY);
-        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        userDTO.setAuthorities(
+                Collections.singleton(new AuthorityDTO(AuthoritiesConstants.USER, "User")));
 
         var returnedUserDTO =
                 om.readValue(
@@ -142,7 +144,7 @@ class UserResourceIT {
                                 .andReturn()
                                 .getResponse()
                                 .getContentAsString(),
-                        AdminUserDTO.class);
+                        UserDTO.class);
 
         User convertedUser = userMapper.userDTOToUser(returnedUserDTO);
         // Validate the returned User
@@ -158,7 +160,7 @@ class UserResourceIT {
     void createUserWithExistingId() throws Exception {
         int databaseSizeBeforeCreate = userRepository.findAll().size();
 
-        AdminUserDTO userDTO = new AdminUserDTO();
+        UserDTO userDTO = new UserDTO();
         userDTO.setId(DEFAULT_ID);
         userDTO.setFirstName(DEFAULT_FIRSTNAME);
         userDTO.setLastName(DEFAULT_LASTNAME);
@@ -166,7 +168,8 @@ class UserResourceIT {
         userDTO.setActivated(true);
         userDTO.setImageUrl(DEFAULT_IMAGEURL);
         userDTO.setLangKey(DEFAULT_LANGKEY);
-        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        userDTO.setAuthorities(
+                Collections.singleton(new AuthorityDTO(AuthoritiesConstants.USER, "User")));
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restUserMockMvc
@@ -187,14 +190,15 @@ class UserResourceIT {
         userRepository.saveAndFlush(user);
         int databaseSizeBeforeCreate = userRepository.findAll().size();
 
-        AdminUserDTO userDTO = new AdminUserDTO();
+        UserDTO userDTO = new UserDTO();
         userDTO.setFirstName(DEFAULT_FIRSTNAME);
         userDTO.setLastName(DEFAULT_LASTNAME);
         userDTO.setEmail(DEFAULT_EMAIL);
         userDTO.setActivated(true);
         userDTO.setImageUrl(DEFAULT_IMAGEURL);
         userDTO.setLangKey(DEFAULT_LANGKEY);
-        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        userDTO.setAuthorities(
+                Collections.singleton(new AuthorityDTO(AuthoritiesConstants.USER, "User")));
 
         // Create the User
         restUserMockMvc
@@ -215,14 +219,15 @@ class UserResourceIT {
         userRepository.saveAndFlush(user);
         int databaseSizeBeforeCreate = userRepository.findAll().size();
 
-        AdminUserDTO userDTO = new AdminUserDTO();
+        UserDTO userDTO = new UserDTO();
         userDTO.setFirstName(DEFAULT_FIRSTNAME);
         userDTO.setLastName(DEFAULT_LASTNAME);
         userDTO.setEmail(DEFAULT_EMAIL); // this email should already be used
         userDTO.setActivated(true);
         userDTO.setImageUrl(DEFAULT_IMAGEURL);
         userDTO.setLangKey(DEFAULT_LANGKEY);
-        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        userDTO.setAuthorities(
+                Collections.singleton(new AuthorityDTO(AuthoritiesConstants.USER, "User")));
 
         // Create the User
         restUserMockMvc
@@ -288,7 +293,7 @@ class UserResourceIT {
         // Update the user
         User updatedUser = userRepository.findById(user.getId()).orElseThrow();
 
-        AdminUserDTO userDTO = getAdminUserDTO(updatedUser);
+        UserDTO userDTO = getAdminUserDTO(updatedUser);
 
         restUserMockMvc
                 .perform(
@@ -314,8 +319,8 @@ class UserResourceIT {
                 });
     }
 
-    private static @NotNull AdminUserDTO getAdminUserDTO(User updatedUser) {
-        AdminUserDTO userDTO = new AdminUserDTO();
+    private static @NotNull UserDTO getAdminUserDTO(User updatedUser) {
+        UserDTO userDTO = new UserDTO();
         userDTO.setId(updatedUser.getId());
         userDTO.setFirstName(UPDATED_FIRSTNAME);
         userDTO.setLastName(UPDATED_LASTNAME);
@@ -327,7 +332,8 @@ class UserResourceIT {
         userDTO.setCreatedDate(updatedUser.getCreatedDate());
         userDTO.setLastModifiedBy(updatedUser.getLastModifiedBy());
         userDTO.setLastModifiedDate(updatedUser.getLastModifiedDate());
-        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        userDTO.setAuthorities(
+                Collections.singleton(new AuthorityDTO(AuthoritiesConstants.USER, "User")));
         return userDTO;
     }
 
@@ -341,7 +347,7 @@ class UserResourceIT {
         // Update the user
         User updatedUser = userRepository.findById(user.getId()).orElseThrow();
 
-        AdminUserDTO userDTO = new AdminUserDTO();
+        UserDTO userDTO = new UserDTO();
         userDTO.setId(updatedUser.getId());
         userDTO.setFirstName(UPDATED_FIRSTNAME);
         userDTO.setLastName(UPDATED_LASTNAME);
@@ -353,7 +359,8 @@ class UserResourceIT {
         userDTO.setCreatedDate(updatedUser.getCreatedDate());
         userDTO.setLastModifiedBy(updatedUser.getLastModifiedBy());
         userDTO.setLastModifiedDate(updatedUser.getLastModifiedDate());
-        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        userDTO.setAuthorities(
+                Collections.singleton(new AuthorityDTO(AuthoritiesConstants.USER, "User")));
 
         restUserMockMvc
                 .perform(
@@ -398,7 +405,7 @@ class UserResourceIT {
         // Update the user
         User updatedUser = userRepository.findById(user.getId()).orElseThrow();
 
-        AdminUserDTO userDTO = new AdminUserDTO();
+        UserDTO userDTO = new UserDTO();
         userDTO.setId(updatedUser.getId());
         userDTO.setFirstName(updatedUser.getFirstName());
         userDTO.setLastName(updatedUser.getLastName());
@@ -410,7 +417,8 @@ class UserResourceIT {
         userDTO.setCreatedDate(updatedUser.getCreatedDate());
         userDTO.setLastModifiedBy(updatedUser.getLastModifiedBy());
         userDTO.setLastModifiedDate(updatedUser.getLastModifiedDate());
-        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        userDTO.setAuthorities(
+                Collections.singleton(new AuthorityDTO(AuthoritiesConstants.USER, "User")));
 
         restUserMockMvc
                 .perform(

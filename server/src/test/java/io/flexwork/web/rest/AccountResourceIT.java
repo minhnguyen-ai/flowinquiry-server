@@ -15,8 +15,10 @@ import io.flexwork.modules.usermanagement.domain.User;
 import io.flexwork.modules.usermanagement.repository.AuthorityRepository;
 import io.flexwork.modules.usermanagement.repository.UserRepository;
 import io.flexwork.modules.usermanagement.service.UserService;
-import io.flexwork.modules.usermanagement.service.dto.AdminUserDTO;
+import io.flexwork.modules.usermanagement.service.dto.AuthorityDTO;
 import io.flexwork.modules.usermanagement.service.dto.PasswordChangeDTO;
+import io.flexwork.modules.usermanagement.service.dto.UserDTO;
+import io.flexwork.modules.usermanagement.service.mapper.UserMapper;
 import io.flexwork.modules.usermanagement.web.rest.AccountResource;
 import io.flexwork.modules.usermanagement.web.rest.KeyAndPasswordVM;
 import io.flexwork.modules.usermanagement.web.rest.ManagedUserVM;
@@ -56,6 +58,8 @@ class AccountResourceIT {
     @Autowired private AuthorityRepository authorityRepository;
 
     @Autowired private UserService userService;
+
+    @Autowired private UserMapper userMapper;
 
     @Autowired private PasswordEncoder passwordEncoder;
 
@@ -102,10 +106,10 @@ class AccountResourceIT {
     @Test
     @WithMockUser(TEST_USER_LOGIN_EMAIL)
     void testGetExistingAccount() throws Exception {
-        Set<String> authorities = new HashSet<>();
-        authorities.add(AuthoritiesConstants.ADMIN);
+        Set<AuthorityDTO> authorities = new HashSet<>();
+        authorities.add(new AuthorityDTO(AuthoritiesConstants.ADMIN));
 
-        AdminUserDTO user = new AdminUserDTO();
+        UserDTO user = new UserDTO();
         user.setFirstName("john");
         user.setLastName("doe");
         user.setEmail(TEST_USER_LOGIN_EMAIL);
@@ -126,7 +130,11 @@ class AccountResourceIT {
                 .andExpect(jsonPath("$.email").value(TEST_USER_LOGIN_EMAIL))
                 .andExpect(jsonPath("$.imageUrl").value("http://placehold.it/50x50"))
                 .andExpect(jsonPath("$.langKey").value("en"))
-                .andExpect(jsonPath("$.authorities").value(AuthoritiesConstants.ADMIN));
+                .andExpect(
+                        jsonPath("$.authorities")
+                                .value(
+                                        new AuthorityDTO(
+                                                AuthoritiesConstants.ADMIN, "Administrator")));
 
         userService.deleteUserByEmail(TEST_USER_LOGIN_EMAIL);
     }
@@ -151,7 +159,8 @@ class AccountResourceIT {
         validUser.setEmail("test-register-valid@example.com");
         validUser.setImageUrl("http://placehold.it/50x50");
         validUser.setLangKey(Constants.DEFAULT_LANGUAGE);
-        validUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        validUser.setAuthorities(
+                Collections.singleton(new AuthorityDTO(AuthoritiesConstants.ADMIN, "Admin")));
         assertThat(userRepository.findOneByEmailIgnoreCase("test-register-valid@example.com"))
                 .isEmpty();
 
@@ -180,7 +189,8 @@ class AccountResourceIT {
         invalidUser.setActivated(true);
         invalidUser.setImageUrl("http://placehold.it/50x50");
         invalidUser.setLangKey(Constants.DEFAULT_LANGUAGE);
-        invalidUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        invalidUser.setAuthorities(
+                Collections.singleton(new AuthorityDTO(AuthoritiesConstants.USER, "User")));
 
         restAccountMockMvc
                 .perform(
@@ -247,7 +257,8 @@ class AccountResourceIT {
         invalidUser.setActivated(activated);
         invalidUser.setImageUrl("http://placehold.it/50x50");
         invalidUser.setLangKey(Constants.DEFAULT_LANGUAGE);
-        invalidUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        invalidUser.setAuthorities(
+                Collections.singleton(new AuthorityDTO(AuthoritiesConstants.USER, "User")));
         return invalidUser;
     }
 
@@ -262,7 +273,8 @@ class AccountResourceIT {
         firstUser.setEmail("test-register-duplicate-email@example.com");
         firstUser.setImageUrl("http://placehold.it/50x50");
         firstUser.setLangKey(Constants.DEFAULT_LANGUAGE);
-        firstUser.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+        firstUser.setAuthorities(
+                Collections.singleton(new AuthorityDTO(AuthoritiesConstants.USER, "User")));
 
         // Register first user
         restAccountMockMvc
@@ -306,7 +318,7 @@ class AccountResourceIT {
                 .isEqualTo("test-register-duplicate-email@example.com");
 
         testUser4.orElseThrow().setActivated(true);
-        userService.updateUser((new AdminUserDTO(testUser4.orElseThrow())));
+        userService.updateUser(userMapper.userToUserDTO(testUser4.orElseThrow()));
 
         userService.deleteUserByEmail("test-register-duplicate-email@example.com");
     }
@@ -322,7 +334,8 @@ class AccountResourceIT {
         validUser.setActivated(true);
         validUser.setImageUrl("http://placehold.it/50x50");
         validUser.setLangKey(Constants.DEFAULT_LANGUAGE);
-        validUser.setAuthorities(Collections.singleton(AuthoritiesConstants.ADMIN));
+        validUser.setAuthorities(
+                Collections.singleton(new AuthorityDTO(AuthoritiesConstants.ADMIN)));
 
         restAccountMockMvc
                 .perform(
@@ -387,14 +400,14 @@ class AccountResourceIT {
         user.setActivated(true);
         userRepository.saveAndFlush(user);
 
-        AdminUserDTO userDTO = new AdminUserDTO();
+        UserDTO userDTO = new UserDTO();
         userDTO.setFirstName("firstname");
         userDTO.setLastName("lastname");
         userDTO.setEmail("save-account@example.com");
         userDTO.setActivated(false);
         userDTO.setImageUrl("http://placehold.it/50x50");
         userDTO.setLangKey(Constants.DEFAULT_LANGUAGE);
-        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.ADMIN));
+        userDTO.setAuthorities(Collections.singleton(new AuthorityDTO(AuthoritiesConstants.ADMIN)));
 
         restAccountMockMvc
                 .perform(
@@ -431,14 +444,14 @@ class AccountResourceIT {
 
         userRepository.saveAndFlush(user);
 
-        AdminUserDTO userDTO = new AdminUserDTO();
+        UserDTO userDTO = new UserDTO();
         userDTO.setFirstName("firstname");
         userDTO.setLastName("lastname");
         userDTO.setEmail("invalid email");
         userDTO.setActivated(false);
         userDTO.setImageUrl("http://placehold.it/50x50");
         userDTO.setLangKey(Constants.DEFAULT_LANGUAGE);
-        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.ADMIN));
+        userDTO.setAuthorities(Collections.singleton(new AuthorityDTO(AuthoritiesConstants.ADMIN)));
 
         restAccountMockMvc
                 .perform(
@@ -470,14 +483,14 @@ class AccountResourceIT {
 
         userRepository.saveAndFlush(anotherUser);
 
-        AdminUserDTO userDTO = new AdminUserDTO();
+        UserDTO userDTO = new UserDTO();
         userDTO.setFirstName("firstname");
         userDTO.setLastName("lastname");
         userDTO.setEmail("save-existing-email2@example.com");
         userDTO.setActivated(false);
         userDTO.setImageUrl("http://placehold.it/50x50");
         userDTO.setLangKey(Constants.DEFAULT_LANGUAGE);
-        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.ADMIN));
+        userDTO.setAuthorities(Collections.singleton(new AuthorityDTO(AuthoritiesConstants.ADMIN)));
 
         restAccountMockMvc
                 .perform(
@@ -501,14 +514,14 @@ class AccountResourceIT {
         user.setActivated(true);
         userRepository.saveAndFlush(user);
 
-        AdminUserDTO userDTO = new AdminUserDTO();
+        UserDTO userDTO = new UserDTO();
         userDTO.setFirstName("firstname");
         userDTO.setLastName("lastname");
         userDTO.setEmail("save-existing-email-and-login@example.com");
         userDTO.setActivated(false);
         userDTO.setImageUrl("http://placehold.it/50x50");
         userDTO.setLangKey(Constants.DEFAULT_LANGUAGE);
-        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.ADMIN));
+        userDTO.setAuthorities(Collections.singleton(new AuthorityDTO(AuthoritiesConstants.ADMIN)));
 
         restAccountMockMvc
                 .perform(

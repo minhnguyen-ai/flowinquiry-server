@@ -1,24 +1,20 @@
 package io.flexwork.modules.usermanagement.service.dto;
 
-import io.flexwork.modules.usermanagement.domain.Authority;
-import io.flexwork.modules.usermanagement.domain.User;
 import java.io.Serializable;
+import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.util.Objects;
 import java.util.Set;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
-/** A DTO representing a user, with only the public attributes. */
 public class UserDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Long id;
+    @EqualsAndHashCode.Include private Long id;
 
-    private String email;
+    @EqualsAndHashCode.Include private String email;
 
     private String firstName;
 
@@ -26,40 +22,21 @@ public class UserDTO implements Serializable {
 
     private String timezone;
 
+    private String imageUrl;
+
+    private boolean activated = false;
+
+    private String langKey;
+
     private LocalDateTime lastLoginTime;
 
-    private Set<Authority> authorities;
+    private Set<AuthorityDTO> authorities;
 
-    public UserDTO() {
-        // Empty constructor needed for Jackson.
-    }
+    private String createdBy;
 
-    public UserDTO(User user) {
-        this.id = user.getId();
-        this.email = user.getEmail();
-        // Customize it here if you need, or not, firstName/lastName/etc
-    }
+    private Instant createdDate;
 
-    public LocalDateTime getLastLoginTime() {
-        if (lastLoginTime == null) return null;
-        ZoneId userZone = ZoneId.of(timezone);
-        return lastLoginTime.atZone(ZoneOffset.UTC).withZoneSameInstant(userZone).toLocalDateTime();
-    }
+    private String lastModifiedBy;
 
-    public void setLastLoginTime(LocalDateTime lastLoginTime) {
-        this.lastLoginTime = lastLoginTime;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        UserDTO userDTO = (UserDTO) o;
-        return Objects.equals(id, userDTO.id) && Objects.equals(email, userDTO.email);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, email);
-    }
+    private Instant lastModifiedDate;
 }

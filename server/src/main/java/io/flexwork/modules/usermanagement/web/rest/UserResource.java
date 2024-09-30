@@ -5,7 +5,8 @@ import io.flexwork.modules.usermanagement.domain.User;
 import io.flexwork.modules.usermanagement.repository.UserRepository;
 import io.flexwork.modules.usermanagement.service.MailService;
 import io.flexwork.modules.usermanagement.service.UserService;
-import io.flexwork.modules.usermanagement.service.dto.AdminUserDTO;
+import io.flexwork.modules.usermanagement.service.dto.UserDTO;
+import io.flexwork.modules.usermanagement.service.mapper.UserMapper;
 import io.flexwork.modules.usermanagement.web.rest.errors.BadRequestAlertException;
 import io.flexwork.modules.usermanagement.web.rest.errors.EmailAlreadyUsedException;
 import io.flexwork.modules.usermanagement.web.rest.errors.LoginAlreadyUsedException;
@@ -85,12 +86,18 @@ public class UserResource {
 
     private final UserRepository userRepository;
 
+    private UserMapper userMapper;
+
     private final MailService mailService;
 
     public UserResource(
-            UserService userService, UserRepository userRepository, MailService mailService) {
+            UserService userService,
+            UserRepository userRepository,
+            UserMapper userMapper,
+            MailService mailService) {
         this.userService = userService;
         this.userRepository = userRepository;
+        this.userMapper = userMapper;
         this.mailService = mailService;
     }
 
@@ -109,7 +116,7 @@ public class UserResource {
      */
     @PostMapping("/users")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public ResponseEntity<User> createUser(@Valid @RequestBody AdminUserDTO userDTO)
+    public ResponseEntity<User> createUser(@Valid @RequestBody UserDTO userDTO)
             throws URISyntaxException {
         log.debug("REST request to save User : {}", userDTO);
 
@@ -141,10 +148,10 @@ public class UserResource {
      */
     @PutMapping({"/users", "/users/{login}"})
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public ResponseEntity<AdminUserDTO> updateUser(
+    public ResponseEntity<UserDTO> updateUser(
             @PathVariable(name = "login", required = false) @Pattern(regexp = Constants.LOGIN_REGEX)
                     String email,
-            @Valid @RequestBody AdminUserDTO userDTO) {
+            @Valid @RequestBody UserDTO userDTO) {
         log.debug("REST request to update User : {}", userDTO);
         Optional<User> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
         if (existingUser.isPresent()
@@ -156,7 +163,7 @@ public class UserResource {
                 && (!existingUser.orElseThrow().getId().equals(userDTO.getId()))) {
             throw new LoginAlreadyUsedException();
         }
-        Optional<AdminUserDTO> updatedUser = userService.updateUser(userDTO);
+        Optional<UserDTO> updatedUser = userService.updateUser(userDTO);
 
         return ResponseUtil.wrapOrNotFound(
                 updatedUser,
@@ -173,14 +180,14 @@ public class UserResource {
      */
     @GetMapping("/users")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public ResponseEntity<List<AdminUserDTO>> getAllUsers(
+    public ResponseEntity<List<UserDTO>> getAllUsers(
             @org.springdoc.core.annotations.ParameterObject Pageable pageable) {
         log.debug("REST request to get all User for an admin");
         if (!onlyContainsAllowedProperties(pageable)) {
             return ResponseEntity.badRequest().build();
         }
 
-        final Page<AdminUserDTO> page = userService.getAllManagedUsers(pageable);
+        final Page<UserDTO> page = userService.getAllManagedUsers(pageable);
         HttpHeaders headers =
                 PaginationUtil.generatePaginationHttpHeaders(
                         ServletUriComponentsBuilder.fromCurrentRequest(), page);
@@ -202,11 +209,11 @@ public class UserResource {
      */
     @GetMapping("/users/{login}")
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public ResponseEntity<AdminUserDTO> getUser(
+    public ResponseEntity<UserDTO> getUser(
             @PathVariable("login") @Pattern(regexp = Constants.LOGIN_REGEX) String login) {
         log.debug("REST request to get User : {}", login);
         return ResponseUtil.wrapOrNotFound(
-                userService.getUserWithAuthoritiesByEmail(login).map(AdminUserDTO::new));
+                userService.getUserWithAuthoritiesByEmail(login).map(userMapper::userToUserDTO));
     }
 
     /**
