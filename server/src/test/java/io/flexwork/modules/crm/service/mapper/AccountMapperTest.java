@@ -65,4 +65,23 @@ public class AccountMapperTest {
                                 account2.getAssignedToUser().getId(),
                                 accountDTO2.getAssignedToUserId()));
     }
+
+    @Test
+    public void testUpdateAccount() {
+        AccountDTO accountDTO =
+                AccountDTO.builder()
+                        .id(1L)
+                        .parentAccountId(1L)
+                        .assignedToUserId(1L)
+                        .industry("industry")
+                        .build();
+
+        Account account = Account.builder().id(1L).accountName("accountName").build();
+        accountMapper.updateAccountFromDTO(accountDTO, account);
+        assertAll(
+                () -> assertEquals("accountName", account.getAccountName()),
+                () -> assertEquals("industry", account.getIndustry()),
+                () -> assertEquals(1L, account.getParentAccount().getId()),
+                () -> assertEquals(1, account.getAssignedToUser().getId()));
+    }
 }

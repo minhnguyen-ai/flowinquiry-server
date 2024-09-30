@@ -5,8 +5,6 @@ import static io.flexwork.db.DbConstants.DEFAULT_TENANT;
 import io.flexwork.db.service.LiquibaseService;
 import io.flexwork.modules.usermanagement.domain.Tenant;
 import io.flexwork.modules.usermanagement.repository.TenantRepository;
-import io.flexwork.modules.usermanagement.service.dto.TenantDTO;
-import io.flexwork.modules.usermanagement.service.mapper.TenantMapper;
 import jakarta.transaction.Transactional;
 import java.util.Optional;
 import java.util.Random;
@@ -38,7 +36,7 @@ public class TenantService {
      */
     @SneakyThrows
     @Transactional
-    public String registerNewTenant(Tenant tenant) {
+    public Tenant registerNewTenant(Tenant tenant) {
         log.info("Registering new tenant: {}", tenant);
 
         Optional<Tenant> existingTenant = tenantRepository.findByNameIgnoreCase(tenant.getName());
@@ -63,7 +61,7 @@ public class TenantService {
 
         tenantRepository.save(tenant);
         liquibaseService.createTenantDbSchema(tenant.getNameId());
-        return tenant.getNameId();
+        return tenant;
     }
 
     public Tenant getDefaultTenant() {
@@ -75,7 +73,7 @@ public class TenantService {
                                         "Default tenant " + DEFAULT_TENANT + " not found"));
     }
 
-    public Page<TenantDTO> findAllTenants(Pageable pageable) {
-        return tenantRepository.findAll(pageable).map(TenantMapper.instance::tenantToTenantDto);
+    public Page<Tenant> findAllTenants(Pageable pageable) {
+        return tenantRepository.findAll(pageable);
     }
 }

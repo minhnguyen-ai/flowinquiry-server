@@ -39,13 +39,14 @@ public class ContactController {
 
     @PostMapping
     public ContactDTO createContact(@RequestBody ContactDTO contactDTO) {
-        return contactService.createContact(contactMapper.contactDTOToContact(contactDTO));
+        return contactMapper.contactToContactDTO(
+                contactService.createContact(contactMapper.contactDTOToContact(contactDTO)));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<ContactDTO> updateContact(
-            @PathVariable Long id, @RequestBody Contact contactDetails) {
-        Contact updatedContact = contactService.updateContact(id, contactDetails);
+            @PathVariable Long id, @RequestBody ContactDTO contactDTO) {
+        Contact updatedContact = contactService.updateContact(id, contactMapper.contactDTOToContact(contactDTO));
         return ResponseEntity.ok(contactMapper.contactToContactDTO(updatedContact));
     }
 

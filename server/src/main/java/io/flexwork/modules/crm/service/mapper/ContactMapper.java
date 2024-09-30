@@ -5,6 +5,7 @@ import io.flexwork.modules.crm.domain.Contact;
 import io.flexwork.modules.crm.service.dto.ContactDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface ContactMapper {
@@ -13,6 +14,9 @@ public interface ContactMapper {
 
     @Mapping(target = "account", expression = "java(ofAccount(contactDTO.getAccountId()))")
     Contact contactDTOToContact(ContactDTO contactDTO);
+
+    @Mapping(target = "account", expression = "java(ofAccount(contactDTO.getAccountId()))")
+    void updateContactFromContactDTO(ContactDTO contactDTO, @MappingTarget Contact contact);
 
     default Account ofAccount(Long accountId) {
         Account account = new Account();

@@ -1,9 +1,13 @@
 package io.flexwork.modules.crm.service;
 
 import io.flexwork.modules.crm.domain.Account;
+import io.flexwork.modules.crm.domain.Contact;
 import io.flexwork.modules.crm.event.ActivityLogEvent;
 import io.flexwork.modules.crm.repository.AccountRepository;
+
 import java.util.Optional;
+
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,6 +38,34 @@ public class AccountService {
         ActivityLogEvent activityLogEvent = new ActivityLogEvent(this);
         eventPublisher.publishEvent(activityLogEvent);
         return savedAccount;
+    }
+
+    public Account updateAccount(Long accountId, Account accountDetails) {
+// Step 1: Find the account by ID
+        Account existingAccount = accountRepository.findById(accountId)
+                .orElseThrow(() -> new EntityNotFoundException("Account not found with id: " + accountId));
+
+        // Step 2: Update the fields of the existing account with the new details
+        existingAccount.setAccountName(accountDetails.getAccountName());
+        existingAccount.setAccountType(accountDetails.getAccountType());
+        existingAccount.setIndustry(accountDetails.getIndustry());
+        existingAccount.setWebsite(accountDetails.getWebsite());
+        existingAccount.setPhoneNumber(accountDetails.getPhoneNumber());
+        existingAccount.setEmail(accountDetails.getEmail());
+        existingAccount.setAddressLine1(accountDetails.getAddressLine1());
+        existingAccount.setAddressLine2(accountDetails.getAddressLine2());
+        existingAccount.setCity(accountDetails.getCity());
+        existingAccount.setState(accountDetails.getState());
+        existingAccount.setPostalCode(accountDetails.getPostalCode());
+        existingAccount.setCountry(accountDetails.getCountry());
+        existingAccount.setAnnualRevenue(accountDetails.getAnnualRevenue());
+        existingAccount.setParentAccount(accountDetails.getParentAccount());
+        existingAccount.setStatus(accountDetails.getStatus());
+        existingAccount.setAssignedToUser(accountDetails.getAssignedToUser());
+        existingAccount.setNotes(accountDetails.getNotes());
+
+        // Step 3: Save the updated account
+        return accountRepository.save(existingAccount);
     }
 
     // Delete an account by its ID

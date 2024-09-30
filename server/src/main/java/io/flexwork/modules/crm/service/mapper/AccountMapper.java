@@ -22,13 +22,19 @@ public interface AccountMapper {
     Account accountDTOToAccount(AccountDTO accountDTO);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(
+            target = "assignedToUser",
+            expression = "java(ofUser(accountDTO.getAssignedToUserId()))")
+    @Mapping(
+            target = "parentAccount",
+            expression = "java(ofParentAccount(accountDTO.getParentAccountId()))")
     void updateAccountFromDTO(AccountDTO accountDTO, @MappingTarget Account account);
 
     default User ofUser(Long userId) {
-        return User.builder().id(userId).build();
+        return (userId == null) ? null : User.builder().id(userId).build();
     }
 
     default Account ofParentAccount(Long parentAccountId) {
-        return Account.builder().id(parentAccountId).build();
+        return (parentAccountId == null) ? null : Account.builder().id(parentAccountId).build();
     }
 }
