@@ -5,7 +5,6 @@ import io.flexwork.modules.usermanagement.domain.Authority;
 import io.flexwork.modules.usermanagement.domain.User;
 import io.flexwork.modules.usermanagement.repository.AuthorityRepository;
 import io.flexwork.modules.usermanagement.repository.UserRepository;
-import io.flexwork.modules.usermanagement.service.dto.AdminUserDTO;
 import io.flexwork.modules.usermanagement.service.dto.UserDTO;
 import io.flexwork.modules.usermanagement.service.mapper.UserMapper;
 import io.flexwork.security.Constants;
@@ -95,7 +94,7 @@ public class UserService {
                         });
     }
 
-    public User registerUser(AdminUserDTO userDTO, String password) {
+    public User registerUser(UserDTO userDTO, String password) {
         userRepository
                 .findOneByEmailIgnoreCase(userDTO.getEmail().toLowerCase())
                 .ifPresent(
@@ -146,7 +145,7 @@ public class UserService {
         return true;
     }
 
-    public User createUser(AdminUserDTO userDTO) {
+    public User createUser(UserDTO userDTO) {
         User user = new User();
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
@@ -167,7 +166,9 @@ public class UserService {
         if (userDTO.getAuthorities() != null) {
             Set<Authority> authorities =
                     userDTO.getAuthorities().stream()
-                            .map(authorityRepository::findById)
+                            .map(
+                                    authorityDTO ->
+                                            authorityRepository.findById(authorityDTO.getName()))
                             .filter(Optional::isPresent)
                             .map(Optional::get)
                             .collect(Collectors.toSet());
@@ -184,7 +185,7 @@ public class UserService {
      * @param userDTO user to update.
      * @return updated user.
      */
-    public Optional<AdminUserDTO> updateUser(AdminUserDTO userDTO) {
+    public Optional<UserDTO> updateUser(UserDTO userDTO) {
         return Optional.of(userRepository.findById(userDTO.getId()))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
@@ -201,7 +202,10 @@ public class UserService {
                             Set<Authority> managedAuthorities = user.getAuthorities();
                             managedAuthorities.clear();
                             userDTO.getAuthorities().stream()
-                                    .map(authorityRepository::findById)
+                                    .map(
+                                            authorityDTO ->
+                                                    authorityRepository.findById(
+                                                            authorityDTO.getName()))
                                     .filter(Optional::isPresent)
                                     .map(Optional::get)
                                     .forEach(managedAuthorities::add);
@@ -209,7 +213,7 @@ public class UserService {
                             log.debug("Changed Information for User: {}", user);
                             return user;
                         })
-                .map(AdminUserDTO::new);
+                .map(userMapper::userToUserDTO);
     }
 
     public void deleteUserByEmail(String email) {
@@ -267,8 +271,8 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public Page<AdminUserDTO> getAllManagedUsers(Pageable pageable) {
-        return userRepository.findAll(pageable).map(AdminUserDTO::new);
+    public Page<UserDTO> getAllManagedUsers(Pageable pageable) {
+        return userRepository.findAll(pageable).map(value -> userMapper.userToUserDTO(value));
     }
 
     @Transactional(readOnly = true)

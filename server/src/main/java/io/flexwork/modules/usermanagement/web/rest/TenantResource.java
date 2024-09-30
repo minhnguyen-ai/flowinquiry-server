@@ -31,7 +31,7 @@ public class TenantResource {
 
     @PostMapping("/tenants")
     public TenantDTO createTenant(@RequestBody TenantDTO tenantDTO) {
-        Tenant tenant = TenantMapper.instance.tenantDtoToTenant(tenantDTO);
+        Tenant tenant = tenantMapper.tenantDtoToTenant(tenantDTO);
         return tenantMapper.tenantToTenantDto(tenantService.registerNewTenant(tenant));
     }
 

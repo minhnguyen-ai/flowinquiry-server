@@ -4,7 +4,11 @@ import io.flexwork.modules.crm.domain.Account;
 import io.flexwork.modules.crm.domain.Contact;
 import io.flexwork.modules.crm.event.ActivityLogEvent;
 import io.flexwork.modules.crm.repository.AccountRepository;
+<<<<<<< HEAD
 
+        =======
+import jakarta.persistence.EntityNotFoundException;
+>>>>>>> 1968e609cd687b3eb57bd14674886bd0566d94b9
 import java.util.Optional;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -41,9 +45,14 @@ public class AccountService {
     }
 
     public Account updateAccount(Long accountId, Account accountDetails) {
-// Step 1: Find the account by ID
-        Account existingAccount = accountRepository.findById(accountId)
-                .orElseThrow(() -> new EntityNotFoundException("Account not found with id: " + accountId));
+
+        Account existingAccount =
+                accountRepository
+                        .findById(accountId)
+                        .orElseThrow(
+                                () ->
+                                        new EntityNotFoundException(
+                                                "Account not found with id: " + accountId));
 
         // Step 2: Update the fields of the existing account with the new details
         existingAccount.setAccountName(accountDetails.getAccountName());

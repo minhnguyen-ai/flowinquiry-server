@@ -25,6 +25,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
 import tech.jhipster.config.DefaultProfileUtil;
 
@@ -35,6 +36,7 @@ import tech.jhipster.config.DefaultProfileUtil;
     FlexworkProperties.class
 })
 @EntityScan("io.flexwork")
+@Order(1)
 public class FlexworkApp implements CommandLineRunner {
 
     private static final Logger log = LoggerFactory.getLogger(FlexworkApp.class);

@@ -46,7 +46,8 @@ public class ContactController {
     @PutMapping("/{id}")
     public ResponseEntity<ContactDTO> updateContact(
             @PathVariable Long id, @RequestBody ContactDTO contactDTO) {
-        Contact updatedContact = contactService.updateContact(id, contactMapper.contactDTOToContact(contactDTO));
+        Contact updatedContact =
+                contactService.updateContact(id, contactMapper.contactDTOToContact(contactDTO));
         return ResponseEntity.ok(contactMapper.contactToContactDTO(updatedContact));
     }
 

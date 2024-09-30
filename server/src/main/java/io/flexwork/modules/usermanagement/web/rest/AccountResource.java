@@ -4,8 +4,9 @@ import io.flexwork.modules.usermanagement.domain.User;
 import io.flexwork.modules.usermanagement.repository.UserRepository;
 import io.flexwork.modules.usermanagement.service.MailService;
 import io.flexwork.modules.usermanagement.service.UserService;
-import io.flexwork.modules.usermanagement.service.dto.AdminUserDTO;
 import io.flexwork.modules.usermanagement.service.dto.PasswordChangeDTO;
+import io.flexwork.modules.usermanagement.service.dto.UserDTO;
+import io.flexwork.modules.usermanagement.service.mapper.UserMapper;
 import io.flexwork.modules.usermanagement.web.rest.errors.EmailAlreadyUsedException;
 import io.flexwork.modules.usermanagement.web.rest.errors.InvalidPasswordException;
 import io.flexwork.security.SecurityUtils;
@@ -35,12 +36,18 @@ public class AccountResource {
 
     private final UserService userService;
 
+    private UserMapper userMapper;
+
     private final MailService mailService;
 
     public AccountResource(
-            UserRepository userRepository, UserService userService, MailService mailService) {
+            UserRepository userRepository,
+            UserService userService,
+            UserMapper userMapper,
+            MailService mailService) {
         this.userRepository = userRepository;
         this.userService = userService;
+        this.userMapper = userMapper;
         this.mailService = mailService;
     }
 
@@ -85,10 +92,10 @@ public class AccountResource {
      *     returned.
      */
     @GetMapping("/account")
-    public AdminUserDTO getAccount() {
+    public UserDTO getAccount() {
         return userService
                 .getUserWithAuthorities()
-                .map(AdminUserDTO::new)
+                .map(userMapper::userToUserDTO)
                 .orElseThrow(() -> new AccountResourceException("User could not be found"));
     }
 
@@ -100,7 +107,7 @@ public class AccountResource {
      * @throws RuntimeException {@code 500 (Internal Server Error)} if the user login wasn't found.
      */
     @PostMapping("/account")
-    public void saveAccount(@Valid @RequestBody AdminUserDTO userDTO) {
+    public void saveAccount(@Valid @RequestBody UserDTO userDTO) {
         String userLogin =
                 SecurityUtils.getCurrentUserLogin()
                         .orElseThrow(

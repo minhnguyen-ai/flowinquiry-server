@@ -6,7 +6,8 @@ import static io.flexwork.security.SecurityUtils.JWT_ALGORITHM;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.flexwork.modules.usermanagement.repository.UserRepository;
 import io.flexwork.modules.usermanagement.service.UserService;
-import io.flexwork.modules.usermanagement.service.dto.AdminUserDTO;
+import io.flexwork.modules.usermanagement.service.dto.UserDTO;
+import io.flexwork.modules.usermanagement.service.mapper.UserMapper;
 import io.flexwork.modules.usermanagement.web.rest.errors.InvalidLoginException;
 import jakarta.validation.Valid;
 import java.time.Instant;
@@ -48,21 +49,25 @@ public class LoginController {
 
     private final UserService userService;
 
+    private UserMapper userMapper;
+
     private final UserRepository userRepository;
 
     public LoginController(
             JwtEncoder jwtEncoder,
             AuthenticationManagerBuilder authenticationManagerBuilder,
             UserService userService,
+            UserMapper userMapper,
             UserRepository userRepository) {
         this.jwtEncoder = jwtEncoder;
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.userService = userService;
+        this.userMapper = userMapper;
         this.userRepository = userRepository;
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AdminUserDTO> authorize(@Valid @RequestBody LoginVM loginVM) {
+    public ResponseEntity<UserDTO> authorize(@Valid @RequestBody LoginVM loginVM) {
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(loginVM.getEmail(), loginVM.getPassword());
 
@@ -70,10 +75,10 @@ public class LoginController {
                 authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        AdminUserDTO adminUserDTO =
+        UserDTO adminUserDTO =
                 userService
                         .getUserWithAuthorities()
-                        .map(AdminUserDTO::new)
+                        .map(value -> userMapper.userToUserDTO(value))
                         .orElseThrow(() -> new InvalidLoginException());
 
         String jwt = this.createToken(authentication, loginVM.isRememberMe());

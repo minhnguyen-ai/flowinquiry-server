@@ -1,10 +1,10 @@
 package io.flexwork.modules.usermanagement.web.rest;
 
-import io.flexwork.modules.usermanagement.service.dto.AdminUserDTO;
+import io.flexwork.modules.usermanagement.service.dto.UserDTO;
 import jakarta.validation.constraints.Size;
 
 /** View Model extending the AdminUserDTO, which is meant to be used in the user management UI. */
-public class ManagedUserVM extends AdminUserDTO {
+public class ManagedUserVM extends UserDTO {
 
     public static final int PASSWORD_MIN_LENGTH = 4;
 
