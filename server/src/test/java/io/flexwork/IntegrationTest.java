@@ -1,5 +1,7 @@
 package io.flexwork;
 
+import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
+
 import io.flexwork.config.AsyncSyncConfiguration;
 import io.flexwork.config.EmbeddedSQL;
 import io.flexwork.config.FlexworkProperties;
@@ -10,7 +12,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.jdbc.SqlGroup;
 
 /** Base composite annotation for integration tests. */
 @Target(ElementType.TYPE)
@@ -19,5 +22,9 @@ import org.springframework.context.annotation.Import;
         classes = {FlexworkApp.class, JacksonConfiguration.class, AsyncSyncConfiguration.class})
 @EnableConfigurationProperties({FlexworkProperties.class})
 @EmbeddedSQL
-@Import(TestDataLoaderConfig.class)
+@SqlGroup({
+    @Sql("/sql/users.sql"),
+    @Sql("/sql/accounts.sql"),
+    @Sql(value = "/sql/cleanup.sql", executionPhase = AFTER_TEST_METHOD)
+})
 public @interface IntegrationTest {}

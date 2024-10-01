@@ -132,9 +132,7 @@ class AccountResourceIT {
                 .andExpect(jsonPath("$.langKey").value("en"))
                 .andExpect(
                         jsonPath("$.authorities")
-                                .value(
-                                        new AuthorityDTO(
-                                                AuthoritiesConstants.ADMIN, "Administrator")));
+                                .value("{name=ROLE_ADMIN, descriptiveName=Administrator}"));
 
         userService.deleteUserByEmail(TEST_USER_LOGIN_EMAIL);
     }

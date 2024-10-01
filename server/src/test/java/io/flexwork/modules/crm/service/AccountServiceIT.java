@@ -1,12 +1,12 @@
 package io.flexwork.modules.crm.service;
 
-import static io.flexwork.TestDataLoaderConfig.accountMap;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 import io.flexwork.IntegrationTest;
 import io.flexwork.modules.crm.domain.Account;
+import io.flexwork.modules.crm.repository.AccountRepository;
+import io.flexwork.modules.crm.service.dto.AccountDTO;
+import io.flexwork.modules.crm.service.mapper.AccountMapper;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,22 +16,59 @@ public class AccountServiceIT {
 
     @Autowired private AccountService accountService;
 
-    @Test
-    public void testSaveAccountSuccessfully() {
-        Account savedAccount = accountMap.get("account_1");
-        Optional<Account> optionalAccount = accountService.findAccountById(savedAccount.getId());
-        // Ensure the account was found
-        assertTrue(optionalAccount.isPresent(), "Account should be present");
+    @Autowired private AccountMapper accountMapper;
+    @Autowired private AccountRepository accountRepository;
 
-        Account account = optionalAccount.get();
+    @Test
+    public void testUpdatedAccount() {
+        Account savedAccount = accountRepository.findByAccountName("account_1").orElseThrow();
+        AccountDTO accountDTO =
+                AccountDTO.builder()
+                        .id(savedAccount.getId())
+                        .accountName("account_name2")
+                        .accountType("account_type2")
+                        .industry("industry2")
+                        .status("status2")
+                        .build();
+        Account updatedAccount = accountMapper.accountDTOToAccount(accountDTO);
+        Account returnedUpdateAccount =
+                accountService.updateAccount(savedAccount.getId(), updatedAccount);
         assertAll(
-                () -> assertEquals(savedAccount.getAccountName(), account.getAccountName()),
-                () -> assertEquals(savedAccount.getAccountType(), account.getAccountType()),
-                () -> assertEquals(savedAccount.getIndustry(), account.getIndustry()),
-                () -> assertEquals(savedAccount.getStatus(), account.getStatus()),
-                () -> assertEquals(savedAccount.getId(), account.getId()));
+                () -> assertEquals("account_name2", returnedUpdateAccount.getAccountName()),
+                () -> assertEquals("account_type2", returnedUpdateAccount.getAccountType()),
+                () -> assertEquals("industry2", returnedUpdateAccount.getIndustry()),
+                () -> assertEquals("status2", returnedUpdateAccount.getStatus()),
+                () ->
+                        assertEquals(
+                                savedAccount.getAssignedToUser(),
+                                returnedUpdateAccount.getAssignedToUser()));
     }
 
     @Test
-    public void testUpdatedAccount() {}
+    public void testSaveAccountSuccessfully() {
+        Account account1 =
+                Account.builder()
+                        .accountName("account_name")
+                        .accountType("account_type")
+                        .industry("industry")
+                        .status("status")
+                        .build();
+        Account savedAccount = accountService.saveAccount(account1);
+
+        Optional<Account> optionalAccount = accountService.findAccountById(savedAccount.getId());
+        // Ensure the returnedAccount was found
+        assertTrue(optionalAccount.isPresent(), "Account should be present");
+
+        Account returnedAccount = optionalAccount.get();
+        assertAll(
+                () -> assertEquals(savedAccount.getAccountName(), returnedAccount.getAccountName()),
+                () -> assertEquals(savedAccount.getAccountType(), returnedAccount.getAccountType()),
+                () -> assertEquals(savedAccount.getIndustry(), returnedAccount.getIndustry()),
+                () -> assertEquals(savedAccount.getStatus(), returnedAccount.getStatus()),
+                () -> assertEquals(savedAccount.getId(), returnedAccount.getId()),
+                () ->
+                        assertEquals(
+                                savedAccount.getAssignedToUser(),
+                                returnedAccount.getAssignedToUser()));
+    }
 }

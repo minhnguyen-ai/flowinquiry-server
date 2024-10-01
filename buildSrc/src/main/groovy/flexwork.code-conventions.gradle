@@ -15,6 +15,12 @@ spotless {
         ktfmt()
     }
 
+    sql {
+        target 'src/test/resources/**/*.sql' // have to set manually
+
+        dbeaver() // has its own section below
+    }
+
     format 'xml', {
         target 'src/**/*.xml' // must specify target
         eclipseWtp('xml')
