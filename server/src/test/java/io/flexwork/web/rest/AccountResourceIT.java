@@ -3,6 +3,8 @@ package io.flexwork.web.rest;
 import static io.flexwork.db.DbConstants.DEFAULT_TENANT;
 import static io.flexwork.db.TenantConstants.HEADER_TENANT_ID;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasEntry;
+import static org.hamcrest.Matchers.hasItems;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -132,8 +134,10 @@ class AccountResourceIT {
                 .andExpect(jsonPath("$.langKey").value("en"))
                 .andExpect(
                         jsonPath("$.authorities")
-                                .value("{name=ROLE_ADMIN, descriptiveName=Administrator}"));
-
+                                .value(
+                                        hasItems(
+                                                hasEntry("name", "ROLE_ADMIN"),
+                                                hasEntry("descriptiveName", "Administrator"))));
         userService.deleteUserByEmail(TEST_USER_LOGIN_EMAIL);
     }
 
@@ -205,22 +209,15 @@ class AccountResourceIT {
 
     static Stream<ManagedUserVM> invalidUsers() {
         return Stream.of(
+                createInvalidUser("password", "Bob", "Green", "invalid", true), // <-- invalid
                 createInvalidUser(
-                        "bob", "password", "Bob", "Green", "invalid", true), // <-- invalid
-                createInvalidUser(
-                        "bob",
                         "123",
                         "Bob",
                         "Green",
                         "bob@example.com",
                         true), // password with only 3 digits
                 createInvalidUser(
-                        "bob",
-                        null,
-                        "Bob",
-                        "Green",
-                        "bob@example.com",
-                        true) // invalid null password
+                        null, "Bob", "Green", "bob@example.com", true) // invalid null password
                 );
     }
 
@@ -241,12 +238,7 @@ class AccountResourceIT {
     }
 
     private static ManagedUserVM createInvalidUser(
-            String login,
-            String password,
-            String firstName,
-            String lastName,
-            String email,
-            boolean activated) {
+            String password, String firstName, String lastName, String email, boolean activated) {
         ManagedUserVM invalidUser = new ManagedUserVM();
         invalidUser.setPassword(password);
         invalidUser.setFirstName(firstName);
@@ -333,7 +325,7 @@ class AccountResourceIT {
         validUser.setImageUrl("http://placehold.it/50x50");
         validUser.setLangKey(Constants.DEFAULT_LANGUAGE);
         validUser.setAuthorities(
-                Collections.singleton(new AuthorityDTO(AuthoritiesConstants.ADMIN)));
+                Collections.singleton(new AuthorityDTO(AuthoritiesConstants.USER)));
 
         restAccountMockMvc
                 .perform(

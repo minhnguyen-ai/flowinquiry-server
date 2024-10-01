@@ -23,7 +23,7 @@ INSERT
             notes
         )
     VALUES(
-        1,
+        1000,
         'account_1',
         'Reseller',
         'Information Technology',
@@ -45,4 +45,4 @@ INSERT
         NULL
     );
 
-ALTER SEQUENCE fw_crm_account_id_seq RESTART WITH 2;
+ALTER SEQUENCE fw_crm_account_id_seq RESTART WITH 2000;

@@ -20,7 +20,7 @@ INSERT
             last_modified_date
         )
     VALUES(
-        1,
+        1000,
         '$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOHab',
         'User',
         'User',
@@ -61,7 +61,7 @@ INSERT
             last_modified_date
         )
     VALUES(
-        2,
+        1001,
         '$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oR12',
         'Administrator',
         'Administrator',
