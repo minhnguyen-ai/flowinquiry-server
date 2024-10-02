@@ -23,7 +23,7 @@ const config: DocsThemeConfig = {
 
     const description =
       config.frontMatter.description ||
-      'Make beautiful websites with Next.js & MDX.'
+      'The flexible and configurable CRM system'
     const title = config.title + (route === '/' ? '' : ' - Nextra')
 
     return (
