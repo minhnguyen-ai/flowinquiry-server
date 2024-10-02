@@ -9,6 +9,7 @@ import io.flexwork.db.TenantContext;
 import io.flexwork.db.service.LiquibaseService;
 import io.flexwork.modules.usermanagement.domain.Tenant;
 import io.flexwork.modules.usermanagement.service.TenantService;
+import io.github.cdimascio.dotenv.Dotenv;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import java.net.InetAddress;
@@ -84,9 +85,26 @@ public class FlexworkApp implements CommandLineRunner {
      */
     public static void main(String[] args) {
         SpringApplication app = new SpringApplication(FlexworkApp.class);
+
+        loadEnvVariablesFromEnvFile(".");
+        loadEnvVariablesFromEnvFile("..");
+
         DefaultProfileUtil.addDefaultProfile(app);
         Environment env = app.run(args).getEnvironment();
         logApplicationStartup(env);
+    }
+
+    private static void loadEnvVariablesFromEnvFile(String path) {
+        Dotenv dotEnv =
+                Dotenv.configure()
+                        .directory(path)
+                        .filename(".env.local")
+                        .systemProperties()
+                        .ignoreIfMissing()
+                        .load();
+        if (dotEnv.entries().size() > 0) {
+            log.info("Loaded env variables from {}", path + "/.env.local");
+        }
     }
 
     private static void logApplicationStartup(Environment env) {
