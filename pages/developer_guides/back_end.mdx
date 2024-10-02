@@ -1,1 +1,146 @@
+import { Callout, FileTree, Tabs } from 'nextra/components'
+
 # Back-end
+
+Flexwork back-end is a spring boot application, and it has several components:
+* Spring Data
+* Spring REST
+* Spring Security
+* Spring State Machine
+* Liquibase
+
+Flexwork uses Gradle as its build tool and includes the Gradle wrapper in the distribution, so there's no need to install Gradle separately.
+
+
+## Get the latest sources from GitHub
+
+Access the latest source code for Flexwork's back-end at https://github.com/theflexwork/flexwork-server
+
+
+## Development
+
+### Folders organization
+
+<FileTree>
+  <FileTree.Folder name="flexwork-frontend" defaultOpen>
+    <FileTree.Folder name="scripts" />
+    <FileTree.Folder name="server" />
+    <FileTree.Folder name="tools" />
+  </FileTree.Folder>
+</FileTree>
+
+* `scripts` Includes useful scripts for validating environment settings, setting up project environment variables, and more
+
+
+### Checking environments
+
+Flexwork backend requires Java, Docker is already installed. You can run the `valid_checks.sh` script located in the scripts folder to verify 
+if your machine is set up to work with Flexwork
+
+```bash
+➜  flexwork-server git:(main) scripts/valid_checks.sh 
+Running java_check.sh...
+Java Version Information:
+openjdk version "17.0.11" 2024-04-16 LTS
+OpenJDK Runtime Environment Corretto-17.0.11.9.1 (build 17.0.11+9-LTS)
+OpenJDK 64-Bit Server VM Corretto-17.0.11.9.1 (build 17.0.11+9-LTS, mixed mode, sharing)
+
+Java Vendor: Amazon.com Inc.
+Java Runtime Environment: OpenJDK Runtime Environment
+Java VM Name: OpenJDK 64-Bit Server VM
+Java Home: ~/.jenv
+Java version is 17, which is greater than or equal to 17.
+java_check.sh succeeded.
+Running docker_check.sh...
+docker_check.sh succeeded.
+Your environments settings satisfy Flexwork's conditions
+
+```
+
+### Setup scripts
+
+You will need to run the following scripts:
+
+`scripts/init_git_hooks.sh`: Sets up a git hook to automatically format and check code logic each time you commit changes.
+
+`scripts/init_environments.sh`: Create a new .env.local file, which is used by the Flexwork server
+
+<Callout emoji="💡">
+  You can run the `scripts/all.sh` script, which will check your environment settings and perform the necessary configurations, eliminating the need to run multiple scripts individually
+</Callout>
+
+### Run application
+
+#### Run postgres database
+
+Flexwork uses PostgreSQL as its database and provides pre-configured PostgreSQL settings. You need to run the database before starting the Flexwork server. 
+Ensure that Docker is installed on your machine, then run the command `docker compose -f docker/services.yml` up to start the database
+
+```bash
+➜  flexwork-server git:(main) docker compose -f docker/services.yml up                 
+[+] Running 1/0
+ ✔ Container flexwork-postgresql-1  Created                                                                                                                                                                        0.0s 
+Attaching to postgresql-1
+postgresql-1  | 
+postgresql-1  | PostgreSQL Database directory appears to contain a database; Skipping initialization
+postgresql-1  | 
+postgresql-1  | 2024-10-02 03:59:35.602 UTC [1] LOG:  starting PostgreSQL 16.3 (Debian 16.3-1.pgdg120+1) on aarch64-unknown-linux-gnu, compiled by gcc (Debian 12.2.0-14) 12.2.0, 64-bit
+postgresql-1  | 2024-10-02 03:59:35.602 UTC [1] LOG:  listening on IPv4 address "0.0.0.0", port 5432
+postgresql-1  | 2024-10-02 03:59:35.602 UTC [1] LOG:  listening on IPv6 address "::", port 5432
+postgresql-1  | 2024-10-02 03:59:35.603 UTC [1] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+postgresql-1  | 2024-10-02 03:59:35.607 UTC [30] LOG:  database system was shut down at 2024-10-02 03:59:25 UTC
+postgresql-1  | 2024-10-02 03:59:35.611 UTC [1] LOG:  database system is ready to accept connections
+
+```
+
+<Callout type="error" emoji="️🚫">
+Be sure to run the scripts/all.sh or scripts/create_secrets.sh script before starting the PostgreSQL database, as they will generate a new 
+PostgreSQL password and store it in the .env.local file, which the PostgreSQL container relies on.
+</Callout>
+
+
+#### Run flexwork server
+
+<Tabs items={['Gradle', 'IntelliJ']}>
+<Tabs.Tab>
+From the root folder, run the command `./gradlew :server:bootRun`
+
+```bash
+➜  flexwork-server git:(main) ./gradlew :server:bootRun
+Starting a Gradle Daemon, 1 incompatible Daemon could not be reused, use --status for details
+
+> Task :server:bootRun
+ ███████████ ████                                                          █████
+░░███░░░░░░█░░███                                                         ░░███
+ ░███   █ ░  ░███   ██████  █████ █████ █████ ███ █████  ██████  ████████  ░███ █████
+ ░███████    ░███  ███░░███░░███ ░░███ ░░███ ░███░░███  ███░░███░░███░░███ ░███░░███
+ ░███░░░█    ░███ ░███████  ░░░█████░   ░███ ░███ ░███ ░███ ░███ ░███ ░░░  ░██████░
+ ░███  ░     ░███ ░███░░░    ███░░░███  ░░███████████  ░███ ░███ ░███      ░███░░███
+ █████       █████░░██████  █████ █████  ░░████░████   ░░██████  █████     ████ █████
+░░░░░       ░░░░░  ░░░░░░  ░░░░░ ░░░░░    ░░░░ ░░░░     ░░░░░░  ░░░░░     ░░░░ ░░░░░
+
+
+
+:: Flexwork 🤓  :: Running Spring Boot 3.3.1 :: Startup profile(s) dev ::
+:: https://www.flexwork.io ::
+
+2024-10-01T21:51:52.677-07:00 DEBUG 25048 --- [kground-preinit] org.jboss.logging.logProvider:164 : Logging Provider: org.jboss.logging.Slf4jLoggerProvider found via system property 
+2024-10-01T21:51:52.708-07:00  INFO 25048 --- [  restartedMain] io.flexwork.FlexworkApp.logStarting:50 : Starting FlexworkApp using Java 17.0.11 with PID 25048 (/Users/hainguyen/Projects/flexwork-server/server/build/classes/java/main started by hainguyen in /Users/hainguyen/Projects/flexwork-server/server) 
+2024-10-01T21:51:52.708-07:00 DEBUG 25048 --- [  restartedMain] io.flexwork.FlexworkApp.logStarting:51 : Running with Spring Boot v3.3.1, Spring v6.1.10 
+2024-10-01T21:51:52.708-07:00  INFO 25048 --- [  restartedMain] io.flexwork.FlexworkApp.logStartupProfileInfo:660 : The following 2 profiles are active: "dev", "api-docs" 
+2024-10-01T21:51:52.733-07:00  INFO 25048 --- [  restartedMain] org.springframework.boot.devtools.restart.ChangeableUrls.logTo:252 : The Class-Path manifest attribute in /Users/hainguyen/.gradle/caches/modules-2/files-2.1/com.sun.xml.bind/jaxb-impl/4.0.5/b70ad3db43ee72d7a35ae3c4d1d6d2e08ce7623/jaxb-impl-4.0.5.jar referenced one or more files that do not exist: file:/Users/hainguyen/.gradle/caches/modules-2/files-2.1/com.sun.xml.bind/jaxb-impl/4.0.5/b70ad3db43ee72d7a35ae3c4d1d6d2e08ce7623/jaxb-core.jar,file:/Users/hainguyen/.gradle/caches/modules-2/files-2.1/com.sun.xml.bind/jaxb-impl/4.0.5/b70ad3db43ee72d7a35ae3c4d1d6d2e08ce7623/angus-activation.jar 
+2024-10-01T21:51:52.733-07:00  INFO 25048 --- [  restartedMain] org.springframework.boot.devtools.restart.ChangeableUrls.logTo:252 : The Class-Path manifest attribute in /Users/hainguyen/.gradle/caches/modules-2/files-2.1/com.sun.xml.bind/jaxb-core/4.0.5/ad427d8777ae2495bfcb37069d611e8379867e6d/jaxb-core-4.0.5.jar referenced one or more files that do not exist: file:/Users/hainguyen/.gradle/caches/modules-2/files-2.1/com.sun.xml.bind/jaxb-core/4.0.5/ad427d8777ae2495bfcb37069d611e8379867e6d/jakarta.activation-api.jar,file:/Users/hainguyen/.gradle/caches/modules-2/files-2.1/com.sun.xml.bind/jaxb-core/4.0.5/ad427d8777ae2495bfcb37069d611e8379867e6d/jakarta.xml.bind-api.jar 
+
+```
+
+It may take some time before the server APIs are accessible on the default port `8080`
+</Tabs.Tab>
+<Tabs.Tab>
+You can import the Flexwork server into IntelliJ as a Gradle project. Once imported, run the `io.flexwork.FlexworkApp` class as a standalone Java application
+
+
+![IntelliJ](/assets/flexwork_intellij.png)
+
+As similar than gradle command, it will take some time before the server APIs are accessible on the default port `8080`
+</Tabs.Tab>
+</Tabs>
