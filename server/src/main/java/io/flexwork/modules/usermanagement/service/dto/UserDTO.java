@@ -1,5 +1,6 @@
 package io.flexwork.modules.usermanagement.service.dto;
 
+import jakarta.validation.constraints.Email;
 import java.io.Serializable;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -14,7 +15,7 @@ public class UserDTO implements Serializable {
 
     @EqualsAndHashCode.Include private Long id;
 
-    @EqualsAndHashCode.Include private String email;
+    @Email @EqualsAndHashCode.Include private String email;
 
     private String firstName;
 
