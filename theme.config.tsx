@@ -10,7 +10,7 @@ const config: DocsThemeConfig = {
   docsRepositoryBase: 'https://github.com/theflexwork/flexwork-docs',
   logo: (
     <>
-      <img src="/logo.png"/>
+      <img src="/flexwork-docs/logo.png"/>
     </>
   ),
   head: function useHead() {
@@ -40,7 +40,7 @@ const config: DocsThemeConfig = {
         <meta name="twitter:site:domain" content="theflexwork" />
         <meta name="twitter:url" content="https://theflexwork.io" />
         <meta name="apple-mobile-web-app-title" content="Flexwork" />
-        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+        <link rel="icon" href="/flexwork-docs/favicon.ico" type="image/x-icon" />
       </>
     )
   },
