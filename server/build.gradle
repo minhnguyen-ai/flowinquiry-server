@@ -96,7 +96,9 @@ dependencies {
     implementation(libs.jhipster.framework)
     implementation(libs.springdoc.openapi.starter.webmvc.api)
     implementation("org.apache.commons:commons-lang3")
-    implementation("org.apache.jclouds:jclouds-all:2.6.0")
+    implementation("org.apache.jclouds:jclouds-all:2.6.0") {
+        exclude group: "com.sun.xml.bind"
+    }
     implementation("org.springframework.boot:spring-boot-loader-tools")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-aop")
