@@ -17,6 +17,7 @@ import { Separator } from "@/components/ui/separator";
 import { saveOrUpdateContact } from "@/lib/actions/contacts.action";
 import { validateForm } from "@/lib/validator";
 import { contactSchema, ContactType } from "@/types/contacts";
+import AccountSelectField from "@/components/accounts/account-field-field";
 
 export const ContactForm = ({ initialData }: FormProps<ContactType>) => {
   const form = useForm<ContactType>({
@@ -64,6 +65,7 @@ export const ContactForm = ({ initialData }: FormProps<ContactType>) => {
             label="Last Name"
             placeholder="Last Name"
           />
+          <AccountSelectField label="aaa" value="Account"/>
           <ExtInputField
             form={form}
             required={true}

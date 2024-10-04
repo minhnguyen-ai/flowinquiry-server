@@ -50,16 +50,23 @@ export const contacts_columns_def: ColumnDef<ContactType>[] = [
     ),
   },
   {
-    accessorKey: "status",
+    accessorKey: "email",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Status" />
+      <DataTableColumnHeader column={column} title="Email" />
     ),
     cell: ({ row }) => {
-      return <div>{row.getValue("status")}</div>;
+      return <div>{row.getValue("email")}</div>;
     },
     filterFn: (row, id, value) => {
       return value.includes(row.getValue(id));
     },
+  },
+  {
+    accessorKey: "status",
+    header: ({ column }) => (
+        <DataTableColumnHeader column={column} title="Status" />
+    ),
+    cell: ({ row }) => <div>{row.getValue("status")}</div>,
   },
   {
     accessorKey: "createdAt",

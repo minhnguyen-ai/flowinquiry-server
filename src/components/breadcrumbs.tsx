@@ -1,4 +1,3 @@
-import { Slash } from "lucide-react";
 import { Fragment } from "react";
 
 import {
@@ -27,9 +26,7 @@ export function Breadcrumbs({ items }: { items: BreadcrumbItemProps[] }) {
               </BreadcrumbItem>
             )}
             {index < items.length - 1 && (
-              <BreadcrumbSeparator>
-                <Slash />
-              </BreadcrumbSeparator>
+              <BreadcrumbSeparator/>
             )}
             {index === items.length - 1 && (
               <BreadcrumbPage>{item.title}</BreadcrumbPage>
