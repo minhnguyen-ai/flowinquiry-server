@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const contactSchema = z.object({
   id: z.number().nullish(),
-  account_id: z.number(),
+  accountId: z.number().nullish(),
   firstName: z.string().min(1),
   lastName: z.string().min(1),
   email: z.string().email().nullish(),

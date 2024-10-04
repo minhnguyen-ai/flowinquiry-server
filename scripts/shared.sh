@@ -1,7 +1,5 @@
 #!/bin/bash
 
-#!/bin/bash
-
 # Function to run a script and pass failed_scripts array by reference
 run_script() {
     local script_name="$1"

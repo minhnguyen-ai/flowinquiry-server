@@ -21,12 +21,11 @@ import { contactSchema, ContactType } from "@/types/contacts";
 export const ContactForm = ({ initialData }: FormProps<ContactType>) => {
   const form = useForm<ContactType>({
     resolver: zodResolver(contactSchema),
-    defaultValues: initialData,
+    defaultValues: {...initialData, "accountId": 1}
   });
 
   async function onSubmit(contact: ContactType) {
-    contact.account_id = 1;
-    console.log("Error");
+    // contact.accountId = 1;
     if (validateForm(contact, contactSchema, form)) {
       await saveOrUpdateContact(isEdit, contact);
     }

@@ -1,26 +1,14 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { Circle, HelpCircle } from "lucide-react";
 import Link from "next/link";
 
 import { DataTableRowActions } from "@/components/contacts/contact-table-cell-action";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DataTableColumnHeader } from "@/components/ui/ext-data-table-column-header";
 import { ContactType } from "@/types/contacts";
+import {Button} from "@/components/ui/button";
 
-const status_options = [
-  {
-    value: "Active",
-    label: "Active",
-    icon: HelpCircle,
-  },
-  {
-    value: "InActive",
-    label: "InActive",
-    icon: Circle,
-  },
-];
 export const contacts_columns_def: ColumnDef<ContactType>[] = [
   {
     id: "select",
@@ -46,15 +34,18 @@ export const contacts_columns_def: ColumnDef<ContactType>[] = [
     enableHiding: false,
   },
   {
-    id: "name",
+    accessorFn: (row) => `${row.firstName} ${row.lastName}`,
+    accessorKey: "name",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Name" />
     ),
     cell: ({ row }) => (
       <div>
-        <Link href={`/portal/contacts/${row.original.id}`}>
-          {row.getValue("firstName")} fff {row.getValue("lastName")}brert
-        </Link>
+        <Button variant="link" asChild>
+          <Link href={`/portal/contacts/${row.original.id}`}>
+            {row.getValue("name")}
+          </Link>
+        </Button>
       </div>
     ),
   },
