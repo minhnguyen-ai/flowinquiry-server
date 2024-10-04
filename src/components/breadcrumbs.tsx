@@ -25,9 +25,7 @@ export function Breadcrumbs({ items }: { items: BreadcrumbItemProps[] }) {
                 <BreadcrumbLink href={item.link}>{item.title}</BreadcrumbLink>
               </BreadcrumbItem>
             )}
-            {index < items.length - 1 && (
-              <BreadcrumbSeparator/>
-            )}
+            {index < items.length - 1 && <BreadcrumbSeparator />}
             {index === items.length - 1 && (
               <BreadcrumbPage>{item.title}</BreadcrumbPage>
             )}

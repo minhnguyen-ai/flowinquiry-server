@@ -7,6 +7,7 @@ import { DataTableRowActions } from "@/components/accounts/account-table-cell-ac
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DataTableColumnHeader } from "@/components/ui/ext-data-table-column-header";
+import { obfuscate } from "@/lib/endecode";
 import { AccountType } from "@/types/accounts";
 
 export const accounts_columns_def: ColumnDef<AccountType>[] = [
@@ -40,7 +41,7 @@ export const accounts_columns_def: ColumnDef<AccountType>[] = [
     ),
     cell: ({ row }) => (
       <Button variant="link" asChild>
-        <Link href={`/portal/accounts/${row.original.id}`}>
+        <Link href={`/portal/accounts/${obfuscate(row.original.id!)}`}>
           {row.getValue("accountName")}
         </Link>
       </Button>

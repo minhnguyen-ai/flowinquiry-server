@@ -12,6 +12,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { obfuscate } from "@/lib/endecode";
 import { AccountType } from "@/types/accounts";
 
 export function DataTableRowActions({ row }: { row: Row<AccountType> }) {
@@ -31,7 +32,9 @@ export function DataTableRowActions({ row }: { row: Row<AccountType> }) {
 
           <DropdownMenuItem
             onClick={() =>
-              router.push(`/portal/accounts/${row.original.id}/edit`)
+              router.push(
+                `/portal/accounts/${obfuscate(row.original.id!)}/edit`,
+              )
             }
           >
             <Edit className="mr-2 h-4 w-4" /> Update

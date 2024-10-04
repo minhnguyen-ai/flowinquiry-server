@@ -4,10 +4,10 @@ import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 
 import { DataTableRowActions } from "@/components/contacts/contact-table-cell-action";
+import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DataTableColumnHeader } from "@/components/ui/ext-data-table-column-header";
 import { ContactType } from "@/types/contacts";
-import {Button} from "@/components/ui/button";
 
 export const contacts_columns_def: ColumnDef<ContactType>[] = [
   {
@@ -64,7 +64,7 @@ export const contacts_columns_def: ColumnDef<ContactType>[] = [
   {
     accessorKey: "status",
     header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Status" />
+      <DataTableColumnHeader column={column} title="Status" />
     ),
     cell: ({ row }) => <div>{row.getValue("status")}</div>,
   },

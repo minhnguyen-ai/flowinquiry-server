@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
 import { useForm } from "react-hook-form";
 
+import AccountSelectField from "@/components/accounts/account-id-select";
 import ContactStatusSelect from "@/components/contacts/contact-status-select";
 import { Heading } from "@/components/heading";
 import {
@@ -17,12 +18,11 @@ import { Separator } from "@/components/ui/separator";
 import { saveOrUpdateContact } from "@/lib/actions/contacts.action";
 import { validateForm } from "@/lib/validator";
 import { contactSchema, ContactType } from "@/types/contacts";
-import AccountSelectField from "@/components/accounts/account-field-field";
 
 export const ContactForm = ({ initialData }: FormProps<ContactType>) => {
   const form = useForm<ContactType>({
     resolver: zodResolver(contactSchema),
-    defaultValues: {...initialData, "accountId": 1}
+    defaultValues: { ...initialData, accountId: 1 },
   });
 
   async function onSubmit(contact: ContactType) {
@@ -65,7 +65,7 @@ export const ContactForm = ({ initialData }: FormProps<ContactType>) => {
             label="Last Name"
             placeholder="Last Name"
           />
-          <AccountSelectField label="aaa" value="Account"/>
+          <AccountSelectField label="aaa" value="Account" />
           <ExtInputField
             form={form}
             required={true}

@@ -23,6 +23,7 @@ npx prettier .  --write
 if [ $? -ne 0 ]; then
     echo "Formatting failed. Commit aborted."
     exit 1
+fi
 
 git add .
 
@@ -33,6 +34,7 @@ npx eslint --fix
 if [ $? -ne 0 ]; then
     echo "Eslint failed. Commit aborted."
     exit 1
+fi:
 
 EOF
 

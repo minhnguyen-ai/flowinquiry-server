@@ -3,13 +3,16 @@ import { notFound } from "next/navigation";
 import { AccountView } from "@/components/accounts/account-view";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { findAccountById } from "@/lib/actions/accounts.action";
+import { deobfuscate } from "@/lib/endecode";
 
 export default async function Page({
   params,
 }: {
-  params: { accountId: number };
+  params: { accountId: string };
 }) {
-  const { ok, data: account } = await findAccountById(params.accountId);
+  const { ok, data: account } = await findAccountById(
+    deobfuscate(params.accountId) as number,
+  );
   if (!ok || !account) {
     notFound();
   }

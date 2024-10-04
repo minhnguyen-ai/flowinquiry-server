@@ -26,6 +26,7 @@ import {
   findPreviousAccount,
 } from "@/lib/actions/accounts.action";
 import { findContactsByAccountId } from "@/lib/actions/contacts.action";
+import { obfuscate } from "@/lib/endecode";
 import { cn } from "@/lib/utils";
 import { AccountType } from "@/types/accounts";
 import { ActionResult, PageableResult } from "@/types/commons";
@@ -147,7 +148,7 @@ export const AccountView: React.FC<ViewProps<AccountType>> = ({
         <div className="w-full">Contacts</div>
         <div>
           <Link
-            href={"/portal/contacts/new/edit"}
+            href={`/portal/contacts/new/edit/accountId=${obfuscate(account.id!)}`}
             className={cn(buttonVariants({ variant: "default" }))}
           >
             <Plus className="mr-2 h-4 w-4" /> New Contact
