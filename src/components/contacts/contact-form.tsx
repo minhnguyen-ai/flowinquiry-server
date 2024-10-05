@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useSearchParams } from "next/navigation";
 import React from "react";
 import { useForm } from "react-hook-form";
 
@@ -16,13 +17,28 @@ import {
 import { Form } from "@/components/ui/form";
 import { Separator } from "@/components/ui/separator";
 import { saveOrUpdateContact } from "@/lib/actions/contacts.action";
+import { deobfuscateToNumber } from "@/lib/endecode";
 import { validateForm } from "@/lib/validator";
 import { contactSchema, ContactType } from "@/types/contacts";
 
 export const ContactForm = ({ initialData }: FormProps<ContactType>) => {
+  let accountId: number | null = null;
+  let accountName: string | null = null;
+  const searchParams = useSearchParams();
+  const accountIdBase64 = searchParams.get("accountId");
+
+  if (accountIdBase64 !== null) {
+    accountId = deobfuscateToNumber(accountIdBase64);
+    accountName = searchParams.get("accountName");
+  }
+
   const form = useForm<ContactType>({
     resolver: zodResolver(contactSchema),
-    defaultValues: { ...initialData, accountId: 1 },
+    defaultValues: {
+      ...initialData,
+      accountId: accountId,
+      accountName: accountName,
+    },
   });
 
   async function onSubmit(contact: ContactType) {

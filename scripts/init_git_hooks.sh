@@ -34,7 +34,7 @@ npx eslint --fix
 if [ $? -ne 0 ]; then
     echo "Eslint failed. Commit aborted."
     exit 1
-fi:
+fi
 
 EOF
 

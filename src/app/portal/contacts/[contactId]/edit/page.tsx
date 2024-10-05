@@ -1,6 +1,7 @@
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import ContactForm from "@/components/contacts/contact-form";
 import { findContactById } from "@/lib/actions/contacts.action";
+import { deobfuscateToNumber } from "@/lib/endecode";
 import { ContactType } from "@/types/contacts";
 
 const breadcrumbItems = [
@@ -12,11 +13,11 @@ const breadcrumbItems = [
 export default async function Page({
   params,
 }: {
-  params: { contactId: number | "new" };
+  params: { contactId: string | "new" };
 }) {
   const { data: contact } =
     params.contactId !== "new"
-      ? await findContactById(params.contactId)
+      ? await findContactById(deobfuscateToNumber(params.contactId))
       : { data: undefined as ContactType | undefined };
 
   return (

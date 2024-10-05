@@ -74,7 +74,7 @@ export const AccountView: React.FC<ViewProps<AccountType>> = ({
   });
   if (isError) {
     toast({
-      description: `Can not load contacts for the account ${account.accountName}`,
+      description: `Can not load contacts for the account ${account.name}`,
     });
   }
 
@@ -90,7 +90,7 @@ export const AccountView: React.FC<ViewProps<AccountType>> = ({
         >
           <ChevronLeft />
         </Button>
-        <div className="text-2xl w-full">{account.accountName}</div>
+        <div className="text-2xl w-full">{account.name}</div>
         <Button variant="outline" size="icon" onClick={navigateToNextRecord}>
           <ChevronRight />
         </Button>
@@ -98,7 +98,7 @@ export const AccountView: React.FC<ViewProps<AccountType>> = ({
       <Card>
         <CardContent>
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-            <div>Type: {account.accountType}</div>
+            <div>Type: {account.type}</div>
             <div>Industry: {account.industry}</div>
             <div>Address Line: {account.addressLine1}</div>
             <div>Phone number: {account.phoneNumber}</div>
@@ -127,7 +127,7 @@ export const AccountView: React.FC<ViewProps<AccountType>> = ({
         <CollapsibleContent>
           <div className="grid grid-cols-4 gap-2 w-full max-w-full">
             <div className="w-[200px] content-end">Type: </div>
-            <Badge variant="outline">{account.accountType}</Badge>
+            <Badge variant="outline">{account.type}</Badge>
             <div className="w-[200px]">Industry: </div>
             <Badge variant="outline" className="bg-amber-300">
               {account.industry}
@@ -148,7 +148,7 @@ export const AccountView: React.FC<ViewProps<AccountType>> = ({
         <div className="w-full">Contacts</div>
         <div>
           <Link
-            href={`/portal/contacts/new/edit/accountId=${obfuscate(account.id!)}`}
+            href={`/portal/contacts/new/edit?accountId=${obfuscate(account.id)}&&accountName=${account.name}`}
             className={cn(buttonVariants({ variant: "default" }))}
           >
             <Plus className="mr-2 h-4 w-4" /> New Contact

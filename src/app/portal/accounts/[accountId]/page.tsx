@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { AccountView } from "@/components/accounts/account-view";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { findAccountById } from "@/lib/actions/accounts.action";
-import { deobfuscate } from "@/lib/endecode";
+import { deobfuscateToNumber } from "@/lib/endecode";
 
 export default async function Page({
   params,
@@ -11,7 +11,7 @@ export default async function Page({
   params: { accountId: string };
 }) {
   const { ok, data: account } = await findAccountById(
-    deobfuscate(params.accountId) as number,
+    deobfuscateToNumber(params.accountId),
   );
   if (!ok || !account) {
     notFound();
@@ -20,7 +20,7 @@ export default async function Page({
   const breadcrumbItems = [
     { title: "Dashboard", link: "/portal" },
     { title: "Accounts", link: "/portal/accounts" },
-    { title: account.accountName, link: "#" },
+    { title: account.name, link: "#" },
   ];
 
   return (

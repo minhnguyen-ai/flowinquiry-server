@@ -35,24 +35,24 @@ export const accounts_columns_def: ColumnDef<AccountType>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "accountName",
+    accessorKey: "name",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Name" />
     ),
     cell: ({ row }) => (
       <Button variant="link" asChild>
         <Link href={`/portal/accounts/${obfuscate(row.original.id!)}`}>
-          {row.getValue("accountName")}
+          {row.getValue("name")}
         </Link>
       </Button>
     ),
   },
   {
-    accessorKey: "accountType",
+    accessorKey: "type",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Type" />
     ),
-    cell: ({ row }) => <div>{row.getValue("accountType")}</div>,
+    cell: ({ row }) => <div>{row.getValue("type")}</div>,
   },
   {
     accessorKey: "industry",

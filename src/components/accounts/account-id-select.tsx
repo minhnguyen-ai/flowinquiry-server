@@ -5,13 +5,11 @@ import React from "react";
 import IdInputSelect from "@/components/shared/id_input_select";
 
 type AccountFieldSelectProps = {
-  label: string;
-  value: string;
+  accountName: string | null;
 };
 
 const AccountSelectField: React.FC<AccountFieldSelectProps> = ({
-  label,
-  value,
+  accountName,
 }) => {
   const handleButtonClick = () => {
     alert("Button clicked");

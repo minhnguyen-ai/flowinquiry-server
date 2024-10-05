@@ -33,9 +33,7 @@ export const AccountForm = ({ initialData }: FormProps<AccountType>) => {
   }
 
   const isEdit = !!initialData;
-  const title = isEdit
-    ? `Edit account ${initialData?.accountName}`
-    : "Create account";
+  const title = isEdit ? `Edit account ${initialData?.name}` : "Create account";
   const description = isEdit ? "Edit account" : "Add a new account";
   const submitText = isEdit ? "Save changes" : "Create";
   const submitTextWhileLoading = isEdit ? "Saving changes ..." : "Creating ...";
@@ -54,7 +52,7 @@ export const AccountForm = ({ initialData }: FormProps<AccountType>) => {
           <ExtInputField
             form={form}
             required={true}
-            fieldName="accountName"
+            fieldName="name"
             label="Name"
             placeholder="Account Name"
           />

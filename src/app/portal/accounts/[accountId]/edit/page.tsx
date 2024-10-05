@@ -1,7 +1,7 @@
 import AccountForm from "@/components/accounts/account-form";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { findAccountById } from "@/lib/actions/accounts.action";
-import { deobfuscate } from "@/lib/endecode";
+import { deobfuscateToNumber } from "@/lib/endecode";
 import { AccountType } from "@/types/accounts";
 
 const breadcrumbItems = [
@@ -17,7 +17,7 @@ export default async function Page({
 }) {
   const { data: account } =
     params.accountId !== "new"
-      ? await findAccountById(deobfuscate(params.accountId) as number)
+      ? await findAccountById(deobfuscateToNumber(params.accountId))
       : { data: undefined as AccountType | undefined };
 
   return (

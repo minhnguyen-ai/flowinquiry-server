@@ -10,7 +10,7 @@ const AccountTypesSelect = ({ form, required }: FormFieldProps) => {
     <ValuesQuerySelect<EntityValueDefinition>
       form={form}
       queryName="accountTypes"
-      fieldName="accountType"
+      fieldName="type"
       fieldLabel="Type"
       fetchDataFn={findAccountTypes}
       valueKey="value"

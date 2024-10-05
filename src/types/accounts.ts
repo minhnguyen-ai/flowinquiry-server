@@ -2,8 +2,8 @@ import { z } from "zod";
 
 export const accountSchema = z.object({
   id: z.number().nullish(),
-  accountName: z.string().min(1),
-  accountType: z.string().min(1),
+  name: z.string().min(1),
+  type: z.string().min(1),
   industry: z.string().min(1),
   email: z.string().email().nullish(),
   addressLine1: z.string().nullish(),
