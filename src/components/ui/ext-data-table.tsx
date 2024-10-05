@@ -15,6 +15,7 @@ import {
   VisibilityState,
 } from "@tanstack/react-table";
 import * as React from "react";
+import { useState } from "react";
 
 import { DataTableToolbar } from "@/components/accounts/account-table-toolbar";
 import { DataTablePagination } from "@/components/ui/ext-data-table-pagination";
@@ -26,7 +27,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useImperativeHandle, useState } from "react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
