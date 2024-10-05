@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 
 import { get, post, put } from "@/lib/actions/commons.action";
+import { findEntitiesFilterOptions } from "@/lib/actions/shared.action";
 import { BACKEND_API } from "@/lib/constants";
 import { accountSchema, AccountType } from "@/types/accounts";
 import {
@@ -25,6 +26,10 @@ export const findAccountStatuses = async (): Promise<
   );
 };
 
+export const findAccountStatusesFilterOptions = async () => {
+  return findEntitiesFilterOptions(findAccountStatuses);
+};
+
 export const findAccountTypes = async (): Promise<
   ActionResult<Array<EntityValueDefinition>>
 > => {
@@ -33,12 +38,20 @@ export const findAccountTypes = async (): Promise<
   );
 };
 
+export const findAccountTypesFilterOptions = async () => {
+  return findEntitiesFilterOptions(findAccountTypes);
+};
+
 export const findAccountIndustries = async (): Promise<
   ActionResult<Array<EntityValueDefinition>>
 > => {
   return get<Array<EntityValueDefinition>>(
     `${BACKEND_API}/api/crm/values?entityType=account&&valueKey=industry`,
   );
+};
+
+export const findAccountIndustriesFilterOptions = async () => {
+  return findEntitiesFilterOptions(findAccountIndustries);
 };
 
 export const saveOrUpdateAccount = async (

@@ -12,6 +12,7 @@ import {
 type IdInputSelectProps = {
   name: string;
   label: string;
+  defaultValue: string | null;
   placeholder?: string;
   buttonLabel?: string;
   readOnly?: boolean;
@@ -21,10 +22,10 @@ type IdInputSelectProps = {
 const IdInputSelect: React.FC<IdInputSelectProps> = ({
   name,
   label,
+  defaultValue = null,
   placeholder = "Enter value...",
   buttonLabel = "Select",
   readOnly = true,
-
   onButtonClick,
 }) => {
   const { control, getValues } = useFormContext(); // Get the form context from React Hook Form
@@ -42,7 +43,7 @@ const IdInputSelect: React.FC<IdInputSelectProps> = ({
               <input
                 type="text"
                 {...field} // Spread the React Hook Form field props
-                value={field.value}
+                value={defaultValue ? defaultValue : field.value}
                 placeholder={placeholder}
                 readOnly={readOnly}
                 className={`mt-1 block w-full px-3 py-2 ${

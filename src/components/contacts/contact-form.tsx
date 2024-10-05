@@ -81,7 +81,7 @@ export const ContactForm = ({ initialData }: FormProps<ContactType>) => {
             label="Last Name"
             placeholder="Last Name"
           />
-          <AccountSelectField label="aaa" value="Account" />
+          <AccountSelectField accountName={accountName} />
           <ExtInputField
             form={form}
             required={true}

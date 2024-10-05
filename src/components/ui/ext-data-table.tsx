@@ -16,6 +16,7 @@ import {
 } from "@tanstack/react-table";
 import * as React from "react";
 
+import { DataTableToolbar } from "@/components/accounts/account-table-toolbar";
 import { DataTablePagination } from "@/components/ui/ext-data-table-pagination";
 import {
   Table,
@@ -25,11 +26,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
-const DataTableToolbar = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => <div ref={ref}></div>);
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -71,7 +67,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="space-y-4">
-      {/*<DataTableToolbar table={table} /> Fix me*/}
+      <DataTableToolbar table={table} />
       <div className="rounded-md border">
         <Table>
           <TableHeader>

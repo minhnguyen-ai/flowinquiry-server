@@ -19,6 +19,7 @@ const AccountSelectField: React.FC<AccountFieldSelectProps> = ({
     <IdInputSelect
       name="accountId"
       label="Account"
+      defaultValue={accountName}
       onButtonClick={handleButtonClick}
     />
   );

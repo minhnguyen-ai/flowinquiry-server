@@ -1,6 +1,7 @@
 import { Column } from "@tanstack/react-table";
 import { CheckIcon, PlusCircle } from "lucide-react";
 import * as React from "react";
+import { useEffect, useState } from "react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -20,26 +21,45 @@ import {
 } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
-
-export type FilterOption = {
-  label: string;
-  value: string;
-  icon?: React.ComponentType<{ className?: string }>;
-};
+import { FilterOption } from "@/types/ui-components";
 
 interface DataTableFacetedFilter<TData, TValue> {
   column?: Column<TData, TValue>;
   title?: string;
-  options: FilterOption[];
+  options?: FilterOption[]; // Static options
+  optionsFn?: () => Promise<FilterOption[]>; // Function to load options dynamically
 }
 
 export function DataTableFacetedFilter<TData, TValue>({
   column,
   title,
   options,
+  optionsFn,
 }: DataTableFacetedFilter<TData, TValue>) {
   const facets = column?.getFacetedUniqueValues();
   const selectedValues = new Set(column?.getFilterValue() as string[]);
+
+  const [loadedOptions, setLoadedOptions] = useState<FilterOption[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    const loadOptions = async () => {
+      if (optionsFn) {
+        setLoading(true);
+        try {
+          const resolvedOptions = await optionsFn();
+          setLoadedOptions(resolvedOptions);
+        } catch (error) {
+          console.error("Error loading", error);
+        } finally {
+          setLoading(false);
+        }
+      } else if (options) {
+        setLoadedOptions(options);
+      }
+    };
+    loadOptions();
+  }, [options, optionsFn]);
 
   return (
     <Popover>
@@ -65,7 +85,7 @@ export function DataTableFacetedFilter<TData, TValue>({
                     {selectedValues.size} selected
                   </Badge>
                 ) : (
-                  options
+                  loadedOptions
                     .filter((option) => selectedValues.has(option.value))
                     .map((option) => (
                       <Badge
@@ -88,7 +108,7 @@ export function DataTableFacetedFilter<TData, TValue>({
           <CommandList>
             <CommandEmpty>No results found.</CommandEmpty>
             <CommandGroup>
-              {options.map((option) => {
+              {loadedOptions.map((option) => {
                 const isSelected = selectedValues.has(option.value);
                 return (
                   <CommandItem

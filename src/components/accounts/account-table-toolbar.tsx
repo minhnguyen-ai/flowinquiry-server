@@ -3,10 +3,15 @@
 import type { Table } from "@tanstack/react-table";
 import { X } from "lucide-react";
 
-// import { priority_options, status_options } from "../filters"
 import { Button } from "@/components/ui/button";
+import { DataTableFacetedFilter } from "@/components/ui/ext-data-table-faceted-filter";
 import { DataTableViewOptions } from "@/components/ui/ext-data-table-view-options";
 import { Input } from "@/components/ui/input";
+import {
+  findAccountIndustriesFilterOptions,
+  findAccountStatusesFilterOptions,
+  findAccountTypesFilterOptions,
+} from "@/lib/actions/accounts.action";
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
@@ -28,20 +33,27 @@ export function DataTableToolbar<TData>({
           }
           className="h-8 w-[150px] lg:w-[250px]"
         />
-        {/*{table.getColumn("status") && (*/}
-        {/*    <DataTableFacetedFilter*/}
-        {/*        column={table.getColumn("status")}*/}
-        {/*        title="Status"*/}
-        {/*        options={status_options}*/}
-        {/*    />*/}
-        {/*)}*/}
-        {/*{table.getColumn("priority") && (*/}
-        {/*    <DataTableFacetedFilter*/}
-        {/*        column={table.getColumn("priority")}*/}
-        {/*        title="Priority"*/}
-        {/*        options={priority_options}*/}
-        {/*    />*/}
-        {/*)}*/}
+        {table.getColumn("status") && (
+          <DataTableFacetedFilter
+            column={table.getColumn("status")}
+            title="Status"
+            optionsFn={findAccountStatusesFilterOptions}
+          />
+        )}
+        {table.getColumn("type") && (
+          <DataTableFacetedFilter
+            column={table.getColumn("type")}
+            title="Type"
+            optionsFn={findAccountTypesFilterOptions}
+          />
+        )}
+        {table.getColumn("industry") && (
+          <DataTableFacetedFilter
+            column={table.getColumn("industry")}
+            title="Industry"
+            optionsFn={findAccountIndustriesFilterOptions}
+          />
+        )}
         {isFiltered && (
           <Button
             variant="ghost"
