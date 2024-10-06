@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 
 import { get, post, put } from "@/lib/actions/commons.action";
+import { findEntitiesFilterOptions } from "@/lib/actions/shared.action";
 import { BACKEND_API } from "@/lib/constants";
 import {
   ActionResult,
@@ -31,6 +32,10 @@ export const findContactStatuses = async (): Promise<
   return get<Array<EntityValueDefinition>>(
     `${BACKEND_API}/api/crm/values?entityType=contact&&valueKey=status`,
   );
+};
+
+export const findContactStatusesFilterOptions = async () => {
+  return findEntitiesFilterOptions(findContactStatuses);
 };
 
 export const saveOrUpdateContact = async (

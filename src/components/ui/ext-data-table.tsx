@@ -1,5 +1,6 @@
 "use client";
 
+import { Table as TanstackTable } from "@tanstack/react-table";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -17,7 +18,6 @@ import {
 import * as React from "react";
 import { useState } from "react";
 
-import { DataTableToolbar } from "@/components/accounts/account-table-toolbar";
 import { DataTablePagination } from "@/components/ui/ext-data-table-pagination";
 import {
   Table,
@@ -31,11 +31,13 @@ import {
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  tbToolbar?: React.ComponentType<{ table: TanstackTable<TData> }>; // Toolbar component as a prop
 }
 
 export const DataTable = <TData, TValue>({
   columns,
   data,
+  tbToolbar: ToolbarComponent, // Pass the toolbar component as a prop
 }: DataTableProps<TData, TValue>) => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -65,7 +67,8 @@ export const DataTable = <TData, TValue>({
 
   return (
     <div className="space-y-4">
-      <DataTableToolbar table={table} />
+      {ToolbarComponent && <ToolbarComponent table={table} />}{" "}
+      {/* Render the toolbar */}
       <div className="rounded-md border">
         <Table>
           <TableHeader>

@@ -12,6 +12,7 @@ import Link from "next/link";
 import React, { useState } from "react";
 
 import { contacts_columns_def } from "@/components/contacts/contact-table-columns";
+import { ContactTableToolbar } from "@/components/contacts/contact-table-toolbar";
 import { Badge } from "@/components/ui/badge";
 import {
   Collapsible,
@@ -161,6 +162,7 @@ export const AccountView: React.FC<ViewProps<AccountType>> = ({
         <DataTable
           columns={contacts_columns_def}
           data={contactPageResult?.content}
+          tbToolbar={ContactTableToolbar}
         />
       )}
     </>

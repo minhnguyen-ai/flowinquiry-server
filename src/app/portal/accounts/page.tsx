@@ -3,6 +3,7 @@ import Link from "next/link";
 import React from "react";
 
 import { accounts_columns_def } from "@/components/accounts/account-table-columns";
+import { AccountTableToolbar } from "@/components/accounts/account-table-toolbar";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { Heading } from "@/components/heading";
 import { buttonVariants } from "@/components/ui/button";
@@ -52,6 +53,7 @@ const AccountsPage = async ({ searchParams }: paramsProps) => {
       <DataTable
         columns={accounts_columns_def}
         data={accountPageResult!.content}
+        tbToolbar={AccountTableToolbar}
       />
     </div>
   );

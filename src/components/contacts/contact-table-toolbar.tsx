@@ -7,17 +7,13 @@ import { Button } from "@/components/ui/button";
 import { DataTableFacetedFilter } from "@/components/ui/ext-data-table-faceted-filter";
 import { DataTableViewOptions } from "@/components/ui/ext-data-table-view-options";
 import { Input } from "@/components/ui/input";
-import {
-  findAccountIndustriesFilterOptions,
-  findAccountStatusesFilterOptions,
-  findAccountTypesFilterOptions,
-} from "@/lib/actions/accounts.action";
+import { findContactStatusesFilterOptions } from "@/lib/actions/contacts.action";
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
 }
 
-export function AccountTableToolbar<TData>({
+export function ContactTableToolbar<TData>({
   table,
 }: DataTableToolbarProps<TData>) {
   const isFiltered = table.getState().columnFilters.length > 0;
@@ -26,7 +22,7 @@ export function AccountTableToolbar<TData>({
     <div className="flex items-center justify-between">
       <div className="flex flex-1 items-center space-x-2">
         <Input
-          placeholder="Filter accounts..."
+          placeholder="Filter contacts..."
           value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
             table.getColumn("name")?.setFilterValue(event.target.value)
@@ -37,21 +33,7 @@ export function AccountTableToolbar<TData>({
           <DataTableFacetedFilter
             column={table.getColumn("status")}
             title="Status"
-            optionsFn={findAccountStatusesFilterOptions}
-          />
-        )}
-        {table.getColumn("type") && (
-          <DataTableFacetedFilter
-            column={table.getColumn("type")}
-            title="Type"
-            optionsFn={findAccountTypesFilterOptions}
-          />
-        )}
-        {table.getColumn("industry") && (
-          <DataTableFacetedFilter
-            column={table.getColumn("industry")}
-            title="Industry"
-            optionsFn={findAccountIndustriesFilterOptions}
+            optionsFn={findContactStatusesFilterOptions}
           />
         )}
         {isFiltered && (
