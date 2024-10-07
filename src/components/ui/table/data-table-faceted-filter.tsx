@@ -1,7 +1,5 @@
-import { Column } from "@tanstack/react-table";
-import { CheckIcon, PlusCircle } from "lucide-react";
-import * as React from "react";
-import { useEffect, useState } from "react";
+import { CheckIcon, PlusCircledIcon } from "@radix-ui/react-icons";
+import type { Column } from "@tanstack/react-table";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -21,51 +19,26 @@ import {
 } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
-import { FilterOption } from "@/types/ui-components";
+import { FilterOption } from "@/types/table";
 
-interface DataTableFacetedFilter<TData, TValue> {
+interface DataTableFacetedFilterProps<TData, TValue> {
   column?: Column<TData, TValue>;
   title?: string;
-  options?: FilterOption[]; // Static options
-  optionsFn?: () => Promise<FilterOption[]>; // Function to load options dynamically
+  options: FilterOption[];
 }
 
 export function DataTableFacetedFilter<TData, TValue>({
   column,
   title,
   options,
-  optionsFn,
-}: DataTableFacetedFilter<TData, TValue>) {
-  const facets = column?.getFacetedUniqueValues();
+}: DataTableFacetedFilterProps<TData, TValue>) {
   const selectedValues = new Set(column?.getFilterValue() as string[]);
-
-  const [loadedOptions, setLoadedOptions] = useState<FilterOption[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
-
-  useEffect(() => {
-    const loadOptions = async () => {
-      if (optionsFn) {
-        setLoading(true);
-        try {
-          const resolvedOptions = await optionsFn();
-          setLoadedOptions(resolvedOptions);
-        } catch (error) {
-          console.error("Error loading", error);
-        } finally {
-          setLoading(false);
-        }
-      } else if (options) {
-        setLoadedOptions(options);
-      }
-    };
-    loadOptions();
-  }, [options, optionsFn]);
 
   return (
     <Popover>
       <PopoverTrigger asChild>
         <Button variant="outline" size="sm" className="h-8 border-dashed">
-          <PlusCircle className="mr-2 h-4 w-4" />
+          <PlusCircledIcon className="mr-2 size-4" />
           {title}
           {selectedValues?.size > 0 && (
             <>
@@ -85,7 +58,7 @@ export function DataTableFacetedFilter<TData, TValue>({
                     {selectedValues.size} selected
                   </Badge>
                 ) : (
-                  loadedOptions
+                  options
                     .filter((option) => selectedValues.has(option.value))
                     .map((option) => (
                       <Badge
@@ -102,14 +75,15 @@ export function DataTableFacetedFilter<TData, TValue>({
           )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0" align="start">
+      <PopoverContent className="w-[12.5rem] p-0" align="start">
         <Command>
           <CommandInput placeholder={title} />
           <CommandList>
             <CommandEmpty>No results found.</CommandEmpty>
-            <CommandGroup>
-              {loadedOptions.map((option) => {
+            <CommandGroup className="max-h-[18.75rem] overflow-y-auto overflow-x-hidden">
+              {options.map((option) => {
                 const isSelected = selectedValues.has(option.value);
+
                 return (
                   <CommandItem
                     key={option.value}
@@ -127,23 +101,27 @@ export function DataTableFacetedFilter<TData, TValue>({
                   >
                     <div
                       className={cn(
-                        "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
+                        "mr-2 flex size-4 items-center justify-center rounded-sm border border-primary",
                         isSelected
                           ? "bg-primary text-primary-foreground"
                           : "opacity-50 [&_svg]:invisible",
                       )}
                     >
-                      <CheckIcon className={cn("h-4 w-4")} />
+                      <CheckIcon className="size-4" aria-hidden="true" />
                     </div>
                     {option.icon && (
-                      <option.icon className="mr-2 h-4 w-4 text-muted-foreground" />
+                      <option.icon
+                        className="mr-2 size-4 text-muted-foreground"
+                        aria-hidden="true"
+                      />
                     )}
                     <span>{option.label}</span>
-                    {facets?.get(option.value) && (
-                      <span className="ml-auto flex h-4 w-4 items-center justify-center font-mono text-xs">
-                        {facets.get(option.value)}
-                      </span>
-                    )}
+                    {option.withCount &&
+                      column?.getFacetedUniqueValues()?.get(option.value) && (
+                        <span className="ml-auto flex size-4 items-center justify-center font-mono text-xs">
+                          {column?.getFacetedUniqueValues().get(option.value)}
+                        </span>
+                      )}
                   </CommandItem>
                 );
               })}

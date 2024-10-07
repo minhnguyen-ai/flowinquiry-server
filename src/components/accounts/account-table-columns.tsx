@@ -6,7 +6,7 @@ import Link from "next/link";
 import { DataTableRowActions } from "@/components/accounts/account-table-cell-action";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { DataTableColumnHeader } from "@/components/ui/ext-data-table-column-header";
+import { DataTableColumnHeader } from "@/components/ui/table/data-table-column-header";
 import { obfuscate } from "@/lib/endecode";
 import { AccountType } from "@/types/accounts";
 

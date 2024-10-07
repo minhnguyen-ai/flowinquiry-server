@@ -21,3 +21,16 @@ export const accountSchema = z.object({
 });
 
 export type AccountType = z.infer<typeof accountSchema>;
+
+export const accountSearchParamsSchema = z.object({
+  page: z.coerce.number().default(1), // page number
+  size: z.coerce.number().default(10), // size per page
+  sort: z.string().optional(),
+  name: z.string().optional(),
+  status: z.string().optional(),
+  industry: z.string().optional(),
+  type: z.string().optional(),
+  operator: z.enum(["and", "or"]).optional(),
+});
+
+export type AccountSearchParams = z.infer<typeof accountSearchParamsSchema>;

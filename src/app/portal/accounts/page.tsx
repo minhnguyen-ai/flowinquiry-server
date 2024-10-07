@@ -1,16 +1,17 @@
+"use memo";
+
 import { Plus } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 
-import { accounts_columns_def } from "@/components/accounts/account-table-columns";
-import { AccountTableToolbar } from "@/components/accounts/account-table-toolbar";
+import { AccountsTable } from "@/components/accounts/account-table";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { Heading } from "@/components/heading";
 import { buttonVariants } from "@/components/ui/button";
-import { DataTable } from "@/components/ui/ext-data-table";
 import { Separator } from "@/components/ui/separator";
-import { findAccounts } from "@/lib/actions/accounts.action";
+import { searchAccounts } from "@/lib/actions/accounts.action";
 import { cn } from "@/lib/utils";
+import { accountSearchParamsSchema } from "@/types/accounts";
 
 const breadcrumbItems = [
   { title: "Dashboard", link: "/portal" },
@@ -24,23 +25,15 @@ type paramsProps = {
 };
 
 const AccountsPage = async ({ searchParams }: paramsProps) => {
-  const { ok, data: accountPageResult } = await findAccounts();
-  if (!ok) {
-    throw new Error("Failed to load accounts");
-  }
-  const page = Number(searchParams.page) || 1;
-  const pageLimit = accountPageResult!.size || 1;
-  const totalElements = accountPageResult!.totalElements;
-  const pageCount = Math.ceil(totalElements / pageLimit);
+  const search = accountSearchParamsSchema.parse(searchParams);
+  const accountPromise = searchAccounts(search);
+
   return (
     <div className="space-y-4">
       <Breadcrumbs items={breadcrumbItems} />
 
       <div className="flex flex-row justify-between">
-        <Heading
-          title={`Accounts (${totalElements})`}
-          description="Manage accounts"
-        />
+        <Heading title={`Accounts`} description="Manage accounts" />
 
         <Link
           href={"/portal/accounts/new/edit"}
@@ -50,10 +43,9 @@ const AccountsPage = async ({ searchParams }: paramsProps) => {
         </Link>
       </div>
       <Separator />
-      <DataTable
-        columns={accounts_columns_def}
-        data={accountPageResult!.content}
-        tbToolbar={AccountTableToolbar}
+      <AccountsTable
+        accountsPromise={accountPromise}
+        enableAdvancedFilter={false}
       />
     </div>
   );
