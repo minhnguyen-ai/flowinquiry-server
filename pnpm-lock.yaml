@@ -73,6 +73,9 @@ importers:
       "@tanstack/react-table":
         specifier: ^8.20.5
         version: 8.20.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      "@types/qs":
+        specifier: ^6.9.16
+        version: 6.9.16
       auth:
         specifier: ^1.1.1
         version: 1.1.1(zod@3.23.8)
@@ -179,6 +182,9 @@ importers:
       prettier:
         specifier: 3.3.3
         version: 3.3.3
+      qs:
+        specifier: ^6.13.0
+        version: 6.13.0
       tailwindcss:
         specifier: ^3.4.13
         version: 3.4.13
@@ -1642,6 +1648,12 @@ packages:
     resolution:
       {
         integrity: sha512-hCZTSvwbzWGvhqxp/RqVqwU999pBf2vp7hzIjiYOsl8wqOmUxkQ6ddw1cV3l8811+kdUFus/q4d1Y3E3SyEifA==,
+      }
+
+  "@types/qs@6.9.16":
+    resolution:
+      {
+        integrity: sha512-7i+zxXdPD0T4cKDuxCUXJ4wHcsJLwENa6Z3dCu8cfCK743OGy5Nu1RmAGqDPsoTDINVEcdXKRvR/zre+P2Ku1A==,
       }
 
   "@types/react-dom@18.3.0":
@@ -3960,6 +3972,13 @@ packages:
       }
     engines: { node: ">=6" }
 
+  qs@6.13.0:
+    resolution:
+      {
+        integrity: sha512-+38qI9SOr8tfZ4QmJNplMUxqjbe7LKvvZgWdExBOmd+egZTtjLB67Gu0HRX3u/XOq7UU2Nx6nsjvS16Z9uwfpg==,
+      }
+    engines: { node: ">=0.6" }
+
   queue-microtask@1.2.3:
     resolution:
       {
@@ -5771,6 +5790,8 @@ snapshots:
 
   "@types/prop-types@15.7.13": {}
 
+  "@types/qs@6.9.16": {}
+
   "@types/react-dom@18.3.0":
     dependencies:
       "@types/react": 18.3.11
@@ -7275,6 +7296,10 @@ snapshots:
       react-is: 16.13.1
 
   punycode@2.3.1: {}
+
+  qs@6.13.0:
+    dependencies:
+      side-channel: 1.0.6
 
   queue-microtask@1.2.3: {}
 

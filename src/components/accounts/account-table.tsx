@@ -24,7 +24,6 @@ export function AccountsTable({
   // Feature flags for showcasing some additional features. Feel free to remove them.
 
   const { data, pageCount } = React.use(accountsPromise);
-  console.log(`Page count ${pageCount} ${data.length}`);
   // Memoize the columns so they don't re-render on every render
   const columns = React.useMemo(() => accounts_columns_def, []);
 

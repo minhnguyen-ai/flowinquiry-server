@@ -16,6 +16,7 @@ import {
   EntityValueDefinition,
   PageableResult,
 } from "@/types/commons";
+import qs from "qs";
 
 export const findAccounts = async (): Promise<
   ActionResult<PageableResult<AccountType>>
@@ -105,9 +106,9 @@ export const findNextAccount = async (accountId: number) => {
 
 export async function searchAccounts(input: AccountSearchParams) {
   noStore();
-  console.log(`Search accounts ${JSON.stringify(input)}`);
+  console.log(`Search accounts ${qs.stringify(input)}`);
   const { ok, data: pageResult } = await get<PageableResult<AccountType>>(
-    `${BACKEND_API}/api/crm/accounts`,
+    `${BACKEND_API}/api/crm/accounts?${qs.stringify(input)}`,
   );
   if (ok) {
     return { data: pageResult!.content, pageCount: pageResult!.totalPages };
