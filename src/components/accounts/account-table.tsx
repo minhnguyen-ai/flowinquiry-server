@@ -8,7 +8,13 @@ import { DataTableAdvancedToolbar } from "@/components/ui/table/advanced/data-ta
 import { DataTable } from "@/components/ui/table/data-table";
 import { DataTableToolbar } from "@/components/ui/table/data-table-toolbar";
 import { useDataTable } from "@/hooks/use-data-table";
-import { searchAccounts } from "@/lib/actions/accounts.action";
+import { useFetchData } from "@/hooks/use-fetch-data-values";
+import {
+  findAccountIndustries,
+  findAccountStatuses,
+  findAccountTypes,
+  searchAccounts,
+} from "@/lib/actions/accounts.action";
 import { AccountType } from "@/types/accounts";
 import { DataTableFilterField } from "@/types/table";
 
@@ -27,6 +33,10 @@ export function AccountsTable({
   // Memoize the columns so they don't re-render on every render
   const columns = React.useMemo(() => accounts_columns_def, []);
 
+  const accountStatuses = useFetchData(findAccountStatuses);
+  const accountTypes = useFetchData(findAccountTypes);
+  const accountIndustries = useFetchData(findAccountIndustries);
+
   /**
    * This component can render either a faceted filter or a search filter based on the `options` prop.
    *
@@ -44,27 +54,36 @@ export function AccountsTable({
       value: "name",
       placeholder: "Filter names...",
     },
-    // FIX ME: load status, type from database
-    // {
-    //     label: "Status",
-    //     value: "status",
-    //     options: tasks.status.enumValues.map((status) => ({
-    //         label: status[0]?.toUpperCase() + status.slice(1),
-    //         value: status,
-    //         icon: getStatusIcon(status),
-    //         withCount: true,
-    //     })),
-    // },
-    // {
-    //     label: "Type",
-    //     value: "type",
-    //     options: tasks.priority.enumValues.map((priority) => ({
-    //         label: priority[0]?.toUpperCase() + priority.slice(1),
-    //         value: priority,
-    //         icon: getPriorityIcon(priority),
-    //         withCount: true,
-    //     })),
-    // },
+    {
+      label: "Type",
+      value: "type",
+      options: accountTypes.map((type) => ({
+        label: type,
+        value: type,
+        icon: undefined,
+        withCount: true,
+      })),
+    },
+    {
+      label: "Industry",
+      value: "industry",
+      options: accountIndustries.map((industry) => ({
+        label: industry,
+        value: industry,
+        icon: undefined,
+        withCount: true,
+      })),
+    },
+    {
+      label: "Status",
+      value: "status",
+      options: accountStatuses.map((status) => ({
+        label: status,
+        value: status,
+        icon: undefined,
+        withCount: true,
+      })),
+    },
   ];
 
   const { table } = useDataTable({

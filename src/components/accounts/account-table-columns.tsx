@@ -7,6 +7,13 @@ import { DataTableRowActions } from "@/components/accounts/account-table-cell-ac
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DataTableColumnHeader } from "@/components/ui/table/data-table-column-header";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { formatDateTime, formatDateTimeDistanceToNow } from "@/lib/datetime";
 import { obfuscate } from "@/lib/endecode";
 import { AccountType } from "@/types/accounts";
 
@@ -74,8 +81,19 @@ export const accounts_columns_def: ColumnDef<AccountType>[] = [
       <DataTableColumnHeader column={column} title="Created" />
     ),
     cell: ({ row }) => {
-      const field = row.getValue("createdAt") as Date;
-      return <div>{new Date(field).toDateString()}</div>;
+      const field = new Date(row.getValue("createdAt"));
+      return (
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger>
+              {formatDateTimeDistanceToNow(field)}
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{formatDateTime(field)}</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      );
     },
   },
   {
