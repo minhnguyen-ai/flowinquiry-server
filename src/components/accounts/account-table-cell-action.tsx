@@ -1,7 +1,7 @@
 "use client";
 // import { AlertModal } from '@/components/modal/alert-modal';
 import { Row } from "@tanstack/react-table";
-import { Edit, MoreHorizontal } from "lucide-react";
+import { Edit, MoreHorizontal, Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
@@ -39,9 +39,9 @@ export function DataTableRowActions({ row }: { row: Row<AccountType> }) {
           >
             <Edit className="mr-2 h-4 w-4" /> Update
           </DropdownMenuItem>
-          {/*<DropdownMenuItem onClick={() => setOpen(true)}>*/}
-          {/*  <Trash className="mr-2 h-4 w-4" /> Delete*/}
-          {/*</DropdownMenuItem>*/}
+          <DropdownMenuItem onClick={() => console.log("Open menu")}>
+            <Trash className="mr-2 h-4 w-4" /> Delete
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </>

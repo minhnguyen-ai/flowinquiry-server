@@ -6,8 +6,15 @@ import Link from "next/link";
 import { DataTableRowActions } from "@/components/contacts/contact-table-cell-action";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { DataTableColumnHeader } from "@/components/ui/ext-data-table-column-header";
+import { DataTableColumnHeader } from "@/components/ui/table/data-table-column-header";
 import { ContactType } from "@/types/contacts";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { formatDateTime, formatDateTimeDistanceToNow } from "@/lib/datetime";
 
 export const contacts_columns_def: ColumnDef<ContactType>[] = [
   {
@@ -74,8 +81,19 @@ export const contacts_columns_def: ColumnDef<ContactType>[] = [
       <DataTableColumnHeader column={column} title="Created" />
     ),
     cell: ({ row }) => {
-      const field = row.getValue("createdAt") as Date;
-      return <div>{new Date(field).toDateString()}</div>;
+      const field = new Date(row.getValue("createdAt"));
+      return (
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger>
+              {formatDateTimeDistanceToNow(field)}
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{formatDateTime(field)}</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      );
     },
   },
   {

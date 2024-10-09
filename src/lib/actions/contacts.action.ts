@@ -1,6 +1,8 @@
 "use server";
 
+import { unstable_noStore as noStore } from "next/dist/server/web/spec-extension/unstable-no-store";
 import { redirect } from "next/navigation";
+import qs from "qs";
 
 import { get, post, put } from "@/lib/actions/commons.action";
 import { findEntitiesFilterOptions } from "@/lib/actions/shared.action";
@@ -10,7 +12,11 @@ import {
   EntityValueDefinition,
   PageableResult,
 } from "@/types/commons";
-import { contactSchema, ContactType } from "@/types/contacts";
+import {
+  contactSchema,
+  ContactSearchParams,
+  ContactType,
+} from "@/types/contacts";
 
 export const findContactById = async (
   contactId: number,
@@ -37,6 +43,20 @@ export const findContactStatuses = async (): Promise<
 export const findContactStatusesFilterOptions = async () => {
   return findEntitiesFilterOptions(findContactStatuses);
 };
+
+export async function searchContacts(input: ContactSearchParams) {
+  noStore();
+
+  console.log(`Contact search param ${qs.stringify(input)}`);
+  const { ok, data: pageResult } = await get<PageableResult<ContactType>>(
+    `${BACKEND_API}/api/crm/contacts/account/15`,
+  );
+  if (ok) {
+    return { data: pageResult!.content, pageCount: pageResult!.totalPages };
+  } else {
+    throw new Error("Can not get entities");
+  }
+}
 
 export const saveOrUpdateContact = async (
   isEdit: boolean,

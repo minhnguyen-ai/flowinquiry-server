@@ -1,6 +1,5 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
 import {
   ChevronLeft,
   ChevronRight,
@@ -11,27 +10,24 @@ import {
 import Link from "next/link";
 import React, { useState } from "react";
 
-import { contacts_columns_def } from "@/components/contacts/contact-table-columns";
-import { ContactTableToolbar } from "@/components/contacts/contact-table-toolbar";
+import { ContactsTable } from "@/components/contacts/contact-table";
 import { Badge } from "@/components/ui/badge";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { DataTable } from "@/components/ui/ext-data-table";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "@/components/ui/use-toast";
 import {
   findNextAccount,
   findPreviousAccount,
 } from "@/lib/actions/accounts.action";
-import { findContactsByAccountId } from "@/lib/actions/contacts.action";
+import { searchContacts } from "@/lib/actions/contacts.action";
 import { obfuscate } from "@/lib/endecode";
 import { cn } from "@/lib/utils";
 import { AccountType } from "@/types/accounts";
-import { ActionResult, PageableResult } from "@/types/commons";
-import { ContactType } from "@/types/contacts";
+import { contactSearchParamsSchema } from "@/types/contacts";
 
 import { Button, buttonVariants } from "../ui/button";
 import { Card, CardContent } from "../ui/card";
@@ -42,6 +38,9 @@ export const AccountView: React.FC<ViewProps<AccountType>> = ({
 }: ViewProps<AccountType>) => {
   const [isOpen, setIsOpen] = useState(true);
   const [account, setAccount] = useState<AccountType>(initialData);
+
+  const search = contactSearchParamsSchema.parse({});
+  const contactPromise = searchContacts(search);
 
   const navigateToPreviousRecord = async () => {
     const { ok, data } = await findPreviousAccount(account.id!);
@@ -64,22 +63,6 @@ export const AccountView: React.FC<ViewProps<AccountType>> = ({
       });
     }
   };
-
-  const { data: contactQueryResult, isError } = useQuery<
-    ActionResult<PageableResult<ContactType>>
-  >({
-    queryKey: [`contactsPerAccount`, account.id],
-    queryFn: async () => {
-      return findContactsByAccountId(account.id!);
-    },
-  });
-  if (isError) {
-    toast({
-      description: `Can not load contacts for the account ${account.name}`,
-    });
-  }
-
-  let contactPageResult = contactQueryResult?.data;
 
   return (
     <>
@@ -156,15 +139,10 @@ export const AccountView: React.FC<ViewProps<AccountType>> = ({
           </Link>
         </div>
       </div>
-      {contactPageResult?.content === undefined ? (
-        <div>can not load contacts</div>
-      ) : (
-        <DataTable
-          columns={contacts_columns_def}
-          data={contactPageResult?.content}
-          tbToolbar={ContactTableToolbar}
-        />
-      )}
+      <ContactsTable
+        contactPromise={contactPromise}
+        enableAdvancedFilter={true}
+      />
     </>
   );
 };

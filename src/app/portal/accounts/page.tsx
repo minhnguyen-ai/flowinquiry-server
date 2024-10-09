@@ -45,7 +45,7 @@ const AccountsPage = async ({ searchParams }: paramsProps) => {
       <Separator />
       <AccountsTable
         accountsPromise={accountPromise}
-        enableAdvancedFilter={false}
+        enableAdvancedFilter={true}
       />
     </div>
   );
