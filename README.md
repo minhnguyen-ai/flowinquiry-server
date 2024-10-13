@@ -1,8 +1,6 @@
 # Flexwork documentation
 
-The public document site of the Flexwork site
-
-## Documentation
+Visit the Flexwork public documentation site. Check it out [here](https://theflexwork.github.io/flexwork-docs)
 
 ## Development
 
