@@ -1,11 +1,5 @@
-This is the Flexwork front-end. We're working diligently to prepare the first public release. If you're seeing this message, it means the source code is not yet ready for community review or contributions
+# flexwork-app
 
-## Getting Started
+[![Build status](https://github.com/theflexwork/flexwork-frontend/actions/workflows/node.js.yml/badge.svg)](https://github.com/theflexwork/flexwork-frontend/actions/workflows/node.js.yml)
 
-First, run the development server:
-
-```bash
-pnpm dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Welcome to the Flexwork front-end, handling the requests for the Flexwork's users. We're working hard to prepare for the first public release. If you're seeing this message, the source code is still in development and not yet ready for production. For developer guidelines, please visit this [page](https://theflexwork.github.io/flexwork-docs/developer_guides/front_end)
