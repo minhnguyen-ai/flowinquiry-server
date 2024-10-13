@@ -12,12 +12,12 @@ export const useFetchData = (
     const loadItems = async () => {
       const { ok, data } = await fetchData();
       if (ok && data) {
-        setItems(data.map((it) => it.value)); // Apply transformation to the fetched data
+        // setItems(data.map((it) => it.value)); // Apply transformation to the fetched data
       }
     };
 
     loadItems();
-  }, [fetchData]);
+  }, []);
 
   return items;
 };

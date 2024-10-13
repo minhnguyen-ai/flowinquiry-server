@@ -9,7 +9,11 @@ import { z } from "zod";
 
 import { Heading } from "@/components/heading";
 import { Button } from "@/components/ui/button";
-import { ExtInputField, ExtTextAreaField } from "@/components/ui/ext-form";
+import {
+  ExtInputField,
+  ExtTextAreaField,
+  SubmitButton,
+} from "@/components/ui/ext-form";
 import { Form } from "@/components/ui/form";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/components/ui/use-toast";
@@ -55,7 +59,6 @@ export const UserForm: React.FC<UserFormProps> = ({ initialData }) => {
 
   const onSubmit = async (data: z.infer<typeof userSchema>) => {
     try {
-      console.log(`Add new user ${JSON.stringify(data)}`);
       setLoading(true);
       router.refresh();
       router.push(`/portal/users`);
@@ -118,13 +121,8 @@ export const UserForm: React.FC<UserFormProps> = ({ initialData }) => {
             fieldName="description"
             label="Description"
           />
-          <Button
-            type="submit"
-            disabled={loading}
-            className="px-4 py-2 sm:col-span-2"
-          >
-            {action}
-          </Button>
+          <Button onClick={() => router.back()}>Discard</Button>
+          <SubmitButton label="Invite user" labelWhileLoading="Creating ..." />
         </form>
       </Form>
     </>

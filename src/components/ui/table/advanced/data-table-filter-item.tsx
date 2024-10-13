@@ -18,12 +18,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { DataTableAdvancedFacetedFilter } from "@/components/ui/table/advanced/data-table-advanced-faceted-filter";
 import { dataTableConfig } from "@/config/data-table";
 import { useDebounce } from "@/hooks/use-debounce";
 import { cn } from "@/lib/utils";
 import { DataTableFilterOption } from "@/types/table";
-
-import { DataTableAdvancedFacetedFilter } from "./data-table-advanced-faceted-filter";
 
 interface DataTableFilterItemProps<TData> {
   table: Table<TData>;

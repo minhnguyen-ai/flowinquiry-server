@@ -1,8 +1,9 @@
 "use server";
 
+import { redirect } from "next/navigation";
+
 import { auth } from "@/auth";
 import { ActionResult } from "@/types/commons";
-import { redirect } from "next/navigation";
 
 export const fetchData = async <TData, TResponse>(
   url: string,

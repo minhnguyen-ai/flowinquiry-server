@@ -28,6 +28,7 @@ export function ContactsTable({
   // Feature flags for showcasing some additional features. Feel free to remove them.
 
   const { data, pageCount } = React.use(contactPromise);
+
   // Memoize the columns so they don't re-render on every render
   const columns = React.useMemo(() => contacts_columns_def, []);
 

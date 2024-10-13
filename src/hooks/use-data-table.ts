@@ -194,10 +194,10 @@ export function useDataTable<TData>({
     parseAsString
       .withOptions(queryStateOptions)
       .withDefault(
-        `${initialState?.sorting?.[0]?.id}.${initialState?.sorting?.[0]?.desc ? "desc" : "asc"}`,
+        `${initialState?.sorting?.[0]?.id},${initialState?.sorting?.[0]?.desc ? "desc" : "asc"}`,
       ),
   );
-  const [column, order] = sort?.split(".") ?? [];
+  const [column, order] = sort?.split(",") ?? [];
 
   // Create parsers for each filter field
   const filterParsers = React.useMemo(() => {
@@ -250,7 +250,7 @@ export function useDataTable<TData>({
     if (typeof updaterOrValue === "function") {
       const newSorting = updaterOrValue(sorting);
       void setSort(
-        `${newSorting[0]?.id}.${newSorting[0]?.desc ? "desc" : "asc"}`,
+        `${newSorting[0]?.id},${newSorting[0]?.desc ? "desc" : "asc"}`,
       );
     }
   }

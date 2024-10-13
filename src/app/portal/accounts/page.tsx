@@ -1,5 +1,3 @@
-"use memo";
-
 import { Plus } from "lucide-react";
 import Link from "next/link";
 import React from "react";
@@ -24,7 +22,7 @@ type paramsProps = {
   };
 };
 
-const AccountsPage = async ({ searchParams }: paramsProps) => {
+const AccountsPage = ({ searchParams }: paramsProps) => {
   const search = accountSearchParamsSchema.parse(searchParams);
   const accountPromise = searchAccounts(search);
 

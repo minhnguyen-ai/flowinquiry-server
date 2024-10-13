@@ -7,7 +7,6 @@ import { DataTableRowActions } from "@/components/contacts/contact-table-cell-ac
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DataTableColumnHeader } from "@/components/ui/table/data-table-column-header";
-import { ContactType } from "@/types/contacts";
 import {
   Tooltip,
   TooltipContent,
@@ -15,6 +14,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { formatDateTime, formatDateTimeDistanceToNow } from "@/lib/datetime";
+import { ContactType } from "@/types/contacts";
 
 export const contacts_columns_def: ColumnDef<ContactType>[] = [
   {

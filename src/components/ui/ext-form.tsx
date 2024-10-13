@@ -100,11 +100,7 @@ export const SubmitButton = ({
   const { pending } = useFormStatus();
 
   return (
-    <Button
-      type="submit"
-      disabled={pending}
-      className="px-4 py-2 sm:col-span-2"
-    >
+    <Button type="submit" disabled={pending}>
       {!pending ? label : labelWhileLoading}
     </Button>
   );

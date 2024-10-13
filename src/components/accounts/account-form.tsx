@@ -19,8 +19,12 @@ import { Separator } from "@/components/ui/separator";
 import { saveOrUpdateAccount } from "@/lib/actions/accounts.action";
 import { validateForm } from "@/lib/validator";
 import { accountSchema, AccountType } from "@/types/accounts";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 export const AccountForm = ({ initialData }: FormProps<AccountType>) => {
+  const router = useRouter();
+
   const form = useForm<AccountType>({
     resolver: zodResolver(accountSchema),
     defaultValues: initialData,
@@ -108,6 +112,7 @@ export const AccountForm = ({ initialData }: FormProps<AccountType>) => {
           />
           <AccountStatusSelect form={form} required={true} />
           <ExtTextAreaField form={form} fieldName="notes" label="Notes" />
+          <Button onClick={() => router.back()}>Discard</Button>
           <SubmitButton
             label={submitText}
             labelWhileLoading={submitTextWhileLoading}
