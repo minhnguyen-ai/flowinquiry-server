@@ -29,22 +29,23 @@ const AccountsPage = ({ searchParams }: paramsProps) => {
   return (
     <div className="space-y-4">
       <Breadcrumbs items={breadcrumbItems} />
+      <div className="bg-card px-6 py-6">
+        <div className="flex flex-row justify-between">
+          <Heading title={`Accounts`} description="Manage accounts" />
 
-      <div className="flex flex-row justify-between">
-        <Heading title={`Accounts`} description="Manage accounts" />
-
-        <Link
-          href={"/portal/accounts/new/edit"}
-          className={cn(buttonVariants({ variant: "default" }))}
-        >
-          <Plus className="mr-2 h-4 w-4" /> New Account
-        </Link>
+          <Link
+            href={"/portal/accounts/new/edit"}
+            className={cn(buttonVariants({ variant: "default" }))}
+          >
+            <Plus className="mr-2 h-4 w-4" /> New Account
+          </Link>
+        </div>
+        <Separator />
+        <AccountsTable
+          accountsPromise={accountPromise}
+          enableAdvancedFilter={true}
+        />
       </div>
-      <Separator />
-      <AccountsTable
-        accountsPromise={accountPromise}
-        enableAdvancedFilter={true}
-      />
     </div>
   );
 };

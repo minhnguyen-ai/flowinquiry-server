@@ -74,7 +74,7 @@ export const UserForm: React.FC<UserFormProps> = ({ initialData }) => {
   };
 
   return (
-    <>
+    <div className="bg-card px-6 py-6">
       <div className="flex items-center justify-between">
         <Heading title={title} description={description} />
         {initialData && (
@@ -121,10 +121,17 @@ export const UserForm: React.FC<UserFormProps> = ({ initialData }) => {
             fieldName="description"
             label="Description"
           />
-          <Button onClick={() => router.back()}>Discard</Button>
-          <SubmitButton label="Invite user" labelWhileLoading="Creating ..." />
+          <div className="flex items-center gap-2">
+            <SubmitButton
+              label="Invite user"
+              labelWhileLoading="Creating ..."
+            />
+            <Button variant="secondary" onClick={() => router.back()}>
+              Discard
+            </Button>
+          </div>
         </form>
       </Form>
-    </>
+    </div>
   );
 };

@@ -2,8 +2,11 @@ import { redirect } from "next/navigation";
 import { SessionProvider } from "next-auth/react";
 
 import { auth } from "@/auth";
-import Navbar from "@/components/navbar";
-import Sidebar from "@/components/sidebar";
+import AppFooter from "@/components/themes/footer";
+import AppHeader from "@/components/themes/header/app-header";
+import AppSidebar from "@/components/themes/sidebar/sidebar-main";
+import LayoutContentProvider from "@/providers/layout-content-provider";
+import LayoutProvider from "@/providers/layout-provider";
 
 const MainLayout = async ({ children }: { children: React.ReactNode }) => {
   const session = await auth();
@@ -11,15 +14,12 @@ const MainLayout = async ({ children }: { children: React.ReactNode }) => {
 
   return (
     <SessionProvider session={session}>
-      <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
-        <Sidebar />
-        <div className="flex flex-col">
-          <Navbar />
-          <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
-            {children}
-          </main>
-        </div>
-      </div>
+      <LayoutProvider>
+        <AppHeader />
+        <AppSidebar />
+        <LayoutContentProvider>{children}</LayoutContentProvider>
+        <AppFooter />
+      </LayoutProvider>
     </SessionProvider>
   );
 };

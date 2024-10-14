@@ -43,7 +43,7 @@ export const AccountForm = ({ initialData }: FormProps<AccountType>) => {
   const submitTextWhileLoading = isEdit ? "Saving changes ..." : "Creating ...";
 
   return (
-    <>
+    <div className="bg-card px-6 py-6">
       <div className="flex items-center justify-between">
         <Heading title={title} description={description} />
       </div>
@@ -112,14 +112,18 @@ export const AccountForm = ({ initialData }: FormProps<AccountType>) => {
           />
           <AccountStatusSelect form={form} required={true} />
           <ExtTextAreaField form={form} fieldName="notes" label="Notes" />
-          <Button onClick={() => router.back()}>Discard</Button>
-          <SubmitButton
-            label={submitText}
-            labelWhileLoading={submitTextWhileLoading}
-          />
+          <div className="flex items-center gap-2">
+            <SubmitButton
+              label={submitText}
+              labelWhileLoading={submitTextWhileLoading}
+            />
+            <Button variant="secondary" onClick={() => router.back()}>
+              Discard
+            </Button>
+          </div>
         </form>
       </Form>
-    </>
+    </div>
   );
 };
 
