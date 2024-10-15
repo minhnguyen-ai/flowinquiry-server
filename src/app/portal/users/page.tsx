@@ -26,7 +26,7 @@ type paramsProps = {
 const Users = async ({ searchParams }: paramsProps) => {
   const { ok, data } = await getUsers();
   if (!ok) {
-    // throw new Error("Can not load users"); // TODO: fixit
+    // throw new Error("Can not load users"); // TODO: FIXME
   }
 
   const page = Number(searchParams.page) || 1;

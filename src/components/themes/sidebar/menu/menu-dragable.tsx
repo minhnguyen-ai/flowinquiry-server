@@ -42,9 +42,8 @@ import MenuWidget from "../common/menu-widget";
 import TeamSwitcher from "../common/team-switcher";
 
 export function MenuDragAble() {
-  const t = "Menu";
   const pathname = usePathname();
-  const menuList = getMenuList(pathname, t);
+  const menuList = getMenuList(pathname);
   const [config, setConfig] = useConfig();
   const collapsed = config.collapsed;
 

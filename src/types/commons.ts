@@ -20,13 +20,24 @@ export interface User {
   authorities?: string[] | null;
 }
 
-export type ActionResult<DValue> = {
-  status: "default" | "success" | "system_error" | "user_error";
-  message?: string;
+type ActionResultSuccess<DValue> = {
+  status: "success";
   value?: string;
-  data?: DValue;
-  ok?: boolean;
+  message?: string;
+  data: DValue;
+  ok: true;
 };
+
+type ActionResultFailure = {
+  status: "system_error" | "user_error";
+  message: string;
+  data?: undefined;
+  ok: false;
+};
+
+export type ActionResult<DValue> =
+  | ActionResultSuccess<DValue>
+  | ActionResultFailure;
 
 export interface PageableResult<Entity> {
   totalPages: number;

@@ -1,7 +1,7 @@
 "use client";
 
 import { Ellipsis } from "lucide-react";
-import { useParams, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
 import React from "react";
 
 import Logo from "@/components/logo";
@@ -27,12 +27,11 @@ import { CollapseMenuButton } from "../common/collapse-menu-button";
 export function MenuClassic({}) {
   // translate
   const pathname = usePathname();
-  const params = useParams<{ locale: string }>();
   const direction = "ltr";
 
   const isDesktop = useMediaQuery("(min-width: 1280px)");
 
-  const menuList = getMenuList(pathname, "Menu");
+  const menuList = getMenuList(pathname);
   const [config, setConfig] = useConfig();
   const collapsed = config.collapsed;
   const [hoverConfig] = useMenuHoverConfig();
@@ -111,7 +110,7 @@ export function MenuClassic({}) {
                               <div>
                                 <MenuItem
                                   label={label}
-                                  Icon={icon}
+                                  icon={icon}
                                   href={href}
                                   active={active}
                                   id={id}
@@ -130,7 +129,7 @@ export function MenuClassic({}) {
                     ) : (
                       <div className="w-full mb-2" key={index}>
                         <CollapseMenuButton
-                          Icon={icon}
+                          icon={icon}
                           label={label}
                           active={active}
                           submenus={submenus}

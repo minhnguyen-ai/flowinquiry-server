@@ -1,4 +1,4 @@
-import { Building2, Files, Home, LogIn, Settings, Users } from "lucide-react";
+import { Building2, Castle, Home, Settings, Users } from "lucide-react";
 
 import { IconType } from "@/types/ui-components";
 
@@ -33,7 +33,7 @@ export type Group = {
   id: string;
 };
 
-export function getMenuList(pathname: string, t: any): Group[] {
+export function getMenuList(pathname: string): Group[] {
   return [
     {
       groupLabel: "",
@@ -41,32 +41,40 @@ export function getMenuList(pathname: string, t: any): Group[] {
       menus: [
         {
           id: "dashboard",
-          href: "/",
+          href: "/portal/dashboard",
           label: "dashboard",
-          active: pathname.includes("/"),
+          active: pathname.includes("/portal/dashboard"),
           icon: Home,
           submenus: [],
         },
       ],
     },
     {
-      groupLabel: "apps",
+      groupLabel: "",
       id: "app",
       menus: [
+        // {
+        //   id: "accounts",
+        //   href: "/portal/accounts",
+        //   label: "Accounts",
+        //   active: pathname.includes("/portal/accounts"),
+        //   icon: Building2,
+        //   submenus: [],
+        // },
+        // {
+        //   id: "files",
+        //   href: "/portal/files",
+        //   label: "Files",
+        //   active: pathname.includes("/portal/files"),
+        //   icon: Files,
+        //   submenus: [],
+        // },
         {
-          id: "accounts",
-          href: "/portal/accounts",
-          label: "Accounts",
-          active: pathname.includes("/portal/accounts"),
-          icon: Building2,
-          submenus: [],
-        },
-        {
-          id: "files",
-          href: "/portal/files",
-          label: "Files",
-          active: pathname.includes("/portal/files"),
-          icon: Files,
+          id: "teams",
+          href: "/portal/teams",
+          label: "Teams",
+          active: pathname.includes("/portal/teams"),
+          icon: Castle,
           submenus: [],
         },
         {
@@ -80,31 +88,23 @@ export function getMenuList(pathname: string, t: any): Group[] {
       ],
     },
     {
-      groupLabel: "settings",
+      groupLabel: "",
       id: "settings",
       menus: [
         {
           id: "auth",
-          href: "/auth/login",
-          label: "authentication",
-          active: pathname.includes("/auth"),
+          href: "/portal/settings",
+          label: "Settings",
+          active: pathname.includes("/portal/settings"),
           icon: Settings,
-          submenus: [
-            {
-              href: "/auth/login",
-              label: "signInOne",
-              active: pathname === "/auth/login",
-              icon: LogIn,
-              children: [],
-            },
-          ],
+          submenus: [],
         },
       ],
     },
   ];
 }
 
-export function getHorizontalMenuList(pathname: string, t: any): Group[] {
+export function getHorizontalMenuList(pathname: string): Group[] {
   return [
     {
       groupLabel: "dashboard",

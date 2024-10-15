@@ -10,7 +10,7 @@ interface MenuItemProps {
   id: string;
   href: string;
   label: string;
-  Icon: IconType;
+  icon: IconType;
   active: boolean;
   collapsed: boolean;
 }
@@ -25,7 +25,7 @@ import { IconType } from "@/types/ui-components";
 const MenuItem = ({
   href,
   label,
-  Icon,
+  icon: Icon,
   active,
   id,
   collapsed,

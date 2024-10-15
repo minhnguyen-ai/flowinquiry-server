@@ -115,7 +115,7 @@ interface MultiFilterRowProps<TData> {
   setSelectedOptions: React.Dispatch<
     React.SetStateAction<DataTableFilterOption<TData>[]>
   >;
-  operator?: DataTableConfig["logicalOperators"][number];
+  operator: DataTableConfig["logicalOperators"][number] | undefined;
   setOperator: React.Dispatch<
     React.SetStateAction<
       DataTableConfig["logicalOperators"][number] | undefined

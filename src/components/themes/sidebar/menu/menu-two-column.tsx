@@ -10,7 +10,7 @@ import { getMenuList } from "@/lib/menus";
 export function MenuTwoColumn() {
   // translate
   const pathname = usePathname();
-  const menuList = getMenuList(pathname, "Menu");
+  const menuList = getMenuList(pathname);
 
   return (
     <>

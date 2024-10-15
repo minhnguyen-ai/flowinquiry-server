@@ -113,7 +113,7 @@ export async function searchAccounts(input: AccountSearchParams) {
     `Search account ${qs.stringify(input)} --- ${JSON.stringify(input)}`,
   );
   if (ok) {
-    return { data: pageResult!.content, pageCount: pageResult!.totalPages };
+    return { data: pageResult.content, pageCount: pageResult.totalPages };
   } else {
     throw new Error("Can not get entities");
   }
