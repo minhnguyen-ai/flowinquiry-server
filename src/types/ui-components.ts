@@ -10,3 +10,9 @@ export interface UiAttributes {
 export interface FormFieldProps extends UiAttributes {
   form: any;
 }
+
+export type FilterOption = {
+  label: string;
+  value: string;
+  icon?: React.ComponentType<{ className?: string }>;
+};
