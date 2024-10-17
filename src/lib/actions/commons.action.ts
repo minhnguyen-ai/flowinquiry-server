@@ -31,6 +31,9 @@ export const fetchData = async <TData, TResponse>(
       console.log("Unauthorized access. Redirect to the login page");
       redirect("/login");
     } else {
+      console.log(
+        `Failed to fetch ${url} / ${method}. Reason is ${response.statusText}`,
+      );
       return {
         ok: false,
         status: "system_error",

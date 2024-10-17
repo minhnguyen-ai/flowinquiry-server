@@ -1,16 +1,21 @@
 "use server";
 
+import { unstable_noStore as noStore } from "next/dist/server/web/spec-extension/unstable-no-store";
 import { redirect } from "next/navigation";
+import qs from "qs";
 
 import { auth } from "@/auth";
 import { get } from "@/lib/actions/commons.action";
 import { BACKEND_API } from "@/lib/constants";
 import { PageableResult } from "@/types/commons";
-import { userSchema, UserType } from "@/types/users";
+import { userSchema, UserSearchParams, UserType } from "@/types/users";
 
-export const getUsers = async () => {
-  return get<PageableResult<UserType>>(`${BACKEND_API}/api/users`);
-};
+export async function searchUsers(input: UserSearchParams) {
+  noStore();
+  return get<PageableResult<UserType>>(
+    `${BACKEND_API}/api/users?${qs.stringify(input)}`,
+  );
+}
 
 export const createUser = async (user: UserType) => {
   const validation = userSchema.safeParse(user);

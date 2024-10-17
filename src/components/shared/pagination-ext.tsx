@@ -15,7 +15,7 @@ interface PaginationProps {
   onPageChange: (page: number) => void;
 }
 
-const CustomPagination: React.FC<PaginationProps> = ({
+const PaginationExt: React.FC<PaginationProps> = ({
   currentPage,
   totalPages,
   onPageChange,
@@ -107,4 +107,4 @@ const CustomPagination: React.FC<PaginationProps> = ({
   );
 };
 
-export default CustomPagination;
+export default PaginationExt;

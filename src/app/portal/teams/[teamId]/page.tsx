@@ -5,11 +5,6 @@ import TeamView from "@/components/teams/team-view";
 import { findTeamById } from "@/lib/actions/teams.action";
 import { deobfuscateToNumber } from "@/lib/endecode";
 
-const breadcrumbItems = [
-  { title: "Dashboard", link: "/portal" },
-  { title: "Teams", link: "/portal/teams" },
-];
-
 const Page = async ({ params }: { params: { teamId: string } }) => {
   const { ok, data: team } = await findTeamById(
     deobfuscateToNumber(params.teamId),

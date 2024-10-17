@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import { Heading } from "@/components/heading";
-import CustomPagination from "@/components/shared/customPagination";
+import PaginationExt from "@/components/shared/pagination-ext";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Card,
@@ -24,6 +24,7 @@ export const TeamList = () => {
   const [items, setItems] = useState<Array<TeamType>>([]); // Store the items
   const [currentPage, setCurrentPage] = useState(1); // Track current page
   const [totalPages, setTotalPages] = useState(0); // Total pages
+  const [totalElements, setTotalElements] = useState(0);
   const [loading, setLoading] = useState(false); // Loading state
   const [error, setError] = useState<string | null>(null); // Error state
   const itemsPerPage = 10; // Customize the number of items per page
@@ -39,6 +40,7 @@ export const TeamList = () => {
       });
       if (ok) {
         setItems(pageResult.content); // Update items
+        setTotalElements(pageResult.totalElements);
         setTotalPages(pageResult.totalPages); // Update total pages
       }
     } catch (err) {
@@ -59,7 +61,10 @@ export const TeamList = () => {
   return (
     <div className="bg-card px-6 py-6">
       <div className="flex flex-row justify-between">
-        <Heading title={`Teams`} description="Manage teams" />
+        <Heading
+          title={`Teams (${totalElements})`}
+          description="Manage teams"
+        />
 
         <Link
           href={"/portal/teams/new/edit"}
@@ -88,7 +93,7 @@ export const TeamList = () => {
           </div>
         ))}
       </div>
-      <CustomPagination
+      <PaginationExt
         currentPage={currentPage}
         totalPages={totalPages}
         onPageChange={(page) => setCurrentPage(page)}
