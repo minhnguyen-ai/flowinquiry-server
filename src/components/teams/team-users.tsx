@@ -12,10 +12,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { ViewProps } from "@/components/ui/ext-form";
 import { findMembersByTeamId } from "@/lib/actions/teams.action";
 import { obfuscate } from "@/lib/endecode";
 import { UserType } from "@/types/users";
-import { ViewProps } from "@/components/ui/ext-form";
 
 const TeamUsersView = ({ initialData: teamId }: ViewProps<number>) => {
   const [items, setItems] = useState<Array<UserType>>([]); // Store the items

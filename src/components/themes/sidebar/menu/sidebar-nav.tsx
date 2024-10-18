@@ -7,10 +7,9 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useConfig } from "@/hooks/use-config";
 import { Group } from "@/lib/menus";
+import MenuLabel from "@/components/themes/sidebar/common/menu-label";
+import { CollapseMenuButton2 } from "@/components/themes/sidebar/common/collapse-menu-button2";
 
-import { CollapseMenuButton2 } from "../common/collapse-menu-button2";
-import MenuLabel from "../common/menu-label";
-import TeamSwitcher from "../common/team-switcher";
 const SidebarNav = ({ menuList }: { menuList: Group[] }) => {
   const [config, setConfig] = useConfig();
   const pathname = usePathname();
@@ -34,9 +33,6 @@ const SidebarNav = ({ menuList }: { menuList: Group[] }) => {
       )}
 
       <ScrollArea className="[&>div>div[style]]:!block h-full" dir={direction}>
-        <div className="px-4 space-y-3 mt-6">
-          <TeamSwitcher />
-        </div>
         <div className="px-4 pt-6  sticky top-0  bg-sidebar z-20">
           {data?.groupLabel && (
             <MenuLabel

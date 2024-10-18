@@ -23,6 +23,10 @@ import { useParams, usePathname } from "next/navigation";
 import React from "react";
 
 import Logo from "@/components/logo";
+import { CollapseMenuButton } from "@/components/themes/sidebar/common/collapse-menu-button";
+import MenuItem from "@/components/themes/sidebar/common/menu-item";
+import MenuLabel from "@/components/themes/sidebar/common/menu-label";
+import MenuWidget from "@/components/themes/sidebar/common/menu-widget";
 import SidebarHoverToggle from "@/components/themes/sidebar/sidebar-hover-toggle";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
@@ -34,12 +38,6 @@ import {
 import { useConfig } from "@/hooks/use-config";
 import { getMenuList } from "@/lib/menus";
 import { cn } from "@/lib/utils";
-
-import { CollapseMenuButton } from "../common/collapse-menu-button";
-import MenuItem from "../common/menu-item";
-import MenuLabel from "../common/menu-label";
-import MenuWidget from "../common/menu-widget";
-import TeamSwitcher from "../common/team-switcher";
 
 export function MenuDragAble() {
   const pathname = usePathname();
@@ -112,9 +110,7 @@ export function MenuDragAble() {
             "px-4": !collapsed,
             "text-center": collapsed,
           })}
-        >
-          <TeamSwitcher />
-        </div>
+        ></div>
 
         <DndContext
           collisionDetection={closestCenter}

@@ -7,7 +7,6 @@ import React from "react";
 import Logo from "@/components/logo";
 import MenuItem from "@/components/themes/sidebar/common/menu-item";
 import MenuLabel from "@/components/themes/sidebar/common/menu-label";
-import TeamSwitcher from "@/components/themes/sidebar/common/team-switcher";
 import SidebarHoverToggle from "@/components/themes/sidebar/sidebar-hover-toggle";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
@@ -70,9 +69,7 @@ export function MenuClassic({}) {
               "px-4": !collapsed || hovered,
               "text-center": collapsed || !hovered,
             })}
-          >
-            <TeamSwitcher />
-          </div>
+          ></div>
         )}
 
         <nav className="mt-8 h-full w-full">
