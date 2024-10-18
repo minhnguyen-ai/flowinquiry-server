@@ -22,7 +22,7 @@ const Page = async ({ params }: { params: { teamId: string } }) => {
   return (
     <div className="space-y-4 max-w-[72rem]">
       <Breadcrumbs items={breadcrumbItems} />
-      <TeamView />
+      <TeamView initialData={team} />
     </div>
   );
 };

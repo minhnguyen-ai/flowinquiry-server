@@ -20,6 +20,11 @@ const PaginationExt: React.FC<PaginationProps> = ({
   totalPages,
   onPageChange,
 }) => {
+  // Hide pagination if there is only one page
+  if (totalPages <= 1) {
+    return null;
+  }
+
   const handlePageClick = (page: number) => {
     if (page < 1 || page > totalPages) return;
     onPageChange(page);

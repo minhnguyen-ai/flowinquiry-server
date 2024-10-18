@@ -62,7 +62,7 @@ export const UserList = () => {
         />
 
         <Link
-          href={"/portal/users/new/edit"}
+          href={"/portal/users/edit/new"}
           className={cn(buttonVariants({ variant: "default" }))}
         >
           <Plus className="mr-2 h-4 w-4" /> Invite user

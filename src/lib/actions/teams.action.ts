@@ -8,6 +8,7 @@ import { get, post, put } from "@/lib/actions/commons.action";
 import { BACKEND_API } from "@/lib/constants";
 import { ActionResult, PageableResult } from "@/types/commons";
 import { teamSchema, TeamSearchParams, TeamType } from "@/types/teams";
+import { UserType } from "@/types/users";
 
 export const findTeamById = async (teamId: number) => {
   return get<TeamType>(`${BACKEND_API}/api/teams/${teamId}`);
@@ -44,5 +45,11 @@ export async function searchTeams(input: TeamSearchParams) {
   noStore();
   return get<PageableResult<TeamType>>(
     `${BACKEND_API}/api/teams?${qs.stringify(input)}`,
+  );
+}
+
+export async function findMembersByTeamId(teamId: number) {
+  return get<PageableResult<UserType>>(
+    `${BACKEND_API}/api/teams/${teamId}/members`,
   );
 }
