@@ -3,12 +3,12 @@ import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 import React from "react";
 
+import { CollapseMenuButton2 } from "@/components/themes/sidebar/common/collapse-menu-button2";
+import MenuLabel from "@/components/themes/sidebar/common/menu-label";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useConfig } from "@/hooks/use-config";
 import { Group } from "@/lib/menus";
-import MenuLabel from "@/components/themes/sidebar/common/menu-label";
-import { CollapseMenuButton2 } from "@/components/themes/sidebar/common/collapse-menu-button2";
 
 const SidebarNav = ({ menuList }: { menuList: Group[] }) => {
   const [config, setConfig] = useConfig();

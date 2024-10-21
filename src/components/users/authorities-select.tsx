@@ -3,19 +3,19 @@
 import React, { useEffect, useState } from "react";
 
 import {
-  FormControl,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+  MultiSelector,
+  MultiSelectorContent,
+  MultiSelectorInput,
+  MultiSelectorItem,
+  MultiSelectorList,
+  MultiSelectorTrigger,
+} from "@/components/ui/multi-select";
 import { getAuthorities } from "@/lib/actions/authorities.action";
 import { UiAttributes } from "@/types/ui-components";
 import { AuthorityType } from "@/types/users";
@@ -48,31 +48,30 @@ const AuthoritiesSelect = ({
   return (
     <FormField
       control={form.control}
-      name="authority"
+      name="authorities"
       render={({ field }) => (
         <FormItem>
           <FormLabel>
             {label}
             {required && <span className="text-destructive"> *</span>}
           </FormLabel>
-          <Select
-            onValueChange={field.onChange}
-            defaultValue={authorities[0].name}
-            {...field}
-          >
-            <FormControl>
-              <SelectTrigger>
-                <SelectValue defaultValue={authorities[0].name} />
-              </SelectTrigger>
-            </FormControl>
-            <SelectContent>
-              {authorities?.map((authority) => (
-                <SelectItem key={authority.name} value={authority.name}>
-                  {authority.descriptiveName}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <MultiSelector onValuesChange={field.onChange} values={field.value}>
+            <MultiSelectorTrigger>
+              <MultiSelectorInput placeholder="Select authorities" />
+            </MultiSelectorTrigger>
+            <MultiSelectorContent>
+              <MultiSelectorList>
+                {authorities.map((authority) => (
+                  <MultiSelectorItem
+                    key={authority.name}
+                    value={authority.descriptiveName}
+                  >
+                    <span>{authority.descriptiveName}</span>
+                  </MultiSelectorItem>
+                ))}
+              </MultiSelectorList>
+            </MultiSelectorContent>
+          </MultiSelector>
           <FormMessage />
         </FormItem>
       )}

@@ -4,7 +4,7 @@ import { UserForm } from "@/components/users/user-form";
 const breadcrumbItems = [
   { title: "Dashboard", link: "/portal" },
   { title: "Users", link: "/portal/users" },
-  { title: "Create", link: "/portal/users/new" },
+  { title: "Create", link: "/portal/users/edit/new" },
 ];
 
 export default function Page() {

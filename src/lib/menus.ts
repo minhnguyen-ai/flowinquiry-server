@@ -53,14 +53,14 @@ export function getMenuList(pathname: string): Group[] {
       groupLabel: "",
       id: "app",
       menus: [
-        // {
-        //   id: "accounts",
-        //   href: "/portal/accounts",
-        //   label: "Accounts",
-        //   active: pathname.includes("/portal/accounts"),
-        //   icon: Building2,
-        //   submenus: [],
-        // },
+        {
+          id: "accounts",
+          href: "/portal/accounts",
+          label: "Accounts",
+          active: pathname.includes("/portal/accounts"),
+          icon: Building2,
+          submenus: [],
+        },
         // {
         //   id: "files",
         //   href: "/portal/files",

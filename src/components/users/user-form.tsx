@@ -18,17 +18,11 @@ import { Form } from "@/components/ui/form";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/components/ui/use-toast";
 import AuthoritiesSelect from "@/components/users/authorities-select";
+import { userSchema, UserType } from "@/types/users";
 
 interface UserFormProps {
   initialData: any | null;
 }
-
-const userSchema = z.object({
-  email: z.string().email({ message: "Email is required" }),
-  firstName: z.string().min(1, { message: "First name is required" }),
-  lastName: z.string().min(1, { message: "Last name is required" }),
-  description: z.string().optional(),
-});
 
 type UserFormValues = z.infer<typeof userSchema>;
 
@@ -42,23 +36,14 @@ export const UserForm: React.FC<UserFormProps> = ({ initialData }) => {
   const description = isEdit ? "Edit user" : "Add a new user";
   const action = isEdit ? "Save changes" : "Create";
 
-  const defaultValues = initialData
-    ? initialData
-    : {
-        email: "",
-        password: "",
-        firstName: "",
-        lastName: "",
-        description: "",
-      };
-
   const form = useForm<UserFormValues>({
     resolver: zodResolver(userSchema),
-    defaultValues,
+    defaultValues: initialData,
   });
 
-  const onSubmit = async (data: z.infer<typeof userSchema>) => {
+  function onSubmit(user: UserType) {
     try {
+      console.log(`Save data ${JSON.stringify(user)}`);
       setLoading(true);
       router.refresh();
       router.push(`/portal/users`);
@@ -71,7 +56,7 @@ export const UserForm: React.FC<UserFormProps> = ({ initialData }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   return (
     <div className="bg-card px-6 py-6">
@@ -115,11 +100,6 @@ export const UserForm: React.FC<UserFormProps> = ({ initialData }) => {
             fieldName="lastName"
             label="Last Name"
             placeholder="Last Name"
-          />
-          <ExtTextAreaField
-            form={form}
-            fieldName="description"
-            label="Description"
           />
           <div className="flex items-center gap-2">
             <SubmitButton

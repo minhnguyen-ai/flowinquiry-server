@@ -6,13 +6,13 @@ export const authoritySchema = z.object({
 });
 
 export const userSchema = z.object({
-  id: z.number(),
+  id: z.number().nullish(),
   email: z.string().email(),
-  firstName: z.string().nullish(),
+  firstName: z.string().min(1),
   lastName: z.string().nullish(),
-  timezone: z.string().min(1),
+  timezone: z.string().nullish(),
   lastLoginTime: z.string().nullish(),
-  authorities: z.array(authoritySchema),
+  authorities: z.array(authoritySchema).nullish(),
 });
 
 export type UserType = z.infer<typeof userSchema>;
