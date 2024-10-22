@@ -2,19 +2,15 @@
 
 import { unstable_noStore as noStore } from "next/dist/server/web/spec-extension/unstable-no-store";
 import { redirect } from "next/navigation";
-import qs from "qs";
 
 import { auth } from "@/auth";
-import { get } from "@/lib/actions/commons.action";
+import { doAdvanceSearch } from "@/lib/actions/commons.action";
 import { BACKEND_API } from "@/lib/constants";
-import { PageableResult } from "@/types/commons";
 import { userSchema, UserSearchParams, UserType } from "@/types/users";
 
 export async function searchUsers(input: UserSearchParams) {
   noStore();
-  return get<PageableResult<UserType>>(
-    `${BACKEND_API}/api/users?${qs.stringify(input)}`,
-  );
+  return doAdvanceSearch<UserType>(`${BACKEND_API}/api/users/search`);
 }
 
 export const createUser = async (user: UserType) => {

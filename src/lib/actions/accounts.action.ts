@@ -4,7 +4,7 @@ import { revalidatePath, unstable_noStore as noStore } from "next/cache";
 import { redirect } from "next/navigation";
 import qs from "qs";
 
-import { get, post, put } from "@/lib/actions/commons.action";
+import { doAdvanceSearch, get, post, put } from "@/lib/actions/commons.action";
 import { findEntitiesFilterOptions } from "@/lib/actions/shared.action";
 import { BACKEND_API } from "@/lib/constants";
 import {
@@ -17,6 +17,7 @@ import {
   EntityValueDefinition,
   PageableResult,
 } from "@/types/commons";
+import { TeamType } from "@/types/teams";
 
 export const findAccounts = async (): Promise<
   ActionResult<PageableResult<AccountType>>
@@ -106,16 +107,17 @@ export const findNextAccount = async (accountId: number) => {
 
 export async function searchAccounts(input: AccountSearchParams) {
   noStore();
-  const { ok, data: pageResult } = await get<PageableResult<AccountType>>(
-    `${BACKEND_API}/api/crm/accounts?${qs.stringify(input)}`,
-  );
-  console.log(
-    `Search account ${qs.stringify(input)} --- ${JSON.stringify(input)}`,
+  const {
+    ok,
+    message,
+    data: pageResult,
+  } = await doAdvanceSearch<AccountType>(
+    `${BACKEND_API}/api/crm/accounts/search`,
   );
   if (ok) {
     return { data: pageResult.content, pageCount: pageResult.totalPages };
   } else {
-    throw new Error("Can not get entities");
+    throw new Error("Can not get the entities " + message);
   }
 }
 
