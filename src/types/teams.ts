@@ -10,13 +10,3 @@ export const teamSchema = z.object({
 });
 
 export type TeamType = z.infer<typeof teamSchema>;
-
-export const teamSearchParamsSchema = z.object({
-  page: z.coerce.number().default(1).optional(), // page number
-  size: z.coerce.number().default(10).optional(), // size per page
-  sort: z.string().optional(),
-  name: z.string().optional(),
-  operator: z.enum(["and", "or"]).optional(),
-});
-
-export type TeamSearchParams = z.infer<typeof teamSearchParamsSchema>;

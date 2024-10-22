@@ -2,12 +2,11 @@
 
 import { unstable_noStore as noStore } from "next/dist/server/web/spec-extension/unstable-no-store";
 import { redirect } from "next/navigation";
-import qs from "qs";
 
-import { get, post, put } from "@/lib/actions/commons.action";
+import { doAdvanceSearch, get, post, put } from "@/lib/actions/commons.action";
 import { BACKEND_API } from "@/lib/constants";
 import { ActionResult, PageableResult } from "@/types/commons";
-import { teamSchema, TeamSearchParams, TeamType } from "@/types/teams";
+import { teamSchema, TeamType } from "@/types/teams";
 import { UserType } from "@/types/users";
 
 export const findTeamById = async (teamId: number) => {
@@ -41,11 +40,9 @@ export const saveOrUpdateTeam = async (
   }
 };
 
-export async function searchTeams(input: TeamSearchParams) {
+export async function searchTeams() {
   noStore();
-  return get<PageableResult<TeamType>>(
-    `${BACKEND_API}/api/teams?${qs.stringify(input)}`,
-  );
+  return doAdvanceSearch<TeamType>(`${BACKEND_API}/api/teams/search`);
 }
 
 export async function findMembersByTeamId(teamId: number) {

@@ -9,11 +9,7 @@ import { z } from "zod";
 
 import { Heading } from "@/components/heading";
 import { Button } from "@/components/ui/button";
-import {
-  ExtInputField,
-  ExtTextAreaField,
-  SubmitButton,
-} from "@/components/ui/ext-form";
+import { ExtInputField, SubmitButton } from "@/components/ui/ext-form";
 import { Form } from "@/components/ui/form";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/components/ui/use-toast";

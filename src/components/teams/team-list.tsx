@@ -34,10 +34,7 @@ export const TeamList = () => {
     setError(null);
     try {
       // Replace this with your actual API call
-      const { ok, data: pageResult } = await searchTeams({
-        page: page,
-        size: itemsPerPage,
-      });
+      const { ok, data: pageResult } = await searchTeams();
       if (ok) {
         setItems(pageResult.content); // Update items
         setTotalElements(pageResult.totalElements);
