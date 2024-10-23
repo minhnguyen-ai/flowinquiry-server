@@ -12,7 +12,7 @@ export const userSchema = z.object({
   lastName: z.string().nullish(),
   timezone: z.string().nullish(),
   lastLoginTime: z.string().nullish(),
-  authorities: z.array(authoritySchema).nullish(),
+  authorities: z.array(authoritySchema),
 });
 
 export type UserType = z.infer<typeof userSchema>;

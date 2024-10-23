@@ -2,7 +2,6 @@
 
 import { revalidatePath, unstable_noStore as noStore } from "next/cache";
 import { redirect } from "next/navigation";
-import qs from "qs";
 
 import { doAdvanceSearch, get, post, put } from "@/lib/actions/commons.action";
 import { findEntitiesFilterOptions } from "@/lib/actions/shared.action";
@@ -17,7 +16,6 @@ import {
   EntityValueDefinition,
   PageableResult,
 } from "@/types/commons";
-import { TeamType } from "@/types/teams";
 
 export const findAccounts = async (): Promise<
   ActionResult<PageableResult<AccountType>>

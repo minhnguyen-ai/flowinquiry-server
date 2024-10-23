@@ -73,21 +73,19 @@ export const TeamList = () => {
       <Separator />
       <div className="flex flex-row flex-wrap space-x-4 space-y-4 content-around">
         {items?.map((team) => (
-          <div>
-            <Card key={team.id} className="w-[28rem]">
-              <CardHeader>
-                <CardTitle>
-                  <Button variant="link" asChild>
-                    <Link href={`/portal/teams/${obfuscate(team.id)}`}>
-                      {team.name}
-                    </Link>
-                  </Button>
-                </CardTitle>
-                <CardDescription>{team.slogan}</CardDescription>
-              </CardHeader>
-              <CardContent className="p-5">${team.description}</CardContent>
-            </Card>
-          </div>
+          <Card key={team.id} className="w-[28rem]">
+            <CardHeader>
+              <CardTitle>
+                <Button variant="link" asChild>
+                  <Link href={`/portal/teams/${obfuscate(team.id)}`}>
+                    {team.name}
+                  </Link>
+                </Button>
+              </CardTitle>
+              <CardDescription>{team.slogan}</CardDescription>
+            </CardHeader>
+            <CardContent className="p-5">${team.description}</CardContent>
+          </Card>
         ))}
       </div>
       <PaginationExt

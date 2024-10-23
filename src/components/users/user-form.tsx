@@ -37,21 +37,21 @@ export const UserForm: React.FC<UserFormProps> = ({ initialData }) => {
     defaultValues: initialData,
   });
 
-  function onSubmit(user: UserType) {
-    try {
-      console.log(`Save data ${JSON.stringify(user)}`);
-      setLoading(true);
-      router.refresh();
-      router.push(`/portal/users`);
-    } catch (error: any) {
-      toast({
-        variant: "destructive",
-        title: "Uh oh! Something went wrong.",
-        description: "There was a problem with your request.",
-      });
-    } finally {
-      setLoading(false);
-    }
+  function onSubmit(data: UserType) {
+    console.log(`Data: ${JSON.stringify(data)}`);
+    // try {
+    //   setLoading(true);
+    //   router.refresh();
+    //   router.push(`/portal/users`);
+    // } catch (error: any) {
+    //   toast({
+    //     variant: "destructive",
+    //     title: "Uh oh! Something went wrong.",
+    //     description: "There was a problem with your request.",
+    //   });
+    // } finally {
+    //   setLoading(false);
+    // }
   }
 
   return (
@@ -82,7 +82,7 @@ export const UserForm: React.FC<UserFormProps> = ({ initialData }) => {
             label="Email"
             placeholder="Email"
           />
-          <AuthoritiesSelect form={form} label="Authority" />
+          <AuthoritiesSelect form={form} required={true} label="Authority" />
           <ExtInputField
             form={form}
             required={true}
