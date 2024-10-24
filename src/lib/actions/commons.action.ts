@@ -112,33 +112,9 @@ export const doAdvanceSearch = async <T>(
   });
 
   // Send POST request with filters and pagination
-  try {
-    const session = await auth();
-    const response = await fetch(`${url}?${queryParams.toString()}`, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        Authorization: `Bearer ${session?.user?.accessToken}`,
-      },
-      body: JSON.stringify(buildSearchQuery(filters)),
-    });
-    if (response.ok) {
-      const data = (await response.json()) as PageableResult<T>;
-      return { ok: true, status: "success", data };
-    } else {
-      return {
-        ok: false,
-        status: "system_error",
-        message: response.statusText,
-      };
-    }
-  } catch (error) {
-    return {
-      ok: false,
-      status: "system_error",
-      message: `Error`,
-    };
-  }
+  return fetchData(
+    `${url}?${queryParams.toString()}`,
+    "POST",
+    buildSearchQuery(filters),
+  );
 };

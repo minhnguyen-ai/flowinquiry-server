@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import React from "react";
 import { useForm } from "react-hook-form";
 
@@ -21,7 +21,11 @@ import { deobfuscateToNumber } from "@/lib/endecode";
 import { validateForm } from "@/lib/validator";
 import { contactSchema, ContactType } from "@/types/contacts";
 
+import { Button } from "../ui/button";
+
 export const ContactForm = ({ initialData }: FormProps<ContactType>) => {
+  const router = useRouter();
+
   let accountId: number | null = null;
   let accountName: string | null = null;
   const searchParams = useSearchParams();
@@ -57,7 +61,7 @@ export const ContactForm = ({ initialData }: FormProps<ContactType>) => {
   const submitTextWhileLoading = isEdit ? "Saving changes ..." : "Creating ...";
 
   return (
-    <>
+    <div className="bg-card px-6 py-6">
       <div className="flex items-center justify-between">
         <Heading title={title} description={description} />
       </div>
@@ -127,13 +131,18 @@ export const ContactForm = ({ initialData }: FormProps<ContactType>) => {
           />
           <ContactStatusSelect form={form} required={true} />
           <ExtTextAreaField form={form} fieldName="notes" label="Notes" />
-          <SubmitButton
-            label={submitText}
-            labelWhileLoading={submitTextWhileLoading}
-          />
+          <div className="flex items-center gap-2">
+            <SubmitButton
+              label={submitText}
+              labelWhileLoading={submitTextWhileLoading}
+            />
+            <Button variant="secondary" onClick={() => router.back()}>
+              Discard
+            </Button>
+          </div>
         </form>
       </Form>
-    </>
+    </div>
   );
 };
 

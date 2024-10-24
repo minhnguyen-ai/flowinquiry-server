@@ -1,9 +1,10 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import { contacts_columns_def } from "@/components/contacts/contact-table-columns";
 import { ContactsTableToolbarActions } from "@/components/contacts/contact-table-toolbar-actions";
+import { Skeleton } from "@/components/ui/skeleton";
 import { DataTableAdvancedToolbar } from "@/components/ui/table/advanced/data-table-advanced-toolbar";
 import { DataTable } from "@/components/ui/table/data-table";
 import { DataTableToolbar } from "@/components/ui/table/data-table-toolbar";
@@ -27,7 +28,30 @@ export function ContactsTable({
 }: ContactsTableProps) {
   // Feature flags for showcasing some additional features. Feel free to remove them.
 
-  const { data, pageCount } = React.use(contactPromise);
+  const [data, setData] = useState<Array<ContactType>>([]);
+  const [pageCount, setPageCount] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Fetch data using useEffect
+  useEffect(() => {
+    // Define async function to handle the promise
+    const fetchContacts = async () => {
+      try {
+        setLoading(true);
+        const { data: contactData, pageCount: contactPageCount } =
+          await contactPromise;
+        setData(contactData);
+        setPageCount(contactPageCount); // Assuming response contains a `pageCount` field
+      } catch (err) {
+        setError(err.message); // Handle any errors
+      } finally {
+        setLoading(false); // Stop loading when done
+      }
+    };
+
+    fetchContacts(); // Call the async function
+  }, []); // Empty dependency array ensures it runs only once when component mounts
 
   // Memoize the columns so they don't re-render on every render
   const columns = React.useMemo(() => contacts_columns_def, []);
@@ -82,6 +106,12 @@ export function ContactsTable({
     ? DataTableAdvancedToolbar
     : DataTableToolbar;
 
+  if (loading)
+    return (
+      <div className="flex flex-col space-y-3">
+        <Skeleton className="h-[125px] w-full rounded-xl bg-slate-300" />
+      </div>
+    );
   return (
     <DataTable table={table} floatingBar={null}>
       <Toolbar table={table} filterFields={filterFields}>
