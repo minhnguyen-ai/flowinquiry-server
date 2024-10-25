@@ -13,6 +13,7 @@ import { ViewProps } from "@/components/ui/ext-form";
 import { TeamType } from "@/types/teams";
 
 const TeamView = ({ entity: team }: ViewProps<TeamType>) => {
+  console.log(`Team info ${JSON.stringify(team)}`);
   return (
     <div className="w-full">
       <Card className="w-[600px]">
