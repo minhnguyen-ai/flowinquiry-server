@@ -31,7 +31,7 @@ export function ContactsTable({
   const [data, setData] = useState<Array<ContactType>>([]);
   const [pageCount, setPageCount] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<String>("");
 
   // Fetch data using useEffect
   useEffect(() => {
@@ -42,11 +42,11 @@ export function ContactsTable({
         const { data: contactData, pageCount: contactPageCount } =
           await contactPromise;
         setData(contactData);
-        setPageCount(contactPageCount); // Assuming response contains a `pageCount` field
+        setPageCount(contactPageCount);
       } catch (err) {
-        setError(err.message); // Handle any errors
+        setError((err as Error).message);
       } finally {
-        setLoading(false); // Stop loading when done
+        setLoading(false);
       }
     };
 

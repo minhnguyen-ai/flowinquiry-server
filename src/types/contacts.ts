@@ -22,14 +22,6 @@ export const contactSchema = z.object({
 
 export type ContactType = z.infer<typeof contactSchema>;
 
-export const contactSearchParamsSchema = z.object({
-  page: z.coerce.number().default(1), // page number
-  size: z.coerce.number().default(10), // size per page
-  sort: z.string().optional(),
-  name: z.string().optional(),
-  status: z.string().optional(),
-  accountId: z.onumber(),
-  operator: z.enum(["and", "or"]).optional(),
-});
-
-export type ContactSearchParams = z.infer<typeof contactSearchParamsSchema>;
+export type ContactSearchSchema = {
+  account_id: number;
+};

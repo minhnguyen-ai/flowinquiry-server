@@ -9,6 +9,7 @@ import {
   Filter,
   Pagination,
   paginationSchema,
+  QueryDTO,
   querySchema,
 } from "@/types/query";
 
@@ -73,11 +74,11 @@ const defaultPagination: Pagination = {
 };
 
 // Function to send a dynamic search query with pagination and URL
-export const doAdvanceSearch = async <T>(
+export const doAdvanceSearch = async <S, R>(
   url: string, // URL is passed as a parameter
-  filters: Filter<T>[] = [], // Filters for the search
+  filters: Filter<S>[] = [], // Filters for the search
   pagination: Pagination = defaultPagination, // Default pagination with page 1 and size 10
-): Promise<ActionResult<PageableResult<T>>> => {
+): Promise<ActionResult<PageableResult<R>>> => {
   // Validate query
   const queryValidation = querySchema.safeParse({ filters });
   if (!queryValidation.success) {
@@ -111,8 +112,9 @@ export const doAdvanceSearch = async <T>(
     ),
   });
 
+  console.log("Prepare send post");
   // Send POST request with filters and pagination
-  return fetchData(
+  return fetchData<QueryDTO<S>, PageableResult<R>>(
     `${url}?${queryParams.toString()}`,
     "POST",
     buildSearchQuery(filters),

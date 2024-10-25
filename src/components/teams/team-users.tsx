@@ -17,7 +17,7 @@ import { findMembersByTeamId } from "@/lib/actions/teams.action";
 import { obfuscate } from "@/lib/endecode";
 import { UserType } from "@/types/users";
 
-const TeamUsersView = ({ initialData: teamId }: ViewProps<number>) => {
+const TeamUsersView = ({ entity: teamId }: ViewProps<number>) => {
   const [items, setItems] = useState<Array<UserType>>([]); // Store the items
   const [currentPage, setCurrentPage] = useState(1); // Track current page
   const [totalPages, setTotalPages] = useState(0); // Total pages

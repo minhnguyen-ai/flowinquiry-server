@@ -12,7 +12,7 @@ import {
 import { ViewProps } from "@/components/ui/ext-form";
 import { TeamType } from "@/types/teams";
 
-const TeamView = ({ initialData: team }: ViewProps<TeamType>) => {
+const TeamView = ({ entity: team }: ViewProps<TeamType>) => {
   return (
     <div className="w-full">
       <Card className="w-[600px]">
@@ -21,7 +21,7 @@ const TeamView = ({ initialData: team }: ViewProps<TeamType>) => {
           <CardDescription>{team.slogan}</CardDescription>
         </CardHeader>
         <CardContent>
-          <TeamUsersView initialData={team.id!} />
+          <TeamUsersView entity={team.id!} />
         </CardContent>
         <CardFooter className="flex justify-between"></CardFooter>
       </Card>

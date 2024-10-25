@@ -27,25 +27,25 @@ import { searchContacts } from "@/lib/actions/contacts.action";
 import { obfuscate } from "@/lib/endecode";
 import { cn } from "@/lib/utils";
 import { AccountType } from "@/types/accounts";
-import { contactSearchParamsSchema } from "@/types/contacts";
 
 import { Button, buttonVariants } from "../ui/button";
 import { Card, CardContent } from "../ui/card";
 import { ViewProps } from "../ui/ext-form";
 
 export const AccountView: React.FC<ViewProps<AccountType>> = ({
-  initialData,
+  entity,
 }: ViewProps<AccountType>) => {
   const [isOpen, setIsOpen] = useState(true);
-  const [account, setAccount] = useState<AccountType>(initialData);
+  const [account, setAccount] = useState<AccountType>(entity);
 
-  const search = contactSearchParamsSchema.parse({});
-  const contactPromise = searchContacts(search);
+  const contactPromise = searchContacts([
+    { field: "account.id", operator: "eq", value: account.id! },
+  ]);
 
   const navigateToPreviousRecord = async () => {
     const { ok, data } = await findPreviousAccount(account.id!);
     if (ok) {
-      setAccount(data!);
+      setAccount(data);
     } else {
       toast({
         description: "You reach the first record",
@@ -56,7 +56,7 @@ export const AccountView: React.FC<ViewProps<AccountType>> = ({
   const navigateToNextRecord = async () => {
     const { ok, data } = await findNextAccount(account.id!);
     if (ok) {
-      setAccount(data!);
+      setAccount(data);
     } else {
       toast({
         description: "You reach the last record",
@@ -65,7 +65,7 @@ export const AccountView: React.FC<ViewProps<AccountType>> = ({
   };
 
   return (
-    <>
+    <div className="bg-card px-6 py-6 rounded-2xl">
       <div className="flex flex-row justify-between gap-1">
         <Button
           variant="outline"
@@ -143,6 +143,6 @@ export const AccountView: React.FC<ViewProps<AccountType>> = ({
         contactPromise={contactPromise}
         enableAdvancedFilter={true}
       />
-    </>
+    </div>
   );
 };

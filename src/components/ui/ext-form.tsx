@@ -28,7 +28,7 @@ export interface FormProps<Entity> {
 }
 
 export interface ViewProps<DValue> {
-  initialData: DValue;
+  entity: DValue;
 }
 
 export const ExtInputField = ({

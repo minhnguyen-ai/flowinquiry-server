@@ -2,15 +2,14 @@ import { z } from "zod";
 
 export type Operator = "gt" | "lt" | "eq" | "in";
 
-// Generic filter that adapts to the object's type (T)
-export type Filter<T> = {
-  field: keyof T; // Restrict fields to keys of the object type
-  operator: Operator;
-  value: T[keyof T] | T[keyof T][]; // Value is based on the type of the field
+export type Filter = {
+  field: string; // Loosely typed field name
+  operator: Operator; // Specifies the operator (greater than, less than, etc.)
+  value: any; // Loosely typed value, can be a single value or array
 };
 
-export type QueryDTO<T> = {
-  filters: Filter<T>[];
+export type QueryDTO = {
+  filters: Filter[]; // Array of Filter objects
 };
 
 // Pagination type for handling pagination and sorting
@@ -52,7 +51,7 @@ export const paginationSchema = z.object({
 });
 
 // Function to build a dynamic search query with strong types
-export const buildSearchQuery = <T>(filters: Filter<T>[]): QueryDTO<T> => {
+export const buildSearchQuery = (filters: Filter[]): QueryDTO => {
   return {
     filters,
   };

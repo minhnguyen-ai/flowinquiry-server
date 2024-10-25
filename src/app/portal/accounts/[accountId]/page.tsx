@@ -26,7 +26,7 @@ export default async function Page({
   return (
     <div className="space-y-4 max-w-[72rem]">
       <Breadcrumbs items={breadcrumbItems} />
-      <AccountView initialData={account} />
+      <AccountView entity={account} />
     </div>
   );
 }

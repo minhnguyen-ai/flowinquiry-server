@@ -43,7 +43,7 @@ export const AccountForm = ({ initialData }: FormProps<AccountType>) => {
   const submitTextWhileLoading = isEdit ? "Saving changes ..." : "Creating ...";
 
   return (
-    <div className="bg-card px-6 py-6">
+    <div className="bg-card px-6 py-6 rounded-2xl">
       <div className="flex items-center justify-between">
         <Heading title={title} description={description} />
       </div>
