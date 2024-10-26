@@ -33,10 +33,8 @@ const AuthoritiesSelect = ({
   const [authorities, setAuthorities] = useState<Array<AuthorityType>>();
   useEffect(() => {
     const fetchAuthorities = async () => {
-      const { ok, data } = await getAuthorities();
-      if (ok) {
-        setAuthorities(data);
-      }
+      const data = await getAuthorities();
+      setAuthorities(data);
     };
 
     fetchAuthorities();
@@ -45,36 +43,52 @@ const AuthoritiesSelect = ({
   if (authorities === undefined) {
     return <div>Can not load authorities</div>;
   }
+
   return (
     <FormField
       control={form.control}
       name="authorities"
-      render={({ field }) => (
-        <FormItem>
-          <FormLabel>
-            {label}
-            {required && <span className="text-destructive"> *</span>}
-          </FormLabel>
-          <MultiSelector onValuesChange={field.onChange} values={field.value}>
-            <MultiSelectorTrigger>
-              <MultiSelectorInput placeholder="Select authorities" />
-            </MultiSelectorTrigger>
-            <MultiSelectorContent>
-              <MultiSelectorList>
-                {authorities.map((authority) => (
-                  <MultiSelectorItem
-                    key={authority.name}
-                    value={authority.descriptiveName}
-                  >
-                    <span>{authority.descriptiveName}</span>
-                  </MultiSelectorItem>
-                ))}
-              </MultiSelectorList>
-            </MultiSelectorContent>
-          </MultiSelector>
-          <FormMessage />
-        </FormItem>
-      )}
+      render={({ field }) => {
+        // Define a custom onValuesChange handler
+        const handleValuesChange = (newValues: String[]) => {
+          const filteredAuthorities = authorities
+            .filter((authority) =>
+              newValues.includes(authority.descriptiveName),
+            )
+            .map((authority) => authority.name);
+          field.onChange(filteredAuthorities);
+        };
+
+        return (
+          <FormItem>
+            <FormLabel>
+              {label}
+              {required && <span className="text-destructive"> *</span>}
+            </FormLabel>
+            <MultiSelector
+              onValuesChange={handleValuesChange}
+              values={field.value}
+            >
+              <MultiSelectorTrigger>
+                <MultiSelectorInput placeholder="Select authorities" />
+              </MultiSelectorTrigger>
+              <MultiSelectorContent>
+                <MultiSelectorList>
+                  {authorities.map((authority) => (
+                    <MultiSelectorItem
+                      key={authority.name}
+                      value={authority.descriptiveName}
+                    >
+                      <span>{authority.descriptiveName}</span>
+                    </MultiSelectorItem>
+                  ))}
+                </MultiSelectorList>
+              </MultiSelectorContent>
+            </MultiSelector>
+            <FormMessage />
+          </FormItem>
+        );
+      }}
     />
   );
 };

@@ -11,20 +11,14 @@ import {
   AccountSearchParams,
   AccountType,
 } from "@/types/accounts";
-import {
-  ActionResult,
-  EntityValueDefinition,
-  PageableResult,
-} from "@/types/commons";
+import { EntityValueDefinition, PageableResult } from "@/types/commons";
 
-export const findAccounts = async (): Promise<
-  ActionResult<PageableResult<AccountType>>
-> => {
+export const findAccounts = async (): Promise<PageableResult<AccountType>> => {
   return get<PageableResult<AccountType>>(`${BACKEND_API}/api/crm/accounts`);
 };
 
 export const findAccountStatuses = async (): Promise<
-  ActionResult<Array<EntityValueDefinition>>
+  Array<EntityValueDefinition>
 > => {
   return get<Array<EntityValueDefinition>>(
     `${BACKEND_API}/api/crm/values?entityType=account&&valueKey=status`,
@@ -36,7 +30,7 @@ export const findAccountStatusesFilterOptions = async () => {
 };
 
 export const findAccountTypes = async (): Promise<
-  ActionResult<Array<EntityValueDefinition>>
+  Array<EntityValueDefinition>
 > => {
   return get<Array<EntityValueDefinition>>(
     `${BACKEND_API}/api/crm/values?entityType=account&&valueKey=type`,
@@ -48,7 +42,7 @@ export const findAccountTypesFilterOptions = async () => {
 };
 
 export const findAccountIndustries = async (): Promise<
-  ActionResult<Array<EntityValueDefinition>>
+  Array<EntityValueDefinition>
 > => {
   return get<Array<EntityValueDefinition>>(
     `${BACKEND_API}/api/crm/values?entityType=account&&valueKey=industry`,
@@ -62,30 +56,22 @@ export const findAccountIndustriesFilterOptions = async () => {
 export const saveOrUpdateAccount = async (
   isEdit: boolean,
   account: AccountType,
-): Promise<ActionResult<string>> => {
+): Promise<void> => {
   const validation = accountSchema.safeParse(account);
 
   if (validation.success) {
-    let response: ActionResult<string>;
     if (isEdit) {
-      response = await put<AccountType, string>(
+      await put<AccountType, string>(
         `${BACKEND_API}/api/crm/accounts/${account.id}`,
         account,
       );
     } else {
-      response = await post<AccountType, string>(
+      await post<AccountType, string>(
         `${BACKEND_API}/api/crm/accounts`,
         account,
       );
     }
-
-    if (response.ok) {
-      redirect("/portal/accounts");
-    } else {
-      return response;
-    }
-  } else {
-    return { ok: false, status: "user_error", message: "Validation failed" };
+    redirect("/portal/accounts");
   }
 };
 
@@ -105,18 +91,7 @@ export const findNextAccount = async (accountId: number) => {
 
 export async function searchAccounts(input: AccountSearchParams) {
   noStore();
-  const {
-    ok,
-    message,
-    data: pageResult,
-  } = await doAdvanceSearch<AccountType>(
-    `${BACKEND_API}/api/crm/accounts/search`,
-  );
-  if (ok) {
-    return { data: pageResult.content, pageCount: pageResult.totalPages };
-  } else {
-    throw new Error("Can not get the entities " + message);
-  }
+  return doAdvanceSearch<AccountType>(`${BACKEND_API}/api/crm/accounts/search`);
 }
 
 export async function deleteAccounts(input: { ids: number[] }) {

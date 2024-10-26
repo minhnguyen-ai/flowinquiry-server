@@ -1,39 +1,30 @@
 "use server";
 
-import { unstable_noStore as noStore } from "next/dist/server/web/spec-extension/unstable-no-store";
 import { redirect } from "next/navigation";
 
 import { doAdvanceSearch, get, post, put } from "@/lib/actions/commons.action";
 import { findEntitiesFilterOptions } from "@/lib/actions/shared.action";
 import { BACKEND_API } from "@/lib/constants";
-import {
-  ActionResult,
-  EntityValueDefinition,
-  PageableResult,
-} from "@/types/commons";
-import {
-  contactSchema,
-  ContactSearchSchema,
-  ContactType,
-} from "@/types/contacts";
+import { EntityValueDefinition, PageableResult } from "@/types/commons";
+import { contactSchema, ContactType } from "@/types/contacts";
 import { Filter } from "@/types/query";
 
 export const findContactById = async (
   contactId: number,
-): Promise<ActionResult<ContactType>> => {
+): Promise<ContactType> => {
   return get<ContactType>(`${BACKEND_API}/api/crm/contacts/${contactId}`);
 };
 
 export const findContactsByAccountId = async (
   accountId: number,
-): Promise<ActionResult<PageableResult<ContactType>>> => {
+): Promise<PageableResult<ContactType>> => {
   return get<PageableResult<ContactType>>(
     `${BACKEND_API}/api/crm/contacts/account/${accountId}`,
   );
 };
 
 export const findContactStatuses = async (): Promise<
-  ActionResult<Array<EntityValueDefinition>>
+  Array<EntityValueDefinition>
 > => {
   return get<Array<EntityValueDefinition>>(
     `${BACKEND_API}/api/crm/values?entityType=contact&&valueKey=status`,
@@ -44,10 +35,8 @@ export const findContactStatusesFilterOptions = async () => {
   return findEntitiesFilterOptions(findContactStatuses);
 };
 
-export async function searchContacts(filters: Filter<ContactSearchSchema>[]) {
-  noStore();
-
-  return doAdvanceSearch<ContactSearchSchema, ContactType>(
+export async function searchContacts(filters: Filter[]) {
+  return doAdvanceSearch<ContactType>(
     `${BACKEND_API}/api/crm/contacts/search`,
     filters,
   );
@@ -56,29 +45,22 @@ export async function searchContacts(filters: Filter<ContactSearchSchema>[]) {
 export const saveOrUpdateContact = async (
   isEdit: boolean,
   contact: ContactType,
-): Promise<ActionResult<string>> => {
+): Promise<void> => {
   const validation = contactSchema.safeParse(contact);
 
   if (validation.success) {
-    let response: ActionResult<string>;
     if (isEdit) {
-      response = await put<ContactType, string>(
+      await put<ContactType, string>(
         `${BACKEND_API}/api/crm/contacts/${contact.id}`,
         contact,
       );
     } else {
-      response = await post<ContactType, string>(
+      await post<ContactType, string>(
         `${BACKEND_API}/api/crm/contacts`,
         contact,
       );
     }
 
-    if (response.ok) {
-      redirect("/portal/contacts");
-    } else {
-      return response;
-    }
-  } else {
-    return { ok: false, status: "user_error", message: "Validation failed" };
+    redirect("/portal/contacts");
   }
 };

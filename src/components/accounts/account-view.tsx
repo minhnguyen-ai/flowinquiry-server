@@ -18,13 +18,13 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { Separator } from "@/components/ui/separator";
-import { toast } from "@/components/ui/use-toast";
 import {
   findNextAccount,
   findPreviousAccount,
 } from "@/lib/actions/accounts.action";
 import { searchContacts } from "@/lib/actions/contacts.action";
 import { obfuscate } from "@/lib/endecode";
+import { navigateToRecord } from "@/lib/navigation-record";
 import { cn } from "@/lib/utils";
 import { AccountType } from "@/types/accounts";
 
@@ -43,25 +43,21 @@ export const AccountView: React.FC<ViewProps<AccountType>> = ({
   ]);
 
   const navigateToPreviousRecord = async () => {
-    const { ok, data } = await findPreviousAccount(account.id!);
-    if (ok) {
-      setAccount(data);
-    } else {
-      toast({
-        description: "You reach the first record",
-      });
-    }
+    const previousAccount = await navigateToRecord(
+      findPreviousAccount,
+      "You reach the first record",
+      account.id!,
+    );
+    setAccount(previousAccount);
   };
 
   const navigateToNextRecord = async () => {
-    const { ok, data } = await findNextAccount(account.id!);
-    if (ok) {
-      setAccount(data);
-    } else {
-      toast({
-        description: "You reach the last record",
-      });
-    }
+    const nextAccount = await navigateToRecord(
+      findNextAccount,
+      "You reach the last record",
+      account.id!,
+    );
+    setAccount(nextAccount);
   };
 
   return (

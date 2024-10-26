@@ -2,7 +2,7 @@ import { AdapterUser } from "@auth/core/adapters";
 import NextAuth, { User } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
-import apiAuthSignIn from "@/lib/api";
+import apiAuthSignIn from "@/lib/auth";
 
 export const { handlers, auth } = NextAuth({
   providers: [

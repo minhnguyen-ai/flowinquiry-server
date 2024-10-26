@@ -26,22 +26,15 @@ export const TeamList = () => {
   const [totalPages, setTotalPages] = useState(0); // Total pages
   const [totalElements, setTotalElements] = useState(0);
   const [loading, setLoading] = useState(false); // Loading state
-  const [error, setError] = useState<string | null>(null); // Error state
-  const itemsPerPage = 10; // Customize the number of items per page
 
   const fetchData = async (page: number) => {
     setLoading(true);
-    setError(null);
     try {
       // Replace this with your actual API call
-      const { ok, data: pageResult } = await searchTeams();
-      if (ok) {
-        setItems(pageResult.content); // Update items
-        setTotalElements(pageResult.totalElements);
-        setTotalPages(pageResult.totalPages); // Update total pages
-      }
-    } catch (err) {
-      setError("Failed to fetch data");
+      const pageResult = await searchTeams();
+      setItems(pageResult.content); // Update items
+      setTotalElements(pageResult.totalElements);
+      setTotalPages(pageResult.totalPages); // Update total pages
     } finally {
       setLoading(false);
     }
@@ -53,7 +46,6 @@ export const TeamList = () => {
   }, [currentPage]);
 
   if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
 
   return (
     <div className="bg-card px-6 py-6">

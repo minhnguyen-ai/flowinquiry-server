@@ -39,19 +39,19 @@ export const UserForm: React.FC<UserFormProps> = ({ initialData }) => {
 
   function onSubmit(data: UserType) {
     console.log(`Data: ${JSON.stringify(data)}`);
-    // try {
-    //   setLoading(true);
-    //   router.refresh();
-    //   router.push(`/portal/users`);
-    // } catch (error: any) {
-    //   toast({
-    //     variant: "destructive",
-    //     title: "Uh oh! Something went wrong.",
-    //     description: "There was a problem with your request.",
-    //   });
-    // } finally {
-    //   setLoading(false);
-    // }
+    try {
+      setLoading(true);
+      router.refresh();
+      router.push(`/portal/users`);
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: "There was a problem with your request.",
+      });
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (

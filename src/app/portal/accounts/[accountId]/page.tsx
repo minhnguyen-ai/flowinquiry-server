@@ -10,10 +10,8 @@ export default async function Page({
 }: {
   params: { accountId: string };
 }) {
-  const { ok, data: account } = await findAccountById(
-    deobfuscateToNumber(params.accountId),
-  );
-  if (!ok || !account) {
+  const account = await findAccountById(deobfuscateToNumber(params.accountId));
+  if (!account) {
     notFound();
   }
 

@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 
 import { doAdvanceSearch, get, post, put } from "@/lib/actions/commons.action";
 import { BACKEND_API } from "@/lib/constants";
-import { ActionResult, PageableResult } from "@/types/commons";
+import { PageableResult } from "@/types/commons";
 import { teamSchema, TeamType } from "@/types/teams";
 import { UserType } from "@/types/users";
 
@@ -16,27 +16,17 @@ export const findTeamById = async (teamId: number) => {
 export const saveOrUpdateTeam = async (
   isEdit: boolean,
   team: TeamType,
-): Promise<ActionResult<string>> => {
+): Promise<void> => {
   const validation = teamSchema.safeParse(team);
 
   if (validation.success) {
-    let response: ActionResult<string>;
     if (isEdit) {
-      response = await put<TeamType, string>(
-        `${BACKEND_API}/api/teams/${team.id}`,
-        team,
-      );
+      await put<TeamType, string>(`${BACKEND_API}/api/teams/${team.id}`, team);
     } else {
-      response = await post<TeamType, string>(`${BACKEND_API}/api/teams`, team);
+      await post<TeamType, string>(`${BACKEND_API}/api/teams`, team);
     }
 
-    if (response.ok) {
-      redirect("/portal/teams");
-    } else {
-      return response;
-    }
-  } else {
-    return { ok: false, status: "user_error", message: "Validation failed" };
+    redirect("/portal/teams");
   }
 };
 

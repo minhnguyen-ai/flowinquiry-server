@@ -1,17 +1,17 @@
 import React from "react";
 
-import { ActionResult, EntityValueDefinition } from "@/types/commons";
+import { EntityValueDefinition } from "@/types/commons";
 
 // Generic hook to load data
 export const useFetchData = (
-  fetchData: () => Promise<ActionResult<Array<EntityValueDefinition>>>,
+  fetchData: () => Promise<Array<EntityValueDefinition>>,
 ) => {
   const [items, setItems] = React.useState<Array<string>>([]);
 
   React.useEffect(() => {
     const loadItems = async () => {
-      const { ok, data } = await fetchData();
-      if (ok && data) {
+      const data = await fetchData();
+      if (data) {
         // setItems(data.map((it) => it.value)); // Apply transformation to the fetched data
       }
     };

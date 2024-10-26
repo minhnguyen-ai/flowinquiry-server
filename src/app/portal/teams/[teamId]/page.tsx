@@ -6,10 +6,8 @@ import { findTeamById } from "@/lib/actions/teams.action";
 import { deobfuscateToNumber } from "@/lib/endecode";
 
 const Page = async ({ params }: { params: { teamId: string } }) => {
-  const { ok, data: team } = await findTeamById(
-    deobfuscateToNumber(params.teamId),
-  );
-  if (!ok || !team) {
+  const team = await findTeamById(deobfuscateToNumber(params.teamId));
+  if (!team) {
     notFound();
   }
 
@@ -22,7 +20,7 @@ const Page = async ({ params }: { params: { teamId: string } }) => {
   return (
     <div className="space-y-4 max-w-[72rem]">
       <Breadcrumbs items={breadcrumbItems} />
-      <TeamView initialData={team} />
+      <TeamView entity={team} />
     </div>
   );
 };

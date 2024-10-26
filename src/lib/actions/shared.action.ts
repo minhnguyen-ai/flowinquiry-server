@@ -3,26 +3,20 @@
 import { get } from "@/lib/actions/commons.action";
 import { BACKEND_API } from "@/lib/constants";
 import { mapEntityToFilterOptions } from "@/lib/mappers";
-import { ActionResult, EntityValueDefinition } from "@/types/commons";
+import { EntityValueDefinition } from "@/types/commons";
 
 export interface TimezoneInfo {
   zoneId: string;
   offset: string;
 }
 
-export const getTimezones = async (): Promise<
-  ActionResult<Array<TimezoneInfo>>
-> => {
+export const getTimezones = async (): Promise<Array<TimezoneInfo>> => {
   return get<Array<TimezoneInfo>>(`${BACKEND_API}/api/timezones`);
 };
 
 export const findEntitiesFilterOptions = async (
-  findEntitiesFn: () => Promise<ActionResult<Array<EntityValueDefinition>>>,
+  findEntitiesFn: () => Promise<Array<EntityValueDefinition>>,
 ) => {
-  const { ok, data } = await findEntitiesFn();
-  if (ok) {
-    return mapEntityToFilterOptions(data!);
-  } else {
-    throw new Error("Can not load account industries");
-  }
+  const data = await findEntitiesFn();
+  return mapEntityToFilterOptions(data);
 };

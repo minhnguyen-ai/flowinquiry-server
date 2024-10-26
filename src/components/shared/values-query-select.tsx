@@ -31,7 +31,6 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
-import { ActionResult } from "@/types/commons";
 import { UiAttributes } from "@/types/ui-components";
 
 interface ValuesQuerySelectProps<T> extends UiAttributes {
@@ -40,7 +39,7 @@ interface ValuesQuerySelectProps<T> extends UiAttributes {
   fieldName: string;
   fieldLabel: string;
   required?: boolean;
-  fetchDataFn: () => Promise<ActionResult<Array<T>>>;
+  fetchDataFn: () => Promise<Array<T>>;
   valueKey: keyof T;
   renderTooltip?: (option: T) => string; // Optional tooltip render function
   renderOption: (option: T) => string;
@@ -65,12 +64,12 @@ const ValuesQuerySelect = <T,>({
 }: ValuesQuerySelectProps<T>) => {
   const [open, setOpen] = useState(false);
 
-  const { data: optionsResult, isError } = useQuery<ActionResult<Array<T>>>({
+  const optionsResult = useQuery<Array<T>>({
     queryKey: [queryName],
     queryFn: async () => fetchDataFn(),
   });
 
-  if (isError || !optionsResult) {
+  if (!optionsResult) {
     return <div>{noDataMessage}</div>;
   }
 

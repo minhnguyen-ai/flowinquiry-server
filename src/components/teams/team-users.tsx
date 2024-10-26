@@ -23,21 +23,15 @@ const TeamUsersView = ({ entity: teamId }: ViewProps<number>) => {
   const [totalPages, setTotalPages] = useState(0); // Total pages
   const [totalElements, setTotalElements] = useState(0);
   const [loading, setLoading] = useState(false); // Loading state
-  const [error, setError] = useState<string | null>(null); // Error state
   const itemsPerPage = 10; // Customize the number of items per page
   const fetchData = async (page: number) => {
     setLoading(true);
-    setError(null);
     try {
-      // Replace this with your actual API call
-      const { ok, data: pageResult } = await findMembersByTeamId(teamId);
-      if (ok) {
-        setItems(pageResult.content); // Update items
-        setTotalElements(pageResult.totalElements);
-        setTotalPages(pageResult.totalPages); // Update total pages
-      }
-    } catch (err) {
-      setError("Failed to fetch data");
+      const pageResult = await findMembersByTeamId(teamId);
+
+      setItems(pageResult.content); // Update items
+      setTotalElements(pageResult.totalElements);
+      setTotalPages(pageResult.totalPages); // Update total pages
     } finally {
       setLoading(false);
     }
@@ -49,7 +43,6 @@ const TeamUsersView = ({ entity: teamId }: ViewProps<number>) => {
   }, [currentPage]);
 
   if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
 
   return (
     <div>

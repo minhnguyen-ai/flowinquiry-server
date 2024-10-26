@@ -3,7 +3,8 @@
 import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
-import { ActionResult, PageableResult } from "@/types/commons";
+import { handleError, HttpError } from "@/lib/errors";
+import { PageableResult } from "@/types/commons";
 import {
   buildSearchQuery,
   Filter,
@@ -17,7 +18,7 @@ export const fetchData = async <TData, TResponse>(
   url: string,
   method: string,
   data?: TData,
-): Promise<ActionResult<TResponse>> => {
+): Promise<TResponse> => {
   const session = await auth();
   const response = await fetch(url, {
     method: method,
@@ -31,39 +32,34 @@ export const fetchData = async <TData, TResponse>(
   });
 
   if (response.ok) {
-    const data = (await response.json()) as TResponse;
-    return { ok: true, status: "success", data };
+    return (await response.json()) as TResponse;
   } else {
     // Unauthorized access
     if (response.status === 401) {
       redirect("/login");
-    } else {
-      return {
-        ok: false,
-        status: "system_error",
-        message: response.statusText,
-      };
     }
+    await handleError(response);
+
+    // Add unreachable return statement for TypeScript type safety
+    return Promise.reject("Unreachable code: handleError should throw");
   }
 };
 
-export const get = async <TResponse>(
-  url: string,
-): Promise<ActionResult<TResponse>> => {
+export const get = async <TResponse>(url: string): Promise<TResponse> => {
   return fetchData(url, "GET");
 };
 
 export const post = async <TData, TResponse>(
   url: string,
   data?: TData,
-): Promise<ActionResult<TResponse>> => {
+): Promise<TResponse> => {
   return fetchData(url, "POST", data);
 };
 
 export const put = async <TData, TResponse>(
   url: string,
   data?: TData,
-): Promise<ActionResult<TResponse>> => {
+): Promise<TResponse> => {
   return fetchData(url, "PUT", data);
 };
 
@@ -74,29 +70,27 @@ const defaultPagination: Pagination = {
 };
 
 // Function to send a dynamic search query with pagination and URL
-export const doAdvanceSearch = async <S, R>(
+export const doAdvanceSearch = async <R>(
   url: string, // URL is passed as a parameter
-  filters: Filter<S>[] = [], // Filters for the search
+  filters: Filter[] = [], // Filters for the search
   pagination: Pagination = defaultPagination, // Default pagination with page 1 and size 10
-): Promise<ActionResult<PageableResult<R>>> => {
+) => {
   // Validate query
   const queryValidation = querySchema.safeParse({ filters });
   if (!queryValidation.success) {
-    return {
-      ok: false,
-      status: "system_error",
-      message: `Invalid query ${queryValidation.error.errors}`,
-    };
+    throw new HttpError(
+      HttpError.BAD_REQUEST,
+      `Invalid query ${queryValidation.error.errors}`,
+    );
   }
 
   // Validate pagination
   const paginationValidation = paginationSchema.safeParse(pagination);
   if (!paginationValidation.success) {
-    return {
-      ok: false,
-      status: "system_error",
-      message: `Invalid pagination ${paginationValidation.error.errors}`,
-    };
+    throw new HttpError(
+      HttpError.BAD_REQUEST,
+      `Invalid pagination ${paginationValidation.error.errors}`,
+    );
   }
 
   // Build pagination URL parameters
@@ -112,9 +106,7 @@ export const doAdvanceSearch = async <S, R>(
     ),
   });
 
-  console.log("Prepare send post");
-  // Send POST request with filters and pagination
-  return fetchData<QueryDTO<S>, PageableResult<R>>(
+  return fetchData<QueryDTO, PageableResult<R>>(
     `${url}?${queryParams.toString()}`,
     "POST",
     buildSearchQuery(filters),

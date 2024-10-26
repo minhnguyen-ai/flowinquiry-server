@@ -12,7 +12,13 @@ export const userSchema = z.object({
   lastName: z.string().nullish(),
   timezone: z.string().nullish(),
   lastLoginTime: z.string().nullish(),
-  authorities: z.array(authoritySchema),
+  authorities: z
+    .array(z.union([authoritySchema, z.string()]))
+    .transform((authorities) =>
+      authorities.map((auth) =>
+        typeof auth === "string" ? { name: auth, descriptiveName: "" } : auth,
+      ),
+    ),
 });
 
 export type UserType = z.infer<typeof userSchema>;
