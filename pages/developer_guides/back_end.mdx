@@ -70,6 +70,30 @@ You will need to run the following scripts:
   You can run the `scripts/all.sh` script, which will check your environment settings and perform the necessary configurations, eliminating the need to run multiple scripts individually
 </Callout>
 
+#### Sending email
+
+To use Flexwork's email features, such as sending activation emails to users or reminders about upcoming tasks, you'll need an SMTP account. You can configure this with providers like Gmail, Amazon SES, or any SMTP service. Please note that this email setup is intended for use in a local environment only.
+
+Run the script `scripts/smtp_config.sh`, it will ask you the STMP information, and then it writes all to the local file `.env.local`
+
+```bash
+➜  flexwork-server git:(main) ✗ scripts/smtp_config.sh
+Enter your SMTP host: smtp.gmail.com
+Enter your SMTP port: 587
+Enter your username: <username>
+Enter your password: <password>
+Does SMTP require STARTTLS (y/n)? y
+Backup of .env.local created as .env.local.backup
+Configuration has been saved to .env.local
+````
+<Callout type="info" emoji="ℹ️">
+    To use your Google credentials to send a test email, you cannot use your regular email password. Instead, you'll need to generate an App Password. For detailed instructions, see the guide at https://support.google.com/mail/answer/185833?hl=en
+</Callout>
+
+<Callout emoji="💡">
+For setting up email in a production environment, please refer to our documentation [here](/production) or contact the Flexwork team for further assistance.
+</Callout>
+
 ### Run application
 
 #### Run postgres database
