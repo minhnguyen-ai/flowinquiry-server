@@ -10,7 +10,7 @@ const config: DocsThemeConfig = {
   docsRepositoryBase: 'https://github.com/theflexwork/flexwork-docs',
   logo: (
     <>
-      <img src="/flexwork-docs/logo.png"/>
+      <img src="/flexwork-docs/logo.png" />
     </>
   ),
   head: function useHead() {
@@ -18,13 +18,13 @@ const config: DocsThemeConfig = {
     const { route } = useRouter()
     const isDefault = route === '/' || !config.title
     const image =
-      'https://nextra.site/' +
+      'https://theflexwork.io/' +
       (isDefault ? 'og.jpeg' : `api/og?title=${config.title}`)
 
     const description =
       config.frontMatter.description ||
       'The flexible and configurable CRM system'
-    const title = config.title + (route === '/' ? '' : ' - Nextra')
+    const title = config.title + (route === '/' ? '' : ' - Flexwork')
 
     return (
       <>
