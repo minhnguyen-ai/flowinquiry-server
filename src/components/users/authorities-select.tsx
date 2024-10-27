@@ -48,47 +48,32 @@ const AuthoritiesSelect = ({
     <FormField
       control={form.control}
       name="authorities"
-      render={({ field }) => {
-        // Define a custom onValuesChange handler
-        const handleValuesChange = (newValues: String[]) => {
-          const filteredAuthorities = authorities
-            .filter((authority) =>
-              newValues.includes(authority.descriptiveName),
-            )
-            .map((authority) => authority.name);
-          field.onChange(filteredAuthorities);
-        };
-
-        return (
-          <FormItem>
-            <FormLabel>
-              {label}
-              {required && <span className="text-destructive"> *</span>}
-            </FormLabel>
-            <MultiSelector
-              onValuesChange={handleValuesChange}
-              values={field.value}
-            >
-              <MultiSelectorTrigger>
-                <MultiSelectorInput placeholder="Select authorities" />
-              </MultiSelectorTrigger>
-              <MultiSelectorContent>
-                <MultiSelectorList>
-                  {authorities.map((authority) => (
-                    <MultiSelectorItem
-                      key={authority.name}
-                      value={authority.descriptiveName}
-                    >
-                      <span>{authority.descriptiveName}</span>
-                    </MultiSelectorItem>
-                  ))}
-                </MultiSelectorList>
-              </MultiSelectorContent>
-            </MultiSelector>
-            <FormMessage />
-          </FormItem>
-        );
-      }}
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>
+            {label}
+            {required && <span className="text-destructive"> *</span>}
+          </FormLabel>
+          <MultiSelector onValuesChange={field.onChange} values={field.value}>
+            <MultiSelectorTrigger>
+              <MultiSelectorInput placeholder="Select authorities" />
+            </MultiSelectorTrigger>
+            <MultiSelectorContent>
+              <MultiSelectorList>
+                {authorities.map((authority) => (
+                  <MultiSelectorItem
+                    key={authority.name}
+                    value={authority.descriptiveName}
+                  >
+                    <span>{authority.descriptiveName}</span>
+                  </MultiSelectorItem>
+                ))}
+              </MultiSelectorList>
+            </MultiSelectorContent>
+          </MultiSelector>
+          <FormMessage />
+        </FormItem>
+      )}
     />
   );
 };

@@ -8,12 +8,13 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { Heading } from "@/components/heading";
+import TimezoneSelect from "@/components/shared/timezones-select";
 import { Button } from "@/components/ui/button";
 import { ExtInputField, SubmitButton } from "@/components/ui/ext-form";
 import { Form } from "@/components/ui/form";
 import { Separator } from "@/components/ui/separator";
-import { useToast } from "@/components/ui/use-toast";
 import AuthoritiesSelect from "@/components/users/authorities-select";
+import { createUser } from "@/lib/actions/users.action";
 import { userSchema, UserType } from "@/types/users";
 
 interface UserFormProps {
@@ -24,9 +25,7 @@ type UserFormValues = z.infer<typeof userSchema>;
 
 export const UserForm: React.FC<UserFormProps> = ({ initialData }) => {
   const router = useRouter();
-  const { toast } = useToast();
   const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
   const isEdit = !!initialData;
   const title = isEdit ? "Edit User" : "Create User";
   const description = isEdit ? "Edit user" : "Add a new user";
@@ -37,34 +36,17 @@ export const UserForm: React.FC<UserFormProps> = ({ initialData }) => {
     defaultValues: initialData,
   });
 
-  function onSubmit(data: UserType) {
+  async function onSubmit(data: UserType) {
     console.log(`Data: ${JSON.stringify(data)}`);
-    try {
-      setLoading(true);
-      router.refresh();
-      router.push(`/portal/users`);
-    } catch (error: any) {
-      toast({
-        variant: "destructive",
-        title: "Uh oh! Something went wrong.",
-        description: "There was a problem with your request.",
-      });
-    } finally {
-      setLoading(false);
-    }
+    await createUser(data);
   }
 
   return (
-    <div className="bg-card px-6 py-6">
+    <div className="bg-card px-6 py-6 rounded-2xl">
       <div className="flex items-center justify-between">
         <Heading title={title} description={description} />
         {initialData && (
-          <Button
-            disabled={loading}
-            variant="destructive"
-            size="sm"
-            onClick={() => setOpen(true)}
-          >
+          <Button variant="destructive" size="sm" onClick={() => setOpen(true)}>
             <Trash className="h-4 w-4" />
           </Button>
         )}
@@ -97,7 +79,14 @@ export const UserForm: React.FC<UserFormProps> = ({ initialData }) => {
             label="Last Name"
             placeholder="Last Name"
           />
-          <div className="flex items-center gap-2">
+          <TimezoneSelect
+            form={form}
+            fieldName="timezone"
+            label="Timezone"
+            placeholder="Timezone"
+            required={true}
+          />
+          <div className="flex items-center gap-2 col-first">
             <SubmitButton
               label="Invite user"
               labelWhileLoading="Creating ..."

@@ -81,7 +81,7 @@ const ValuesQuerySelect = <T,>({
         control={form.control}
         name={fieldName}
         render={({ field }) => (
-          <FormItem>
+          <FormItem className="w-[300px]">
             <FormLabel>
               {fieldLabel}
               {required && <span className="text-destructive"> *</span>}

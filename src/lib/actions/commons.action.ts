@@ -30,7 +30,7 @@ export const fetchData = async <TData, TResponse>(
     },
     ...(data && { body: JSON.stringify(data) }),
   });
-
+  console.log(`Response ${response.status}`);
   if (response.ok) {
     return (await response.json()) as TResponse;
   } else {

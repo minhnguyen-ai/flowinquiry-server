@@ -16,7 +16,7 @@ export const userSchema = z.object({
     .array(z.union([authoritySchema, z.string()]))
     .transform((authorities) =>
       authorities.map((auth) =>
-        typeof auth === "string" ? { name: auth, descriptiveName: "" } : auth,
+        typeof auth === "string" ? { name: auth, descriptiveName: auth } : auth,
       ),
     ),
 });

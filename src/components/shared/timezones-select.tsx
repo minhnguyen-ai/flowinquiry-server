@@ -1,23 +1,31 @@
 import React from "react";
 
 import ValuesQuerySelect from "@/components/shared/values-query-select";
+import { ExtInputProps } from "@/components/ui/ext-form";
 import { getTimezones, TimezoneInfo } from "@/lib/actions/shared.action";
-import { FormFieldProps } from "@/types/ui-components";
+import { UiAttributes } from "@/types/ui-components";
 
-const TimezoneSelect = ({ form, required }: FormFieldProps) => {
+const TimezoneSelect = ({
+  form,
+  fieldName,
+  label,
+  placeholder,
+  required,
+  type = undefined,
+}: ExtInputProps & UiAttributes) => {
   return (
     <ValuesQuerySelect<TimezoneInfo>
       form={form}
       queryName="timezones"
-      fieldName="timezone"
-      fieldLabel="Timezone"
+      fieldName={fieldName}
+      fieldLabel={label}
       fetchDataFn={getTimezones}
       valueKey="zoneId"
       renderOption={(timezone: TimezoneInfo) =>
         `${timezone.offset} ${timezone.zoneId}`
       }
       required={required}
-      placeholder="Select timezone"
+      placeholder={placeholder}
       noDataMessage="No timezone found"
       searchPlaceholder="Search timezone..."
     />
