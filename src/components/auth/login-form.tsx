@@ -53,7 +53,7 @@ const LoginForm = () => {
     const response = await signIn("credentials", {
       email: data.email,
       password: data.password,
-      callbackUrl: "/portal",
+      redirectTo: "/portal",
       redirect: false,
     });
 

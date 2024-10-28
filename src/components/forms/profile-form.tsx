@@ -122,7 +122,12 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ resourceServer }) => {
             label="Last Name"
             placeholder="Last Name"
           />
-          <TimezoneSelect form={form} required={true} />
+          <TimezoneSelect
+            form={form}
+            required={true}
+            fieldName="timezone"
+            label="Timezone"
+          />
           <Button type="submit">Submit</Button>
         </form>
       </Form>

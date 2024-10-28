@@ -13,9 +13,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { obfuscate } from "@/lib/endecode";
-import { AccountType } from "@/types/accounts";
+import { AuthorityType } from "@/types/authorities";
 
-export function AccountTableRowActions({ row }: { row: Row<AccountType> }) {
+export function AuthorityTableRowActions({ row }: { row: Row<AuthorityType> }) {
   const router = useRouter();
 
   return (
@@ -33,7 +33,7 @@ export function AccountTableRowActions({ row }: { row: Row<AccountType> }) {
           <DropdownMenuItem
             onClick={() =>
               router.push(
-                `/portal/accounts/${obfuscate(row.original.id!)}/edit`,
+                `/portal/settings/authorities/${obfuscate(row.original.name!)}/edit`,
               )
             }
           >

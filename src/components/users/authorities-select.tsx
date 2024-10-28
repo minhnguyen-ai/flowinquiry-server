@@ -17,8 +17,8 @@ import {
   MultiSelectorTrigger,
 } from "@/components/ui/multi-select";
 import { getAuthorities } from "@/lib/actions/authorities.action";
+import { AuthorityType } from "@/types/authorities";
 import { UiAttributes } from "@/types/ui-components";
-import { AuthorityType } from "@/types/users";
 
 interface AuthoritiesSelectProps {
   form: any;
@@ -34,7 +34,7 @@ const AuthoritiesSelect = ({
   useEffect(() => {
     const fetchAuthorities = async () => {
       const data = await getAuthorities();
-      setAuthorities(data);
+      setAuthorities(data.content);
     };
 
     fetchAuthorities();

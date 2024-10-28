@@ -18,21 +18,33 @@ export const fetchData = async <TData, TResponse>(
   url: string,
   method: string,
   data?: TData,
+  isAuthorized: boolean = true,
 ): Promise<TResponse> => {
-  const session = await auth();
+  const session = isAuthorized ? await auth() : null;
+  const headers: Record<string, string> = {
+    Accept: "application/json",
+    "Content-Type": "application/json",
+    "Access-Control-Allow-Origin": "*",
+  };
+  // Conditionally add Authorization header if isAuthorized is true
+  if (isAuthorized && session?.user?.accessToken) {
+    headers.Authorization = `Bearer ${session.user.accessToken}`;
+  }
+
   const response = await fetch(url, {
     method: method,
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-      "Access-Control-Allow-Origin": "*",
-      Authorization: `Bearer ${session?.user?.accessToken}`,
-    },
+    headers: headers,
     ...(data && { body: JSON.stringify(data) }),
   });
-  console.log(`Response ${response.status}`);
   if (response.ok) {
-    return (await response.json()) as TResponse;
+    try {
+      // Try to parse the JSON response
+      return (await response.json()) as TResponse;
+    } catch (error) {
+      // If parsing fails, log a warning and return undefined or a fallback
+      console.warn("No JSON response body or failed to parse:", error);
+      return undefined as unknown as TResponse;
+    }
   } else {
     // Unauthorized access
     if (response.status === 401) {
@@ -45,15 +57,19 @@ export const fetchData = async <TData, TResponse>(
   }
 };
 
-export const get = async <TResponse>(url: string): Promise<TResponse> => {
-  return fetchData(url, "GET");
+export const get = async <TResponse>(
+  url: string,
+  isAuthorized: boolean = true,
+): Promise<TResponse> => {
+  return fetchData(url, "GET", undefined, isAuthorized);
 };
 
 export const post = async <TData, TResponse>(
   url: string,
   data?: TData,
+  isAuthorized: boolean = true,
 ): Promise<TResponse> => {
-  return fetchData(url, "POST", data);
+  return fetchData(url, "POST", data, isAuthorized);
 };
 
 export const put = async <TData, TResponse>(

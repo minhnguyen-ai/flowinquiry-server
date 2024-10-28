@@ -19,3 +19,11 @@ export const createUser = async (user: UserType) => {
     redirect("/portal/users");
   }
 };
+
+export const passwordReset = async (key: string, password: string) => {
+  await post(
+    `${BACKEND_API}/api/account/reset-password/finish`,
+    { key: key, newPassword: password },
+    false,
+  );
+};

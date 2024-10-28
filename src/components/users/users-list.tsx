@@ -30,10 +30,11 @@ export const UserList = () => {
         page: page,
         size: itemsPerPage,
       });
-
-      setItems(pageResult.content); // Update items
-      setTotalElements(pageResult.totalElements);
-      setTotalPages(pageResult.totalPages);
+      if (pageResult) {
+        setItems(pageResult.content);
+        setTotalElements(pageResult.totalElements);
+        setTotalPages(pageResult.totalPages);
+      }
     } finally {
       setLoading(false);
     }
@@ -47,7 +48,7 @@ export const UserList = () => {
   if (loading) return <div>Loading...</div>;
 
   return (
-    <div className="bg-card px-6 py-6">
+    <div className="bg-card px-6 py-6 rounded-2xl h-full">
       <div className="flex flex-row justify-between">
         <Heading
           title={`Users (${totalElements})`}

@@ -1,9 +1,6 @@
 import { z } from "zod";
 
-export const authoritySchema = z.object({
-  name: z.string().min(1),
-  descriptiveName: z.string().min(1),
-});
+import { authoritySchema } from "@/types/authorities";
 
 export const userSchema = z.object({
   id: z.number().nullish(),
@@ -16,14 +13,14 @@ export const userSchema = z.object({
     .array(z.union([authoritySchema, z.string()]))
     .transform((authorities) =>
       authorities.map((auth) =>
-        typeof auth === "string" ? { name: auth, descriptiveName: auth } : auth,
+        typeof auth === "string"
+          ? { name: auth, descriptiveName: auth, systemRole: false }
+          : auth,
       ),
     ),
 });
 
 export type UserType = z.infer<typeof userSchema>;
-
-export type AuthorityType = z.infer<typeof authoritySchema>;
 
 export const userSearchParamsSchema = z.object({
   page: z.coerce.number().default(1).optional(), // page number

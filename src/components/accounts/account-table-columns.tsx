@@ -3,7 +3,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 
-import { DataTableRowActions } from "@/components/accounts/account-table-cell-action";
+import { AccountTableRowActions } from "@/components/accounts/account-table-cell-action";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DataTableColumnHeader } from "@/components/ui/table/data-table-column-header";
@@ -98,6 +98,6 @@ export const accounts_columns_def: ColumnDef<AccountType>[] = [
   },
   {
     id: "actions",
-    cell: ({ row }) => <DataTableRowActions row={row} />,
+    cell: ({ row }) => <AccountTableRowActions row={row} />,
   },
 ];
