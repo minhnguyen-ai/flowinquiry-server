@@ -14,10 +14,12 @@ import { createAuthority } from "@/lib/actions/authorities.action";
 import { authoritySchema, AuthorityType } from "@/types/authorities";
 
 type NewAuthorityFormProps = {
-  onSave: () => void;
+  onSaveSuccess: () => void;
 };
 
-const NewAuthorityForm: React.FC<NewAuthorityFormProps> = ({ onSave }) => {
+const NewAuthorityForm: React.FC<NewAuthorityFormProps> = ({
+  onSaveSuccess,
+}) => {
   const form = useForm<AuthorityType>({
     resolver: zodResolver(authoritySchema),
     defaultValues: {
@@ -26,10 +28,8 @@ const NewAuthorityForm: React.FC<NewAuthorityFormProps> = ({ onSave }) => {
   });
 
   async function onSubmit(authority: AuthorityType) {
-    const transformedData = authoritySchema.parse(authority);
-    console.log(`authority ${JSON.stringify(transformedData)}`);
     await createAuthority(authority);
-    onSave();
+    onSaveSuccess();
   }
 
   return (

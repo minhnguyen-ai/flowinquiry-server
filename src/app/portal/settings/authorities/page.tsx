@@ -19,7 +19,11 @@ const breadcrumbItems = [
 
 const AuthoritiesPage = () => {
   const [open, setOpen] = useState(false);
-  const authorityPromise = getAuthorities();
+  const [authorityPromise, setAuthorityPromise] = useState(getAuthorities);
+
+  function onSaveAuthoritySuccess() {
+    setAuthorityPromise(getAuthorities());
+  }
 
   return (
     <div className="space-y-4">
@@ -31,7 +35,11 @@ const AuthoritiesPage = () => {
             <Plus />
             New Authority
           </Button>
-          <NewAuthorityDialog open={open} setOpen={setOpen} />
+          <NewAuthorityDialog
+            open={open}
+            setOpen={setOpen}
+            onSaveSuccess={onSaveAuthoritySuccess}
+          />
         </div>
         <Separator />
         <AuthoritiesTable

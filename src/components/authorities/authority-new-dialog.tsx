@@ -14,14 +14,17 @@ import {
 type NewAuthorityDialogProps = {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  onSaveSuccess: () => void;
 };
 
 const NewAuthorityDialog: React.FC<NewAuthorityDialogProps> = ({
   open,
   setOpen,
+  onSaveSuccess,
 }) => {
   const handleCloseDialog = () => {
     setOpen(false);
+    onSaveSuccess();
   };
 
   return (
@@ -33,7 +36,7 @@ const NewAuthorityDialog: React.FC<NewAuthorityDialogProps> = ({
             Create a new authority to access resources
           </DialogDescription>
         </DialogHeader>
-        <NewAuthorityForm onSave={handleCloseDialog} />
+        <NewAuthorityForm onSaveSuccess={handleCloseDialog} />
       </DialogContent>
     </Dialog>
   );

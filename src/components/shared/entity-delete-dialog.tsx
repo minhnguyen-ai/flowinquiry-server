@@ -28,38 +28,52 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { useMediaQuery } from "@/hooks/use-media-query";
-import { deleteAccounts } from "@/lib/actions/accounts.action";
-import { AccountType } from "@/types/accounts";
 
-interface DeleteAccountsDialogProps
+// Constrain TEntity to be an object
+export interface EntitiesDeleteDialogProps<TEntity extends Record<string, any>>
   extends React.ComponentPropsWithoutRef<typeof Dialog> {
-  accounts: Row<AccountType>["original"][];
+  entities: Row<TEntity>["original"][];
   showTrigger?: boolean;
   onSuccess?: () => void;
+  deleteEntitiesFn: (ids: number[]) => Promise<void>; // Pass a function to delete entities
+  entityName: string; // Pass the entity name for the UI text
 }
 
-export function DeleteAccountsDialog({
-  accounts,
+export function EntitiesDeleteDialog<TEntity extends Record<string, any>>({
+  entities,
   showTrigger = true,
   onSuccess,
+  deleteEntitiesFn,
+  entityName,
   ...props
-}: DeleteAccountsDialogProps) {
+}: EntitiesDeleteDialogProps<TEntity>) {
   const [isDeletePending, startDeleteTransition] = React.useTransition();
   const isDesktop = useMediaQuery("(min-width: 640px)");
 
   function onDelete() {
     startDeleteTransition(async () => {
-      const { error } = await deleteAccounts({
-        ids: accounts.map((account) => account.id!),
+      // Perform a runtime check to ensure each entity has an "id" field
+      const ids = entities.map((entity) => {
+        if ("id" in entity && typeof entity.id === "number") {
+          return entity.id; // Return the ID if it exists and is a string
+        } else {
+          throw new Error(`Entity does not have a valid "id" field`);
+        }
       });
 
-      if (error) {
-        toast.error(error);
+      try {
+        await deleteEntitiesFn(ids);
+      } catch (error) {
+        toast.error(
+          `Cannot delete ${entityName}${entities.length > 1 ? "s" : ""}`,
+        );
         return;
       }
 
       props.onOpenChange?.(false);
-      toast.success("Tasks deleted");
+      toast.success(
+        `${entityName}${entities.length > 1 ? "s are" : " is"} deleted`,
+      );
       onSuccess?.();
     });
   }
@@ -71,7 +85,7 @@ export function DeleteAccountsDialog({
           <DialogTrigger asChild>
             <Button variant="outline" size="sm">
               <TrashIcon className="mr-2 size-4" aria-hidden="true" />
-              Delete ({accounts.length})
+              Delete ({entities.length})
             </Button>
           </DialogTrigger>
         ) : null}
@@ -80,8 +94,11 @@ export function DeleteAccountsDialog({
             <DialogTitle>Are you absolutely sure?</DialogTitle>
             <DialogDescription>
               This action cannot be undone. This will permanently delete your{" "}
-              <span className="font-medium">{accounts.length}</span>
-              {accounts.length === 1 ? " task" : " tasks"} from our servers.
+              <span className="font-medium">{entities.length}</span>
+              {entities.length === 1
+                ? ` ${entityName}`
+                : ` ${entityName}s`}{" "}
+              from our servers.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="gap-2 sm:space-x-0">
@@ -114,7 +131,7 @@ export function DeleteAccountsDialog({
         <DrawerTrigger asChild>
           <Button variant="outline" size="sm">
             <TrashIcon className="mr-2 size-4" aria-hidden="true" />
-            Delete ({accounts.length})
+            Delete ({entities.length})
           </Button>
         </DrawerTrigger>
       ) : null}
@@ -123,8 +140,9 @@ export function DeleteAccountsDialog({
           <DrawerTitle>Are you absolutely sure?</DrawerTitle>
           <DrawerDescription>
             This action cannot be undone. This will permanently delete your{" "}
-            <span className="font-medium">{accounts.length}</span>
-            {accounts.length === 1 ? " task" : " tasks"} from our servers.
+            <span className="font-medium">{entities.length}</span>
+            {entities.length === 1 ? ` ${entityName}` : ` ${entityName}s`} from
+            our servers.
           </DrawerDescription>
         </DrawerHeader>
         <DrawerFooter className="gap-2 sm:space-x-0">

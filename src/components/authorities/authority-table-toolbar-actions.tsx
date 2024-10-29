@@ -15,7 +15,7 @@ export function AuthoritiesTableToolbarActions({
   return (
     <div className="flex items-center gap-2">
       {/*{table.getFilteredSelectedRowModel().rows.length > 0 ? (*/}
-      {/*    <DeleteAccountsDialog*/}
+      {/*    <AccountDeleteDialog*/}
       {/*        accounts={table*/}
       {/*            .getFilteredSelectedRowModel()*/}
       {/*            .rows.map((row) => row.original)}*/}

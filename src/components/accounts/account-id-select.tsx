@@ -2,7 +2,7 @@
 
 import React from "react";
 
-import IdInputSelect from "@/components/shared/id_input_select";
+import IdInputSelect from "@/components/shared/id-input-select";
 
 type AccountFieldSelectProps = {
   accountName: string | null;

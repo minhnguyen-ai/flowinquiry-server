@@ -75,8 +75,17 @@ export const post = async <TData, TResponse>(
 export const put = async <TData, TResponse>(
   url: string,
   data?: TData,
+  isAuthorized: boolean = true,
 ): Promise<TResponse> => {
-  return fetchData(url, "PUT", data);
+  return fetchData(url, "PUT", data, isAuthorized);
+};
+
+export const deleteExec = async <TData, TResponse>(
+  url: string,
+  data?: TData,
+  isAuthorized: boolean = true,
+): Promise<TResponse> => {
+  return fetchData(url, "DELETE", data, isAuthorized);
 };
 
 // Default pagination object

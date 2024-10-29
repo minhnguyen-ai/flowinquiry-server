@@ -27,7 +27,7 @@ export const accounts_columns_def: ColumnDef<AccountType>[] = [
           table.toggleAllPageRowsSelected(!!value)
         }
         aria-label="Select all"
-        className="translate-y-[2px]"
+        className="translate-y-0.5"
       />
     ),
     cell: ({ row }) => (
@@ -35,7 +35,7 @@ export const accounts_columns_def: ColumnDef<AccountType>[] = [
         checked={row.getIsSelected()}
         onCheckedChange={(value: any) => row.toggleSelected(!!value)}
         aria-label="Select row"
-        className="translate-y-[2px]"
+        className="translate-y-0.5"
       />
     ),
     enableSorting: false,

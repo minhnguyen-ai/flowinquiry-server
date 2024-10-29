@@ -18,6 +18,7 @@ import { AuthorityType } from "@/types/authorities";
 export function AuthorityTableRowActions({ row }: { row: Row<AuthorityType> }) {
   const router = useRouter();
 
+  const authority = row.original;
   return (
     <>
       <DropdownMenu modal={false}>
@@ -31,15 +32,32 @@ export function AuthorityTableRowActions({ row }: { row: Row<AuthorityType> }) {
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
 
           <DropdownMenuItem
-            onClick={() =>
-              router.push(
-                `/portal/settings/authorities/${obfuscate(row.original.name!)}/edit`,
-              )
+            className={
+              authority.systemRole
+                ? "opacity-50 cursor-not-allowed text-gray-400"
+                : ""
+            }
+            onClick={
+              !authority.systemRole
+                ? () =>
+                    router.push(
+                      `/portal/settings/authorities/${obfuscate(row.original.name!)}/edit`,
+                    )
+                : undefined
             }
           >
             <Edit className="mr-2 h-4 w-4" /> Update
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => console.log("Open menu")}>
+          <DropdownMenuItem
+            className={
+              authority.systemRole
+                ? "opacity-50 cursor-not-allowed text-gray-400"
+                : ""
+            }
+            onClick={
+              !authority.systemRole ? () => console.log("Open menu") : undefined
+            }
+          >
             <Trash className="mr-2 h-4 w-4" /> Delete
           </DropdownMenuItem>
         </DropdownMenuContent>

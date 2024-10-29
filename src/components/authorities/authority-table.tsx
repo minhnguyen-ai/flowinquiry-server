@@ -25,9 +25,7 @@ export function AuthoritiesTable({
   const [pageCount, setPageCount] = useState(0);
   const [loading, setLoading] = useState(true);
 
-  // Fetch data using useEffect
   useEffect(() => {
-    // Define async function to handle the promise
     const fetchAuthorities = async () => {
       try {
         setLoading(true);
@@ -39,8 +37,8 @@ export function AuthoritiesTable({
       }
     };
 
-    fetchAuthorities(); // Call the async function
-  }, []); // Empty dependency array ensures it runs only once when component mounts
+    fetchAuthorities();
+  }, [authoritiesPromise]);
 
   // Memoize the columns so they don't re-render on every render
   const columns = React.useMemo(() => authorities_columns_def, []);

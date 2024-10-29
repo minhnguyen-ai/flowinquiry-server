@@ -3,7 +3,13 @@
 import { revalidatePath, unstable_noStore as noStore } from "next/cache";
 import { redirect } from "next/navigation";
 
-import { doAdvanceSearch, get, post, put } from "@/lib/actions/commons.action";
+import {
+  deleteExec,
+  doAdvanceSearch,
+  get,
+  post,
+  put,
+} from "@/lib/actions/commons.action";
 import { findEntitiesFilterOptions } from "@/lib/actions/shared.action";
 import { BACKEND_API } from "@/lib/constants";
 import {
@@ -94,11 +100,8 @@ export async function searchAccounts(input: AccountSearchParams) {
   return doAdvanceSearch<AccountType>(`${BACKEND_API}/api/crm/accounts/search`);
 }
 
-export async function deleteAccounts(input: { ids: number[] }) {
+export async function deleteAccounts(ids: number[]) {
   revalidatePath("/");
 
-  return {
-    data: null,
-    error: null,
-  };
+  return deleteExec(`${BACKEND_API}/api/crm/accounts`, ids);
 }
