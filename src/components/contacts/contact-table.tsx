@@ -68,16 +68,16 @@ export function ContactsTable({
       id: "firstName",
       placeholder: "Filter names...",
     },
-    {
-      label: "Status",
-      id: "status",
-      options: contactStatuses.map((status) => ({
-        label: status,
-        value: status,
-        icon: undefined,
-        withCount: true,
-      })),
-    },
+    // {
+    //   label: "Status",
+    //   id: "status",
+    //   options: contactStatuses.map((status) => ({
+    //     label: status,
+    //     value: status,
+    //     icon: undefined,
+    //     withCount: true,
+    //   })),
+    // },
   ];
 
   const { table } = useDataTable({
