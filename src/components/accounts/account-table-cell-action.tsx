@@ -18,6 +18,8 @@ import { AccountType } from "@/types/accounts";
 export function AccountTableRowActions({ row }: { row: Row<AccountType> }) {
   const router = useRouter();
 
+  function showDeleteConfirmDialog() {}
+
   return (
     <>
       <DropdownMenu modal={false}>
@@ -39,7 +41,7 @@ export function AccountTableRowActions({ row }: { row: Row<AccountType> }) {
           >
             <Edit className="mr-2 h-4 w-4" /> Update
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => console.log("Open menu")}>
+          <DropdownMenuItem onClick={showDeleteConfirmDialog}>
             <Trash className="mr-2 h-4 w-4" /> Delete
           </DropdownMenuItem>
         </DropdownMenuContent>

@@ -103,5 +103,5 @@ export async function searchAccounts(input: AccountSearchParams) {
 export async function deleteAccounts(ids: number[]) {
   revalidatePath("/");
 
-  return deleteExec(`${BACKEND_API}/api/crm/accounts`, ids);
+  return deleteExec(`${BACKEND_API}/api/crm/accounts`, ids).then(() => {});
 }

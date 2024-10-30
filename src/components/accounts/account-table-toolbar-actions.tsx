@@ -26,17 +26,11 @@ export function AccountsTableToolbarActions({
           deleteEntitiesFn={deleteAccounts}
         />
       ) : null}
-      {/*<CreateTaskDialog />*/}
-      {/*FIX ME: redirect to create account*/}
       <ExportButton
         table={table}
         filename="accounts"
         excludeColumns={["select", "actions"]}
       />
-      {/**
-       * Other actions can be added here.
-       * For example, import, view, etc.
-       */}
     </div>
   );
 }
