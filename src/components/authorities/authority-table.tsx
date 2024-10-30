@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 
 import { authorities_columns_def } from "@/components/authorities/authority-table-columns";
 import { AuthoritiesTableToolbarActions } from "@/components/authorities/authority-table-toolbar-actions";
-import { DataTableAdvancedToolbar } from "@/components/ui/table/advanced/data-table-advanced-toolbar";
 import { DataTable } from "@/components/ui/table/data-table";
 import { DataTableToolbar } from "@/components/ui/table/data-table-toolbar";
 import { useDataTable } from "@/hooks/use-data-table";
@@ -57,7 +56,7 @@ export function AuthoritiesTable({
   const filterFields: DataTableFilterField<AuthorityType>[] = [
     {
       label: "Name",
-      value: "name",
+      id: "name",
       placeholder: "Filter names...",
     },
   ];
@@ -77,15 +76,11 @@ export function AuthoritiesTable({
     clearOnDefault: true,
   });
 
-  const Toolbar = enableAdvancedFilter
-    ? DataTableAdvancedToolbar
-    : DataTableToolbar;
-
   return (
     <DataTable table={table} floatingBar={null}>
-      <Toolbar table={table} filterFields={filterFields}>
+      <DataTableToolbar table={table} filterFields={filterFields}>
         <AuthoritiesTableToolbarActions table={table} />
-      </Toolbar>
+      </DataTableToolbar>
     </DataTable>
   );
 }

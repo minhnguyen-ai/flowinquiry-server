@@ -184,7 +184,7 @@ export function useDataTable<TData>({
     parseAsInteger.withOptions(queryStateOptions).withDefault(1),
   );
   const [perPage, setPerPage] = useQueryState(
-    "size",
+    "perPage",
     parseAsInteger
       .withOptions(queryStateOptions)
       .withDefault(initialState?.pagination?.pageSize ?? 10),
@@ -194,10 +194,10 @@ export function useDataTable<TData>({
     parseAsString
       .withOptions(queryStateOptions)
       .withDefault(
-        `${initialState?.sorting?.[0]?.id},${initialState?.sorting?.[0]?.desc ? "desc" : "asc"}`,
+        `${initialState?.sorting?.[0]?.id}.${initialState?.sorting?.[0]?.desc ? "desc" : "asc"}`,
       ),
   );
-  const [column, order] = sort?.split(",") ?? [];
+  const [column, order] = sort?.split(".") ?? [];
 
   // Create parsers for each filter field
   const filterParsers = React.useMemo(() => {
@@ -206,14 +206,13 @@ export function useDataTable<TData>({
     >((acc, field) => {
       if (field.options) {
         // Faceted filter
-        acc[field.value as string] = parseAsArrayOf(
+        acc[field.id as string] = parseAsArrayOf(
           parseAsString,
-          ".",
+          ",",
         ).withOptions(queryStateOptions);
       } else {
         // Search filter
-        acc[field.value as string] =
-          parseAsString.withOptions(queryStateOptions);
+        acc[field.id as string] = parseAsString.withOptions(queryStateOptions);
       }
       return acc;
     }, {});
@@ -250,7 +249,7 @@ export function useDataTable<TData>({
     if (typeof updaterOrValue === "function") {
       const newSorting = updaterOrValue(sorting);
       void setSort(
-        `${newSorting[0]?.id},${newSorting[0]?.desc ? "desc" : "asc"}`,
+        `${newSorting[0]?.id}.${newSorting[0]?.desc ? "desc" : "asc"}`,
       );
     }
   }
@@ -287,34 +286,36 @@ export function useDataTable<TData>({
   }, [filterFields, enableAdvancedFilter]);
 
   const onColumnFiltersChange = React.useCallback(
-    (updateOrValue: Updater<ColumnFiltersState>) => {
-      if (enableAdvancedFilter) return; // Don't process filters if advanced filtering is enabled
+    (updaterOrValue: Updater<ColumnFiltersState>) => {
+      // Don't process filters if advanced filtering is enabled
+      if (enableAdvancedFilter) return;
 
       setColumnFilters((prev) => {
         const next =
-          typeof updateOrValue === "function"
-            ? updateOrValue(prev)
-            : updateOrValue;
+          typeof updaterOrValue === "function"
+            ? updaterOrValue(prev)
+            : updaterOrValue;
 
         const filterUpdates = next.reduce<
           Record<string, string | string[] | null>
         >((acc, filter) => {
-          if (searchableColumns.find((col) => col.value === filter.id)) {
+          if (searchableColumns.find((col) => col.id === filter.id)) {
             // For search filters, use the value directly
             acc[filter.id] = filter.value as string;
-          } else if (filterableColumns.find((col) => col.value === filter.id)) {
+          } else if (filterableColumns.find((col) => col.id === filter.id)) {
             // For faceted filters, use the array of values
             acc[filter.id] = filter.value as string[];
           }
           return acc;
         }, {});
 
-        // Handle filter removal
         prev.forEach((prevFilter) => {
           if (!next.some((filter) => filter.id === prevFilter.id)) {
             filterUpdates[prevFilter.id] = null;
           }
         });
+
+        void setPage(1);
 
         debouncedSetFilterValues(filterUpdates);
         return next;
@@ -322,9 +323,10 @@ export function useDataTable<TData>({
     },
     [
       debouncedSetFilterValues,
+      enableAdvancedFilter,
       filterableColumns,
       searchableColumns,
-      enableAdvancedFilter,
+      setPage,
     ],
   );
 

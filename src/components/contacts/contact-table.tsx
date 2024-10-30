@@ -5,7 +5,6 @@ import React, { useEffect, useState } from "react";
 import { contacts_columns_def } from "@/components/contacts/contact-table-columns";
 import { ContactsTableToolbarActions } from "@/components/contacts/contact-table-toolbar-actions";
 import { Skeleton } from "@/components/ui/skeleton";
-import { DataTableAdvancedToolbar } from "@/components/ui/table/advanced/data-table-advanced-toolbar";
 import { DataTable } from "@/components/ui/table/data-table";
 import { DataTableToolbar } from "@/components/ui/table/data-table-toolbar";
 import { useDataTable } from "@/hooks/use-data-table";
@@ -26,8 +25,6 @@ export function ContactsTable({
   contactPromise,
   enableAdvancedFilter = false,
 }: ContactsTableProps) {
-  // Feature flags for showcasing some additional features. Feel free to remove them.
-
   const [data, setData] = useState<Array<ContactType>>([]);
   const [pageCount, setPageCount] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -68,12 +65,12 @@ export function ContactsTable({
   const filterFields: DataTableFilterField<ContactType>[] = [
     {
       label: "First Name",
-      value: "firstName",
+      id: "firstName",
       placeholder: "Filter names...",
     },
     {
       label: "Status",
-      value: "status",
+      id: "status",
       options: contactStatuses.map((status) => ({
         label: status,
         value: status,
@@ -98,10 +95,6 @@ export function ContactsTable({
     clearOnDefault: true,
   });
 
-  const Toolbar = enableAdvancedFilter
-    ? DataTableAdvancedToolbar
-    : DataTableToolbar;
-
   if (loading)
     return (
       <div className="flex flex-col space-y-3">
@@ -110,9 +103,9 @@ export function ContactsTable({
     );
   return (
     <DataTable table={table} floatingBar={null}>
-      <Toolbar table={table} filterFields={filterFields}>
+      <DataTableToolbar table={table} filterFields={filterFields}>
         <ContactsTableToolbarActions table={table} />
-      </Toolbar>
+      </DataTableToolbar>
     </DataTable>
   );
 }

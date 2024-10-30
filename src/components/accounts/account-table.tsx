@@ -4,7 +4,6 @@ import React from "react";
 
 import { accounts_columns_def } from "@/components/accounts/account-table-columns";
 import { AccountsTableToolbarActions } from "@/components/accounts/account-table-toolbar-actions";
-import { DataTableAdvancedToolbar } from "@/components/ui/table/advanced/data-table-advanced-toolbar";
 import { DataTable } from "@/components/ui/table/data-table";
 import { DataTableToolbar } from "@/components/ui/table/data-table-toolbar";
 import { useDataTable } from "@/hooks/use-data-table";
@@ -27,10 +26,7 @@ export function AccountsTable({
   accountsPromise,
   enableAdvancedFilter = false,
 }: AccountsTableProps) {
-  // Feature flags for showcasing some additional features. Feel free to remove them.
-
   const { content: data, totalPages: pageCount } = React.use(accountsPromise);
-  // Memoize the columns so they don't re-render on every render
   const columns = React.useMemo(() => accounts_columns_def, []);
 
   const accountStatuses = useFetchData(findAccountStatuses);
@@ -50,40 +46,40 @@ export function AccountsTable({
    */
   const filterFields: DataTableFilterField<AccountType>[] = [
     {
+      id: "name",
       label: "Name",
-      value: "name",
       placeholder: "Filter names...",
     },
-    {
-      label: "Type",
-      value: "type",
-      options: accountTypes.map((type) => ({
-        label: type,
-        value: type,
-        icon: undefined,
-        withCount: true,
-      })),
-    },
-    {
-      label: "Industry",
-      value: "industry",
-      options: accountIndustries.map((industry) => ({
-        label: industry,
-        value: industry,
-        icon: undefined,
-        withCount: true,
-      })),
-    },
-    {
-      label: "Status",
-      value: "status",
-      options: accountStatuses.map((status) => ({
-        label: status,
-        value: status,
-        icon: undefined,
-        withCount: true,
-      })),
-    },
+    // {
+    //   id: "type",
+    //   label: "Type",
+    //   options: accountTypes.map((type) => ({
+    //     label: type,
+    //     value: type,
+    //     icon: undefined,
+    //     withCount: true,
+    //   })),
+    // },
+    // {
+    //   id: "industry",
+    //   label: "Industry",
+    //   options: accountIndustries.map((industry) => ({
+    //     label: industry,
+    //     value: industry,
+    //     icon: undefined,
+    //     withCount: true,
+    //   })),
+    // },
+    // {
+    //   id: "status",
+    //   label: "Status",
+    //   options: accountStatuses.map((status) => ({
+    //     label: status,
+    //     value: status,
+    //     icon: undefined,
+    //     withCount: true,
+    //   })),
+    // },
   ];
 
   const { table } = useDataTable({
@@ -101,15 +97,11 @@ export function AccountsTable({
     clearOnDefault: true,
   });
 
-  const Toolbar = enableAdvancedFilter
-    ? DataTableAdvancedToolbar
-    : DataTableToolbar;
-
   return (
     <DataTable table={table} floatingBar={null}>
-      <Toolbar table={table} filterFields={filterFields}>
+      <DataTableToolbar table={table} filterFields={filterFields}>
         <AccountsTableToolbarActions table={table} />
-      </Toolbar>
+      </DataTableToolbar>
     </DataTable>
   );
 }

@@ -19,12 +19,12 @@ import {
 } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
-import { FilterOption } from "@/types/table";
+import { Option } from "@/types/table";
 
 interface DataTableFacetedFilterProps<TData, TValue> {
   column?: Column<TData, TValue>;
   title?: string;
-  options: FilterOption[];
+  options: Option[];
 }
 
 export function DataTableFacetedFilter<TData, TValue>({
@@ -78,7 +78,7 @@ export function DataTableFacetedFilter<TData, TValue>({
       <PopoverContent className="w-[12.5rem] p-0" align="start">
         <Command>
           <CommandInput placeholder={title} />
-          <CommandList>
+          <CommandList className="max-h-full">
             <CommandEmpty>No results found.</CommandEmpty>
             <CommandGroup className="max-h-[18.75rem] overflow-y-auto overflow-x-hidden">
               {options.map((option) => {
@@ -116,12 +116,11 @@ export function DataTableFacetedFilter<TData, TValue>({
                       />
                     )}
                     <span>{option.label}</span>
-                    {option.withCount &&
-                      column?.getFacetedUniqueValues()?.get(option.value) && (
-                        <span className="ml-auto flex size-4 items-center justify-center font-mono text-xs">
-                          {column?.getFacetedUniqueValues().get(option.value)}
-                        </span>
-                      )}
+                    {option.count && (
+                      <span className="ml-auto flex size-4 items-center justify-center font-mono text-xs">
+                        {option.count}
+                      </span>
+                    )}
                   </CommandItem>
                 );
               })}
