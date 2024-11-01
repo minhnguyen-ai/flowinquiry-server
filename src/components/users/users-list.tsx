@@ -3,6 +3,7 @@
 import { formatDistanceToNow } from "date-fns";
 import { Plus } from "lucide-react";
 import Link from "next/link";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { Heading } from "@/components/heading";
@@ -10,40 +11,65 @@ import PaginationExt from "@/components/shared/pagination-ext";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
+import { useDebouncedCallback } from "@/hooks/use-debounced-callback";
 import { searchUsers } from "@/lib/actions/users.action";
 import { cn } from "@/lib/utils";
 import { UserType } from "@/types/users";
 
 export const UserList = () => {
-  const [items, setItems] = useState<Array<UserType>>([]); // Store the items
-  const [currentPage, setCurrentPage] = useState(1); // Track current page
-  const [totalPages, setTotalPages] = useState(0); // Total pages
+  const [items, setItems] = useState<Array<UserType>>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
   const [totalElements, setTotalElements] = useState(0);
-  const [loading, setLoading] = useState(false); // Loading state
-  const itemsPerPage = 10; // Customize the number of items per page
+  const [loading, setLoading] = useState(false);
+  const [userSearchTerm, setUserSearchTerm] = useState<string | undefined>(
+    undefined,
+  );
 
-  const fetchData = async (page: number) => {
+  const searchParams = useSearchParams();
+  const { replace } = useRouter();
+  const pathname = usePathname();
+
+  const fetchData = async () => {
     setLoading(true);
     try {
-      const pageResult = await searchUsers({
-        page: page,
-        size: itemsPerPage,
-      });
-      if (pageResult) {
-        setItems(pageResult.content);
-        setTotalElements(pageResult.totalElements);
-        setTotalPages(pageResult.totalPages);
-      }
+      const pageResult = await searchUsers(
+        userSearchTerm
+          ? [
+              {
+                field: "firstName,lastName",
+                operator: "lk",
+                value: userSearchTerm,
+              },
+            ]
+          : [],
+        { page: currentPage, size: 10 },
+      );
+      setItems(pageResult.content);
+      setTotalElements(pageResult.totalElements);
+      setTotalPages(pageResult.totalPages);
     } finally {
       setLoading(false);
     }
   };
 
-  // Fetch data when component mounts or page changes
+  const handleSearchTeams = useDebouncedCallback((userName: string) => {
+    const params = new URLSearchParams(searchParams);
+    console.log(`Search ${userName}`);
+    if (userName) {
+      params.set("name", userName);
+    } else {
+      params.delete("name");
+    }
+    setUserSearchTerm(userName);
+    replace(`${pathname}?${params.toString()}`);
+  }, 2000);
+
   useEffect(() => {
-    fetchData(currentPage);
-  }, [currentPage]);
+    fetchData();
+  }, [currentPage, userSearchTerm]);
 
   if (loading) return <div>Loading...</div>;
 
@@ -55,12 +81,22 @@ export const UserList = () => {
           description="Manage users"
         />
 
-        <Link
-          href={"/portal/users/new/edit"}
-          className={cn(buttonVariants({ variant: "default" }))}
-        >
-          <Plus className="mr-2 h-4 w-4" /> Invite user
-        </Link>
+        <div className="flex space-x-4">
+          <Input
+            className="w-[18rem]"
+            placeholder="Search user names ..."
+            onChange={(e) => {
+              handleSearchTeams(e.target.value);
+            }}
+            defaultValue={searchParams.get("name")?.toString()}
+          />
+          <Link
+            href={"/portal/users/new/edit"}
+            className={cn(buttonVariants({ variant: "default" }))}
+          >
+            <Plus className="mr-2 h-4 w-4" /> Invite user
+          </Link>
+        </div>
       </div>
       <Separator />
       <div className="flex flex-row flex-wrap space-x-4 space-y-4 content-around">

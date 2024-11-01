@@ -23,7 +23,6 @@ const TeamUsersView = ({ entity: teamId }: ViewProps<number>) => {
   const [totalPages, setTotalPages] = useState(0); // Total pages
   const [totalElements, setTotalElements] = useState(0);
   const [loading, setLoading] = useState(false); // Loading state
-  const itemsPerPage = 10; // Customize the number of items per page
   const fetchData = async (page: number) => {
     setLoading(true);
     try {
@@ -46,7 +45,6 @@ const TeamUsersView = ({ entity: teamId }: ViewProps<number>) => {
 
   return (
     <div>
-      Members
       <div className="flex flex-row flex-wrap space-x-4 space-y-4 content-around">
         {items?.map((user) => (
           <div>
@@ -61,7 +59,7 @@ const TeamUsersView = ({ entity: teamId }: ViewProps<number>) => {
                 </CardTitle>
                 <CardDescription>{user.firstName}</CardDescription>
               </CardHeader>
-              <CardContent className="p-5">${user.email}</CardContent>
+              <CardContent className="p-5">{user.email}</CardContent>
             </Card>
           </div>
         ))}

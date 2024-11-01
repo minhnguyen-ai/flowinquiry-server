@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 import { doAdvanceSearch, get, post, put } from "@/lib/actions/commons.action";
 import { BACKEND_API } from "@/lib/constants";
 import { PageableResult } from "@/types/commons";
+import { Filter, Pagination } from "@/types/query";
 import { teamSchema, TeamType } from "@/types/teams";
 import { UserType } from "@/types/users";
 
@@ -30,9 +31,16 @@ export const saveOrUpdateTeam = async (
   }
 };
 
-export async function searchTeams() {
+export async function searchTeams(
+  filters: Filter[] = [],
+  pagination: Pagination,
+) {
   noStore();
-  return doAdvanceSearch<TeamType>(`${BACKEND_API}/api/teams/search`);
+  return doAdvanceSearch<TeamType>(
+    `${BACKEND_API}/api/teams/search`,
+    filters,
+    pagination,
+  );
 }
 
 export async function findMembersByTeamId(teamId: number) {

@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export type Operator = "gt" | "lt" | "eq" | "in";
+export type Operator = "gt" | "lt" | "eq" | "in" | "lk";
 
 export type Filter = {
   field: string; // Loosely typed field name
@@ -22,7 +22,7 @@ export type Pagination = {
 // Zod schema for filters
 export const filterSchema = z.object({
   field: z.string().min(1),
-  operator: z.enum(["gt", "lt", "eq", "in"]),
+  operator: z.enum(["gt", "lt", "eq", "in", "lk"]),
   value: z.union([
     z.string(),
     z.number(),

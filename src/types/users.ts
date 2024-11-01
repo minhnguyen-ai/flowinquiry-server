@@ -21,13 +21,3 @@ export const userSchema = z.object({
 });
 
 export type UserType = z.infer<typeof userSchema>;
-
-export const userSearchParamsSchema = z.object({
-  page: z.coerce.number().default(1).optional(), // page number
-  size: z.coerce.number().default(10).optional(), // size per page
-  sort: z.string().optional(),
-  name: z.string().optional(),
-  operator: z.enum(["and", "or"]).optional(),
-});
-
-export type UserSearchParams = z.infer<typeof userSearchParamsSchema>;

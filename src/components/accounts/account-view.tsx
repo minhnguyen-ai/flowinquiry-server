@@ -27,6 +27,8 @@ import { obfuscate } from "@/lib/endecode";
 import { navigateToRecord } from "@/lib/navigation-record";
 import { cn } from "@/lib/utils";
 import { AccountType } from "@/types/accounts";
+import { PageableResult } from "@/types/commons";
+import { ContactType } from "@/types/contacts";
 
 import { Button, buttonVariants } from "../ui/button";
 import { Card, CardContent } from "../ui/card";
@@ -37,10 +39,13 @@ export const AccountView: React.FC<ViewProps<AccountType>> = ({
 }: ViewProps<AccountType>) => {
   const [isOpen, setIsOpen] = useState(true);
   const [account, setAccount] = useState<AccountType>(entity);
-
-  const contactPromise = searchContacts([
-    { field: "account.id", operator: "eq", value: account.id! },
-  ]);
+  const [contactPromise, setContactPromise] = useState<
+    Promise<PageableResult<ContactType>>
+  >(
+    searchContacts([
+      { field: "account.id", operator: "eq", value: account.id! },
+    ]),
+  );
 
   const navigateToPreviousRecord = async () => {
     const previousAccount = await navigateToRecord(
@@ -49,6 +54,11 @@ export const AccountView: React.FC<ViewProps<AccountType>> = ({
       account.id!,
     );
     setAccount(previousAccount);
+    setContactPromise(
+      searchContacts([
+        { field: "account.id", operator: "eq", value: previousAccount.id! },
+      ]),
+    );
   };
 
   const navigateToNextRecord = async () => {
@@ -58,6 +68,11 @@ export const AccountView: React.FC<ViewProps<AccountType>> = ({
       account.id!,
     );
     setAccount(nextAccount);
+    setContactPromise(
+      searchContacts([
+        { field: "account.id", operator: "eq", value: nextAccount.id! },
+      ]),
+    );
   };
 
   return (
@@ -137,7 +152,7 @@ export const AccountView: React.FC<ViewProps<AccountType>> = ({
       </div>
       <ContactsTable
         contactPromise={contactPromise}
-        enableAdvancedFilter={true}
+        enableAdvancedFilter={false}
       />
     </div>
   );
