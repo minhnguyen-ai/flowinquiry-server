@@ -76,7 +76,7 @@ export const AccountView: React.FC<ViewProps<AccountType>> = ({
   };
 
   return (
-    <div className="bg-card px-6 py-6 rounded-2xl">
+    <div className="py-4">
       <div className="flex flex-row justify-between gap-1">
         <Button
           variant="outline"

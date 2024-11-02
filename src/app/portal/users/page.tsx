@@ -1,4 +1,4 @@
-import { Breadcrumbs } from "@/components/breadcrumbs";
+import { SimpleContentView } from "@/components/admin-panel/simple-content-view";
 import { UserList } from "@/components/users/users-list";
 
 const breadcrumbItems = [
@@ -14,10 +14,9 @@ type paramsProps = {
 
 const Users = async ({ searchParams }: paramsProps) => {
   return (
-    <div className="space-y-4">
-      <Breadcrumbs items={breadcrumbItems} />
+    <SimpleContentView title="Users" breadcrumbItems={breadcrumbItems}>
       <UserList />
-    </div>
+    </SimpleContentView>
   );
 };
 

@@ -61,7 +61,7 @@ export const ContactForm = ({ initialData }: FormProps<ContactType>) => {
   const submitTextWhileLoading = isEdit ? "Saving changes ..." : "Creating ...";
 
   return (
-    <div className="bg-card px-6 py-6">
+    <div className="grid grid-cols-1 gap-4">
       <div className="flex items-center justify-between">
         <Heading title={title} description={description} />
       </div>

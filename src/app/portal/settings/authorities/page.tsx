@@ -3,9 +3,9 @@
 import { Plus } from "lucide-react";
 import React, { useState } from "react";
 
+import { SimpleContentView } from "@/components/admin-panel/simple-content-view";
 import NewAuthorityDialog from "@/components/authorities/authority-new-dialog";
 import { AuthoritiesTable } from "@/components/authorities/authority-table";
-import { Breadcrumbs } from "@/components/breadcrumbs";
 import { Heading } from "@/components/heading";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -26,28 +26,25 @@ const AuthoritiesPage = () => {
   }
 
   return (
-    <div className="space-y-4">
-      <Breadcrumbs items={breadcrumbItems} />
-      <div className="bg-card px-6 py-6 rounded-2xl">
-        <div className="flex flex-row justify-between">
-          <Heading title="Authorities" description="Manage authorities" />
-          <Button onClick={() => setOpen(true)}>
-            <Plus />
-            New Authority
-          </Button>
-          <NewAuthorityDialog
-            open={open}
-            setOpen={setOpen}
-            onSaveSuccess={onSaveAuthoritySuccess}
-          />
-        </div>
-        <Separator />
-        <AuthoritiesTable
-          authoritiesPromise={authorityPromise}
-          enableAdvancedFilter={true}
+    <SimpleContentView title="Authorities" breadcrumbItems={breadcrumbItems}>
+      <div className="flex flex-row justify-between">
+        <Heading title="Authorities" description="Manage authorities" />
+        <Button onClick={() => setOpen(true)}>
+          <Plus />
+          New Authority
+        </Button>
+        <NewAuthorityDialog
+          open={open}
+          setOpen={setOpen}
+          onSaveSuccess={onSaveAuthoritySuccess}
         />
       </div>
-    </div>
+      <Separator />
+      <AuthoritiesTable
+        authoritiesPromise={authorityPromise}
+        enableAdvancedFilter={true}
+      />
+    </SimpleContentView>
   );
 };
 

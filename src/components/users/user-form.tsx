@@ -37,12 +37,11 @@ export const UserForm: React.FC<UserFormProps> = ({ initialData }) => {
   });
 
   async function onSubmit(data: UserType) {
-    console.log(`Data: ${JSON.stringify(data)}`);
     await createUser(data);
   }
 
   return (
-    <div className="bg-card px-6 py-6 rounded-2xl">
+    <div className="grid grid-cols-1 gap-4">
       <div className="flex items-center justify-between">
         <Heading title={title} description={description} />
         {initialData && (

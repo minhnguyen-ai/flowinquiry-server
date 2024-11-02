@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 
+import { ContentLayout } from "@/components/admin-panel/content-layout";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import TeamView from "@/components/teams/team-view";
 import { findTeamById } from "@/lib/actions/teams.action";
@@ -18,10 +19,10 @@ const Page = async ({ params }: { params: { teamId: string } }) => {
   ];
 
   return (
-    <div className="space-y-4 max-w-[72rem]">
+    <ContentLayout title="Teams">
       <Breadcrumbs items={breadcrumbItems} />
       <TeamView entity={team} />
-    </div>
+    </ContentLayout>
   );
 };
 

@@ -3,20 +3,21 @@
 import { Plus } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { Heading } from "@/components/heading";
 import PaginationExt from "@/components/shared/pagination-ext";
+import DefaultTeamLogo from "@/components/teams/team-logo";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button, buttonVariants } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { useDebouncedCallback } from "@/hooks/use-debounced-callback";
 import { searchTeams } from "@/lib/actions/teams.action";
 import { obfuscate } from "@/lib/endecode";
@@ -72,7 +73,7 @@ export const TeamList = () => {
   if (loading) return <div>Loading...</div>;
 
   return (
-    <div className="bg-card px-6 py-6 w-full">
+    <div className="grid grid-cols-1 gap-4">
       <div className="flex flex-row justify-between">
         <div className="flex-shrink-0">
           <Heading
@@ -98,21 +99,36 @@ export const TeamList = () => {
         </div>
       </div>
       <Separator />
-      <div className="flex flex-row flex-wrap space-x-4 space-y-4 content-around">
+      <div className="flex flex-row flex-wrap space-x-6 space-y-6">
         {items?.map((team) => (
-          <Card key={team.id} className="w-[28rem]">
-            <CardHeader>
-              <CardTitle>
-                <Button variant="link" asChild>
-                  <Link href={`/portal/teams/${obfuscate(team.id)}`}>
-                    {team.name}
-                  </Link>
-                </Button>
-              </CardTitle>
-              <CardDescription>{team.slogan}</CardDescription>
-            </CardHeader>
-            <CardContent className="p-5">{team.description}</CardContent>
-          </Card>
+          <div
+            key={team.id}
+            className="w-[24rem] flex flex-row gap-4 border border-gray-200 px-4 py-4 rounded-2xl"
+          >
+            <div>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Avatar className="size-24 cursor-pointer ring-offset-2 ring-2 ring-slate-200">
+                      <AvatarImage src={undefined} alt="@shadcn" />
+                      <AvatarFallback>
+                        <DefaultTeamLogo />
+                      </AvatarFallback>
+                    </Avatar>
+                  </TooltipTrigger>
+                  <TooltipContent>{team.slogan}</TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
+            <div>
+              <Button variant="link" asChild className="px-0">
+                <Link href={`/portal/teams/${obfuscate(team.id)}`}>
+                  {team.name}
+                </Link>
+              </Button>
+              <div>{team.description}</div>
+            </div>
+          </div>
         ))}
       </div>
       <PaginationExt

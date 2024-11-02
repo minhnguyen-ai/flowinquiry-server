@@ -9,7 +9,6 @@ import { z } from "zod";
 import TimezoneSelect from "@/components/shared/timezones-select";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { ExtInputField } from "@/components/ui/ext-form";
 import {
   Form,
@@ -83,7 +82,7 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ resourceServer }) => {
   };
 
   return (
-    <Card>
+    <div>
       <h4>Profile</h4>
 
       <div className="profile-picture-section">
@@ -131,6 +130,6 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ resourceServer }) => {
           <Button type="submit">Submit</Button>
         </form>
       </Form>
-    </Card>
+    </div>
   );
 };

@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 
 import { AccountView } from "@/components/accounts/account-view";
-import { Breadcrumbs } from "@/components/breadcrumbs";
+import { SimpleContentView } from "@/components/admin-panel/simple-content-view";
 import { findAccountById } from "@/lib/actions/accounts.action";
 import { deobfuscateToNumber } from "@/lib/endecode";
 
@@ -22,9 +22,8 @@ export default async function Page({
   ];
 
   return (
-    <div className="space-y-4 max-w-[72rem]">
-      <Breadcrumbs items={breadcrumbItems} />
+    <SimpleContentView title="Accounts" breadcrumbItems={breadcrumbItems}>
       <AccountView entity={account} />
-    </div>
+    </SimpleContentView>
   );
 }

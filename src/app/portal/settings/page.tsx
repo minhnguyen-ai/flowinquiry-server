@@ -1,6 +1,7 @@
 import Link from "next/link";
 import React from "react";
 
+import { ContentLayout } from "@/components/admin-panel/content-layout";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,9 +18,9 @@ const breadcrumbItems = [
 
 const SettingsPage = () => {
   return (
-    <div className="space-y-4">
+    <ContentLayout title="Settings">
       <Breadcrumbs items={breadcrumbItems} />
-      <div className="bg-card px-6 py-6 rounded-2xl">
+      <div className="py-4">
         <Card className="w-[20em] rounded-xl">
           <CardHeader>
             <CardTitle>
@@ -34,7 +35,7 @@ const SettingsPage = () => {
           </CardHeader>
         </Card>
       </div>
-    </div>
+    </ContentLayout>
   );
 };
 

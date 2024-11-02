@@ -8,12 +8,13 @@ import TeamUsersView from "@/components/teams/team-users";
 import { buttonVariants } from "@/components/ui/button";
 import { ViewProps } from "@/components/ui/ext-form";
 import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { TeamType } from "@/types/teams";
 
 const TeamView = ({ entity: team }: ViewProps<TeamType>) => {
   return (
-    <div className="w-full bg-card px-6 py-6">
+    <div className="grid grid-cols-1 gap-4 py-4">
       <div className="flex items-center justify-between">
         <Heading
           title={team.name}
@@ -36,6 +37,7 @@ const TeamView = ({ entity: team }: ViewProps<TeamType>) => {
           </Link>
         </div>
       </div>
+      <Separator />
       <TeamUsersView entity={team.id!} />
     </div>
   );

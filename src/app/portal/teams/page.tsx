@@ -1,4 +1,4 @@
-import { Breadcrumbs } from "@/components/breadcrumbs";
+import { SimpleContentView } from "@/components/admin-panel/simple-content-view";
 import { TeamList } from "@/components/teams/team-list";
 
 const breadcrumbItems = [
@@ -8,10 +8,9 @@ const breadcrumbItems = [
 
 const TeamsIndex = async () => {
   return (
-    <div className="space-y-4">
-      <Breadcrumbs items={breadcrumbItems} />
+    <SimpleContentView title="Teams" breadcrumbItems={breadcrumbItems}>
       <TeamList />
-    </div>
+    </SimpleContentView>
   );
 };
 

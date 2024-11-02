@@ -1,5 +1,5 @@
 import AccountForm from "@/components/accounts/account-form";
-import { Breadcrumbs } from "@/components/breadcrumbs";
+import { SimpleContentView } from "@/components/admin-panel/simple-content-view";
 import { findAccountById } from "@/lib/actions/accounts.action";
 import { deobfuscateToNumber } from "@/lib/endecode";
 
@@ -20,9 +20,8 @@ export default async function Page({
       : undefined;
 
   return (
-    <div className="space-y-4">
-      <Breadcrumbs items={breadcrumbItems} />
+    <SimpleContentView title="Accounts" breadcrumbItems={breadcrumbItems}>
       <AccountForm initialData={account} />
-    </div>
+    </SimpleContentView>
   );
 }

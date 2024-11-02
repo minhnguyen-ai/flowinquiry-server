@@ -5,8 +5,8 @@ const AppLogo = (props: IconProps) => {
     <>
       <svg
         {...props}
-        width="32"
-        height="32"
+        width="62"
+        height="62"
         viewBox="0 0 400 400"
         fill="none"
         preserveAspectRatio="xMidYMid meet"

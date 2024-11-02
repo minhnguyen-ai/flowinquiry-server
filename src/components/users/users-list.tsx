@@ -1,18 +1,16 @@
 "use client";
 
-import { formatDistanceToNow } from "date-fns";
 import { Plus } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { Heading } from "@/components/heading";
 import PaginationExt from "@/components/shared/pagination-ext";
-import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
+import UserCard from "@/components/users/user-card";
 import { useDebouncedCallback } from "@/hooks/use-debounced-callback";
 import { searchUsers } from "@/lib/actions/users.action";
 import { cn } from "@/lib/utils";
@@ -74,7 +72,7 @@ export const UserList = () => {
   if (loading) return <div>Loading...</div>;
 
   return (
-    <div className="bg-card px-6 py-6 rounded-2xl h-full">
+    <div className="py-4 grid grid-cols-1 gap-4">
       <div className="flex flex-row justify-between">
         <Heading
           title={`Users (${totalElements})`}
@@ -100,40 +98,7 @@ export const UserList = () => {
       </div>
       <Separator />
       <div className="flex flex-row flex-wrap space-x-4 space-y-4 content-around">
-        {items?.map((user) => (
-          <Card key={user.id} className="w-[28rem]">
-            <CardContent className="p-5">
-              <div className="flex flex-col">
-                <div className="text-2xl text-amber-500">
-                  {user.firstName}, {user.lastName}
-                </div>
-                <div>
-                  <b>Email:</b>{" "}
-                  <Link href={`mailto:${user.email}`}>{user.email}</Link>
-                </div>
-                <div>Timezone: {user.timezone}</div>
-                <div>
-                  Last login time:{" "}
-                  {user.lastLoginTime
-                    ? formatDistanceToNow(new Date(user.lastLoginTime), {
-                        addSuffix: true,
-                      })
-                    : ""}
-                </div>
-                <div className="flex flex-row space-x-1">
-                  Authorities:{" "}
-                  <div className="flex flex-row flex-wrap space-x-1">
-                    {user.authorities?.map((authority) => (
-                      <Badge key={authority.name}>
-                        {authority.descriptiveName}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+        {items?.map((user) => UserCard({ user }))}
       </div>
       <PaginationExt
         currentPage={currentPage}

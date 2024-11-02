@@ -3,7 +3,7 @@ import Link from "next/link";
 import React from "react";
 
 import { AccountsTable } from "@/components/accounts/account-table";
-import { Breadcrumbs } from "@/components/breadcrumbs";
+import { SimpleContentView } from "@/components/admin-panel/simple-content-view";
 import { Heading } from "@/components/heading";
 import { buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -27,26 +27,23 @@ const AccountsPage = ({ searchParams }: paramsProps) => {
   const accountPromise = searchAccounts(search);
 
   return (
-    <div className="space-y-4">
-      <Breadcrumbs items={breadcrumbItems} />
-      <div className="bg-card px-6 py-6">
-        <div className="flex flex-row justify-between">
-          <Heading title={`Accounts`} description="Manage accounts" />
+    <SimpleContentView title="Accounts" breadcrumbItems={breadcrumbItems}>
+      <div className="flex flex-row justify-between">
+        <Heading title={`Accounts`} description="Manage accounts" />
 
-          <Link
-            href={"/portal/accounts/new/edit"}
-            className={cn(buttonVariants({ variant: "default" }))}
-          >
-            <Plus className="mr-2 h-4 w-4" /> New Account
-          </Link>
-        </div>
-        <Separator />
-        <AccountsTable
-          accountsPromise={accountPromise}
-          enableAdvancedFilter={false}
-        />
+        <Link
+          href={"/portal/accounts/new/edit"}
+          className={cn(buttonVariants({ variant: "default" }))}
+        >
+          <Plus className="mr-2 h-4 w-4" /> New Account
+        </Link>
       </div>
-    </div>
+      <Separator />
+      <AccountsTable
+        accountsPromise={accountPromise}
+        enableAdvancedFilter={false}
+      />
+    </SimpleContentView>
   );
 };
 

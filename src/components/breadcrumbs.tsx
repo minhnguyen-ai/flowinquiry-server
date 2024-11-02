@@ -10,7 +10,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 
-type BreadcrumbItemProps = {
+export type BreadcrumbItemProps = {
   title: string;
   link: string;
 };

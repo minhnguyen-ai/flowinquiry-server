@@ -1,20 +1,11 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import PaginationExt from "@/components/shared/pagination-ext";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { ViewProps } from "@/components/ui/ext-form";
+import UserCard from "@/components/users/user-card";
 import { findMembersByTeamId } from "@/lib/actions/teams.action";
-import { obfuscate } from "@/lib/endecode";
 import { UserType } from "@/types/users";
 
 const TeamUsersView = ({ entity: teamId }: ViewProps<number>) => {
@@ -46,23 +37,7 @@ const TeamUsersView = ({ entity: teamId }: ViewProps<number>) => {
   return (
     <div>
       <div className="flex flex-row flex-wrap space-x-4 space-y-4 content-around">
-        {items?.map((user) => (
-          <div>
-            <Card key={user.id} className="w-[28rem]">
-              <CardHeader>
-                <CardTitle>
-                  <Button variant="link" asChild>
-                    <Link href={`/portal/users/${obfuscate(user.id)}`}>
-                      {user.lastName}
-                    </Link>
-                  </Button>
-                </CardTitle>
-                <CardDescription>{user.firstName}</CardDescription>
-              </CardHeader>
-              <CardContent className="p-5">{user.email}</CardContent>
-            </Card>
-          </div>
-        ))}
+        {items?.map((user) => UserCard({ user }))}
       </div>
       <PaginationExt
         currentPage={currentPage}

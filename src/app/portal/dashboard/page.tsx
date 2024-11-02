@@ -1,10 +1,11 @@
 import { Folder, Newspaper, User } from "lucide-react";
 
+import { ContentLayout } from "@/components/admin-panel/content-layout";
 import DashboardCard from "@/components/dashboard/dashboard-card";
 
 export default function Home() {
   return (
-    <>
+    <ContentLayout title="Dashboard">
       <h1 className="text-2xl mb-4">Dashboard</h1>
       <div className="flex justify-between gap-5 mb-5">
         <DashboardCard
@@ -23,6 +24,6 @@ export default function Home() {
           icon={<User size={72} className="text-slate-500" />}
         />
       </div>
-    </>
+    </ContentLayout>
   );
 }

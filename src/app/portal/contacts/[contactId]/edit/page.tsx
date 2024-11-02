@@ -1,4 +1,4 @@
-import { Breadcrumbs } from "@/components/breadcrumbs";
+import { SimpleContentView } from "@/components/admin-panel/simple-content-view";
 import ContactForm from "@/components/contacts/contact-form";
 import { findContactById } from "@/lib/actions/contacts.action";
 import { deobfuscateToNumber } from "@/lib/endecode";
@@ -20,9 +20,8 @@ export default async function Page({
       : undefined;
 
   return (
-    <div className="space-y-4">
-      <Breadcrumbs items={breadcrumbItems} />
+    <SimpleContentView title="Contacts" breadcrumbItems={breadcrumbItems}>
       <ContactForm initialData={contact} />
-    </div>
+    </SimpleContentView>
   );
 }

@@ -1,4 +1,4 @@
-import { Breadcrumbs } from "@/components/breadcrumbs";
+import { SimpleContentView } from "@/components/admin-panel/simple-content-view";
 import { TeamForm } from "@/components/teams/team-form";
 
 const breadcrumbItems = [
@@ -9,10 +9,9 @@ const breadcrumbItems = [
 
 const Page = () => {
   return (
-    <div className="space-y-4">
-      <Breadcrumbs items={breadcrumbItems} />
+    <SimpleContentView title="Teams" breadcrumbItems={breadcrumbItems}>
       <TeamForm initialData={undefined} />
-    </div>
+    </SimpleContentView>
   );
 };
 
