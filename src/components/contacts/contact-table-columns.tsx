@@ -48,7 +48,7 @@ export const contacts_columns_def: ColumnDef<ContactType>[] = [
     ),
     cell: ({ row }) => (
       <div>
-        <Button variant="link" asChild>
+        <Button variant="link" className="px-0" asChild>
           <Link href={`/portal/contacts/${row.original.id}`}>
             {row.getValue("name")}
           </Link>

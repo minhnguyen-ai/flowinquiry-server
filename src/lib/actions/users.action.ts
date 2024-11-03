@@ -3,7 +3,7 @@
 import { unstable_noStore as noStore } from "next/dist/server/web/spec-extension/unstable-no-store";
 import { redirect } from "next/navigation";
 
-import { doAdvanceSearch, post } from "@/lib/actions/commons.action";
+import { doAdvanceSearch, get, post } from "@/lib/actions/commons.action";
 import { BACKEND_API } from "@/lib/constants";
 import { Filter, Pagination } from "@/types/query";
 import { userSchema, UserType } from "@/types/users";
@@ -19,6 +19,10 @@ export async function searchUsers(
     pagination,
   );
 }
+
+export const findUserById = async (userId: number) => {
+  return get<UserType>(`${BACKEND_API}/api/users/${userId}`);
+};
 
 export const createUser = async (user: UserType) => {
   const validation = userSchema.safeParse(user);

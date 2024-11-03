@@ -36,7 +36,7 @@ const TeamUsersView = ({ entity: teamId }: ViewProps<number>) => {
 
   return (
     <div>
-      <div className="flex flex-row flex-wrap space-x-4 space-y-4 content-around">
+      <div className="flex flex-row flex-wrap gap-4 content-around">
         {items?.map((user) => UserCard({ user }))}
       </div>
       <PaginationExt

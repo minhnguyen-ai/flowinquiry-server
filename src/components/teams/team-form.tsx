@@ -2,6 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import React from "react";
 import { FileWithPath, useDropzone } from "react-dropzone";
 import { useForm } from "react-hook-form";
@@ -26,12 +27,16 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { toast } from "@/components/ui/use-toast";
-import { saveOrUpdateTeam } from "@/lib/actions/teams.action";
+import { apiClient } from "@/lib/api-client";
 import { validateForm } from "@/lib/validator";
 import { teamSchema, TeamType } from "@/types/teams";
 
 export const TeamForm = ({ initialData }: FormProps<TeamType>) => {
   const router = useRouter();
+  const { data: session } = useSession();
+
+  const [selectedFile, setSelectedFile] =
+    React.useState<FileWithPreview | null>(null);
 
   const form = useForm<TeamType>({
     resolver: zodResolver(teamSchema),
@@ -40,12 +45,27 @@ export const TeamForm = ({ initialData }: FormProps<TeamType>) => {
 
   async function onSubmit(team: TeamType) {
     if (validateForm(team, teamSchema, form)) {
-      await saveOrUpdateTeam(isEdit, team);
+      console.log(`Submit team ${JSON.stringify(team)}`);
+      const formData = new FormData();
+
+      const teamJsonBlob = new Blob([JSON.stringify(team)], {
+        type: "application/json",
+      });
+      formData.append("teamDTO", teamJsonBlob);
+      if (selectedFile) {
+        formData.append("file", selectedFile);
+      }
+
+      await apiClient(
+        "/api/teams",
+        "POST",
+        formData,
+        session?.user?.accessToken,
+      );
+      router.push("/portal/teams");
     }
   }
 
-  const [selectedFile, setSelectedFile] =
-    React.useState<FileWithPreview | null>(null);
   const [isDialogOpen, setDialogOpen] = React.useState(false);
 
   const isEdit = !!initialData;
@@ -117,7 +137,7 @@ export const TeamForm = ({ initialData }: FormProps<TeamType>) => {
         </div>
         <Form {...form}>
           <form
-            className="grid grid-cols-1 gap-6 sm:grid-cols-2"
+            className="grid grid-cols-1 gap-6 md:grid-cols-2"
             onSubmit={form.handleSubmit(onSubmit)}
           >
             <ExtInputField
@@ -133,7 +153,7 @@ export const TeamForm = ({ initialData }: FormProps<TeamType>) => {
               fieldName="description"
               label="Description"
             />
-            <div className="flex items-center gap-2">
+            <div className="md:col-span-2 flex flex-row gap-4">
               <SubmitButton
                 label={submitText}
                 labelWhileLoading={submitTextWhileLoading}

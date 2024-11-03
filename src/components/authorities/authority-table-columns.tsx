@@ -46,7 +46,7 @@ export const authorities_columns_def: ColumnDef<AuthorityType>[] = [
       return (
         <div className="flex space-x-2">
           {isSystemLabel && <Badge variant="outline">System</Badge>}
-          <Button variant="link" asChild>
+          <Button variant="link" className="px-0" asChild>
             <Link
               href={`/portal/settings/authorities/${obfuscate(row.original.name!)}`}
             >

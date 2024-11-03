@@ -47,7 +47,7 @@ export const accounts_columns_def: ColumnDef<AccountType>[] = [
       <DataTableColumnHeader column={column} title="Name" />
     ),
     cell: ({ row }) => (
-      <Button variant="link" asChild>
+      <Button variant="link" className="px-0" asChild>
         <Link href={`/portal/accounts/${obfuscate(row.original.id!)}`}>
           {row.getValue("name")}
         </Link>

@@ -112,7 +112,7 @@ export const AccountForm = ({ initialData }: FormProps<AccountType>) => {
           />
           <AccountStatusSelect form={form} required={true} />
           <ExtTextAreaField form={form} fieldName="notes" label="Notes" />
-          <div className="flex items-center gap-2">
+          <div className="md:col-span-2 flex flex-row gap-4">
             <SubmitButton
               label={submitText}
               labelWhileLoading={submitTextWhileLoading}

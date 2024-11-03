@@ -8,7 +8,8 @@ import {
   Plus,
 } from "lucide-react";
 import Link from "next/link";
-import React, { useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
 
 import { ContactsTable } from "@/components/contacts/contact-table";
 import { Badge } from "@/components/ui/badge";
@@ -37,6 +38,8 @@ import { ViewProps } from "../ui/ext-form";
 export const AccountView: React.FC<ViewProps<AccountType>> = ({
   entity,
 }: ViewProps<AccountType>) => {
+  const router = useRouter();
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(true);
   const [account, setAccount] = useState<AccountType>(entity);
   const [contactPromise, setContactPromise] = useState<
@@ -47,6 +50,12 @@ export const AccountView: React.FC<ViewProps<AccountType>> = ({
     ]),
   );
 
+  useEffect(() => {
+    if (account && pathname !== `/portal/accounts/${obfuscate(account.id)}`) {
+      router.replace(`/portal/accounts/${obfuscate(account.id)}`);
+    }
+  }, [account, router]);
+
   const navigateToPreviousRecord = async () => {
     const previousAccount = await navigateToRecord(
       findPreviousAccount,
@@ -54,11 +63,6 @@ export const AccountView: React.FC<ViewProps<AccountType>> = ({
       account.id!,
     );
     setAccount(previousAccount);
-    setContactPromise(
-      searchContacts([
-        { field: "account.id", operator: "eq", value: previousAccount.id! },
-      ]),
-    );
   };
 
   const navigateToNextRecord = async () => {
@@ -68,31 +72,27 @@ export const AccountView: React.FC<ViewProps<AccountType>> = ({
       account.id!,
     );
     setAccount(nextAccount);
-    setContactPromise(
-      searchContacts([
-        { field: "account.id", operator: "eq", value: nextAccount.id! },
-      ]),
-    );
   };
 
   return (
-    <div className="py-4">
-      <div className="flex flex-row justify-between gap-1">
+    <div className="grid grid-cols-1 gap-4">
+      <div className="flex flex-row justify-between gap-4">
         <Button
           variant="outline"
+          className="px-2"
           size="icon"
           onClick={navigateToPreviousRecord}
         >
-          <ChevronLeft />
+          <ChevronLeft className="text-gray-400" />
         </Button>
         <div className="text-2xl w-full">{account.name}</div>
         <Button variant="outline" size="icon" onClick={navigateToNextRecord}>
-          <ChevronRight />
+          <ChevronRight className="text-gray-400" />
         </Button>
       </div>
       <Card>
         <CardContent>
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+          <div className="grid grid-cols-1 px-4 py-4 gap-4 md:grid-cols-2">
             <div>Type: {account.type}</div>
             <div>Industry: {account.industry}</div>
             <div>Address Line: {account.addressLine1}</div>
@@ -120,27 +120,32 @@ export const AccountView: React.FC<ViewProps<AccountType>> = ({
           </div>
         </div>
         <CollapsibleContent>
-          <div className="grid grid-cols-4 gap-2 w-full max-w-full">
-            <div className="w-[200px] content-end">Type: </div>
-            <Badge variant="outline">{account.type}</Badge>
-            <div className="w-[200px]">Industry: </div>
-            <Badge variant="outline" className="bg-amber-300">
-              {account.industry}
-            </Badge>
-            <div className="w-[200px]">Address Line:</div>
-            <div> {account.addressLine1}</div>
-            <div className="w-[200px]">Phone number: </div>
-            <div>{account.phoneNumber}</div>
-            <div className="w-[200px]">Status:</div>{" "}
-            <Badge variant="outline" className="bg-amber-300">
-              {account.status}
-            </Badge>
+          <div className="grid grid-cols-1 gap-4  md:grid-cols-2">
+            <div>
+              Type: <Badge variant="outline">{account.type}</Badge>
+            </div>
+
+            <div>
+              Industry:{" "}
+              <Badge variant="outline" className="bg-amber-300">
+                {account.industry}
+              </Badge>
+            </div>
+
+            <div>Address Line:{account.addressLine1}</div>
+            <div>Phone number: {account.phoneNumber}</div>
+            <div>
+              Status:{" "}
+              <Badge variant="outline" className="bg-amber-300">
+                {account.status}
+              </Badge>
+            </div>
           </div>
         </CollapsibleContent>
       </Collapsible>
       <Separator />
       <div className="flex flex-row justify-between">
-        <div className="w-full">Contacts</div>
+        <div className="text-xl w-full">Contacts</div>
         <div>
           <Link
             href={`/portal/contacts/new/edit?accountId=${obfuscate(account.id)}&&accountName=${account.name}`}

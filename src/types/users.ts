@@ -9,6 +9,8 @@ export const userSchema = z.object({
   lastName: z.string().nullish(),
   timezone: z.string().nullish(),
   lastLoginTime: z.string().nullish(),
+  activated: z.boolean().optional(),
+  imageUrl: z.string().nullish(),
   authorities: z
     .array(z.union([authoritySchema, z.string()]))
     .transform((authorities) =>

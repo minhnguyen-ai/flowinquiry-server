@@ -16,7 +16,7 @@ import {
 
 export const fetchData = async <TData, TResponse>(
   url: string,
-  method: string,
+  method: "GET" | "POST" | "PUT" | "DELETE",
   data?: TData,
   isAuthorized: boolean = true,
 ): Promise<TResponse> => {

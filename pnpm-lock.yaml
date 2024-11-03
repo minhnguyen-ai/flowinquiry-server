@@ -87,7 +87,7 @@ importers:
         version: 1.1.3(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       "@tanstack/react-query":
         specifier: ^5.59.16
-        version: 5.59.16(react@18.3.1)
+        version: 5.59.19(react@18.3.1)
       "@tanstack/react-table":
         specifier: ^8.20.5
         version: 8.20.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -144,7 +144,7 @@ importers:
         version: 18.3.1(react@18.3.1)
       react-dropzone:
         specifier: ^14.3.2
-        version: 14.3.2(react@18.3.1)
+        version: 14.3.3(react@18.3.1)
       react-hook-form:
         specifier: ^7.53.1
         version: 7.53.1(react@18.3.1)
@@ -156,7 +156,7 @@ importers:
         version: 2.13.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       sonner:
         specifier: ^1.5.0
-        version: 1.5.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 1.7.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       tailwind-merge:
         specifier: ^2.5.4
         version: 2.5.4
@@ -181,7 +181,7 @@ importers:
         version: 9.14.0
       "@types/node":
         specifier: ^22.8.6
-        version: 22.8.6
+        version: 22.8.7
       "@types/react":
         specifier: ^18.3.12
         version: 18.3.12
@@ -1411,16 +1411,16 @@ packages:
         integrity: sha512-KGYxvIOXcceOAbEk4bi/dVLEK9z8sZ0uBB3Il5b1rhfClSpcX0yfRO0KmTkqR2cnQDymwLB+25ZyMzICg/cm/A==,
       }
 
-  "@tanstack/query-core@5.59.16":
+  "@tanstack/query-core@5.59.17":
     resolution:
       {
-        integrity: sha512-crHn+G3ltqb5JG0oUv6q+PMz1m1YkjpASrXTU+sYWW9pLk0t2GybUHNRqYPZWhxgjPaVGC4yp92gSFEJgYEsPw==,
+        integrity: sha512-jWdDiif8kaqnRGHNXAa9CnudtxY5v9DUxXhodgqX2Rwzj+1UwStDHEbBd9IA5C7VYAaJ2s+BxFR6PUBs8ERorA==,
       }
 
-  "@tanstack/react-query@5.59.16":
+  "@tanstack/react-query@5.59.19":
     resolution:
       {
-        integrity: sha512-MuyWheG47h6ERd4PKQ6V8gDyBu3ThNG22e1fRVwvq6ap3EqsFhyuxCAwhNP/03m/mLg+DAb0upgbPaX6VB+CkQ==,
+        integrity: sha512-xLRfyFyQOFcLltKCds0LijfC6/HQJrrTTnZB8ciyn74LIkVAm++vZJ6eUVG20RmJtdP8REdy7vSOYW4M3//XLA==,
       }
     peerDependencies:
       react: ^18 || ^19
@@ -1526,10 +1526,10 @@ packages:
         integrity: sha512-CPM9nzrCPPJHQNA9keH9CVkVI+WR5kMa+7XEs5jcGQ0VoAGnLv242w8lIVgwAEfmE4oufJRaTc9PNLQl0ioAow==,
       }
 
-  "@types/node@22.8.6":
+  "@types/node@22.8.7":
     resolution:
       {
-        integrity: sha512-tosuJYKrIqjQIlVCM4PEGxOmyg3FCPa/fViuJChnGeEIhjA46oy8FMVoF9su1/v8PNs2a8Q0iFNyOx0uOF91nw==,
+        integrity: sha512-LidcG+2UeYIWcMuMUpBKOnryBWG/rnmOHQR5apjn8myTQcx3rinFRn7DcIFhMnS0PPFSC6OafdIKEad0lj6U0Q==,
       }
 
   "@types/prop-types@15.7.13":
@@ -1904,10 +1904,10 @@ packages:
       }
     engines: { node: ">= 6" }
 
-  caniuse-lite@1.0.30001676:
+  caniuse-lite@1.0.30001677:
     resolution:
       {
-        integrity: sha512-Qz6zwGCiPghQXGJvgQAem79esjitvJ+CxSbSQkW9H/UX5hg8XM88d4lp2W+MEQ81j+Hip58Il+jGVdazk1z9cw==,
+        integrity: sha512-fmfjsOlJUpMWu+mAAtZZZHz7UEwsUxIIvu1TJfO1HqFQvB/B+ii0xr9B5HpbZY/mC4XZ8SvjHJqtAY6pDPQEog==,
       }
 
   chalk@4.1.2:
@@ -3919,10 +3919,10 @@ packages:
     peerDependencies:
       react: ^18.3.1
 
-  react-dropzone@14.3.2:
+  react-dropzone@14.3.3:
     resolution:
       {
-        integrity: sha512-SMfxMjU/lHm6iXHqpRTnYXSbngC08yz51W3NlqS+cBhXpR+orZacLuxO5MJ0gcF+9vV5/K91uniiTCzkmRgriA==,
+        integrity: sha512-38yaWovqDqZdtn7LKTE5lFdqc57hYbPdS/oIxyhmaTP/yzC0yztPxnNy+poxew5HKF44gzGCNcNDBYjqlCXr6g==,
       }
     engines: { node: ">= 10.13" }
     peerDependencies:
@@ -4213,14 +4213,14 @@ packages:
         integrity: sha512-bLGGlR1QxBcynn2d5YmDX4MGjlZvy2MRBDRNHLJ8VI6l6+9FUiyTFNJ0IveOSP0bcXgVDPRcfGqA0pjaqUpfVg==,
       }
 
-  sonner@1.5.0:
+  sonner@1.7.0:
     resolution:
       {
-        integrity: sha512-FBjhG/gnnbN6FY0jaNnqZOMmB73R+5IiyYAw8yBj7L54ER7HB3fOSE5OFiQiE2iXWxeXKvg6fIP4LtVppHEdJA==,
+        integrity: sha512-W6dH7m5MujEPyug3lpI2l3TC3Pp1+LTgK0Efg+IHDrBbtEjyCmCHHo6yfNBOsf1tFZ6zf+jceWwB38baC8yO9g==,
       }
     peerDependencies:
-      react: ^18.0.0
-      react-dom: ^18.0.0
+      react: ^18.0.0 || ^19.0.0 || ^19.0.0-rc
+      react-dom: ^18.0.0 || ^19.0.0 || ^19.0.0-rc
 
   source-map-js@1.2.1:
     resolution:
@@ -4881,7 +4881,7 @@ snapshots:
       "@inquirer/figures": 1.0.7
       "@inquirer/type": 2.0.0
       "@types/mute-stream": 0.0.4
-      "@types/node": 22.8.6
+      "@types/node": 22.8.7
       "@types/wrap-ansi": 3.0.0
       ansi-escapes: 4.3.2
       cli-width: 4.1.0
@@ -5583,11 +5583,11 @@ snapshots:
       "@swc/counter": 0.1.3
       tslib: 2.8.1
 
-  "@tanstack/query-core@5.59.16": {}
+  "@tanstack/query-core@5.59.17": {}
 
-  "@tanstack/react-query@5.59.16(react@18.3.1)":
+  "@tanstack/react-query@5.59.19(react@18.3.1)":
     dependencies:
-      "@tanstack/query-core": 5.59.16
+      "@tanstack/query-core": 5.59.17
       react: 18.3.1
 
   "@tanstack/react-table@8.20.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)":
@@ -5632,9 +5632,9 @@ snapshots:
 
   "@types/mute-stream@0.0.4":
     dependencies:
-      "@types/node": 22.8.6
+      "@types/node": 22.8.7
 
-  "@types/node@22.8.6":
+  "@types/node@22.8.7":
     dependencies:
       undici-types: 6.19.8
 
@@ -5904,7 +5904,7 @@ snapshots:
 
   camelcase-css@2.0.1: {}
 
-  caniuse-lite@1.0.30001676: {}
+  caniuse-lite@1.0.30001677: {}
 
   chalk@4.1.2:
     dependencies:
@@ -6907,7 +6907,7 @@ snapshots:
       "@next/env": 14.2.16
       "@swc/helpers": 0.5.5
       busboy: 1.6.0
-      caniuse-lite: 1.0.30001676
+      caniuse-lite: 1.0.30001677
       graceful-fs: 4.2.11
       postcss: 8.4.31
       react: 18.3.1
@@ -7141,7 +7141,7 @@ snapshots:
       react: 18.3.1
       scheduler: 0.23.2
 
-  react-dropzone@14.3.2(react@18.3.1):
+  react-dropzone@14.3.3(react@18.3.1):
     dependencies:
       attr-accept: 2.2.4
       file-selector: 2.1.0
@@ -7338,7 +7338,7 @@ snapshots:
 
   sisteransi@1.0.5: {}
 
-  sonner@1.5.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  sonner@1.7.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)

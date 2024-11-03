@@ -2,10 +2,10 @@ import { z } from "zod";
 
 export const authoritySchema = z
   .object({
-    name: z.string().nullable(), // Allow `name` to be null initially
-    descriptiveName: z.string().min(1), // Require `descriptiveName` to be a non-empty string
-    systemRole: z.boolean().default(false), // Default for `systemRole`
-    description: z.string().nullable(),
+    name: z.string().nullable(),
+    descriptiveName: z.string().min(1),
+    systemRole: z.boolean().default(false),
+    description: z.string().nullable().optional(),
   })
   .transform((data) => {
     // If `name` is null, set it to `descriptiveName`

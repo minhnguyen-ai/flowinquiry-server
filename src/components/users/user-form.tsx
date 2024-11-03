@@ -54,7 +54,7 @@ export const UserForm: React.FC<UserFormProps> = ({ initialData }) => {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="grid grid-cols-1 gap-6 sm:grid-cols-2 max-w-[72rem]"
+          className="grid grid-cols-1 gap-4 sm:grid-cols-2 max-w-[72rem]"
         >
           <ExtInputField
             form={form}
@@ -85,7 +85,7 @@ export const UserForm: React.FC<UserFormProps> = ({ initialData }) => {
             placeholder="Timezone"
             required={true}
           />
-          <div className="flex items-center gap-2 col-first">
+          <div className="md:col-span-2 flex flex-row gap-4">
             <SubmitButton
               label="Invite user"
               labelWhileLoading="Creating ..."

@@ -45,7 +45,14 @@ export function UserNav() {
                   className="relative h-8 w-8 rounded-full"
                 >
                   <Avatar className="h-8 w-8">
-                    <AvatarImage src="#" alt="Avatar" />
+                    <AvatarImage
+                      src={
+                        session?.user?.imageUrl
+                          ? `/api/files/${session.user.imageUrl}`
+                          : undefined
+                      }
+                      alt="Avatar"
+                    />
                     <AvatarFallback className="bg-transparent">
                       {session?.user?.firstName?.charAt(0).toUpperCase()}
                       {session?.user?.lastName?.charAt(0).toUpperCase()}
@@ -54,7 +61,10 @@ export function UserNav() {
                 </Button>
               </DropdownMenuTrigger>
             </TooltipTrigger>
-            <TooltipContent side="bottom">Profile</TooltipContent>
+            <TooltipContent side="bottom">
+              {session?.user?.firstName?.charAt(0).toUpperCase()}
+              {session?.user?.lastName?.charAt(0).toUpperCase()}
+            </TooltipContent>
           </Tooltip>
         </TooltipProvider>
 
@@ -81,8 +91,8 @@ export function UserNav() {
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
             <DialogTrigger asChild>
-              <DropdownMenuItem className="flex items-center gap-2 text-sm font-medium text-default-600 capitalize px-3 py-1.5 cursor-pointer">
-                <Info className="w-4 h-4" />
+              <DropdownMenuItem className="hover:cursor-pointer">
+                <Info className="w-4 h-4 mr-3 text-muted-foreground" />
                 About
               </DropdownMenuItem>
             </DialogTrigger>

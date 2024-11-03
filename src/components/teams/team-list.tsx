@@ -99,18 +99,25 @@ export const TeamList = () => {
         </div>
       </div>
       <Separator />
-      <div className="flex flex-row flex-wrap space-x-6 space-y-6">
+      <div className="flex flex-row flex-wrap gap-4">
         {items?.map((team) => (
           <div
             key={team.id}
-            className="w-[24rem] flex flex-row gap-4 border border-gray-200 px-4 py-4 rounded-2xl"
+            className="w-[24rem] flex flex-row gap-4 border border-gray-200 rounded-2xl"
           >
-            <div>
+            <div className="px-4 py-4">
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Avatar className="size-24 cursor-pointer ring-offset-2 ring-2 ring-slate-200">
-                      <AvatarImage src={undefined} alt="@shadcn" />
+                    <Avatar className="size-24 cursor-pointer">
+                      <AvatarImage
+                        src={
+                          team.logoUrl
+                            ? `/api/files/${team.logoUrl}`
+                            : undefined
+                        }
+                        alt="@flexwork"
+                      />
                       <AvatarFallback>
                         <DefaultTeamLogo />
                       </AvatarFallback>
@@ -123,7 +130,7 @@ export const TeamList = () => {
             <div>
               <Button variant="link" asChild className="px-0">
                 <Link href={`/portal/teams/${obfuscate(team.id)}`}>
-                  {team.name}
+                  {team.name} ({team.memberCount})
                 </Link>
               </Button>
               <div>{team.description}</div>

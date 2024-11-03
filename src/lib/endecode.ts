@@ -37,3 +37,11 @@ export const deobfuscateToNumber = (encodedValue: string): number => {
   }
   return decodedValue;
 };
+
+export const deobfuscateToString = (encodedValue: string): string => {
+  const decodedValue = deobfuscate(encodedValue);
+  if (typeof decodedValue !== "string") {
+    throw new Error("Decoded value is not a valid string");
+  }
+  return decodedValue;
+};

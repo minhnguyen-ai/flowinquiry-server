@@ -55,7 +55,6 @@ export const UserList = () => {
 
   const handleSearchTeams = useDebouncedCallback((userName: string) => {
     const params = new URLSearchParams(searchParams);
-    console.log(`Search ${userName}`);
     if (userName) {
       params.set("name", userName);
     } else {
@@ -97,7 +96,7 @@ export const UserList = () => {
         </div>
       </div>
       <Separator />
-      <div className="flex flex-row flex-wrap space-x-4 space-y-4 content-around">
+      <div className="flex flex-row flex-wrap gap-4 content-around">
         {items?.map((user) => UserCard({ user }))}
       </div>
       <PaginationExt

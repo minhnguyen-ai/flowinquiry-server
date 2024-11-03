@@ -1,13 +1,14 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { Heading } from "@/components/heading";
 import TimezoneSelect from "@/components/shared/timezones-select";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { ExtInputField } from "@/components/ui/ext-form";
 import {
@@ -19,50 +20,37 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
 import { toast } from "@/components/ui/use-toast";
+import { findUserById } from "@/lib/actions/users.action";
+import { obfuscate } from "@/lib/endecode";
+import { userSchema } from "@/types/users";
 
-interface ProfileFormProps {
-  resourceServer: String;
-}
+const userSchemaWithFile = userSchema.extend({
+  file: z.any().optional(), // Add file as an optional field of any type
+});
 
-export const ProfileForm: React.FC<ProfileFormProps> = ({ resourceServer }) => {
-  const handleSubmit = async (data: z.infer<typeof formSchema>) => {
-    // Handle form submission logic here
-  };
+type UserTypeWithFile = z.infer<typeof userSchemaWithFile>;
 
-  const formSchema = z.object({
-    email: z.string().email({
-      message: "Invalid email address",
-    }),
-    firstName: z.string().min(1),
-    lastName: z.string().min(1),
-  });
+export const ProfileForm = () => {
+  const router = useRouter();
+  const { data: session } = useSession();
 
-  const { data: session, status } = useSession();
-
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      email: `${session?.user?.email}`,
-      firstName: `${session?.user?.firstName}`,
-      lastName: `${session?.user?.lastName}`,
-    },
-  });
-
-  const [avatarPath, setAvatarPath] = useState("");
-
-  const fileInput = useRef<HTMLInputElement>(null);
-
-  const handleFileUpload = async (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    event.preventDefault();
-
+  const handleSubmit = async (data: UserTypeWithFile) => {
     const formData = new FormData();
-    formData.append("file", fileInput?.current?.files?.[0]!);
 
-    const response = await fetch(`/api/files/singleUpload?type=avatar`, {
-      method: "POST",
+    const userJsonBlob = new Blob([JSON.stringify(data)], {
+      type: "application/json",
+    });
+    formData.append("userDTO", userJsonBlob);
+
+    const avatarFile = form.watch("file")[0]; // Get the file object directly
+    if (avatarFile) {
+      formData.append("avatar", avatarFile); // Append the file to FormData
+    }
+
+    const response = await fetch("/api/admin/users", {
+      method: "PUT",
       headers: {
         "Access-Control-Allow-Origin": "*",
         Authorization: `Bearer ${session?.user?.accessToken}`,
@@ -70,64 +58,101 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({ resourceServer }) => {
       body: formData,
     });
     if (response.ok) {
-      const uploadFileResult = await response.json();
-      setAvatarPath(`${resourceServer}/${uploadFileResult["path"]}`);
+      router.push(`/portal/users/${obfuscate(user?.id)}`);
     } else {
+      const errorData = await response.json();
       toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Can not upload the profile picture. Please try again",
+        description: errorData.message || "Failed to update user",
       });
     }
   };
 
-  return (
-    <div>
-      <h4>Profile</h4>
+  const [user, setUser] = useState<UserTypeWithFile | undefined>(undefined);
 
-      <div className="profile-picture-section">
-        <Avatar>
-          <AvatarImage src={avatarPath} />
-          <AvatarFallback>HN</AvatarFallback>
-        </Avatar>
-        <input type="file" onChange={handleFileUpload} ref={fileInput} />
-      </div>
+  useEffect(() => {
+    async function loadUserInfo() {
+      const userData = await findUserById(Number(session?.user?.id));
+      setUser({ ...userData, file: undefined });
+
+      if (userData) {
+        form.reset(userData);
+      }
+    }
+    loadUserInfo();
+  }, []);
+
+  const form = useForm<UserTypeWithFile>({
+    resolver: zodResolver(userSchemaWithFile),
+  });
+
+  return (
+    <div className="grid grid-cols-1 gap-4">
+      <Heading
+        title="Profile"
+        description="Manage your account details here. Update your email, profile picture, password, and other personal information to keep your profile accurate and secure"
+      />
+      <Separator />
+
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input placeholder="Email" {...field} readOnly />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <ExtInputField
-            form={form}
-            required={true}
-            fieldName="firstName"
-            label="First Name"
-            placeholder="First Name"
-          />
-          <ExtInputField
-            form={form}
-            required={true}
-            fieldName="lastName"
-            label="Last Name"
-            placeholder="Last Name"
-          />
-          <TimezoneSelect
-            form={form}
-            required={true}
-            fieldName="timezone"
-            label="Timezone"
-          />
-          <Button type="submit">Submit</Button>
+        <form
+          onSubmit={form.handleSubmit(handleSubmit)}
+          className="flex flex-row gap-4"
+        >
+          <div>
+            <FormField
+              control={form.control}
+              name="file"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input type="file" {...form.register("file")} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Email" {...field} readOnly />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <TimezoneSelect
+              form={form}
+              required={true}
+              fieldName="timezone"
+              label="Timezone"
+            />
+            <ExtInputField
+              form={form}
+              required={true}
+              fieldName="firstName"
+              label="First Name"
+              placeholder="First Name"
+            />
+            <ExtInputField
+              form={form}
+              required={true}
+              fieldName="lastName"
+              label="Last Name"
+              placeholder="Last Name"
+            />
+            <div className="md:col-span-2 flex flex-row gap-4">
+              <Button type="submit">Submit</Button>
+              <Button variant="secondary" onClick={() => router.back()}>
+                Discard
+              </Button>
+            </div>
+          </div>
         </form>
       </Form>
     </div>
