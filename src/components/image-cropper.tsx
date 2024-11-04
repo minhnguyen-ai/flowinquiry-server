@@ -18,7 +18,10 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
+  DialogDescription,
   DialogFooter,
+  DialogHeader,
+  DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 
@@ -107,6 +110,12 @@ export function ImageCropper({
         </Avatar>
       </DialogTrigger>
       <DialogContent className="p-0 gap-0">
+        <DialogHeader>
+          <DialogTitle>Crop Your Image</DialogTitle>
+          <DialogDescription>
+            Drag to adjust the visible area of your image
+          </DialogDescription>
+        </DialogHeader>
         <div className="p-6 size-full">
           <ReactCrop
             crop={crop}

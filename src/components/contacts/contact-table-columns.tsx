@@ -14,6 +14,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { formatDateTime, formatDateTimeDistanceToNow } from "@/lib/datetime";
+import { obfuscate } from "@/lib/endecode";
 import { ContactType } from "@/types/contacts";
 
 export const contacts_columns_def: ColumnDef<ContactType>[] = [
@@ -49,7 +50,7 @@ export const contacts_columns_def: ColumnDef<ContactType>[] = [
     cell: ({ row }) => (
       <div>
         <Button variant="link" className="px-0" asChild>
-          <Link href={`/portal/contacts/${row.original.id}`}>
+          <Link href={`/portal/contacts/${obfuscate(row.original.id)}`}>
             {row.getValue("name")}
           </Link>
         </Button>

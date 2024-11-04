@@ -2,13 +2,13 @@
 
 import {
   EntitiesDeleteDialog,
-  EntitiesDeleteDialogProps,
-} from "@/components/shared/entity-delete-dialog";
+  RowEntitiesDeleteDialogProps,
+} from "@/components/shared/table-entity-delete-dialog";
 import { AccountType } from "@/types/accounts";
 
 export function AccountDeleteDialog({
   ...props
-}: EntitiesDeleteDialogProps<AccountType>) {
+}: RowEntitiesDeleteDialogProps<AccountType>) {
   return EntitiesDeleteDialog<AccountType>({
     ...props,
   });

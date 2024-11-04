@@ -1,15 +1,22 @@
 "use client";
 
-import { Plus } from "lucide-react";
+import { Ellipsis, Pencil, Plus, Trash } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 import { Heading } from "@/components/heading";
+import { EntitiesDeleteDialog } from "@/components/shared/entity-delete-dialog";
 import PaginationExt from "@/components/shared/pagination-ext";
 import DefaultTeamLogo from "@/components/teams/team-logo";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button, buttonVariants } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -19,12 +26,13 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useDebouncedCallback } from "@/hooks/use-debounced-callback";
-import { searchTeams } from "@/lib/actions/teams.action";
+import { deleteTeams, searchTeams } from "@/lib/actions/teams.action";
 import { obfuscate } from "@/lib/endecode";
 import { cn } from "@/lib/utils";
 import { TeamType } from "@/types/teams";
 
 export const TeamList = () => {
+  const router = useRouter();
   const [items, setItems] = useState<Array<TeamType>>([]); // Store the items
   const [teamSearchTerm, setTeamSearchTerm] = useState<string | undefined>(
     undefined,
@@ -33,6 +41,9 @@ export const TeamList = () => {
   const [totalPages, setTotalPages] = useState(0); // Total pages
   const [totalElements, setTotalElements] = useState(0);
   const [loading, setLoading] = useState(false); // Loading state
+
+  const [isDialogOpen, setDialogOpen] = useState(false);
+  const [selectedTeam, setSelectedTeam] = useState<TeamType | null>(null);
 
   const searchParams = useSearchParams();
   const { replace } = useRouter();
@@ -72,6 +83,16 @@ export const TeamList = () => {
 
   if (loading) return <div>Loading...</div>;
 
+  const showDeleteTeamConfirmationDialog = (team: TeamType) => {
+    setSelectedTeam(team);
+    setDialogOpen(true);
+  };
+
+  const deleteTeam = async (ids: number[]) => {
+    await deleteTeams(ids);
+    fetchData();
+  };
+
   return (
     <div className="grid grid-cols-1 gap-4">
       <div className="flex flex-row justify-between">
@@ -103,7 +124,7 @@ export const TeamList = () => {
         {items?.map((team) => (
           <div
             key={team.id}
-            className="w-[24rem] flex flex-row gap-4 border border-gray-200 rounded-2xl"
+            className="relative w-[24rem] flex flex-row gap-4 border border-gray-200 rounded-2xl"
           >
             <div className="px-4 py-4">
               <TooltipProvider>
@@ -135,6 +156,28 @@ export const TeamList = () => {
               </Button>
               <div>{team.description}</div>
             </div>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Ellipsis className="cursor-pointer absolute top-2 right-2 text-gray-400" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-[14rem]">
+                <DropdownMenuItem
+                  className="cursor-pointer"
+                  onClick={() =>
+                    router.push(`/portal/teams/${obfuscate(team.id)}/edit`)
+                  }
+                >
+                  <Pencil />
+                  Edit
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="cursor-pointer"
+                  onClick={() => showDeleteTeamConfirmationDialog(team)}
+                >
+                  <Trash /> Delete
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         ))}
       </div>
@@ -145,6 +188,19 @@ export const TeamList = () => {
           setCurrentPage(page);
         }}
       />
+      {isDialogOpen && selectedTeam && (
+        <EntitiesDeleteDialog
+          entities={[selectedTeam]}
+          entityName="Team"
+          deleteEntitiesFn={deleteTeam}
+          isOpen={isDialogOpen}
+          onOpenChange={setDialogOpen}
+          onSuccess={() => {
+            setDialogOpen(false);
+          }}
+          onClose={() => setDialogOpen(false)}
+        />
+      )}
     </div>
   );
 };

@@ -4,11 +4,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import React from "react";
-import { FileWithPath, useDropzone } from "react-dropzone";
 import { useForm } from "react-hook-form";
 
 import { Heading } from "@/components/heading";
-import { FileWithPreview, ImageCropper } from "@/components/image-cropper";
+import { ImageCropper } from "@/components/image-cropper";
 import DefaultTeamLogo from "@/components/teams/team-logo";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -26,7 +25,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { toast } from "@/components/ui/use-toast";
+import { useImageCropper } from "@/hooks/use-image-cropper";
 import { apiClient } from "@/lib/api-client";
 import { validateForm } from "@/lib/validator";
 import { teamSchema, TeamType } from "@/types/teams";
@@ -35,8 +34,14 @@ export const TeamForm = ({ initialData }: FormProps<TeamType>) => {
   const router = useRouter();
   const { data: session } = useSession();
 
-  const [selectedFile, setSelectedFile] =
-    React.useState<FileWithPreview | null>(null);
+  const {
+    selectedFile,
+    setSelectedFile,
+    isDialogOpen,
+    setDialogOpen,
+    getRootProps,
+    getInputProps,
+  } = useImageCropper();
 
   const form = useForm<TeamType>({
     resolver: zodResolver(teamSchema),
@@ -45,7 +50,6 @@ export const TeamForm = ({ initialData }: FormProps<TeamType>) => {
 
   async function onSubmit(team: TeamType) {
     if (validateForm(team, teamSchema, form)) {
-      console.log(`Submit team ${JSON.stringify(team)}`);
       const formData = new FormData();
 
       const teamJsonBlob = new Blob([JSON.stringify(team)], {
@@ -56,47 +60,31 @@ export const TeamForm = ({ initialData }: FormProps<TeamType>) => {
         formData.append("file", selectedFile);
       }
 
-      await apiClient(
-        "/api/teams",
-        "POST",
-        formData,
-        session?.user?.accessToken,
-      );
+      if (team.id) {
+        await apiClient(
+          "/api/teams",
+          "PUT",
+          formData,
+          session?.user?.accessToken,
+        );
+      } else {
+        await apiClient(
+          "/api/teams",
+          "POST",
+          formData,
+          session?.user?.accessToken,
+        );
+      }
+
       router.push("/portal/teams");
     }
   }
-
-  const [isDialogOpen, setDialogOpen] = React.useState(false);
 
   const isEdit = !!initialData;
   const title = isEdit ? `Edit team ${initialData?.name}` : "Create team";
   const description = isEdit ? "Edit team" : "Add a new team";
   const submitText = isEdit ? "Save changes" : "Create";
   const submitTextWhileLoading = isEdit ? "Saving changes ..." : "Creating ...";
-
-  const onDrop = React.useCallback(
-    (acceptedFiles: FileWithPath[]) => {
-      const file = acceptedFiles[0];
-      if (!file) {
-        toast({ description: "Selected image is too large!" });
-        return;
-      }
-
-      const fileWithPreview = Object.assign(file, {
-        preview: URL.createObjectURL(file),
-      });
-
-      setSelectedFile(fileWithPreview);
-      setDialogOpen(true);
-    },
-
-    [],
-  );
-
-  const { getRootProps, getInputProps } = useDropzone({
-    onDrop,
-    accept: { "image/*": [] },
-  });
 
   return (
     <div className="grid grid-cols-1 gap-4">
@@ -122,7 +110,14 @@ export const TeamForm = ({ initialData }: FormProps<TeamType>) => {
                     className="size-36 cursor-pointer ring-offset-2 ring-2 ring-slate-200"
                   >
                     <input {...getInputProps()} />
-                    <AvatarImage src={undefined} alt="@shadcn" />
+                    <AvatarImage
+                      src={
+                        initialData?.logoUrl
+                          ? `/api/files/${initialData.logoUrl}`
+                          : undefined
+                      }
+                      alt="@flexwork"
+                    />
                     <AvatarFallback>
                       <DefaultTeamLogo />
                     </AvatarFallback>

@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { useForm } from "react-hook-form";
@@ -87,7 +88,7 @@ const LoginForm = () => {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="uppercase text-xs font-bold text-zinc-500 dark:text-white">
+                  <FormLabel className="text-xs font-bold text-zinc-500 dark:text-white">
                     Email
                   </FormLabel>
                   <FormControl>
@@ -106,7 +107,7 @@ const LoginForm = () => {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="uppercase text-xs font-bold text-zinc-500 dark:text-white">
+                  <FormLabel className="text-xs font-bold text-zinc-500 dark:text-white">
                     Password
                   </FormLabel>
                   <FormControl>
@@ -122,24 +123,28 @@ const LoginForm = () => {
                 </FormItem>
               )}
             />
-
-            <FormField
-              control={form.control}
-              name="isRemembered"
-              render={({ field }) => (
-                <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                  <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                  <div className="space-y-1 leading-none">
-                    <FormLabel>Remember me</FormLabel>
-                  </div>
-                </FormItem>
-              )}
-            />
+            <div className="flex flex-row justify-items-center">
+              <FormField
+                control={form.control}
+                name="isRemembered"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <div className="space-y-1 leading-none">
+                      <FormLabel>Remember me</FormLabel>
+                    </div>
+                  </FormItem>
+                )}
+              />
+              <Button variant="link" className="py-0  h-auto">
+                <Link href="/forgot-password">Forgot password</Link>
+              </Button>
+            </div>
             <Button className="w-full">Sign In</Button>
           </form>
         </Form>

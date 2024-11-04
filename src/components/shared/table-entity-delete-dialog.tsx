@@ -1,5 +1,7 @@
 "use client";
 
+import { TrashIcon } from "@radix-ui/react-icons";
+import { type Row } from "@tanstack/react-table";
 import * as React from "react";
 import { toast } from "sonner";
 
@@ -13,6 +15,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from "@/components/ui/dialog";
 import {
   Drawer,
@@ -22,29 +25,29 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
+  DrawerTrigger,
 } from "@/components/ui/drawer";
 import { useMediaQuery } from "@/hooks/use-media-query";
 
-export interface EntitiesDeleteDialogProps<TEntity extends Record<string, any>>
-  extends React.ComponentPropsWithoutRef<typeof Dialog> {
-  entities: TEntity[];
-  isOpen: boolean;
-  onOpenChange: (isOpen: boolean) => void;
+// Constrain TEntity to be an object
+export interface RowEntitiesDeleteDialogProps<
+  TEntity extends Record<string, any>,
+> extends React.ComponentPropsWithoutRef<typeof Dialog> {
+  entities: Row<TEntity>["original"][];
+  showTrigger?: boolean;
   onSuccess?: () => void;
-  onClose?: () => void;
-  deleteEntitiesFn: (ids: number[]) => Promise<void>;
-  entityName: string;
+  deleteEntitiesFn: (ids: number[]) => Promise<void>; // Pass a function to delete entities
+  entityName: string; // Pass the entity name for the UI text
 }
 
 export function EntitiesDeleteDialog<TEntity extends Record<string, any>>({
   entities,
-  isOpen,
-  onOpenChange,
+  showTrigger = true,
   onSuccess,
   deleteEntitiesFn,
   entityName,
   ...props
-}: EntitiesDeleteDialogProps<TEntity>) {
+}: RowEntitiesDeleteDialogProps<TEntity>) {
   const [isDeletePending, startDeleteTransition] = React.useTransition();
   const isDesktop = useMediaQuery("(min-width: 640px)");
 
@@ -68,17 +71,25 @@ export function EntitiesDeleteDialog<TEntity extends Record<string, any>>({
         return;
       }
 
+      props.onOpenChange?.(false);
       toast.success(
         `${entityName}${entities.length > 1 ? "s are" : " is"} deleted`,
       );
       onSuccess?.();
-      onOpenChange?.(false);
     });
   }
 
   if (isDesktop) {
     return (
-      <Dialog open={isOpen} onOpenChange={onOpenChange} {...props}>
+      <Dialog {...props}>
+        {showTrigger ? (
+          <DialogTrigger asChild>
+            <Button variant="outline" size="sm">
+              <TrashIcon className="mr-2 size-4" aria-hidden="true" />
+              Delete ({entities.length})
+            </Button>
+          </DialogTrigger>
+        ) : null}
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Are you absolutely sure?</DialogTitle>
@@ -116,7 +127,15 @@ export function EntitiesDeleteDialog<TEntity extends Record<string, any>>({
   }
 
   return (
-    <Drawer open={isOpen} onOpenChange={onOpenChange} {...props}>
+    <Drawer {...props}>
+      {showTrigger ? (
+        <DrawerTrigger asChild>
+          <Button variant="outline" size="sm">
+            <TrashIcon className="mr-2 size-4" aria-hidden="true" />
+            Delete ({entities.length})
+          </Button>
+        </DrawerTrigger>
+      ) : null}
       <DrawerContent>
         <DrawerHeader>
           <DrawerTitle>Are you absolutely sure?</DrawerTitle>

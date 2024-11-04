@@ -39,3 +39,11 @@ export const passwordReset = async (key: string, password: string) => {
     false,
   );
 };
+
+export const forgotPassword = async (email: string) => {
+  await post(
+    `${BACKEND_API}/api/auth/forgot-password`,
+    { email: email },
+    false,
+  );
+};

@@ -1,24 +1,12 @@
 "use client";
 
-import {
-  ChevronLeft,
-  ChevronRight,
-  ChevronsDown,
-  ChevronsUp,
-  Plus,
-} from "lucide-react";
+import { ChevronLeft, ChevronRight, Plus } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 import { ContactsTable } from "@/components/contacts/contact-table";
 import { Badge } from "@/components/ui/badge";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
-import { Separator } from "@/components/ui/separator";
 import {
   findNextAccount,
   findPreviousAccount,
@@ -93,8 +81,15 @@ export const AccountView: React.FC<ViewProps<AccountType>> = ({
       <Card>
         <CardContent>
           <div className="grid grid-cols-1 px-4 py-4 gap-4 md:grid-cols-2">
-            <div>Type: {account.type}</div>
-            <div>Industry: {account.industry}</div>
+            <div>
+              Type: <Badge variant="outline">{account.type}</Badge>
+            </div>
+            <div>
+              Industry:{" "}
+              <Badge variant="outline" className="bg-amber-300">
+                {account.industry}
+              </Badge>
+            </div>
             <div>Address Line: {account.addressLine1}</div>
             <div>Phone number: {account.phoneNumber}</div>
             <div>
@@ -103,47 +98,6 @@ export const AccountView: React.FC<ViewProps<AccountType>> = ({
           </div>
         </CardContent>
       </Card>
-      <Collapsible open={isOpen} onOpenChange={setIsOpen} className="space-y-2">
-        <div className="flex items-center justify-between space-x-4 px-4">
-          <h4 className="text-sm font-semibold">Details</h4>
-          <div className="flex items-center justify-between space-x-4 px-4">
-            <CollapsibleTrigger asChild>
-              <Button variant="ghost" size="sm" className="w-9 p-0">
-                {isOpen ? (
-                  <ChevronsUp className="h-4 w-4" />
-                ) : (
-                  <ChevronsDown className="h-4 w-4" />
-                )}
-                <span className="sr-only">Toggle</span>
-              </Button>
-            </CollapsibleTrigger>
-          </div>
-        </div>
-        <CollapsibleContent>
-          <div className="grid grid-cols-1 gap-4  md:grid-cols-2">
-            <div>
-              Type: <Badge variant="outline">{account.type}</Badge>
-            </div>
-
-            <div>
-              Industry:{" "}
-              <Badge variant="outline" className="bg-amber-300">
-                {account.industry}
-              </Badge>
-            </div>
-
-            <div>Address Line:{account.addressLine1}</div>
-            <div>Phone number: {account.phoneNumber}</div>
-            <div>
-              Status:{" "}
-              <Badge variant="outline" className="bg-amber-300">
-                {account.status}
-              </Badge>
-            </div>
-          </div>
-        </CollapsibleContent>
-      </Collapsible>
-      <Separator />
       <div className="flex flex-row justify-between">
         <div className="text-xl w-full">Contacts</div>
         <div>

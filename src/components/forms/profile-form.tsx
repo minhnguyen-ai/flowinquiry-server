@@ -8,7 +8,9 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { Heading } from "@/components/heading";
+import { ImageCropper } from "@/components/image-cropper";
 import TimezoneSelect from "@/components/shared/timezones-select";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { ExtInputField } from "@/components/ui/ext-form";
 import {
@@ -21,8 +23,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import { toast } from "@/components/ui/use-toast";
+import DefaultUserLogo from "@/components/users/user-logo";
+import { useImageCropper } from "@/hooks/use-image-cropper";
 import { findUserById } from "@/lib/actions/users.action";
+import { apiClient } from "@/lib/api-client";
 import { obfuscate } from "@/lib/endecode";
 import { userSchema } from "@/types/users";
 
@@ -36,6 +40,17 @@ export const ProfileForm = () => {
   const router = useRouter();
   const { data: session } = useSession();
 
+  const {
+    selectedFile,
+    setSelectedFile,
+    isDialogOpen,
+    setDialogOpen,
+    getRootProps,
+    getInputProps,
+  } = useImageCropper();
+
+  const [user, setUser] = useState<UserTypeWithFile | undefined>(undefined);
+
   const handleSubmit = async (data: UserTypeWithFile) => {
     const formData = new FormData();
 
@@ -44,30 +59,21 @@ export const ProfileForm = () => {
     });
     formData.append("userDTO", userJsonBlob);
 
-    const avatarFile = form.watch("file")[0]; // Get the file object directly
-    if (avatarFile) {
-      formData.append("avatar", avatarFile); // Append the file to FormData
-    }
-
-    const response = await fetch("/api/admin/users", {
-      method: "PUT",
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        Authorization: `Bearer ${session?.user?.accessToken}`,
-      },
-      body: formData,
-    });
-    if (response.ok) {
-      router.push(`/portal/users/${obfuscate(user?.id)}`);
+    if (selectedFile) {
+      console.log("Having file upload");
+      formData.append("file", selectedFile);
     } else {
-      const errorData = await response.json();
-      toast({
-        description: errorData.message || "Failed to update user",
-      });
+      console.log("Not Having file upload");
     }
-  };
 
-  const [user, setUser] = useState<UserTypeWithFile | undefined>(undefined);
+    await apiClient(
+      "/api/admin/users",
+      "PUT",
+      formData,
+      session?.user?.accessToken,
+    );
+    router.push(`/portal/users/${obfuscate(user?.id)}`);
+  };
 
   useEffect(() => {
     async function loadUserInfo() {
@@ -99,18 +105,25 @@ export const ProfileForm = () => {
           className="flex flex-row gap-4"
         >
           <div>
-            <FormField
-              control={form.control}
-              name="file"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input type="file" {...form.register("file")} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            {selectedFile ? (
+              <ImageCropper
+                dialogOpen={isDialogOpen}
+                setDialogOpen={setDialogOpen}
+                selectedFile={selectedFile}
+                setSelectedFile={setSelectedFile}
+              />
+            ) : (
+              <Avatar
+                {...getRootProps()}
+                className="size-36 cursor-pointer ring-offset-2 ring-2 ring-slate-200"
+              >
+                <input {...getInputProps()} />
+                <AvatarImage src={undefined} alt="@flexwork" />
+                <AvatarFallback>
+                  <DefaultUserLogo />
+                </AvatarFallback>
+              </Avatar>
+            )}
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <FormField

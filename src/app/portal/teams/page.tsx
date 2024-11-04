@@ -6,7 +6,7 @@ const breadcrumbItems = [
   { title: "Teams", link: "/portal/teams" },
 ];
 
-const TeamsIndex = async () => {
+const Page = async () => {
   return (
     <SimpleContentView title="Teams" breadcrumbItems={breadcrumbItems}>
       <TeamList />
@@ -14,4 +14,4 @@ const TeamsIndex = async () => {
   );
 };
 
-export default TeamsIndex;
+export default Page;
