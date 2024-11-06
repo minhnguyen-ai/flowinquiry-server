@@ -20,6 +20,12 @@ export async function searchUsers(
   );
 }
 
+export async function getUsersByAuthority(authority: string) {
+  return get<Array<UserType>>(
+    `${BACKEND_API}/api/users/authorities/${authority}`,
+  );
+}
+
 export const findUserById = async (userId: number) => {
   return get<UserType>(`${BACKEND_API}/api/users/${userId}`);
 };

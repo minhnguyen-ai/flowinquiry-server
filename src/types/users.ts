@@ -7,10 +7,16 @@ export const userSchema = z.object({
   email: z.string().email(),
   firstName: z.string().min(1),
   lastName: z.string().nullish(),
+  title: z.string().nullish(),
   timezone: z.string().nullish(),
   lastLoginTime: z.string().nullish(),
   activated: z.boolean().optional(),
   imageUrl: z.string().nullish(),
+  about: z.string().nullish(),
+  address: z.string().nullish(),
+  city: z.string().nullish(),
+  state: z.string().nullish(),
+  country: z.string().nullish(),
   authorities: z
     .array(z.union([authoritySchema, z.string()]))
     .transform((authorities) =>

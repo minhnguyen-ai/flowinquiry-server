@@ -9,10 +9,11 @@ import { z } from "zod";
 
 import { Heading } from "@/components/heading";
 import { ImageCropper } from "@/components/image-cropper";
+import { CountrySelectField } from "@/components/shared/countries-select";
 import TimezoneSelect from "@/components/shared/timezones-select";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { ExtInputField } from "@/components/ui/ext-form";
+import { ExtInputField, ExtTextAreaField } from "@/components/ui/ext-form";
 import {
   Form,
   FormControl,
@@ -158,6 +159,30 @@ export const ProfileForm = () => {
               fieldName="lastName"
               label="Last Name"
               placeholder="Last Name"
+            />
+            <ExtTextAreaField form={form} fieldName="about" label="About" />
+            <ExtInputField
+              form={form}
+              fieldName="address"
+              label="Address"
+              placeholder="Address"
+            />
+            <ExtInputField
+              form={form}
+              fieldName="city"
+              label="City"
+              placeholder="City"
+            />
+            <ExtInputField
+              form={form}
+              fieldName="state"
+              label="State"
+              placeholder="State"
+            />
+            <CountrySelectField
+              form={form}
+              fieldName="country"
+              label="Country"
             />
             <div className="md:col-span-2 flex flex-row gap-4">
               <Button type="submit">Submit</Button>

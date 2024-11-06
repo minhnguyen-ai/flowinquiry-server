@@ -38,11 +38,10 @@ const IdInputSelect: React.FC<IdInputSelectProps> = ({
         <FormItem>
           <FormLabel>{label}</FormLabel>
           <div className="flex items-center">
-            {/* Read-only or editable text field */}
             <FormControl>
               <input
                 type="text"
-                {...field} // Spread the React Hook Form field props
+                {...field}
                 value={defaultValue ? defaultValue : field.value}
                 placeholder={placeholder}
                 readOnly={readOnly}
@@ -61,7 +60,7 @@ const IdInputSelect: React.FC<IdInputSelectProps> = ({
               {buttonLabel}
             </button>
           </div>
-          <FormMessage /> {/* Display error messages if any */}
+          <FormMessage />
         </FormItem>
       )}
     />

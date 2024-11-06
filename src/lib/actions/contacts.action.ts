@@ -64,3 +64,13 @@ export const saveOrUpdateContact = async (
     redirect("/portal/contacts");
   }
 };
+
+export const findPreviousContact = async (contactId: number) => {
+  return get<ContactType>(
+    `${BACKEND_API}/api/crm/contacts/previous/${contactId}`,
+  );
+};
+
+export const findNextContact = async (contactId: number) => {
+  return get<ContactType>(`${BACKEND_API}/api/crm/contacts/next/${contactId}`);
+};

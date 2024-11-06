@@ -34,3 +34,7 @@ export async function findMembersByTeamId(teamId: number) {
     `${BACKEND_API}/api/teams/${teamId}/members`,
   );
 }
+
+export async function findTeamsByMemberId(userId: number) {
+  return get<Array<TeamType>>(`${BACKEND_API}/api/teams/users/${userId}`);
+}

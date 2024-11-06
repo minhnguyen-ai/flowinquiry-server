@@ -36,7 +36,7 @@ export const ExtInputField = ({
   fieldName,
   label,
   placeholder,
-  required,
+  required = false,
   type = undefined,
 }: ExtInputProps & UiAttributes) => {
   return (

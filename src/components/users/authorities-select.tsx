@@ -49,7 +49,7 @@ const AuthoritiesSelect = ({
       control={form.control}
       name="authorities"
       render={({ field }) => (
-        <FormItem>
+        <FormItem className="space-y-0">
           <FormLabel>
             {label}
             {required && <span className="text-destructive"> *</span>}

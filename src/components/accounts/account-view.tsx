@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronLeft, ChevronRight, Plus } from "lucide-react";
+import { ChevronLeft, ChevronRight, Edit, Plus } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -28,7 +28,6 @@ export const AccountView: React.FC<ViewProps<AccountType>> = ({
 }: ViewProps<AccountType>) => {
   const router = useRouter();
   const pathname = usePathname();
-  const [isOpen, setIsOpen] = useState(true);
   const [account, setAccount] = useState<AccountType>(entity);
   const [contactPromise, setContactPromise] = useState<
     Promise<PageableResult<ContactType>>
@@ -64,17 +63,29 @@ export const AccountView: React.FC<ViewProps<AccountType>> = ({
 
   return (
     <div className="grid grid-cols-1 gap-4">
-      <div className="flex flex-row justify-between gap-4">
+      <div className="flex flex-row justify-between gap-4 items-center justify-center">
         <Button
           variant="outline"
-          className="px-2"
+          className="h-6 w-6"
           size="icon"
           onClick={navigateToPreviousRecord}
         >
           <ChevronLeft className="text-gray-400" />
         </Button>
         <div className="text-2xl w-full">{account.name}</div>
-        <Button variant="outline" size="icon" onClick={navigateToNextRecord}>
+        <Button
+          onClick={() =>
+            router.push(`/portal/accounts/${obfuscate(account.id)}/edit`)
+          }
+        >
+          <Edit /> Edit
+        </Button>
+        <Button
+          variant="outline"
+          className="h-6 w-6"
+          size="icon"
+          onClick={navigateToNextRecord}
+        >
           <ChevronRight className="text-gray-400" />
         </Button>
       </div>

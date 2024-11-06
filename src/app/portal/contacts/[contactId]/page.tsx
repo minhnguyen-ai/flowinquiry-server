@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 
 import { ContentLayout } from "@/components/admin-panel/content-layout";
 import { Breadcrumbs } from "@/components/breadcrumbs";
+import { ContactView } from "@/components/contacts/contact-view";
 import { findContactById } from "@/lib/actions/contacts.action";
 import { deobfuscateToNumber } from "@/lib/endecode";
 
@@ -20,6 +21,7 @@ const Page = async ({ params }: { params: { contactId: string } }) => {
   return (
     <ContentLayout title="Teams">
       <Breadcrumbs items={breadcrumbItems} />
+      <ContactView entity={contact} />
     </ContentLayout>
   );
 };
