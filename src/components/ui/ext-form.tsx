@@ -67,7 +67,7 @@ export const ExtTextAreaField = ({
   required,
 }: ExtInputProps & UiAttributes) => {
   return (
-    <div className="w-full sm:col-span-2">
+    <div className="md:col-span-2">
       <FormField
         control={form.control}
         name={fieldName}

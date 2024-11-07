@@ -10,21 +10,24 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { AuthorityType } from "@/types/authorities";
 
 type NewAuthorityDialogProps = {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  onSaveSuccess: () => void;
+  onSaveSuccess: (savedAuthority: AuthorityType) => void;
+  authorityEntity?: AuthorityType | undefined;
 };
 
 const NewAuthorityDialog: React.FC<NewAuthorityDialogProps> = ({
   open,
   setOpen,
   onSaveSuccess,
+  authorityEntity = undefined,
 }) => {
-  const handleCloseDialog = () => {
+  const handleCloseDialog = (savedAuthority: AuthorityType) => {
     setOpen(false);
-    onSaveSuccess();
+    onSaveSuccess(savedAuthority);
   };
 
   return (
@@ -36,7 +39,10 @@ const NewAuthorityDialog: React.FC<NewAuthorityDialogProps> = ({
             Create a new authority to access resources
           </DialogDescription>
         </DialogHeader>
-        <NewAuthorityForm onSaveSuccess={handleCloseDialog} />
+        <NewAuthorityForm
+          authorityEntity={authorityEntity}
+          onSaveSuccess={handleCloseDialog}
+        />
       </DialogContent>
     </Dialog>
   );

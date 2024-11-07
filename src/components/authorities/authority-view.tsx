@@ -1,9 +1,10 @@
 "use client";
 
-import { Edit, Ellipsis, Pencil, Trash } from "lucide-react";
+import { Edit, Ellipsis, Pencil, Plus, Trash } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
+import NewAuthorityDialog from "@/components/authorities/authority-new-dialog";
 import { Heading } from "@/components/heading";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -21,9 +22,12 @@ import { AuthorityType } from "@/types/authorities";
 import { UserType } from "@/types/users";
 
 export const AuthorityView: React.FC<ViewProps<AuthorityType>> = ({
-  entity: authority,
+  entity,
 }: ViewProps<AuthorityType>) => {
+  const [open, setOpen] = useState(false);
   const [users, setUsers] = useState<Array<UserType>>();
+  const [authority, setAuthority] = useState<AuthorityType>(entity);
+
   useEffect(() => {
     async function fetchUsers() {
       const userData = await getUsersByAuthority(authority.name);
@@ -31,6 +35,10 @@ export const AuthorityView: React.FC<ViewProps<AuthorityType>> = ({
     }
     fetchUsers();
   }, []);
+
+  function onEditAuthoritySuccess(savedAuthority: AuthorityType) {
+    setAuthority(savedAuthority);
+  }
 
   return (
     <div className="grid grid-cols-1 gap-4 py-4">
@@ -41,9 +49,18 @@ export const AuthorityView: React.FC<ViewProps<AuthorityType>> = ({
         />
         <div className="flex space-x-4">
           <Button>
+            <Plus /> Add User
+          </Button>
+          <Button onClick={() => setOpen(true)}>
             <Edit /> Edit
           </Button>
         </div>
+        <NewAuthorityDialog
+          open={open}
+          setOpen={setOpen}
+          authorityEntity={authority}
+          onSaveSuccess={onEditAuthoritySuccess}
+        />
       </div>
       <div className="flex flex-row flex-wrap gap-4">
         {users?.map((user: UserType) => (

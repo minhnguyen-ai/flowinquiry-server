@@ -14,29 +14,30 @@ import { createAuthority } from "@/lib/actions/authorities.action";
 import { authoritySchema, AuthorityType } from "@/types/authorities";
 
 type NewAuthorityFormProps = {
-  onSaveSuccess: () => void;
+  onSaveSuccess: (authority: AuthorityType) => void;
+  authorityEntity: AuthorityType | undefined;
 };
 
 const NewAuthorityForm: React.FC<NewAuthorityFormProps> = ({
   onSaveSuccess,
+  authorityEntity,
 }) => {
+  console.log("Authority", authorityEntity);
   const form = useForm<AuthorityType>({
     resolver: zodResolver(authoritySchema),
-    defaultValues: {
-      name: "",
-    },
+    defaultValues: authorityEntity,
   });
 
   async function onSubmit(authority: AuthorityType) {
-    await createAuthority(authority);
-    onSaveSuccess();
+    const savedAuthority = await createAuthority(authority);
+    onSaveSuccess(savedAuthority);
   }
 
   return (
     <div>
       <Form {...form}>
         <form
-          className="grid grid-cols-1 gap-6 sm:grid-cols-2 max-w-[72rem]"
+          className="grid grid-cols-1 gap-4 max-w-[72rem]"
           onSubmit={form.handleSubmit(onSubmit)}
         >
           <ExtInputField

@@ -1,15 +1,10 @@
 "use client";
 
-import { Plus } from "lucide-react";
-import Link from "next/link";
-
 import { Heading } from "@/components/heading";
 import TeamUsersView from "@/components/teams/team-users";
-import { buttonVariants } from "@/components/ui/button";
 import { ViewProps } from "@/components/ui/ext-form";
-import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import { cn } from "@/lib/utils";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TeamType } from "@/types/teams";
 
 const TeamView = ({ entity: team }: ViewProps<TeamType>) => {
@@ -20,25 +15,20 @@ const TeamView = ({ entity: team }: ViewProps<TeamType>) => {
           title={team.name}
           description={team.slogan ?? "Stronger Together"}
         />
-        <div className="flex space-x-4">
-          <Input
-            className="w-[18rem]"
-            placeholder="Search users ..."
-            // onChange={(e) => {
-            //     handleSearchTeams(e.target.value);
-            // }}
-            // defaultValue={searchParams.get("name")?.toString()}
-          />
-          <Link
-            href={"/portal/teams/new/edit"}
-            className={cn(buttonVariants({ variant: "default" }))}
-          >
-            <Plus className="mr-2 h-4 w-4" /> Invite user
-          </Link>
-        </div>
       </div>
       <Separator />
-      <TeamUsersView entity={team.id!} />
+      <Tabs defaultValue="members">
+        <TabsList className="grid w-full grid-cols-3">
+          <TabsTrigger value="members">Members</TabsTrigger>
+          <TabsTrigger value="requests">Requests</TabsTrigger>
+          <TabsTrigger value="workflows">Workflows</TabsTrigger>
+        </TabsList>
+        <TabsContent value="members">
+          <TeamUsersView entity={team.id!} />
+        </TabsContent>
+        <TabsContent value="requests"></TabsContent>
+        <TabsContent value="workflows"></TabsContent>
+      </Tabs>
     </div>
   );
 };

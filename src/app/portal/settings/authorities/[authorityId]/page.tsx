@@ -7,7 +7,6 @@ import { findAuthorityByName } from "@/lib/actions/authorities.action";
 import { deobfuscateToString } from "@/lib/endecode";
 
 const Page = async ({ params }: { params: { authorityId: string } }) => {
-  console.log(`Find authority ${params.authorityId}`);
   const authority = await findAuthorityByName(
     deobfuscateToString(params.authorityId),
   );

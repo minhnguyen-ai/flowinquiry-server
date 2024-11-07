@@ -13,7 +13,13 @@ export const accountSchema = z.object({
   postalCode: z.string().nullish(),
   country: z.string().nullish(),
   phoneNumber: z.string().nullish(),
-  website: z.union([z.string().url(), z.string().length(0)]).optional(),
+  website: z
+    .union([
+      z.string().url(), // Full URL with scheme
+      z.string().regex(/^(https?:\/\/)?(www\.)?[\w-]+(\.[\w-]+)+.*$/), // Allow optional scheme
+      z.string().length(0), // Allow empty string
+    ])
+    .optional(),
   annualRevenue: z.string().nullish(),
   createdAt: z.string().nullish(),
   updatedAt: z.string().nullish(),

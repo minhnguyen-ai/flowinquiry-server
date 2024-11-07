@@ -92,8 +92,8 @@ export const TeamForm = ({ initialData }: FormProps<TeamType>) => {
         <Heading title={title} description={description} />
       </div>
       <Separator />
-      <div className="flex gap-6 py-6">
-        <div className=" top-0">
+      <div className="flex gap-4 py-4 flex-col md:flex-row">
+        <div>
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -132,7 +132,7 @@ export const TeamForm = ({ initialData }: FormProps<TeamType>) => {
         </div>
         <Form {...form}>
           <form
-            className="grid grid-cols-1 gap-6 md:grid-cols-2"
+            className="grid grid-cols-1 gap-4 w-[28rem]"
             onSubmit={form.handleSubmit(onSubmit)}
           >
             <ExtInputField

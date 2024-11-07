@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const authoritySchema = z
   .object({
-    name: z.string().nullable(),
+    name: z.string().nullish(),
     descriptiveName: z.string().min(1),
     systemRole: z.boolean().default(false),
     description: z.string().nullable().optional(),
@@ -12,7 +12,7 @@ export const authoritySchema = z
     return {
       ...data,
       name:
-        data.name === null || data.name === ""
+        data.name === null || data.name === undefined || data.name === ""
           ? data.descriptiveName
           : data.name,
     };
