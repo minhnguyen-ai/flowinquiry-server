@@ -36,6 +36,9 @@ export const handleError = async (response: Response): Promise<void> => {
         HttpError.UNAUTHORIZED,
         errorMessage || "Unauthorized",
       );
+    case HttpError.BAD_REQUEST:
+      throw new HttpError(HttpError.BAD_REQUEST, errorMessage || "Bad request");
+
     case HttpError.NOT_FOUND:
       throw new HttpError(HttpError.NOT_FOUND, errorMessage || "Not Found");
     case HttpError.INTERNAL_SERVER_ERROR:

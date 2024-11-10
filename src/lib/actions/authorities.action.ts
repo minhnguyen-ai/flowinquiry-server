@@ -2,7 +2,10 @@
 
 import { get, post } from "@/lib/actions/commons.action";
 import { BACKEND_API } from "@/lib/constants";
-import { AuthorityType } from "@/types/authorities";
+import {
+  AuthorityResourcePermissionType,
+  AuthorityType,
+} from "@/types/authorities";
 import { PageableResult } from "@/types/commons";
 
 export const getAuthorities = async () => {
@@ -18,4 +21,19 @@ export const createAuthority = async (authority: AuthorityType) => {
     `${BACKEND_API}/api/authorities`,
     authority,
   );
+};
+
+export const findPermissionsByAuthorityName = async (authorityName: string) => {
+  return get<Array<AuthorityResourcePermissionType>>(
+    `${BACKEND_API}/api/authority-permissions/${authorityName}`,
+  );
+};
+
+export const batchSavePermissions = async (
+  permissions: Array<AuthorityResourcePermissionType>,
+) => {
+  return post<
+    Array<AuthorityResourcePermissionType>,
+    Array<AuthorityResourcePermissionType>
+  >(`${BACKEND_API}/api/authority-permissions/batchSave`, permissions);
 };

@@ -5,7 +5,7 @@ export const authoritySchema = z
     name: z.string().nullish(),
     descriptiveName: z.string().min(1),
     systemRole: z.boolean().default(false),
-    description: z.string().nullable().optional(),
+    description: z.string().optional(),
   })
   .transform((data) => {
     // If `name` is null, set it to `descriptiveName`
@@ -20,10 +20,12 @@ export const authoritySchema = z
 
 export type AuthorityType = z.infer<typeof authoritySchema>;
 
-export const authoritySearchParamsSchema = z.object({
-  page: z.coerce.number().default(1), // page number
-  size: z.coerce.number().default(10), // size per page
-  sort: z.string().optional(),
+export const authorityResourcePermissionSchema = z.object({
+  authorityName: z.string().nullish(),
+  resourceName: z.string().nullish(),
+  permission: z.string().nullish(),
 });
 
-export type AuthoritySearchParams = z.infer<typeof authoritySearchParamsSchema>;
+export type AuthorityResourcePermissionType = z.infer<
+  typeof authorityResourcePermissionSchema
+>;

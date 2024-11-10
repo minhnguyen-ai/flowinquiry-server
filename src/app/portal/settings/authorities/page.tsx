@@ -1,10 +1,10 @@
 "use client";
 
 import { Plus } from "lucide-react";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 import { SimpleContentView } from "@/components/admin-panel/simple-content-view";
-import NewAuthorityDialog from "@/components/authorities/authority-new-dialog";
 import { AuthoritiesTable } from "@/components/authorities/authority-table";
 import { Heading } from "@/components/heading";
 import { Button } from "@/components/ui/button";
@@ -18,7 +18,7 @@ const breadcrumbItems = [
 ];
 
 const AuthoritiesPage = () => {
-  const [open, setOpen] = useState(false);
+  const router = useRouter();
   const [authorityPromise, setAuthorityPromise] = useState(getAuthorities);
 
   function onSaveAuthoritySuccess() {
@@ -29,15 +29,12 @@ const AuthoritiesPage = () => {
     <SimpleContentView title="Authorities" breadcrumbItems={breadcrumbItems}>
       <div className="flex flex-row justify-between">
         <Heading title="Authorities" description="Manage authorities" />
-        <Button onClick={() => setOpen(true)}>
+        <Button
+          onClick={() => router.push("/portal/settings/authorities/new/edit")}
+        >
           <Plus />
           New Authority
         </Button>
-        <NewAuthorityDialog
-          open={open}
-          setOpen={setOpen}
-          onSaveSuccess={onSaveAuthoritySuccess}
-        />
       </div>
       <Separator />
       <AuthoritiesTable

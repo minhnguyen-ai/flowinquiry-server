@@ -1,7 +1,7 @@
 import AccountForm from "@/components/accounts/account-form";
 import { SimpleContentView } from "@/components/admin-panel/simple-content-view";
 import { findAccountById } from "@/lib/actions/accounts.action";
-import { deobfuscateToNumber } from "@/lib/endecode";
+import { deobfuscateToNumber, obfuscate } from "@/lib/endecode";
 
 export default async function Page({
   params,
@@ -16,7 +16,15 @@ export default async function Page({
   const breadcrumbItems = [
     { title: "Dashboard", link: "/portal" },
     { title: "Accounts", link: "/portal/accounts" },
-    { title: `${account ? `Edit ${account.name}` : "Create"}`, link: "#" },
+    ...(account
+      ? [
+          {
+            title: `${account.name}`,
+            link: `/portal/accounts/${obfuscate(account.id)}`,
+          },
+          { title: "Edit", link: "#" },
+        ]
+      : [{ title: "Add", link: "#" }]),
   ];
 
   return (
