@@ -1,11 +1,70 @@
-import { Callout } from 'nextra/components'
+import {Callout, Tabs} from 'nextra/components'
 
 # Deployment
+
+## Build your own docker images
+
+You can build your own Docker images and deploy them anywhere, or use the pre-built Flexwork images available on [Docker Hub](https://hub.docker.com/u/theflexwork)
+
+<Tabs items={['Front-end', 'Back-end']}>
+    <Tabs.Tab>
+        To build and publish Docker images for the Flexwork front-end, use the Dockerfile in the root folder along with the `scripts/docker_deployment.sh` script.
+        Use the argument `--tag $version` if you want to customize the docker image version
+
+        ```bash
+        flexwork-frontend git:(main) scripts/docker_deployment.sh --tag 0.0.1
+        Building Docker image...
+        [+] Building 5.2s (22/22) FINISHED                                                                                                                                       docker:desktop-linux
+        => [internal] load build definition from Dockerfile                                                                                                                                     0.0s
+        => => transferring dockerfile: 2.35kB                                                                                                                                                   0.0s
+        => [internal] load metadata for docker.io/library/node:20-alpine                                                                                                                        0.9s
+        => [auth] library/node:pull token for registry-1.docker.io
+        ...
+        What's next:
+        View a summary of image vulnerabilities and recommendations → docker scout quickview
+        Tagging Docker image with '0.0.1' and 'latest'...
+        Logging into Docker repository...
+        Authenticating with existing credentials...
+        ...
+        latest: digest: sha256:94d85f12a3944c7dcbafc6c6851b0413c9e5c48dcb9c33bea54a88287130bd79 size: 2821
+        Docker image has been pushed successfully with tags '0.0.1' and 'latest'.
+        ```
+    </Tabs.Tab>
+    <Tabs.Tab>
+        Flexwork backend uses Jib to build and deploy Docker images to the Docker repository. To change the Docker image
+        version, edit the `projectVersion` attribute in the `gradle.properties` file.
+
+        Open the terminal and navigate to the root folder. Use the command `./gradlew :server:jibDockerBuild` to build the Docker image, or `./gradlew :server:jib` to build and deploy it.
+
+        ```bash
+        ➜  flexwork-server git:(main) ./gradlew :server:jibDockerBuild
+
+        > Task :server:jibDockerBuild
+
+        Containerizing application to Docker daemon as theflexwork/flexwork-server, theflexwork/flexwork-server, theflexwork/flexwork-server:0.0.1...
+        ...
+
+        Got output:
+
+        Container entrypoint set to [bash, -c, /entrypoint.sh]
+
+        Built image to Docker daemon as theflexwork/flexwork-server, theflexwork/flexwork-server, theflexwork/flexwork-server:0.0.1
+        Executing tasks:
+        [==============================] 100.0% complete
+
+
+        BUILD SUCCESSFUL in 4s
+
+        ```
+    </Tabs.Tab>
+</Tabs>
+
+## Multi-Platform Deployment
 
 Our dedicated [repository](https://github.com/theflexwork/flexwork-ops) provides all the resources needed for flexible deployment configurations. With both the frontend and backend packaged as
 Docker images, Flexwork is ready to run on any platform compatible with containerized solutions, such as Kubernetes, Docker Swarm, AWS, Azure, and more
 
-## Docker Compose
+### Docker Compose
 
 The Docker Compose example demonstrates how to quickly run Flexwork in a containerized environment, ideal for testing or local LAN use.
 For more details, explore the flexwork-docker folder in the [flexwork-ops]((https://github.com/theflexwork/flexwork-ops)) repository.
@@ -120,7 +179,7 @@ Open the browser, and access to the address https//localhost or https://local.fl
     * Username: user@theflexwork.io
     * Password: user
 
-### Local HTTPS
+#### Local HTTPS
 
 Caddy uses its local CA to issue certificates, which means that HTTP clients outside the container won’t automatically trust the TLS certificate served by Caddy.
 To resolve this, you may need to install Caddy's root CA certificate in your host machine’s trust store.
@@ -128,11 +187,11 @@ To resolve this, you may need to install Caddy's root CA certificate in your hos
 The Caddy root CA certificate can be found at flexwork-docker/caddy/certificate-authority/root.crt. This file is only generated when you run the Flexwork stack
 with Caddy included. For detailed steps, refer to the Caddy documentation: [Local HTTPS with Docker](https://caddyserver.com/docs/running#local-https-with-docker)
 
-## Docker Swarm
+### Docker Swarm
 TBD
 
-## Kubernetes
+### Kubernetes
 TBD
 
-## AWS
+### AWS
 TBD
