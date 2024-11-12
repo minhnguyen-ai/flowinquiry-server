@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
+import AddUserToAuthorityDialog from "@/components/authorities/authority-add-user-dialog";
 import { Heading } from "@/components/heading";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -35,6 +36,7 @@ import { UserType } from "@/types/users";
 export const AuthorityView: React.FC<ViewProps<AuthorityType>> = ({
   entity,
 }: ViewProps<AuthorityType>) => {
+  const [open, setOpen] = useState(false);
   const [users, setUsers] = useState<Array<UserType>>();
   const [authority, setAuthority] = useState<AuthorityType>(entity);
   const [resourcePermissions, setResourcePermissions] =
@@ -65,9 +67,14 @@ export const AuthorityView: React.FC<ViewProps<AuthorityType>> = ({
           description={authority.description ?? ""}
         />
         <div className="flex space-x-4">
-          <Button>
+          <Button onClick={() => setOpen(true)}>
             <Plus /> Add User
           </Button>
+          <AddUserToAuthorityDialog
+            open={open}
+            setOpen={setOpen}
+            authorityEntity={authority}
+          />
           <Button
             onClick={() =>
               router.push(

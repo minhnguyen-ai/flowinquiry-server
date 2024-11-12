@@ -37,3 +37,13 @@ export const batchSavePermissions = async (
     Array<AuthorityResourcePermissionType>
   >(`${BACKEND_API}/api/authority-permissions/batchSave`, permissions);
 };
+
+export const addUsersToAuthority = (
+  authorityName: string,
+  userIds: number[],
+) => {
+  return post(
+    `${BACKEND_API}/api/authorities/${authorityName}/add-users`,
+    userIds,
+  );
+};

@@ -26,6 +26,15 @@ export async function getUsersByAuthority(authority: string) {
   );
 }
 
+export async function findUsersNotInAuthority(
+  userTerm: string,
+  authorityName: string,
+) {
+  return get<Array<UserType>>(
+    `${BACKEND_API}/api/users/authorities/searchUsersNotInAuthority?userTerm=${userTerm}&&authorityName=${authorityName}`,
+  );
+}
+
 export const findUserById = async (userId: number) => {
   return get<UserType>(`${BACKEND_API}/api/users/${userId}`);
 };

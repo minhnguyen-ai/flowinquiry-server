@@ -41,7 +41,6 @@ type NewAuthorityFormProps = {
   authorityEntity?: AuthorityType | undefined;
 };
 
-// Define the schema with Zod
 const formSchema = z.object({
   authority: authoritySchema,
   permissions: z.array(authorityResourcePermissionSchema),
