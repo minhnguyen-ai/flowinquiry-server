@@ -1,8 +1,10 @@
 "use client";
 
 import { type Table } from "@tanstack/react-table";
+import { Download } from "lucide-react";
 
-import { ExportButton } from "@/components/ui/table/data-table-export-button";
+import { Button } from "@/components/ui/button";
+import { exportTableToCSV } from "@/lib/export";
 import { ContactType } from "@/types/contacts";
 
 interface ContactsTableToolbarActionsProps {
@@ -14,11 +16,20 @@ export function ContactsTableToolbarActions({
 }: ContactsTableToolbarActionsProps) {
   return (
     <div className="flex items-center gap-2">
-      <ExportButton
-        table={table}
-        filename="accounts"
-        excludeColumns={["select", "actions"]}
-      />
+      <Button
+        variant="outline"
+        size="sm"
+        onClick={() =>
+          exportTableToCSV(table, {
+            filename: "contacts",
+            excludeColumns: ["select", "actions"],
+          })
+        }
+        className="gap-2"
+      >
+        <Download className="size-4" aria-hidden="true" />
+        Export
+      </Button>
     </div>
   );
 }

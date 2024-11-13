@@ -1,10 +1,12 @@
 "use client";
 
 import { type Table } from "@tanstack/react-table";
+import { Download } from "lucide-react";
 
 import { AccountDeleteDialog } from "@/components/accounts/account-delete-dialog";
-import { ExportButton } from "@/components/ui/table/data-table-export-button";
+import { Button } from "@/components/ui/button";
 import { deleteAccounts } from "@/lib/actions/accounts.action";
+import { exportTableToCSV } from "@/lib/export";
 import { AccountType } from "@/types/accounts";
 
 interface AccountTableToolbarActionsProps {
@@ -26,11 +28,20 @@ export function AccountsTableToolbarActions({
           deleteEntitiesFn={deleteAccounts}
         />
       ) : null}
-      <ExportButton
-        table={table}
-        filename="accounts"
-        excludeColumns={["select", "actions"]}
-      />
+      <Button
+        variant="outline"
+        size="sm"
+        onClick={() =>
+          exportTableToCSV(table, {
+            filename: "accounts",
+            excludeColumns: ["select", "actions"],
+          })
+        }
+        className="gap-2"
+      >
+        <Download className="size-4" aria-hidden="true" />
+        Export
+      </Button>
     </div>
   );
 }

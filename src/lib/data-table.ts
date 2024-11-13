@@ -1,7 +1,7 @@
 import { type Column } from "@tanstack/react-table";
 
 import { dataTableConfig } from "@/config/data-table";
-import { ColumnType, FilterCondition, FilterOperator } from "@/types/table";
+import { ColumnType, Filter, FilterOperator } from "@/types/table";
 
 /**
  * Generate common pinning styles for a table column.
@@ -98,20 +98,20 @@ export function getFilterOperators(columnType: ColumnType) {
 }
 
 /**
- * Filters out invalid or empty filter conditions from an array of filters.
+ * Filters out invalid or empty filters from an array of filters.
  *
- * This function processes an array of filter conditions and returns a new array
+ * This function processes an array of filters and returns a new array
  * containing only the valid filters. A filter is considered valid if:
  * - It has an 'isEmpty' or 'isNotEmpty' operator, or
  * - Its value is not empty (for array values, at least one element must be present;
  *   for other types, the value must not be an empty string, null, or undefined)
  *
- * @param filters - An array of FilterCondition objects to be validated.
- * @returns A new array containing only the valid filter conditions.
+ * @param filters - An array of Filter objects to be validated.
+ * @returns A new array containing only the valid filters.
  */
 export function getValidFilters<TData>(
-  filters: FilterCondition<TData>[],
-): FilterCondition<TData>[] {
+  filters: Filter<TData>[],
+): Filter<TData>[] {
   return filters.filter(
     (filter) =>
       filter.operator === "isEmpty" ||

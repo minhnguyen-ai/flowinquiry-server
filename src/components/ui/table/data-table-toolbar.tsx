@@ -1,7 +1,7 @@
 "use client";
 
-import { Cross2Icon } from "@radix-ui/react-icons";
 import type { Table } from "@tanstack/react-table";
+import { X } from "lucide-react";
 import * as React from "react";
 
 import { Button } from "@/components/ui/button";
@@ -77,11 +77,11 @@ export function DataTableToolbar<TData>({
                       .getColumn(String(column.id))
                       ?.getFilterValue() as string) ?? ""
                   }
-                  onChange={(event) => {
+                  onChange={(event) =>
                     table
                       .getColumn(String(column.id))
-                      ?.setFilterValue(event.target.value);
-                  }}
+                      ?.setFilterValue(event.target.value)
+                  }
                   className="h-8 w-40 lg:w-64"
                 />
               ),
@@ -106,7 +106,7 @@ export function DataTableToolbar<TData>({
             onClick={() => table.resetColumnFilters()}
           >
             Reset
-            <Cross2Icon className="ml-2 size-4" aria-hidden="true" />
+            <X className="ml-2 size-4" aria-hidden="true" />
           </Button>
         )}
       </div>

@@ -47,11 +47,13 @@ export const accounts_columns_def: ColumnDef<AccountType>[] = [
       <DataTableColumnHeader column={column} title="Name" />
     ),
     cell: ({ row }) => (
-      <Button variant="link" className="px-0" asChild>
-        <Link href={`/portal/accounts/${obfuscate(row.original.id!)}`}>
-          {row.getValue("name")}
-        </Link>
-      </Button>
+      <div className="flex space-x-2">
+        <Button variant="link" className="px-0" asChild>
+          <Link href={`/portal/accounts/${obfuscate(row.original.id!)}`}>
+            {row.getValue("name")}
+          </Link>
+        </Button>
+      </div>
     ),
   },
   {
@@ -59,21 +61,27 @@ export const accounts_columns_def: ColumnDef<AccountType>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Type" />
     ),
-    cell: ({ row }) => <div>{row.getValue("type")}</div>,
+    cell: ({ row }) => (
+      <div className="flex items-center">{row.getValue("type")}</div>
+    ),
   },
   {
     accessorKey: "industry",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Industry" />
     ),
-    cell: ({ row }) => <div>{row.getValue("industry")}</div>,
+    cell: ({ row }) => (
+      <div className="flex items-center">{row.getValue("industry")}</div>
+    ),
   },
   {
     accessorKey: "status",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Status" />
     ),
-    cell: ({ row }) => <div>{row.getValue("status")}</div>,
+    cell: ({ row }) => (
+      <div className="flex items-center">{row.getValue("status")}</div>
+    ),
   },
   {
     accessorKey: "createdAt",
@@ -99,5 +107,6 @@ export const accounts_columns_def: ColumnDef<AccountType>[] = [
   {
     id: "actions",
     cell: ({ row }) => <AccountTableRowActions row={row} />,
+    size: 40,
   },
 ];
