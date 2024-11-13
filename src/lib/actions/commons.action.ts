@@ -37,12 +37,10 @@ export const fetchData = async <TData, TResponse>(
     ...(data && { body: JSON.stringify(data) }),
   });
   if (response.ok) {
-    try {
-      // Try to parse the JSON response
+    const contentType = response.headers.get("content-type");
+    if (contentType && contentType.includes("application/json")) {
       return (await response.json()) as TResponse;
-    } catch (error) {
-      // If parsing fails, log a warning and return undefined or a fallback
-      console.warn("No JSON response body or failed to parse:", error);
+    } else {
       return undefined as unknown as TResponse;
     }
   } else {

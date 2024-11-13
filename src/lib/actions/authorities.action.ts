@@ -1,6 +1,6 @@
 "use server";
 
-import { get, post } from "@/lib/actions/commons.action";
+import { deleteExec, get, post } from "@/lib/actions/commons.action";
 import { BACKEND_API } from "@/lib/constants";
 import {
   AuthorityResourcePermissionType,
@@ -45,5 +45,14 @@ export const addUsersToAuthority = (
   return post(
     `${BACKEND_API}/api/authorities/${authorityName}/add-users`,
     userIds,
+  );
+};
+
+export const deleteUserFromAuthority = async (
+  authorityName: string,
+  userId: number,
+) => {
+  return deleteExec(
+    `${BACKEND_API}/api/authorities/${authorityName}/${userId}`,
   );
 };

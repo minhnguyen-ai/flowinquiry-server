@@ -24,7 +24,10 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import DefaultUserLogo from "@/components/users/user-logo";
-import { findPermissionsByAuthorityName } from "@/lib/actions/authorities.action";
+import {
+  deleteUserFromAuthority,
+  findPermissionsByAuthorityName,
+} from "@/lib/actions/authorities.action";
 import { getUsersByAuthority } from "@/lib/actions/users.action";
 import { obfuscate } from "@/lib/endecode";
 import {
@@ -43,21 +46,30 @@ export const AuthorityView: React.FC<ViewProps<AuthorityType>> = ({
     useState<Array<AuthorityResourcePermissionType>>();
 
   const router = useRouter();
-  useEffect(() => {
-    async function fetchUsers() {
-      const userData = await getUsersByAuthority(authority.name);
-      setUsers(userData);
-    }
 
+  async function fetchUsers() {
+    const userData = await getUsersByAuthority(authority.name);
+    setUsers(userData);
+  }
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  useEffect(() => {
     async function fetchResourcePermissions() {
       const resourcePermissionsResult = await findPermissionsByAuthorityName(
         authority.name,
       );
       setResourcePermissions(resourcePermissionsResult);
     }
-    fetchUsers();
     fetchResourcePermissions();
   }, []);
+
+  async function removeUserOutAuthority(user: UserType) {
+    await deleteUserFromAuthority(authority.name, user.id!);
+    await fetchUsers();
+  }
 
   return (
     <div className="grid grid-cols-1 gap-4 py-4">
@@ -74,6 +86,7 @@ export const AuthorityView: React.FC<ViewProps<AuthorityType>> = ({
             open={open}
             setOpen={setOpen}
             authorityEntity={authority}
+            onSaveSuccess={() => fetchUsers()}
           />
           <Button
             onClick={() =>
@@ -127,7 +140,10 @@ export const AuthorityView: React.FC<ViewProps<AuthorityType>> = ({
                   <TooltipProvider>
                     <Tooltip>
                       <TooltipTrigger>
-                        <DropdownMenuItem className="cursor-pointer">
+                        <DropdownMenuItem
+                          className="cursor-pointer"
+                          onClick={() => removeUserOutAuthority(user)}
+                        >
                           <Trash /> Remove user
                         </DropdownMenuItem>
                       </TooltipTrigger>
