@@ -22,7 +22,7 @@ type paramsProps = {
   };
 };
 
-const AccountsPage = ({ searchParams }: paramsProps) => {
+const Page = ({ searchParams }: paramsProps) => {
   const search = accountSearchParamsSchema.parse(searchParams);
   const accountPromise = searchAccounts(search);
 
@@ -47,4 +47,4 @@ const AccountsPage = ({ searchParams }: paramsProps) => {
   );
 };
 
-export default AccountsPage;
+export default Page;
