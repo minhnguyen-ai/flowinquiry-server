@@ -30,6 +30,7 @@ type NewAuthorityDialogProps = {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   authorityEntity: AuthorityType;
+  onSaveSuccess: () => void;
 };
 
 const optionSchema = z.object({
@@ -46,6 +47,7 @@ const AddUserToAuthorityDialog: React.FC<NewAuthorityDialogProps> = ({
   open,
   setOpen,
   authorityEntity,
+  onSaveSuccess,
 }) => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -55,6 +57,8 @@ const AddUserToAuthorityDialog: React.FC<NewAuthorityDialogProps> = ({
     if (data && data.users) {
       const userIds = data.users.map((user) => Number(user.value));
       await addUsersToAuthority(authorityEntity.name, userIds);
+      setOpen(false);
+      onSaveSuccess();
     }
   };
 
