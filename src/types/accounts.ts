@@ -9,10 +9,13 @@ export const accountSchema = z.object({
   addressLine1: z.string().nullish(),
   addressLine2: z.string().nullish(),
   city: z.string().nullish(),
-  status: z.string().min(1),
+  state: z.string().nullish(),
   postalCode: z.string().nullish(),
   country: z.string().nullish(),
   phoneNumber: z.string().nullish(),
+  status: z.string().min(1),
+  parentAccountId: z.number().optional(),
+  parentAccountName: z.string().optional(),
   website: z
     .union([
       z.string().url(), // Full URL with scheme
