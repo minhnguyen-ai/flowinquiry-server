@@ -1,3 +1,5 @@
+import { UserType } from "@/types/users";
+
 import { BACKEND_API } from "./constants";
 
 export default async function apiAuthSignIn(
@@ -17,7 +19,7 @@ export default async function apiAuthSignIn(
       bearerToken && bearerToken.slice(0, 7) === "Bearer "
         ? bearerToken.slice(7, bearerToken.length)
         : "";
-    const remoteUser = await response.json();
+    const remoteUser = (await response.json()) as UserType;
     return { ...remoteUser, accessToken: jwt };
   } else {
     throw new Error("Can not login " + response.status);
