@@ -84,6 +84,27 @@ export const accounts_columns_def: ColumnDef<AccountType>[] = [
     ),
   },
   {
+    accessorKey: "parentAccountName",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Parent" />
+    ),
+    cell: ({ row }) => (
+      <div className="flex space-x-2">
+        {row.original.parentAccountId ? (
+          <Button variant="link" className="px-0" asChild>
+            <Link
+              href={`/portal/accounts/${obfuscate(row.original.parentAccountId)}`}
+            >
+              {row.getValue("parentAccountName")}
+            </Link>
+          </Button>
+        ) : (
+          <div></div>
+        )}
+      </div>
+    ),
+  },
+  {
     accessorKey: "createdAt",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Created" />

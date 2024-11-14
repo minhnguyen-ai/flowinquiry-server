@@ -93,7 +93,10 @@ export const AccountView: React.FC<ViewProps<AccountType>> = ({
         <CardContent>
           <div className="grid grid-cols-1 px-4 py-4 gap-4 md:grid-cols-2">
             <div>
-              Type: <Badge variant="outline">{account.type}</Badge>
+              Type:{" "}
+              <Badge variant="outline" className="bg-amber-300">
+                {account.type}
+              </Badge>
             </div>
             <div>
               Industry:{" "}
@@ -101,10 +104,33 @@ export const AccountView: React.FC<ViewProps<AccountType>> = ({
                 {account.industry}
               </Badge>
             </div>
-            <div>Address Line: {account.addressLine1}</div>
+            <div>
+              Address Line: {account.addressLine1}
+              {account.city ? `, ${account.city}` : ""}
+              {account.state ? `, ${account.state}` : ""}
+              {account.postalCode ? `, ${account.postalCode}` : ""}
+              {account.country ? `, ${account.country}` : ""}
+            </div>
             <div>Phone number: {account.phoneNumber}</div>
             <div>
-              Status: <Badge variant="outline">{account.status}</Badge>
+              Status:{" "}
+              <Badge variant="outline" className="bg-amber-300">
+                {account.status}
+              </Badge>
+            </div>
+            <div>
+              Parent Account:{" "}
+              {account.parentAccountId ? (
+                <Button variant="link" className="px-0">
+                  <Link
+                    href={`/portal/accounts/${obfuscate(account.parentAccountId)}`}
+                  >
+                    {account.parentAccountName}
+                  </Link>
+                </Button>
+              ) : (
+                ""
+              )}
             </div>
           </div>
         </CardContent>
