@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/tooltip";
 import { getMenuList } from "@/lib/menu-list";
 import { cn } from "@/lib/utils";
+import { usePermissions } from "@/providers/permissions-provider";
 
 interface MenuProps {
   isOpen: boolean | undefined;
@@ -23,7 +24,9 @@ interface MenuProps {
 
 export function Menu({ isOpen }: MenuProps) {
   const pathname = usePathname();
-  const menuList = getMenuList(pathname);
+  const permissions = usePermissions()?.permissions;
+
+  const menuList = getMenuList(pathname, permissions);
 
   return (
     <ScrollArea className="[&>div>div[style]]:!block">

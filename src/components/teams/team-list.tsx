@@ -26,9 +26,11 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useDebouncedCallback } from "@/hooks/use-debounced-callback";
+import { usePagePermission } from "@/hooks/use-page-permission";
 import { deleteTeams, searchTeams } from "@/lib/actions/teams.action";
 import { obfuscate } from "@/lib/endecode";
 import { cn } from "@/lib/utils";
+import { PermissionUtils } from "@/types/resources";
 import { TeamType } from "@/types/teams";
 
 export const TeamList = () => {
@@ -48,6 +50,8 @@ export const TeamList = () => {
   const searchParams = useSearchParams();
   const { replace } = useRouter();
   const pathname = usePathname();
+
+  const permissionLevel = usePagePermission();
 
   const fetchData = async () => {
     setLoading(true);
@@ -111,12 +115,14 @@ export const TeamList = () => {
             }}
             defaultValue={searchParams.get("name")?.toString()}
           />
-          <Link
-            href={"/portal/teams/new/edit"}
-            className={cn(buttonVariants({ variant: "default" }))}
-          >
-            <Plus className="mr-2 h-4 w-4" /> New Team
-          </Link>
+          {PermissionUtils.canWrite(permissionLevel) && (
+            <Link
+              href={"/portal/teams/new/edit"}
+              className={cn(buttonVariants({ variant: "default" }))}
+            >
+              <Plus className="mr-2 h-4 w-4" /> New Team
+            </Link>
+          )}
         </div>
       </div>
       <Separator />
@@ -156,28 +162,32 @@ export const TeamList = () => {
               </Button>
               <div>{team.description}</div>
             </div>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Ellipsis className="cursor-pointer absolute top-2 right-2 text-gray-400" />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-[14rem]">
-                <DropdownMenuItem
-                  className="cursor-pointer"
-                  onClick={() =>
-                    router.push(`/portal/teams/${obfuscate(team.id)}/edit`)
-                  }
-                >
-                  <Pencil />
-                  Edit
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  className="cursor-pointer"
-                  onClick={() => showDeleteTeamConfirmationDialog(team)}
-                >
-                  <Trash /> Delete
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            {PermissionUtils.canWrite(permissionLevel) && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Ellipsis className="cursor-pointer absolute top-2 right-2 text-gray-400" />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-[14rem]">
+                  <DropdownMenuItem
+                    className="cursor-pointer"
+                    onClick={() =>
+                      router.push(`/portal/teams/${obfuscate(team.id)}/edit`)
+                    }
+                  >
+                    <Pencil />
+                    Edit
+                  </DropdownMenuItem>
+                  {PermissionUtils.canAccess(permissionLevel) && (
+                    <DropdownMenuItem
+                      className="cursor-pointer"
+                      onClick={() => showDeleteTeamConfirmationDialog(team)}
+                    >
+                      <Trash /> Delete
+                    </DropdownMenuItem>
+                  )}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
           </div>
         ))}
       </div>

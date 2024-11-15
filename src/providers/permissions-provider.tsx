@@ -10,10 +10,11 @@ import React, {
 } from "react";
 
 import { apiClient } from "@/lib/api-client";
+import { PermissionLevel, ResourceId } from "@/types/resources";
 
-type Permission = {
-  resourceName: string;
-  permission: string;
+export type Permission = {
+  resourceName: ResourceId;
+  permission: PermissionLevel;
 };
 
 // Define the context type
@@ -51,9 +52,8 @@ const fetchPermissions = async (
     "GET",
     undefined,
     authToken,
-  ); // Replace with your API endpoint
-  const data = await response.json();
-  return data.permissions;
+  );
+  return (await response.json()) as Array<Permission>;
 };
 
 // PermissionsProvider component
@@ -64,14 +64,16 @@ export const PermissionsProvider: React.FC<PermissionsProviderProps> = ({
   const [permissions, setPermissions] = useState<Permission[]>([]);
 
   useEffect(() => {
-    // Fetch permissions only if the user is authenticated
-    console.log("Permission " + status + " " + session?.user?.accessToken);
+    // Fetch permissions only if the user is authenticated and session data is available
     if (status === "authenticated" && session) {
       fetchPermissions(Number(session?.user?.id), session?.user?.accessToken!)
         .then(setPermissions)
         .catch(console.error);
     }
   }, [status, session]);
+
+  // Render null until the session is fully loaded to avoid potential issues
+  if (status === "loading") return null;
 
   return (
     <PermissionsContext.Provider value={{ permissions, setPermissions }}>

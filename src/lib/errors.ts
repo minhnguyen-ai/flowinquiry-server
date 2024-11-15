@@ -15,7 +15,10 @@ export class HttpError extends Error {
 }
 
 // Utility method to handle HTTP errors
-export const handleError = async (response: Response): Promise<void> => {
+export const handleError = async (
+  response: Response,
+  url: string,
+): Promise<void> => {
   let errorMessage = undefined;
   try {
     // Check if there's a body to parse based on Content-Length or status
@@ -34,17 +37,23 @@ export const handleError = async (response: Response): Promise<void> => {
     case HttpError.UNAUTHORIZED:
       throw new HttpError(
         HttpError.UNAUTHORIZED,
-        errorMessage || "Unauthorized",
+        `Error at ${url}: ${errorMessage || "Unauthorized"}`,
       );
     case HttpError.BAD_REQUEST:
-      throw new HttpError(HttpError.BAD_REQUEST, errorMessage || "Bad request");
+      throw new HttpError(
+        HttpError.BAD_REQUEST,
+        `Error at ${url}: ${errorMessage || "Bag request"}`,
+      );
 
     case HttpError.NOT_FOUND:
-      throw new HttpError(HttpError.NOT_FOUND, errorMessage || "Not Found");
+      throw new HttpError(
+        HttpError.NOT_FOUND,
+        `Error at ${url}: ${errorMessage || "Not Found"}`,
+      );
     case HttpError.INTERNAL_SERVER_ERROR:
       throw new HttpError(
         HttpError.INTERNAL_SERVER_ERROR,
-        errorMessage || "Internal Server Error",
+        `Error at ${url}: ${errorMessage || "Internal Server Error"}`,
       );
     default:
       throw new HttpError(

@@ -24,6 +24,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import DefaultUserLogo from "@/components/users/user-logo";
+import { usePagePermission } from "@/hooks/use-page-permission";
 import {
   deleteUserFromAuthority,
   findPermissionsByAuthorityName,
@@ -34,11 +35,13 @@ import {
   AuthorityResourcePermissionType,
   AuthorityType,
 } from "@/types/authorities";
+import { PermissionUtils } from "@/types/resources";
 import { UserType } from "@/types/users";
 
 export const AuthorityView: React.FC<ViewProps<AuthorityType>> = ({
   entity,
 }: ViewProps<AuthorityType>) => {
+  const permissionLevel = usePagePermission();
   const [open, setOpen] = useState(false);
   const [users, setUsers] = useState<Array<UserType>>();
   const [authority, setAuthority] = useState<AuthorityType>(entity);
@@ -78,26 +81,28 @@ export const AuthorityView: React.FC<ViewProps<AuthorityType>> = ({
           title={authority.descriptiveName}
           description={authority.description ?? ""}
         />
-        <div className="flex space-x-4">
-          <Button onClick={() => setOpen(true)}>
-            <Plus /> Add User
-          </Button>
-          <AddUserToAuthorityDialog
-            open={open}
-            setOpen={setOpen}
-            authorityEntity={authority}
-            onSaveSuccess={() => fetchUsers()}
-          />
-          <Button
-            onClick={() =>
-              router.push(
-                `/portal/settings/authorities/${obfuscate(authority.name)}/edit`,
-              )
-            }
-          >
-            <Edit /> Edit
-          </Button>
-        </div>
+        {PermissionUtils.canWrite(permissionLevel) && (
+          <div className="flex space-x-4">
+            <Button onClick={() => setOpen(true)}>
+              <Plus /> Add User
+            </Button>
+            <AddUserToAuthorityDialog
+              open={open}
+              setOpen={setOpen}
+              authorityEntity={authority}
+              onSaveSuccess={() => fetchUsers()}
+            />
+            <Button
+              onClick={() =>
+                router.push(
+                  `/portal/settings/authorities/${obfuscate(authority.name)}/edit`,
+                )
+              }
+            >
+              <Edit /> Edit
+            </Button>
+          </div>
+        )}
       </div>
       <div className="flex flex-col md:flex-row md:space-x-4 items-start">
         <div className="md:flex-1 flex flex-row flex-wrap gap-4 w-full">
@@ -132,31 +137,33 @@ export const AuthorityView: React.FC<ViewProps<AuthorityType>> = ({
                   <Link href={`mailto:${user.email}`}>{user.email}</Link>
                 </div>
               </div>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Ellipsis className="cursor-pointer absolute top-2 right-2 text-gray-400" />
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-[14rem] w-full">
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger>
-                        <DropdownMenuItem
-                          className="cursor-pointer"
-                          onClick={() => removeUserOutAuthority(user)}
-                        >
-                          <Trash /> Remove user
-                        </DropdownMenuItem>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>
-                          This action will revoke the selected user’s access and
-                          permissions associated with this authority
-                        </p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              {PermissionUtils.canWrite(permissionLevel) && (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Ellipsis className="cursor-pointer absolute top-2 right-2 text-gray-400" />
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-[14rem] w-full">
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger>
+                          <DropdownMenuItem
+                            className="cursor-pointer"
+                            onClick={() => removeUserOutAuthority(user)}
+                          >
+                            <Trash /> Remove user
+                          </DropdownMenuItem>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>
+                            This action will revoke the selected user’s access
+                            and permissions associated with this authority
+                          </p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )}
             </div>
           ))}
         </div>

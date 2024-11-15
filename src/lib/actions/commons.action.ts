@@ -48,7 +48,7 @@ export const fetchData = async <TData, TResponse>(
     if (response.status === 401 && isAuthorized) {
       redirect("/login");
     }
-    await handleError(response);
+    await handleError(response, url);
 
     // Add unreachable return statement for TypeScript type safety
     return Promise.reject("Unreachable code: handleError should throw");
