@@ -37,8 +37,8 @@ const PaginationExt: React.FC<PaginationProps> = ({
     // Show the first page
     if (currentPage > 3) {
       pages.push(
-        <PaginationItem>
-          <PaginationLink href="#" key={1} onClick={() => handlePageClick(1)}>
+        <PaginationItem key={1}>
+          <PaginationLink href="#" onClick={() => handlePageClick(1)}>
             1
           </PaginationLink>
         </PaginationItem>,
@@ -56,10 +56,9 @@ const PaginationExt: React.FC<PaginationProps> = ({
       i++
     ) {
       pages.push(
-        <PaginationItem>
+        <PaginationItem key={i}>
           <PaginationLink
             href="#"
-            key={i}
             onClick={() => handlePageClick(i)}
             isActive={i === currentPage}
           >
@@ -75,12 +74,8 @@ const PaginationExt: React.FC<PaginationProps> = ({
         pages.push(<span key="right-ellipsis">...</span>); // Right ellipsis
       }
       pages.push(
-        <PaginationItem>
-          <PaginationLink
-            href="#"
-            key={totalPages}
-            onClick={() => handlePageClick(totalPages)}
-          >
+        <PaginationItem key={totalPages}>
+          <PaginationLink href="#" onClick={() => handlePageClick(totalPages)}>
             {totalPages}
           </PaginationLink>
         </PaginationItem>,

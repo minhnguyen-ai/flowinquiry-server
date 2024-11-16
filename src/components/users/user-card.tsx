@@ -16,7 +16,10 @@ interface UserCardProps {
 }
 
 const UserCard: React.FC<UserCardProps> = ({ user }) => (
-  <div className="w-[28rem] flex flex-row gap-4 border border-gray-200 px-4 py-4 rounded-2xl">
+  <div
+    key={user.id}
+    className="w-[28rem] flex flex-row gap-4 border border-gray-200 px-4 py-4 rounded-2xl"
+  >
     <div>
       <Avatar className="size-24 cursor-pointer ">
         <AvatarImage

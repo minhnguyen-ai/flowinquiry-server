@@ -7,6 +7,7 @@ import React, { useEffect, useState } from "react";
 
 import { ContactsTable } from "@/components/contacts/contact-table";
 import { Badge } from "@/components/ui/badge";
+import { usePagePermission } from "@/hooks/use-page-permission";
 import {
   findNextAccount,
   findPreviousAccount,
@@ -18,6 +19,7 @@ import { cn } from "@/lib/utils";
 import { AccountType } from "@/types/accounts";
 import { PageableResult } from "@/types/commons";
 import { ContactType } from "@/types/contacts";
+import { PermissionUtils } from "@/types/resources";
 
 import { Button, buttonVariants } from "../ui/button";
 import { Card, CardContent } from "../ui/card";
@@ -26,6 +28,7 @@ import { ViewProps } from "../ui/ext-form";
 export const AccountView: React.FC<ViewProps<AccountType>> = ({
   entity,
 }: ViewProps<AccountType>) => {
+  const permissionLevel = usePagePermission();
   const router = useRouter();
   const pathname = usePathname();
   const [account, setAccount] = useState<AccountType>(entity);
@@ -73,13 +76,16 @@ export const AccountView: React.FC<ViewProps<AccountType>> = ({
           <ChevronLeft className="text-gray-400" />
         </Button>
         <div className="text-2xl w-full">{account.name}</div>
-        <Button
-          onClick={() =>
-            router.push(`/portal/accounts/${obfuscate(account.id)}/edit`)
-          }
-        >
-          <Edit /> Edit
-        </Button>
+        {PermissionUtils.canWrite(permissionLevel) && (
+          <Button
+            onClick={() =>
+              router.push(`/portal/accounts/${obfuscate(account.id)}/edit`)
+            }
+          >
+            <Edit /> Edit
+          </Button>
+        )}
+
         <Button
           variant="outline"
           className="h-6 w-6"

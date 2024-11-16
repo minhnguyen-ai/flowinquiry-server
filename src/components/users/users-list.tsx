@@ -12,8 +12,10 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import UserCard from "@/components/users/user-card";
 import { useDebouncedCallback } from "@/hooks/use-debounced-callback";
+import { usePagePermission } from "@/hooks/use-page-permission";
 import { searchUsers } from "@/lib/actions/users.action";
 import { cn } from "@/lib/utils";
+import { PermissionUtils } from "@/types/resources";
 import { UserType } from "@/types/users";
 
 export const UserList = () => {
@@ -25,6 +27,7 @@ export const UserList = () => {
   const [userSearchTerm, setUserSearchTerm] = useState<string | undefined>(
     undefined,
   );
+  const permissionLevel = usePagePermission();
 
   const searchParams = useSearchParams();
   const { replace } = useRouter();
@@ -87,12 +90,14 @@ export const UserList = () => {
             }}
             defaultValue={searchParams.get("name")?.toString()}
           />
-          <Link
-            href={"/portal/users/new/edit"}
-            className={cn(buttonVariants({ variant: "default" }))}
-          >
-            <Plus className="mr-2 h-4 w-4" /> Invite user
-          </Link>
+          {PermissionUtils.canWrite(permissionLevel) && (
+            <Link
+              href={"/portal/users/new/edit"}
+              className={cn(buttonVariants({ variant: "default" }))}
+            >
+              <Plus className="mr-2 h-4 w-4" /> Invite user
+            </Link>
+          )}
         </div>
       </div>
       <Separator />

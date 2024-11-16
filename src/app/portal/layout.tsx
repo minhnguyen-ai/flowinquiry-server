@@ -3,6 +3,7 @@ import { SessionProvider } from "next-auth/react";
 
 import { auth } from "@/auth";
 import AdminPanelLayout from "@/components/admin-panel/admin-panel-layout";
+import { PermissionsProvider } from "@/providers/permissions-provider";
 
 const MainLayout = async ({ children }: { children: React.ReactNode }) => {
   const session = await auth();
@@ -10,7 +11,9 @@ const MainLayout = async ({ children }: { children: React.ReactNode }) => {
 
   return (
     <SessionProvider session={session}>
-      <AdminPanelLayout>{children}</AdminPanelLayout>
+      <PermissionsProvider>
+        <AdminPanelLayout>{children}</AdminPanelLayout>
+      </PermissionsProvider>
     </SessionProvider>
   );
 };

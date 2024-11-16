@@ -76,7 +76,7 @@ const Page = async ({ params }: { params: { userId: string } }) => {
             <div className="text-sm">Member of Teams</div>
             <div className="flex flex-row flex-wrap gap-4">
               {teams.map((team) => (
-                <Badge>
+                <Badge key={team.id}>
                   <Link href={`/portal/teams/${obfuscate(team.id)}`}>
                     {team.name}
                   </Link>

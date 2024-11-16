@@ -1,6 +1,6 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -29,14 +29,52 @@ const formSchema = z.object({
 type FormData = z.infer<typeof formSchema>;
 
 const ForgotPasswordPage = () => {
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [submittedEmail, setSubmittedEmail] = useState<string | null>(null);
+
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
   });
 
-  const handleSubmit = (data: FormData) => {
-    console.log("Email", data);
-    forgotPassword(data.email);
+  const handleSubmit = async (data: FormData) => {
+    await forgotPassword(data.email);
+    setSubmittedEmail(data.email); // Save the submitted email for display
+    setIsSubmitted(true); // Switch to success message view
   };
+
+  if (isSubmitted) {
+    return (
+      <div
+        className="flex justify-center items-start min-h-screen"
+        style={{ paddingTop: "100px" }}
+      >
+        <Card className="w-[350px]">
+          <CardHeader>
+            <CardTitle>Email Sent</CardTitle>
+            <CardDescription>
+              A password reset link has been sent to:
+              <strong> {submittedEmail}</strong>
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p className="text-sm text-gray-500 mb-4">
+              Please check your inbox and follow the instructions in the email
+              to reset your password. If you don't see it, check your spam or
+              junk folder.
+            </p>
+            <div className="flex justify-between">
+              <a href="/login" className="hover:underline text-primary text-sm">
+                Back to Log In
+              </a>
+              <Button onClick={() => setIsSubmitted(false)} variant="secondary">
+                Resend
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div

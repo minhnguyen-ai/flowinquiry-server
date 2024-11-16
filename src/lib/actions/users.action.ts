@@ -56,9 +56,8 @@ export const passwordReset = async (key: string, password: string) => {
 };
 
 export const forgotPassword = async (email: string) => {
-  await post(
-    `${BACKEND_API}/api/auth/forgot-password`,
-    { email: email },
+  await get(
+    `${BACKEND_API}/api/account/reset-password/init?email=${email}`,
     false,
   );
 };
