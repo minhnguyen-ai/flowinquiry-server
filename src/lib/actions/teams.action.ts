@@ -12,7 +12,7 @@ import { BACKEND_API } from "@/lib/constants";
 import { PageableResult } from "@/types/commons";
 import { Filter, Pagination } from "@/types/query";
 import { TeamType } from "@/types/teams";
-import { UserType } from "@/types/users";
+import { UserType, UserWithTeamRoleDTO } from "@/types/users";
 
 export const findTeamById = async (teamId: number) => {
   return get<TeamType>(`${BACKEND_API}/api/teams/${teamId}`);
@@ -35,7 +35,7 @@ export async function deleteTeams(ids: number[]) {
 }
 
 export async function findMembersByTeamId(teamId: number) {
-  return get<PageableResult<UserType>>(
+  return get<PageableResult<UserWithTeamRoleDTO>>(
     `${BACKEND_API}/api/teams/${teamId}/members`,
   );
 }
@@ -50,10 +50,23 @@ export async function findUsersNotInTeam(userTerm: string, teamId: number) {
   );
 }
 
-export const addUsersToTeam = (teamId: number, userIds: number[]) => {
-  return post(`${BACKEND_API}/api/teams/${teamId}/add-users`, userIds);
+export const addUsersToTeam = (
+  teamId: number,
+  userIds: number[],
+  teamRole: string,
+) => {
+  return post(`${BACKEND_API}/api/teams/${teamId}/add-users`, {
+    userIds: userIds,
+    role: teamRole,
+  });
 };
 
 export const deleteUserFromTeam = async (teamId: number, userId: number) => {
   return deleteExec(`${BACKEND_API}/api/teams/${teamId}/users/${userId}`);
+};
+
+export const getUserRoleInTeam = async (userId: number, teamId: number) => {
+  return get<Record<string, string>>(
+    `${BACKEND_API}/api/teams/${teamId}/users/${userId}/role`,
+  );
 };

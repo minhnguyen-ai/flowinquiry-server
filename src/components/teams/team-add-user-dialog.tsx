@@ -5,6 +5,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
+import TeamRoleSelectField from "@/components/teams/team-role-select";
 import {
   Dialog,
   DialogContent,
@@ -40,6 +41,7 @@ const optionSchema = z.object({
 
 const FormSchema = z.object({
   users: z.array(optionSchema).min(1),
+  role: z.string(),
 });
 
 const AddUserToTeamDialog: React.FC<AddUserToTeamDialogProps> = ({
@@ -55,10 +57,7 @@ const AddUserToTeamDialog: React.FC<AddUserToTeamDialogProps> = ({
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     if (data && data.users) {
       const userIds = data.users.map((user) => Number(user.value));
-      console.log(
-        `Save user to team ${JSON.stringify(teamEntity.id)} ${JSON.stringify(userIds)}}`,
-      );
-      await addUsersToTeam(teamEntity.id!, userIds);
+      await addUsersToTeam(teamEntity.id!, userIds, data.role);
       setOpen(false);
       onSaveSuccess();
     }
@@ -108,6 +107,7 @@ const AddUserToTeamDialog: React.FC<AddUserToTeamDialogProps> = ({
                 </FormItem>
               )}
             />
+            <TeamRoleSelectField />
             <SubmitButton label="Save" labelWhileLoading="Saving ..." />
           </form>
         </Form>
