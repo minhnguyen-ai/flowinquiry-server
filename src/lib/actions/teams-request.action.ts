@@ -1,7 +1,10 @@
 "use server";
 
-import { post } from "@/lib/actions/commons.action";
+import { unstable_noStore as noStore } from "next/dist/server/web/spec-extension/unstable-no-store";
+
+import { doAdvanceSearch, post } from "@/lib/actions/commons.action";
 import { BACKEND_API } from "@/lib/constants";
+import { Filter, Pagination } from "@/types/query";
 import { TeamRequestType } from "@/types/teams";
 
 export const createTeamRequest = async (teamRequest: TeamRequestType) => {
@@ -10,3 +13,15 @@ export const createTeamRequest = async (teamRequest: TeamRequestType) => {
     teamRequest,
   );
 };
+
+export async function searchTeamRequests(
+  filters: Filter[] = [],
+  pagination: Pagination,
+) {
+  noStore();
+  return doAdvanceSearch<TeamRequestType>(
+    `${BACKEND_API}/api/team-requests/search`,
+    filters,
+    pagination,
+  );
+}
