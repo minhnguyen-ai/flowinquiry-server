@@ -3,6 +3,7 @@
 import { Check, ChevronsUpDown } from "lucide-react";
 import React, { useEffect, useState } from "react";
 
+import { UserAvatar } from "@/components/shared/avatar-display";
 import { Button } from "@/components/ui/button";
 import {
   Command,
@@ -35,7 +36,12 @@ const TeamUserSelectField = ({
   fieldName,
   label,
   teamId,
-}: ExtInputProps & UiAttributes & { teamId: number }) => {
+  onUserSelect,
+}: ExtInputProps &
+  UiAttributes & {
+    teamId: number;
+    onUserSelect?: (user: UserWithTeamRoleDTO) => void;
+  }) => {
   const [users, setUsers] = useState<UserWithTeamRoleDTO[]>([]);
 
   useEffect(() => {
@@ -68,9 +74,14 @@ const TeamUserSelectField = ({
                     const selectedUser = users.find(
                       (user) => user.id === field.value,
                     );
-                    return selectedUser
-                      ? `${selectedUser.firstName} ${selectedUser.lastName}`
-                      : "Select user";
+                    return selectedUser ? (
+                      <div className="flex items-center gap-2">
+                        <UserAvatar imageUrl={selectedUser.imageUrl} />
+                        <span>{`${selectedUser.firstName} ${selectedUser.lastName}`}</span>
+                      </div>
+                    ) : (
+                      "Select user"
+                    );
                   })()}
                   <ChevronsUpDown className="opacity-50" />
                 </Button>
@@ -88,8 +99,13 @@ const TeamUserSelectField = ({
                         key={user.id}
                         onSelect={() => {
                           form.setValue(fieldName, user.id);
+                          if (onUserSelect) {
+                            onUserSelect(user);
+                          }
                         }}
+                        className="gap-2"
                       >
+                        <UserAvatar imageUrl={user.imageUrl} />
                         {user.firstName} {user.lastName} ({user.teamRole})
                         <Check
                           className={cn(
