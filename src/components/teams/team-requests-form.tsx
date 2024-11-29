@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import { Heading } from "@/components/heading";
 import RichTextEditor from "@/components/shared/rich-text-editor";
 import { TeamRequestPrioritySelect } from "@/components/teams/team-requests-priority-select";
+import TicketChannelSelectField from "@/components/teams/team-ticket-channel-select";
 import TeamUserSelectField from "@/components/teams/team-users-select";
 import { Button } from "@/components/ui/button";
 import {
@@ -31,7 +32,7 @@ import {
   TeamRequestDTO,
   TeamRequestDTOSchema,
   TeamRequestPriority,
-} from "@/types/teams";
+} from "@/types/team-requests";
 
 export const TeamRequestForm = ({
   initialData: teamRequest,
@@ -137,6 +138,8 @@ export const TeamRequestForm = ({
             label="Actual Completion Date"
             placeholder="Select a date"
           />
+
+          <TicketChannelSelectField form={form} />
 
           <div className="col-span-1 sm:col-span-2 flex flex-row gap-4">
             <SubmitButton

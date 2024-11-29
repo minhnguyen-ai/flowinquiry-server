@@ -1,98 +1,77 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import {
-  CartesianGrid,
-  Legend,
-  Line,
-  LineChart,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
 
+import PaginationExt from "@/components/shared/pagination-ext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getActivityLogs } from "@/lib/actions/activity-logs.action";
 import { formatDateTimeDistanceToNow } from "@/lib/datetime";
 import { ActivityLogDTO } from "@/types/activity-logs";
 import { TeamDTO } from "@/types/teams";
 
-// Sample Data
-const requestTrendsData = [
-  { week: "Week 1", requests: 10 },
-  { week: "Week 2", requests: 20 },
-  { week: "Week 3", requests: 15 },
-  { week: "Week 4", requests: 25 },
-];
-
 type DashboardTrendsAndActivityProps = {
   team: TeamDTO;
 };
 
-const DashboardTrendsAndActivity = ({
-  team,
-}: DashboardTrendsAndActivityProps) => {
+const RecentTeamActivities = ({ team }: DashboardTrendsAndActivityProps) => {
   const [activityLogs, setActivityLogs] = useState<ActivityLogDTO[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+
   useEffect(() => {
     async function fetchActivityLogs() {
-      getActivityLogs("Team", team.id!).then((data) => {
+      getActivityLogs("Team", team.id!, currentPage, 7).then((data) => {
         setActivityLogs(data.content);
+        setTotalPages(data.totalPages);
       });
     }
     fetchActivityLogs();
-  }, [team]);
+  }, [team, currentPage]);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-      {/* Request Trends */}
-      <Card className="h-full">
-        <CardHeader>
-          <CardTitle>Request Trends</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <LineChart
-            width={500}
-            height={300}
-            data={requestTrendsData}
-            margin={{ top: 20, right: 20, left: 20, bottom: 20 }}
-          >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="week" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Line type="monotone" dataKey="requests" stroke="#8884d8" />
-          </LineChart>
-        </CardContent>
-      </Card>
-
-      {/* Recent Activity */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Recent Activity</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {activityLogs && activityLogs.length > 0 ? (
-            activityLogs.map((activityLog) => (
-              <div key={activityLog.id} className="border-b pb-2">
+    <Card>
+      <CardHeader>
+        <CardTitle>Recent Activity</CardTitle>
+      </CardHeader>
+      <CardContent>
+        {activityLogs && activityLogs.length > 0 ? (
+          <div className="space-y-2">
+            {activityLogs.map((activityLog, index) => (
+              <div
+                key={activityLog.id}
+                className={`py-4 px-4 rounded-md ${
+                  index % 2 === 0
+                    ? "bg-gray-50 dark:bg-gray-800"
+                    : "bg-white dark:bg-gray-900"
+                }`}
+              >
                 <div
-                  className="prose max-w-none"
+                  className="prose max-w-none dark:prose-invert"
                   dangerouslySetInnerHTML={{
                     __html: activityLog.content!,
                   }}
                 />
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                  Modified at:{" "}
                   {formatDateTimeDistanceToNow(new Date(activityLog.createdAt))}
                 </p>
               </div>
-            ))
-          ) : (
-            <p className="text-sm text-gray-500">No activity logs available</p>
-          )}
-        </CardContent>
-      </Card>
-    </div>
+            ))}
+          </div>
+        ) : (
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            No activity logs available
+          </p>
+        )}
+        <PaginationExt
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={(page) => setCurrentPage(page)}
+          className="pt-2"
+        />
+      </CardContent>
+    </Card>
   );
 };
 
-export default DashboardTrendsAndActivity;
+export default RecentTeamActivities;

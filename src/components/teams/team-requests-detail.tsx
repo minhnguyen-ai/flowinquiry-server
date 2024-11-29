@@ -24,7 +24,7 @@ import { formatDateTimeDistanceToNow } from "@/lib/datetime";
 import { obfuscate } from "@/lib/endecode";
 import { navigateToRecord } from "@/lib/navigation-record";
 import { PermissionUtils } from "@/types/resources";
-import { TeamRequestDTO } from "@/types/teams";
+import { TeamRequestDTO } from "@/types/team-requests";
 
 const TeamRequestDetailView = ({ entity }: ViewProps<TeamRequestDTO>) => {
   const permissionLevel = usePagePermission();
@@ -114,15 +114,18 @@ const TeamRequestDetailView = ({ entity }: ViewProps<TeamRequestDTO>) => {
                 {
                   label: "Created",
                   value: formatDateTimeDistanceToNow(
-                    new Date(teamRequest.createdDate!),
+                    new Date(teamRequest.createdAt!),
                   ),
                   colSpan: 1,
                 },
                 {
-                  label: "Priority",
-                  value: <PriorityDisplay priority={teamRequest.priority} />,
+                  label: "Modified",
+                  value: formatDateTimeDistanceToNow(
+                    new Date(teamRequest.modifiedAt!),
+                  ),
                   colSpan: 1,
                 },
+
                 {
                   label: "Request User",
                   value: (
@@ -173,8 +176,20 @@ const TeamRequestDetailView = ({ entity }: ViewProps<TeamRequestDTO>) => {
                   colSpan: 1,
                 },
                 {
+                  label: "Priority",
+                  value: <PriorityDisplay priority={teamRequest.priority} />,
+                  colSpan: 1,
+                },
+                {
                   label: "Current State",
                   value: <Badge>{teamRequest.currentState}</Badge>,
+                  colSpan: 1,
+                },
+                {
+                  label: "Channel",
+                  value: teamRequest.channel && (
+                    <Badge variant="outline">{teamRequest.channel}</Badge>
+                  ),
                   colSpan: 1,
                 },
                 {
@@ -191,13 +206,6 @@ const TeamRequestDetailView = ({ entity }: ViewProps<TeamRequestDTO>) => {
                   value: teamRequest.actualCompletionDate
                     ? new Date(teamRequest.actualCompletionDate).toDateString()
                     : "N/A",
-                  colSpan: 1,
-                },
-                {
-                  label: "Channel",
-                  value: teamRequest.channel && (
-                    <Badge variant="outline">{teamRequest.channel}</Badge>
-                  ),
                   colSpan: 1,
                 },
               ]}

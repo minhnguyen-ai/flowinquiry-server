@@ -5,6 +5,7 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
 import { Heading } from "@/components/heading";
+import { TeamAvatar } from "@/components/shared/avatar-display";
 import { buttonVariants } from "@/components/ui/button";
 import { ViewProps } from "@/components/ui/ext-form";
 import { usePagePermission } from "@/hooks/use-page-permission";
@@ -39,9 +40,13 @@ const TeamWorkflowsView = ({ entity: team }: ViewProps<TeamDTO>) => {
 
   return (
     <div className="grid grid-cols-1 gap-4">
-      <div className="flex flex-row justify-between">
-        <div className="flex-shrink-0">
-          <Heading title={`Workflows`} description="Manage team workflows" />
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <TeamAvatar imageUrl={team.logoUrl} size="w-16 h-16" />
+          <Heading
+            title={team.name}
+            description={team.slogan ?? "Stronger Together"}
+          />
         </div>
         {(PermissionUtils.canWrite(permissionLevel) ||
           teamRole === "Manager") && (

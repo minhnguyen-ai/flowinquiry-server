@@ -4,6 +4,8 @@ import { Ellipsis, Plus, Trash } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
+import { Heading } from "@/components/heading";
+import { TeamAvatar } from "@/components/shared/avatar-display";
 import AddUserToTeamDialog from "@/components/teams/team-add-user-dialog";
 import {
   AlertDialog,
@@ -100,8 +102,14 @@ const TeamUsersView = ({ entity: team }: ViewProps<TeamDTO>) => {
 
   return (
     <div className="grid grid-cols-1 gap-4">
-      <div className="flex flex-row justify-between gap-4 items-center">
-        <div className="text-2xl w-full">{team.name}</div>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <TeamAvatar imageUrl={team.logoUrl} size="w-16 h-16" />
+          <Heading
+            title={team.name}
+            description={team.slogan ?? "Stronger Together"}
+          />
+        </div>
         {(PermissionUtils.canWrite(permissionLevel) ||
           teamRole === "Manager") && (
           <div>

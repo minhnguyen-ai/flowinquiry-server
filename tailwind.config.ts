@@ -91,7 +91,7 @@ const config = {
             a: {
               color: theme("colors.primary.DEFAULT"),
               "&:hover": {
-                color: theme("colors.primary.foreground"),
+                color: theme("colors.primary.DEFAULT"),
               },
             },
             table: {
@@ -109,6 +109,15 @@ const config = {
                 color: theme("colors.foreground"),
                 padding: "0.5rem",
               },
+            },
+            ".table-consistent-width table": {
+              tableLayout: "fixed",
+              width: "100%",
+            },
+            ".table-consistent-width th, .table-consistent-width td": {
+              width: "33.33%",
+              textAlign: "left",
+              padding: "8px",
             },
           },
         },

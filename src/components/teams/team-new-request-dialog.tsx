@@ -32,18 +32,18 @@ import {
 } from "@/components/ui/form";
 import { createTeamRequest } from "@/lib/actions/teams-request.action";
 import {
-  TeamDTO,
   TeamRequestDTO,
   TeamRequestDTOSchema,
   TeamRequestPriority,
-} from "@/types/teams";
+} from "@/types/team-requests";
+import { TeamDTO } from "@/types/teams";
 import { WorkflowDTO } from "@/types/workflows";
 
 type NewRequestToTeamDialogProps = {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   teamEntity: TeamDTO;
-  workflow: WorkflowDTO;
+  workflow: WorkflowDTO | null; // Updated to allow null
   onSaveSuccess: () => void;
 };
 
@@ -60,7 +60,7 @@ const NewRequestToTeamDialog: React.FC<NewRequestToTeamDialogProps> = ({
     resolver: zodResolver(TeamRequestDTOSchema),
     defaultValues: {
       teamId: teamEntity.id!,
-      workflowId: workflow.id!,
+      workflowId: workflow?.id!,
       requestUserId: Number(session?.user?.id!),
     },
   });

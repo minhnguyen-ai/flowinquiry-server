@@ -17,7 +17,8 @@ import { formatDateTimeDistanceToNow } from "@/lib/datetime";
 import { obfuscate } from "@/lib/endecode";
 import { cn } from "@/lib/utils";
 import { Filter, Pagination, QueryDTO } from "@/types/query";
-import { TeamDTO, TeamRequestDTO } from "@/types/teams";
+import { TeamRequestDTO } from "@/types/team-requests";
+import { TeamDTO } from "@/types/teams";
 
 interface TeamRequestsStatusViewProps extends ViewProps<TeamDTO> {
   query: QueryDTO;
@@ -121,7 +122,7 @@ const TeamRequestsStatusView = ({
 
               <Button
                 variant="link"
-                className="px-0 text-xl"
+                className="px-0 text-xl text-left break-words whitespace-normal pb-4"
                 onClick={() => openSheet(request)}
                 tabIndex={0}
                 role="button"
@@ -143,15 +144,18 @@ const TeamRequestsStatusView = ({
                   {
                     label: "Created",
                     value: formatDateTimeDistanceToNow(
-                      new Date(request.createdDate!),
+                      new Date(request.createdAt!),
                     ),
                     colSpan: 1,
                   },
                   {
-                    label: "Priority",
-                    value: <PriorityDisplay priority={request.priority} />,
+                    label: "Modified",
+                    value: formatDateTimeDistanceToNow(
+                      new Date(request.modifiedAt!),
+                    ),
                     colSpan: 1,
                   },
+
                   {
                     label: "Request User",
                     value: (
@@ -202,8 +206,20 @@ const TeamRequestsStatusView = ({
                     colSpan: 1,
                   },
                   {
+                    label: "Priority",
+                    value: <PriorityDisplay priority={request.priority} />,
+                    colSpan: 1,
+                  },
+                  {
                     label: "Current State",
                     value: <Badge>{request.currentState}</Badge>,
+                    colSpan: 1,
+                  },
+                  {
+                    label: "Channel",
+                    value: request.channel && (
+                      <Badge variant="outline">{request.channel}</Badge>
+                    ),
                     colSpan: 1,
                   },
                   {
@@ -218,13 +234,6 @@ const TeamRequestsStatusView = ({
                     value: request.actualCompletionDate
                       ? new Date(request.actualCompletionDate).toDateString()
                       : "N/A",
-                    colSpan: 1,
-                  },
-                  {
-                    label: "Channel",
-                    value: request.channel && (
-                      <Badge variant="outline">{request.channel}</Badge>
-                    ),
                     colSpan: 1,
                   },
                 ]}
