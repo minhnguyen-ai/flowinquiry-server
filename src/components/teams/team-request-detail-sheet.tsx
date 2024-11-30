@@ -159,8 +159,12 @@ const TeamRequestDetailSheet: React.FC<RequestDetailsProps> = ({
                     colSpan: 1,
                   },
                   {
-                    label: "Current State",
-                    value: <Badge>{request.currentState}</Badge>,
+                    label: "State",
+                    value: (
+                      <Badge variant="outline">
+                        {request.currentStateName}
+                      </Badge>
+                    ),
                     colSpan: 1,
                   },
                   {

@@ -10,6 +10,7 @@ import { UserAvatar } from "@/components/shared/avatar-display";
 import CommentsView from "@/components/shared/comments-view";
 import { NColumnsGrid } from "@/components/shared/n-columns-grid";
 import { PriorityDisplay } from "@/components/teams/team-requests-priority-display";
+import TeamRequestsTimelineHistory from "@/components/teams/team-requests-timeline-history";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -181,8 +182,12 @@ const TeamRequestDetailView = ({ entity }: ViewProps<TeamRequestDTO>) => {
                   colSpan: 1,
                 },
                 {
-                  label: "Current State",
-                  value: <Badge>{teamRequest.currentState}</Badge>,
+                  label: "State",
+                  value: (
+                    <Badge variant="outline">
+                      {teamRequest.currentStateName}
+                    </Badge>
+                  ),
                   colSpan: 1,
                 },
                 {
@@ -216,9 +221,12 @@ const TeamRequestDetailView = ({ entity }: ViewProps<TeamRequestDTO>) => {
             value={selectedTab}
             onValueChange={handleTabChange}
           >
-            <TabsList className="grid w-full grid-cols-2">
+            <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="comments">Comments</TabsTrigger>
-              <TabsTrigger value="auditlog">History</TabsTrigger>
+              <TabsTrigger value="changes-history">Changes History</TabsTrigger>
+              <TabsTrigger value="timeline-history">
+                Timeline History
+              </TabsTrigger>
             </TabsList>
             <TabsContent value="comments">
               {selectedTab === "comments" && (
@@ -228,12 +236,17 @@ const TeamRequestDetailView = ({ entity }: ViewProps<TeamRequestDTO>) => {
                 />
               )}
             </TabsContent>
-            <TabsContent value="auditlog">
-              {selectedTab === "auditlog" && (
+            <TabsContent value="changes-history">
+              {selectedTab === "changes-history" && (
                 <AuditLogView
                   entityType="Team_Request"
                   entityId={teamRequest.id!}
                 />
+              )}
+            </TabsContent>
+            <TabsContent value="timeline-history">
+              {selectedTab === "timeline-history" && (
+                <TeamRequestsTimelineHistory teamId={teamRequest.id!} />
               )}
             </TabsContent>
           </Tabs>
