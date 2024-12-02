@@ -7,14 +7,20 @@ import React from "react";
 import { Heading } from "@/components/heading";
 import { TeamAvatar } from "@/components/shared/avatar-display";
 import TeamDashboardTopSection from "@/components/teams/team-dashboard-kpis";
-import TeamPerformanceMetrics from "@/components/teams/team-dashboard-performance-metrics";
 import RecentTeamActivities from "@/components/teams/team-dashboard-recent-activity";
+import TicketCreationByDaySeriesChart from "@/components/teams/team-requests-creation-timeseries-chart";
 import TicketDistributionChart from "@/components/teams/team-requests-distribution-chart";
+import OverdueTickets from "@/components/teams/team-requests-overdue";
 import TicketPriorityPieChart from "@/components/teams/team-requests-priority-chart";
 import UnassignedTickets from "@/components/teams/team-requests-unassigned";
 import { buttonVariants } from "@/components/ui/button";
 import { ViewProps } from "@/components/ui/ext-form";
 import { Separator } from "@/components/ui/separator";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { usePagePermission } from "@/hooks/use-page-permission";
 import { obfuscate } from "@/lib/endecode";
 import { cn } from "@/lib/utils";
@@ -28,10 +34,22 @@ const TeamDashboard = ({ entity: team }: ViewProps<TeamDTO>) => {
     <div className="grid grid-cols-1 gap-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <TeamAvatar imageUrl={team.logoUrl} size="w-16 h-16" />
+          <Tooltip>
+            <TooltipTrigger>
+              <TeamAvatar imageUrl={team.logoUrl} size="w-20 h-20" />
+            </TooltipTrigger>
+            <TooltipContent>
+              <div className="text-left">
+                <p className="font-bold">{team.name}</p>
+                <p className="text-sm text-gray-500">
+                  {team.slogan ?? "Stronger Together"}
+                </p>
+              </div>
+            </TooltipContent>
+          </Tooltip>
           <Heading
-            title={team.name}
-            description={team.slogan ?? "Stronger Together"}
+            title="Team Dashboard"
+            description="Overview of your team's performance and activities. Monitor team requests, progress, and key metrics at a glance"
           />
         </div>
         {PermissionUtils.canWrite(permissionLevel) && (
@@ -45,14 +63,22 @@ const TeamDashboard = ({ entity: team }: ViewProps<TeamDTO>) => {
       </div>
       <Separator />
       <div className="space-y-8">
-        <TeamDashboardTopSection />
+        <TeamDashboardTopSection teamId={team.id!} />
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div className="flex flex-col">
-            <UnassignedTickets teamId={team.id!} />
+            <TicketCreationByDaySeriesChart teamId={team.id!} days={7} />
           </div>
 
           <div className="flex flex-col">
             <RecentTeamActivities team={team} />
+          </div>
+        </div>
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+          <div className="flex flex-col">
+            <UnassignedTickets teamId={team.id!} />
+          </div>
+          <div className="flex flex-col">
+            <OverdueTickets teamId={team.id!} />
           </div>
         </div>
         <div className="flex flex-wrap justify-center gap-4">
@@ -63,7 +89,6 @@ const TeamDashboard = ({ entity: team }: ViewProps<TeamDTO>) => {
             <TicketPriorityPieChart teamId={team.id!} />
           </div>
         </div>
-        <TeamPerformanceMetrics />
       </div>
     </div>
   );

@@ -10,7 +10,9 @@ import {
   PriorityDistributionDTO,
   TeamRequestDTO,
   TicketDistributionDTO,
+  TicketStatisticsDTO,
 } from "@/types/team-requests";
+import { TicketActionCountByDateDTO } from "@/types/teams";
 
 export const createTeamRequest = async (teamRequest: TeamRequestDTO) => {
   return post<TeamRequestDTO, TeamRequestDTO>(
@@ -77,6 +79,38 @@ export const getUnassignedTickets = async (
   sortDirection: string,
 ) => {
   return get<PageableResult<TeamRequestDTO>>(
-    `${BACKEND_API}/api/team-requests/${teamId}/unassigned-tickets?page=${page - 1}&&size=5&&sortBy=${sortBy}&&sortDirection=${sortDirection}`,
+    `${BACKEND_API}/api/team-requests/${teamId}/unassigned-tickets?page=${page}&size=5&sort=${sortBy},${sortDirection}`,
+  );
+};
+
+export const getOverdueTickets = async (
+  teamId: number,
+  page: number,
+  sortBy: string,
+  sortDirection: string,
+) => {
+  return get<PageableResult<TeamRequestDTO>>(
+    `${BACKEND_API}/api/team-requests/${teamId}/overdue-tickets?page=${page}&size=5&sort=${sortBy},${sortDirection}`,
+  );
+};
+
+export const getTicketStatisticsByTeamId = async (teamId: number) => {
+  return get<TicketStatisticsDTO>(
+    `${BACKEND_API}/api/team-requests/${teamId}/statistics`,
+  );
+};
+
+export const getCountOverdueTicketsByTeamId = async (teamId: number) => {
+  return get<number>(
+    `${BACKEND_API}/api/team-requests/${teamId}/overdue-tickets/count`,
+  );
+};
+
+export const getTicketCreationDaySeries = async (
+  teamId: number,
+  days: number,
+) => {
+  return get<TicketActionCountByDateDTO[]>(
+    `${BACKEND_API}/api/team-requests/${teamId}/ticket-creations-day-series?days=${days}`,
   );
 };

@@ -27,3 +27,9 @@ export interface TransitionItemCollectionDTO {
   ticketId: number;
   transitions: TransitionItemDTO[];
 }
+
+export interface TicketActionCountByDateDTO {
+  date: string; // LocalDate is represented as an ISO 8601 string in TypeScript
+  createdCount: number;
+  closedCount: number;
+}
