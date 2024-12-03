@@ -45,6 +45,8 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: "pnpm"
-      - run: cp .env.local.example .env.local
       - run: pnpm install
-      - run: pnpm build
+      - name: Build the application
+        env:
+          BACK_END_SERVER: "http://localhost:8080"
+        run: pnpm build
