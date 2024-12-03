@@ -15,6 +15,7 @@ import io.flexwork.modules.teams.repository.WorkflowTransitionHistoryRepository;
 import io.flexwork.modules.teams.repository.WorkflowTransitionRepository;
 import io.flexwork.modules.teams.service.dto.PriorityDistributionDTO;
 import io.flexwork.modules.teams.service.dto.TeamRequestDTO;
+import io.flexwork.modules.teams.service.dto.TeamTicketPriorityDistributionDTO;
 import io.flexwork.modules.teams.service.dto.TicketActionCountByDateDTO;
 import io.flexwork.modules.teams.service.dto.TicketDistributionDTO;
 import io.flexwork.modules.teams.service.event.NewTeamRequestCreatedEvent;
@@ -157,6 +158,7 @@ public class TeamRequestService {
         boolean isStateChanged =
                 (!Objects.equals(previousState, teamRequestDTO.getCurrentStateId()));
         existingTeamRequest.setIsNew(!isStateChanged);
+
         if (isStateChanged) {
             boolean finalState =
                     workflowStateRepository.isFinalState(
@@ -169,6 +171,9 @@ public class TeamRequestService {
 
         TeamRequestDTO savedTeamRequest =
                 teamRequestMapper.toDto(teamRequestRepository.save(existingTeamRequest));
+
+        entityManager.clear();
+
         eventPublisher.publishEvent(
                 new AuditLogUpdateEvent(this, previousTeamRequest, teamRequestDTO));
 
@@ -178,6 +183,7 @@ public class TeamRequestService {
                     new TeamRequestWorkStateTransitionEvent(
                             this, teamRequestDTO.getId(), previousState, currentState));
         }
+
         return savedTeamRequest;
     }
 
@@ -206,7 +212,8 @@ public class TeamRequestService {
         }
 
         // Check for "team.id" recursively in groups
-        return queryDTO.getGroups().stream().anyMatch(group -> containsTeamIdFilterInGroup(group));
+        return queryDTO.getGroups().stream()
+                .anyMatch(TeamRequestService::containsTeamIdFilterInGroup);
     }
 
     private static boolean containsTeamIdFilterInGroup(GroupFilter groupFilter) {
@@ -294,9 +301,15 @@ public class TeamRequestService {
         return ZonedDateTime.now().plusMinutes(earliestTransition.getSlaDuration());
     }
 
-    public Page<TeamRequestDTO> getOverdueTickets(Long teamId, Pageable pageable) {
+    public Page<TeamRequestDTO> getOverdueTicketsByTeam(Long teamId, Pageable pageable) {
         return teamRequestRepository
                 .findOverdueTicketsByTeamId(teamId, Completed, pageable)
+                .map(teamRequestMapper::toDto);
+    }
+
+    public Page<TeamRequestDTO> getOverdueTicketsByUser(Long userId, Pageable pageable) {
+        return teamRequestRepository
+                .findOverdueTicketsByUserId(userId, Completed, pageable)
                 .map(teamRequestMapper::toDto);
     }
 
@@ -329,5 +342,9 @@ public class TeamRequestService {
         }
 
         return ticketByDaySeries;
+    }
+
+    public List<TeamTicketPriorityDistributionDTO> getPriorityDistributionForUser(Long userId) {
+        return teamRequestRepository.findPriorityDistributionByUserId(userId);
     }
 }

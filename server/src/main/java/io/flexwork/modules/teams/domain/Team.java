@@ -1,12 +1,12 @@
 package io.flexwork.modules.teams.domain;
 
 import io.flexwork.modules.usermanagement.domain.User;
-import io.flexwork.modules.usermanagement.domain.UserTeam;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
 import lombok.*;
+import org.hibernate.annotations.Formula;
 
 @Entity
 @Table(name = "fw_team")
@@ -41,19 +41,15 @@ public class Team {
     private Organization organization;
 
     @EqualsAndHashCode.Exclude
-    @Builder.Default
-    @ManyToMany(mappedBy = "teams")
-    private Set<User> users = new HashSet<>();
+    @ManyToMany
+    @JoinTable(
+            name = "fw_user_team",
+            joinColumns = @JoinColumn(name = "team_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
+    private Set<User> users;
 
-    @EqualsAndHashCode.Exclude
-    @Builder.Default
-    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<UserTeam> teamMembers = new HashSet<>();
-
-    @EqualsAndHashCode.Exclude
-    @Builder.Default
-    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<UserTeam> userTeams = new HashSet<>();
+    @Formula("(SELECT COUNT(ut.user_id) FROM fw_user_team ut WHERE ut.team_id = id)")
+    private Long usersCount;
 
     @EqualsAndHashCode.Exclude
     @Builder.Default
