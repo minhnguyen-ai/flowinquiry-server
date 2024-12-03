@@ -15,7 +15,7 @@ import {
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner"; // Import your spinner component
-import { getTicketsAssignmentDistribution } from "@/lib/actions/teams-request.action";
+import { getTicketsAssignmentDistributionByTeam } from "@/lib/actions/teams-request.action";
 import { obfuscate } from "@/lib/endecode";
 import { TicketDistributionDTO } from "@/types/team-requests";
 
@@ -36,7 +36,7 @@ const TicketDistributionChart: React.FC<TicketDistributionChartProps> = ({
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      getTicketsAssignmentDistribution(teamId)
+      getTicketsAssignmentDistributionByTeam(teamId)
         .then((data) => setData(data))
         .finally(() => setLoading(false));
     };
@@ -110,6 +110,7 @@ const TicketDistributionChart: React.FC<TicketDistributionChartProps> = ({
                 data={chartData}
                 layout="vertical"
                 margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                barSize={40} // Set a fixed bar size
               >
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis type="number" allowDecimals={false} />

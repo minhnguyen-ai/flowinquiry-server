@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 
 import { Heading } from "@/components/heading";
@@ -19,6 +20,7 @@ import PaginationExt from "@/components/shared/pagination-ext";
 import DefaultTeamLogo from "@/components/teams/team-logo";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button, buttonVariants } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -38,12 +40,13 @@ import { usePagePermission } from "@/hooks/use-page-permission";
 import { deleteTeams, searchTeams } from "@/lib/actions/teams.action";
 import { obfuscate } from "@/lib/endecode";
 import { cn } from "@/lib/utils";
-import { QueryDTO } from "@/types/query";
+import { Filter, QueryDTO } from "@/types/query";
 import { PermissionUtils } from "@/types/resources";
 import { TeamDTO } from "@/types/teams";
 
 export const TeamList = () => {
   const router = useRouter();
+  const { data: session } = useSession();
   const [items, setItems] = useState<Array<TeamDTO>>([]);
   const [teamSearchTerm, setTeamSearchTerm] = useState<string | undefined>(
     undefined,
@@ -53,6 +56,7 @@ export const TeamList = () => {
   const [totalElements, setTotalElements] = useState(0);
   const [loading, setLoading] = useState(false);
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
+  const [filterUserTeamsOnly, setFilterUserTeamsOnly] = useState(true);
 
   const [isDialogOpen, setDialogOpen] = useState(false);
   const [selectedTeam, setSelectedTeam] = useState<TeamDTO | null>(null);
@@ -66,16 +70,24 @@ export const TeamList = () => {
   const fetchData = async () => {
     setLoading(true);
     try {
+      const filters: Filter[] = [];
+      if (teamSearchTerm) {
+        filters.push({
+          field: "name",
+          operator: "lk",
+          value: teamSearchTerm,
+        });
+      }
+      if (filterUserTeamsOnly) {
+        filters.push({
+          field: "users.id",
+          operator: "eq",
+          value: Number(session?.user?.id!),
+        });
+      }
+
       const query: QueryDTO = {
-        filters: teamSearchTerm
-          ? [
-              {
-                field: "name",
-                operator: "lk",
-                value: teamSearchTerm,
-              },
-            ]
-          : [],
+        filters,
       };
 
       const pageResult = await searchTeams(query, {
@@ -88,9 +100,11 @@ export const TeamList = () => {
           },
         ],
       });
-      setItems(pageResult.content);
-      setTotalElements(pageResult.totalElements);
-      setTotalPages(pageResult.totalPages);
+      if (pageResult) {
+        setItems(pageResult.content);
+        setTotalElements(pageResult.totalElements);
+        setTotalPages(pageResult.totalPages);
+      }
     } finally {
       setLoading(false);
     }
@@ -113,7 +127,7 @@ export const TeamList = () => {
 
   useEffect(() => {
     fetchData();
-  }, [teamSearchTerm, currentPage, sortDirection]);
+  }, [teamSearchTerm, currentPage, sortDirection, filterUserTeamsOnly]);
 
   const showDeleteTeamConfirmationDialog = (team: TeamDTO) => {
     setSelectedTeam(team);
@@ -144,6 +158,16 @@ export const TeamList = () => {
           <Button variant="outline" onClick={toggleSortDirection}>
             {sortDirection === "asc" ? <ArrowDownAZ /> : <ArrowUpAZ />}
           </Button>
+          <div className="flex items-center space-x-2">
+            <Checkbox
+              id="user-teams-only"
+              checked={filterUserTeamsOnly}
+              onCheckedChange={(checked) => setFilterUserTeamsOnly(!!checked)}
+            />
+            <label htmlFor="user-teams-only" className="text-sm">
+              My Teams Only
+            </label>
+          </div>
           {PermissionUtils.canWrite(permissionLevel) && (
             <Link
               href={"/portal/teams/new/edit"}

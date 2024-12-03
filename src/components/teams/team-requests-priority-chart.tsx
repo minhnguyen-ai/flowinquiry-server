@@ -12,7 +12,7 @@ import {
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner"; // Import your spinner component
-import { getTicketsPriorityDistribution } from "@/lib/actions/teams-request.action";
+import { getTicketsPriorityDistributionByTeam } from "@/lib/actions/teams-request.action";
 import { PriorityDistributionDTO } from "@/types/team-requests";
 import { TeamRequestPriority } from "@/types/team-requests";
 
@@ -26,7 +26,7 @@ const TicketPriorityPieChart = ({ teamId }: { teamId: number }) => {
     // Fetch priority distribution data
     const fetchPriorityData = async () => {
       setLoading(true);
-      getTicketsPriorityDistribution(teamId)
+      getTicketsPriorityDistributionByTeam(teamId)
         .then((data) => setPriorityData(data))
         .finally(() => setLoading(false));
     };
@@ -34,13 +34,14 @@ const TicketPriorityPieChart = ({ teamId }: { teamId: number }) => {
     fetchPriorityData();
   }, [teamId]);
 
-  // Define colors for the pie chart based on TeamRequestPriority
+  // Define colors for the pie chart based on TeamRequestPriority, this color should match with color
+  // defines at team-request-priority-display.tsx
   const COLORS: Record<TeamRequestPriority, string> = {
-    Critical: "#FF4500",
-    High: "#FF6384",
-    Medium: "#36A2EB",
-    Low: "#FFCE56",
-    Trivial: "#00FF00",
+    Critical: "#DC2626", // text-red-600
+    High: "#F97316", // text-orange-500
+    Medium: "#F59E0B", // text-yellow-500
+    Low: "#16A34A", // text-green-500
+    Trivial: "#9CA3AF", // text-gray-400
   };
 
   return (

@@ -1,19 +1,13 @@
-import { z } from "zod";
+import { EntityType } from "@/types/commons";
 
-export const ActivityLogDTOSchema = z.object({
-  id: z.number().nullish(),
-  entityType: z.enum(["Team_Request", "Team"]),
-  entityId: z.number(),
-  content: z.string().min(1),
-  createdAt: z.string().refine((val) => !isNaN(Date.parse(val)), {
-    message: "Invalid date format",
-  }),
-  updatedAt: z.string().refine((val) => !isNaN(Date.parse(val)), {
-    message: "Invalid date format",
-  }),
-  createdById: z.number().nullish(),
-  createdByName: z.string().nullish(),
-  createdByImageUrl: z.string().nullish(),
-});
-
-export type ActivityLogDTO = z.infer<typeof ActivityLogDTOSchema>;
+export interface ActivityLogDTO {
+  id: number;
+  entityType: EntityType;
+  entityName: string;
+  entityId: number;
+  content: string;
+  createdAt: string; // Use ISO string format for Instant
+  createdById: number;
+  createdByName: string;
+  createdByImageUrl: string;
+}
