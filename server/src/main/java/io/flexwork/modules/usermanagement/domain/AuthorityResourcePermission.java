@@ -19,9 +19,8 @@ public class AuthorityResourcePermission {
     @Column(name = "resource_name")
     private String resourceName;
 
-    @Enumerated(EnumType.ORDINAL)
+    @Convert(converter = PermissionConverter.class)
     @Column(name = "permission", nullable = false)
-    @Id
     private Permission permission;
 
     @EqualsAndHashCode.Exclude
@@ -35,9 +34,9 @@ public class AuthorityResourcePermission {
     private Resource resource;
 
     public AuthorityResourcePermission(
-            String authorityName, String resourceName, int permissionOrdinal) {
+            String authorityName, String resourceName, int permissionCode) {
         this.authorityName = authorityName;
         this.resourceName = resourceName;
-        this.permission = Permission.values()[permissionOrdinal];
+        this.permission = Permission.fromCode(permissionCode);
     }
 }
