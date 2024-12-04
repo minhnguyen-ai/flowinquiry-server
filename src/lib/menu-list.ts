@@ -1,4 +1,12 @@
-import { BookLock, Layers, LayoutGrid, LucideIcon, Users } from "lucide-react";
+import {
+  BookLock,
+  Layers,
+  LayoutGrid,
+  LucideIcon,
+  ShieldCheck,
+  UserCog,
+  Users,
+} from "lucide-react";
 
 import { Permission } from "@/providers/permissions-provider";
 
@@ -74,11 +82,6 @@ export function getMenuList(
     {
       groupLabel: "",
       menus: [
-        // {
-        //   href: "/portal/accounts",
-        //   label: "Accounts",
-        //   icon: Building2,
-        // },
         {
           href: "/portal/teams",
           label: "Teams",
@@ -97,7 +100,7 @@ export function getMenuList(
         {
           href: "/portal/settings/authorities",
           label: "Authorities",
-          icon: BookLock,
+          icon: ShieldCheck,
         },
       ],
     },
