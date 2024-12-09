@@ -1,12 +1,19 @@
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+
 type Field = {
-  label: string; // Label for the field
-  value: React.ReactNode; // Value of the field, can be any JSX
+  label: string;
+  value: React.ReactNode;
   colSpan?: number; // Number of columns to span (default: 1)
+  tooltip?: string;
 };
 
 type NColumnsGridProps = {
-  fields: Field[]; // Array of fields to render
-  columns?: number; // Total number of columns in the grid (default: 2)
+  fields: Field[];
+  columns?: number;
   gap?: string; // Gap between rows and columns (default: "4")
   className?: string; // Additional class names for the grid container
 };
@@ -28,12 +35,21 @@ export const NColumnsGrid: React.FC<NColumnsGridProps> = ({
             field.colSpan === 2 ? "sm:col-span-2" : ""
           } flex items-start gap-2`}
         >
-          {/* Label */}
           <span className="text-sm font-medium text-neutral-500 dark:text-neutral-400 w-1/3 text-right">
             {field.label}
           </span>
-          {/* Value */}
-          <div className="text-sm w-2/3 text-left">{field.value}</div>
+          <div className="text-sm w-2/3 text-left">
+            {field.tooltip ? (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <span className="cursor-pointer">{field.value}</span>
+                </TooltipTrigger>
+                <TooltipContent>{field.tooltip}</TooltipContent>
+              </Tooltip>
+            ) : (
+              field.value
+            )}
+          </div>
         </div>
       ))}
     </div>

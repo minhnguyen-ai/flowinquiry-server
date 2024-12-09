@@ -16,7 +16,10 @@ import {
 import { WorkflowDiagram } from "@/components/workflows/workflow-diagram-view";
 import WorkflowEditForm from "@/components/workflows/workflow-editor-form";
 import { usePagePermission } from "@/hooks/use-page-permission";
-import { getWorkflowDetail } from "@/lib/actions/workflows.action";
+import {
+  getWorkflowDetail,
+  updateWorkflowDetail,
+} from "@/lib/actions/workflows.action";
 import { obfuscate } from "@/lib/endecode";
 import { BreadcrumbProvider } from "@/providers/breadcrumb-provider";
 import { useTeam } from "@/providers/team-provider";
@@ -28,27 +31,38 @@ const TeamWorkflowDetailView = ({ workflowId }: { workflowId: number }) => {
   const team = useTeam();
   const [workflowDetail, setWorkflowDetail] =
     useState<WorkflowDetailDTO | null>(null);
+  const [previewWorkflowDetail, setPreviewWorkflowDetail] =
+    useState<WorkflowDetailDTO | null>(null); // Separate state for preview
   const [loading, setLoading] = useState(true);
-  const [isEditing, setIsEditing] = useState(false); // State for edit mode
+  const [isEditing, setIsEditing] = useState(false);
 
   const permissionLevel = usePagePermission();
   const teamRole = useUserTeamRole().role;
 
   useEffect(() => {
     async function fetchWorkflowDetail() {
+      setLoading(true);
       getWorkflowDetail(workflowId)
-        .then((data) => setWorkflowDetail(data))
+        .then((data) => {
+          setWorkflowDetail(data);
+          setPreviewWorkflowDetail(data); // Initialize preview with the original workflow
+        })
         .finally(() => setLoading(false));
     }
 
     fetchWorkflowDetail();
   }, [workflowId]);
 
-  const handleEditClick = () => setIsEditing(true); // Enable edit mode
-  const handleCancelEdit = () => setIsEditing(false); // Disable edit mode
+  const handleSave = (updatedWorkflow: WorkflowDetailDTO) => {
+    updateWorkflowDetail(updatedWorkflow.id!, updatedWorkflow).then((data) => {
+      setWorkflowDetail(data);
+      setPreviewWorkflowDetail(data);
+      setIsEditing(false);
+    });
+  };
 
   if (!workflowDetail) {
-    return <div>Error loading workflow detail.</div>; // Optional error state
+    return <div>Error loading workflow detail.</div>;
   }
 
   const breadcrumbItems = [
@@ -93,14 +107,13 @@ const TeamWorkflowDetailView = ({ workflowId }: { workflowId: number }) => {
             {(PermissionUtils.canWrite(permissionLevel) ||
               teamRole === "Manager") && (
               <div>
-                <Button onClick={handleEditClick}>
-                  <Edit /> Customize Workflow
+                <Button onClick={() => setIsEditing(!isEditing)}>
+                  {isEditing ? "Cancel Edit" : <Edit />} Customize Workflow
                 </Button>
               </div>
             )}
           </div>
 
-          {/* Spinner When Loading */}
           {loading && (
             <div className="flex items-center justify-center py-4">
               <Spinner>
@@ -109,24 +122,17 @@ const TeamWorkflowDetailView = ({ workflowId }: { workflowId: number }) => {
             </div>
           )}
 
-          {/* Workflow Editor Form */}
-          {isEditing && !loading && (
+          {isEditing && workflowDetail && !loading && (
             <WorkflowEditForm
               workflowDetail={workflowDetail}
-              onCancel={handleCancelEdit}
-              onSave={(values) => {
-                console.log("Saved values:", values);
-                // Call API to save workflow changes
-                setIsEditing(false);
-              }}
+              onCancel={() => setIsEditing(false)}
+              onSave={handleSave}
+              onPreviewChange={setPreviewWorkflowDetail} // Update preview in real-time
             />
           )}
 
-          {/* Workflow Diagram */}
-          {!isEditing && !loading && (
-            <div>
-              <WorkflowDiagram workflowDetails={workflowDetail} />
-            </div>
+          {previewWorkflowDetail && !loading && (
+            <WorkflowDiagram workflowDetails={previewWorkflowDetail} />
           )}
         </div>
       </TeamNavLayout>

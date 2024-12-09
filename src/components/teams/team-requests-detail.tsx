@@ -79,7 +79,6 @@ const TeamRequestDetailView = ({ entity }: ViewProps<TeamRequestDTO>) => {
     <BreadcrumbProvider items={breadcrumbItems}>
       <TeamNavLayout teamId={teamRequest.teamId!}>
         <div className="grid grid-cols-1 gap-4">
-          {/* Header Section */}
           <div className="flex flex-row justify-between gap-4 items-center">
             <Button
               variant="outline"
@@ -150,6 +149,9 @@ const TeamRequestDetailView = ({ entity }: ViewProps<TeamRequestDTO>) => {
                       value: formatDateTimeDistanceToNow(
                         new Date(teamRequest.createdAt!),
                       ),
+                      tooltip: new Date(
+                        teamRequest.createdAt!,
+                      ).toLocaleString(),
                       colSpan: 1,
                     },
                     {
@@ -157,6 +159,9 @@ const TeamRequestDetailView = ({ entity }: ViewProps<TeamRequestDTO>) => {
                       value: formatDateTimeDistanceToNow(
                         new Date(teamRequest.modifiedAt!),
                       ),
+                      tooltip: new Date(
+                        teamRequest.modifiedAt!,
+                      ).toLocaleString(),
                       colSpan: 1,
                     },
 
