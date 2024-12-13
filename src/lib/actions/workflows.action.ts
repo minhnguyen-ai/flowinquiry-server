@@ -1,7 +1,3 @@
-"use server";
-
-import { unstable_noStore as noStore } from "next/dist/server/web/spec-extension/unstable-no-store";
-
 import { doAdvanceSearch, get, post, put } from "@/lib/actions/commons.action";
 import { BACKEND_API } from "@/lib/constants";
 import { Pagination, QueryDTO } from "@/types/query";
@@ -17,6 +13,12 @@ export const getWorkflowsByTeam = (teamId: number) => {
   );
 };
 
+export const getGlobalWorkflowHasNotLinkedWithTeam = (teamId: number) => {
+  return get<Array<WorkflowDTO>>(
+    `${BACKEND_API}/api/workflows/teams/${teamId}/global-workflows-not-linked-yet`,
+  );
+};
+
 export const getValidTargetStates = async (
   workflowId: number,
   workflowStateId: number,
@@ -28,7 +30,6 @@ export const getValidTargetStates = async (
 };
 
 export async function searchWorkflows(query: QueryDTO, pagination: Pagination) {
-  noStore();
   return doAdvanceSearch<WorkflowDTO>(
     `${BACKEND_API}/api/workflows/search`,
     query,
@@ -56,5 +57,16 @@ export const updateWorkflowDetail = async (
   return put<WorkflowDetailDTO, WorkflowDetailDTO>(
     `${BACKEND_API}/api/workflows/details/${workflowId}`,
     workflowDetail,
+  );
+};
+
+export const createWorkflowFromReference = async (
+  teamId: number,
+  referenceWorkflowId: number,
+  workflowDto: WorkflowDTO,
+) => {
+  return post<WorkflowDTO, WorkflowDetailDTO>(
+    `${BACKEND_API}/api/workflows/${referenceWorkflowId}/teams/${teamId}/create-workflow-reference`,
+    workflowDto,
   );
 };

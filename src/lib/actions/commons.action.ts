@@ -1,6 +1,4 @@
-"use server";
-
-import { redirect } from "next/navigation";
+import { getSession } from "next-auth/react";
 
 import { auth } from "@/auth";
 import { handleError, HttpError } from "@/lib/errors";
@@ -17,24 +15,26 @@ export const fetchData = async <TData, TResponse>(
   url: string,
   method: "GET" | "POST" | "PUT" | "DELETE",
   data?: TData,
-  isAuthorized: boolean = true,
+  getToken?: () => Promise<string | undefined>,
 ): Promise<TResponse> => {
-  const session = isAuthorized ? await auth() : null;
   const headers: Record<string, string> = {
     Accept: "application/json",
     "Content-Type": "application/json",
-    "Access-Control-Allow-Origin": "*",
   };
-  // Conditionally add Authorization header if isAuthorized is true
-  if (isAuthorized && session?.user?.accessToken) {
-    headers.Authorization = `Bearer ${session.user.accessToken}`;
+
+  if (getToken) {
+    const token = await getToken();
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
   }
 
   const response = await fetch(url, {
-    method: method,
-    headers: headers,
+    method,
+    headers,
     ...(data && { body: JSON.stringify(data) }),
   });
+
   if (response.ok) {
     const contentType = response.headers.get("content-type");
     if (contentType && contentType.includes("application/json")) {
@@ -43,13 +43,6 @@ export const fetchData = async <TData, TResponse>(
       return undefined as unknown as TResponse;
     }
   } else {
-    // Unauthorized access
-    if (response.status === 401 && isAuthorized) {
-      console.log(
-        `Try to access ${url} that return 401. Redirect to the login page`,
-      );
-      redirect("/login");
-    }
     await handleError(response, url);
 
     // Add unreachable return statement for TypeScript type safety
@@ -57,35 +50,49 @@ export const fetchData = async <TData, TResponse>(
   }
 };
 
+export const getClientToken = async (): Promise<string | undefined> => {
+  const session = await getSession();
+  return session?.user?.accessToken;
+};
+
+export const getServerToken = async (): Promise<string | undefined> => {
+  const session = await auth();
+  return session?.user?.accessToken;
+};
+
 export const get = async <TResponse>(
   url: string,
-  isAuthorized: boolean = true,
+  isClient: boolean = true,
 ): Promise<TResponse> => {
-  return fetchData(url, "GET", undefined, isAuthorized);
+  const tokenProvider = isClient ? getClientToken : getServerToken;
+  return fetchData(url, "GET", undefined, tokenProvider);
 };
 
 export const post = async <TData, TResponse>(
   url: string,
   data?: TData,
-  isAuthorized: boolean = true,
+  isClient: boolean = true,
 ): Promise<TResponse> => {
-  return fetchData(url, "POST", data, isAuthorized);
+  const tokenProvider = isClient ? getClientToken : getServerToken;
+  return fetchData(url, "POST", data, tokenProvider);
 };
 
 export const put = async <TData, TResponse>(
   url: string,
   data?: TData,
-  isAuthorized: boolean = true,
+  isClient: boolean = true,
 ): Promise<TResponse> => {
-  return fetchData(url, "PUT", data, isAuthorized);
+  const tokenProvider = isClient ? getClientToken : getServerToken;
+  return fetchData(url, "PUT", data, tokenProvider);
 };
 
 export const deleteExec = async <TData, TResponse>(
   url: string,
   data?: TData,
-  isAuthorized: boolean = true,
+  isClient: boolean = true,
 ): Promise<TResponse> => {
-  return fetchData(url, "DELETE", data, isAuthorized);
+  const tokenProvider = isClient ? getClientToken : getServerToken;
+  return fetchData(url, "DELETE", data, tokenProvider);
 };
 
 // Default pagination object
@@ -99,6 +106,7 @@ export const doAdvanceSearch = async <R>(
   url: string, // URL is passed as a parameter
   query: QueryDTO = { filters: [] },
   pagination: Pagination = defaultPagination, // Default pagination with page 1 and size 10
+  isClient: boolean = true,
 ) => {
   // Validate QueryDTO
   const queryValidation = querySchema.safeParse(query);
@@ -120,9 +128,11 @@ export const doAdvanceSearch = async <R>(
 
   const queryParams = createQueryParams(pagination);
 
+  const tokenProvider = isClient ? getClientToken : getServerToken;
   return fetchData<QueryDTO, PageableResult<R>>(
     `${url}?${queryParams.toString()}`,
     "POST",
-    query, // Pass the QueryDTO directly in the body
+    query,
+    tokenProvider,
   );
 };
