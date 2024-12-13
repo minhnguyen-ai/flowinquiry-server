@@ -93,6 +93,19 @@ public class WorkflowController {
     }
 
     /**
+     * Get global workflows not linked to a specific team.
+     *
+     * @param teamId the ID of the team
+     * @return List of WorkflowDTOs representing global workflows not linked to the team
+     */
+    @GetMapping("/teams/{teamId}/global-workflows-not-linked-yet")
+    public ResponseEntity<List<WorkflowDTO>> getGlobalWorkflowsNotLinkedToTeam(
+            @PathVariable Long teamId) {
+        List<WorkflowDTO> workflows = workflowService.listGlobalWorkflowsNotLinkedToTeam(teamId);
+        return ResponseEntity.ok(workflows);
+    }
+
+    /**
      * Endpoint to retrieve all valid target states for a given workflow and current state ID, with
      * an option to include the current state itself.
      *
@@ -118,7 +131,7 @@ public class WorkflowController {
      * @param workflowId The ID of the workflow to retrieve.
      * @return WorkflowDetailedDTO if found, otherwise 404.
      */
-    @GetMapping("/{workflowId}/details")
+    @GetMapping("/details/{workflowId}")
     public ResponseEntity<WorkflowDetailedDTO> getWorkflowDetail(@PathVariable Long workflowId) {
         return workflowService
                 .getWorkflowDetail(workflowId)
@@ -131,5 +144,36 @@ public class WorkflowController {
             @RequestBody WorkflowDetailedDTO workflowDetailedDTO) {
         WorkflowDetailedDTO savedWorkflow = workflowService.saveWorkflow(workflowDetailedDTO);
         return ResponseEntity.ok(savedWorkflow);
+    }
+
+    @PutMapping("/details/{workflowId}")
+    public ResponseEntity<WorkflowDetailedDTO> updateWorkflow(
+            @PathVariable Long workflowId,
+            @Valid @RequestBody WorkflowDetailedDTO workflowDetailedDTO) {
+        WorkflowDetailedDTO updatedWorkflow =
+                workflowService.updateWorkflow(workflowId, workflowDetailedDTO);
+
+        return ResponseEntity.ok(updatedWorkflow);
+    }
+
+    @PostMapping("/{referencedWorkflowId}/teams/{teamId}/create-workflow-reference")
+    public ResponseEntity<WorkflowDetailedDTO> createWorkflowByReference(
+            @PathVariable Long teamId,
+            @PathVariable Long referencedWorkflowId,
+            @RequestBody WorkflowDTO workflowDTO) {
+        WorkflowDetailedDTO createdWorkflow =
+                workflowService.createWorkflowByReference(
+                        teamId, referencedWorkflowId, workflowDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdWorkflow);
+    }
+
+    @PostMapping("/{workflowToCloneId}/teams/{teamId}/create-workflow-clone")
+    public ResponseEntity<WorkflowDetailedDTO> createWorkflowByCloning(
+            @PathVariable Long teamId,
+            @PathVariable Long workflowToCloneId,
+            @RequestBody WorkflowDTO workflowDTO) {
+        WorkflowDetailedDTO clonedWorkflow =
+                workflowService.createWorkflowByCloning(teamId, workflowToCloneId, workflowDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(clonedWorkflow);
     }
 }

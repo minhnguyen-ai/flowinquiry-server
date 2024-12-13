@@ -21,7 +21,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -327,7 +326,7 @@ class UserControllerIT {
                 });
     }
 
-    private static @NotNull UserDTO getAdminUserDTO(User updatedUser) {
+    private static UserDTO getAdminUserDTO(User updatedUser) {
         UserDTO userDTO = new UserDTO();
         userDTO.setId(updatedUser.getId());
         userDTO.setFirstName(UPDATED_FIRSTNAME);

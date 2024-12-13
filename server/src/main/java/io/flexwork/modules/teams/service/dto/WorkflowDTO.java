@@ -11,22 +11,17 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @SuperBuilder
 public class WorkflowDTO {
-
     private Long id;
-
     private String name;
-
     private String description;
-
     private String requestName;
-
     private Long ownerId; // ID of the owning team; null for global workflows
-
+    private String ownerName;
     private WorkflowVisibility visibility;
-
     private Integer level1EscalationTimeout;
-
     private Integer level2EscalationTimeout;
-
     private Integer level3EscalationTimeout;
+    private Long parentWorkflowId;
+    private boolean clonedFromGlobal;
+    private String tags;
 }
