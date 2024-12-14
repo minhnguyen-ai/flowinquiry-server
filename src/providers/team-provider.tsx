@@ -1,11 +1,18 @@
 "use client";
 
-import React, { createContext, ReactNode, useContext } from "react";
+import React, {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
+import { findTeamById } from "@/lib/actions/teams.action";
 import { TeamDTO } from "@/types/teams";
 
 interface TeamProviderProps {
-  team: TeamDTO;
+  teamId: number;
   children: ReactNode;
 }
 
@@ -21,8 +28,22 @@ export const useTeam = (): TeamDTO => {
 };
 
 export const TeamProvider: React.FC<TeamProviderProps> = ({
-  team,
+  teamId,
   children,
 }) => {
+  const [team, setTeam] = useState<TeamDTO | null>(null);
+
+  useEffect(() => {
+    const fetchTeam = async () => {
+      findTeamById(teamId).then((data) => setTeam(data));
+    };
+
+    fetchTeam();
+  }, [teamId]);
+
+  if (!team) {
+    return <div>Loading...</div>;
+  }
+
   return <TeamContext.Provider value={team}>{children}</TeamContext.Provider>;
 };
