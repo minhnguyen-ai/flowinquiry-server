@@ -8,14 +8,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  MultiSelector,
-  MultiSelectorContent,
-  MultiSelectorInput,
-  MultiSelectorItem,
-  MultiSelectorList,
-  MultiSelectorTrigger,
-} from "@/components/ui/multi-select";
+import { MultiSelect } from "@/components/ui/multi-select";
 import { getAuthorities } from "@/lib/actions/authorities.action";
 import { AuthorityDTO } from "@/types/authorities";
 import { UiAttributes } from "@/types/ui-components";
@@ -30,7 +23,8 @@ const AuthoritiesSelect = ({
   label,
   required,
 }: AuthoritiesSelectProps & UiAttributes) => {
-  const [authorities, setAuthorities] = useState<Array<AuthorityDTO>>();
+  const [authorities, setAuthorities] = useState<AuthorityDTO[]>();
+
   useEffect(() => {
     const fetchAuthorities = async () => {
       const data = await getAuthorities(0);
@@ -41,39 +35,51 @@ const AuthoritiesSelect = ({
   }, []);
 
   if (authorities === undefined) {
-    return <div>Can not load authorities</div>;
+    return <div>Cannot load authorities</div>;
   }
+
+  // Map authorities to options
+  const options = authorities.map((auth) => ({
+    value: auth.name,
+    label: auth.descriptiveName,
+  }));
 
   return (
     <FormField
       control={form.control}
       name="authorities"
-      render={({ field }) => (
-        <FormItem className="space-y-0">
-          <FormLabel>
-            {label}
-            {required && <span className="text-destructive"> *</span>}
-          </FormLabel>
-          <MultiSelector onValuesChange={field.onChange} values={field.value}>
-            <MultiSelectorTrigger>
-              <MultiSelectorInput placeholder="Select authorities" />
-            </MultiSelectorTrigger>
-            <MultiSelectorContent>
-              <MultiSelectorList>
-                {authorities.map((authority) => (
-                  <MultiSelectorItem
-                    key={authority.name}
-                    value={authority.descriptiveName}
-                  >
-                    <span>{authority.descriptiveName}</span>
-                  </MultiSelectorItem>
-                ))}
-              </MultiSelectorList>
-            </MultiSelectorContent>
-          </MultiSelector>
-          <FormMessage />
-        </FormItem>
-      )}
+      render={({ field }) => {
+        // Transform field.value (array of AuthorityDTO) to match MultiSelect's defaultValue (array of options)
+        const defaultValues =
+          field.value?.map((auth: AuthorityDTO) => auth.name) ?? [];
+
+        return (
+          <FormItem className="space-y-0">
+            <FormLabel>
+              {label}
+              {required && <span className="text-destructive"> *</span>}
+            </FormLabel>
+            <MultiSelect
+              options={options}
+              onValueChange={(newValues) =>
+                field.onChange(
+                  newValues
+                    .map((selectedValue) =>
+                      authorities.find((auth) => auth.name === selectedValue),
+                    )
+                    .filter(Boolean)
+                    .map((auth) => auth?.name),
+                )
+              }
+              defaultValue={defaultValues}
+              placeholder="Select authorities"
+              animation={2}
+              maxCount={3}
+            />
+            <FormMessage />
+          </FormItem>
+        );
+      }}
     />
   );
 };

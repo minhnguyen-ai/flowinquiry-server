@@ -26,12 +26,13 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import DefaultUserLogo from "@/components/users/user-logo";
 import { useImageCropper } from "@/hooks/use-image-cropper";
+import { put } from "@/lib/actions/commons.action";
 import { findUserById } from "@/lib/actions/users.action";
-import { apiClient } from "@/lib/api-client";
+import { BACKEND_API } from "@/lib/constants";
 import { obfuscate } from "@/lib/endecode";
-import { userSchema } from "@/types/users";
+import { UserDTOSchema } from "@/types/users";
 
-const userSchemaWithFile = userSchema.extend({
+const userSchemaWithFile = UserDTOSchema.extend({
   file: z.any().optional(), // Add file as an optional field of any type
 });
 
@@ -64,12 +65,7 @@ export const ProfileForm = () => {
       formData.append("file", selectedFile);
     }
 
-    await apiClient(
-      "/api/admin/users",
-      "PUT",
-      formData,
-      session?.user?.accessToken,
-    );
+    await put(`${BACKEND_API}/api/users`, formData);
     router.push(`/portal/users/${obfuscate(user?.id)}`);
   };
 

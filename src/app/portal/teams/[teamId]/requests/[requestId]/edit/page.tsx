@@ -5,11 +5,10 @@ import TeamNavLayout from "@/components/teams/team-nav";
 import { TeamRequestForm } from "@/components/teams/team-requests-form";
 import { deobfuscateToNumber } from "@/lib/endecode";
 
-export default async function Page({
-  params,
-}: {
-  params: { teamId: string; requestId: string };
-}) {
+const Page = async (props: {
+  params: Promise<{ teamId: string; requestId: string }>;
+}) => {
+  const params = await props.params;
   const teamRequestId = deobfuscateToNumber(params.requestId);
 
   return (
@@ -19,4 +18,6 @@ export default async function Page({
       </TeamNavLayout>
     </ContentLayout>
   );
-}
+};
+
+export default Page;
