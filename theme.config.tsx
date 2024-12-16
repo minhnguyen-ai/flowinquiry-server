@@ -10,7 +10,7 @@ const config: DocsThemeConfig = {
   docsRepositoryBase: 'https://github.com/theflexwork/flexwork-docs',
   logo: (
     <>
-      <img src="/flexwork-docs/logo.png" />
+      <img src="/logo.png" />
     </>
   ),
   head: function useHead() {
@@ -18,7 +18,7 @@ const config: DocsThemeConfig = {
     const { route } = useRouter()
     const isDefault = route === '/' || !config.title
     const image =
-      'https://theflexwork.io/' +
+      'https://docs.theflexwork.io/' +
       (isDefault ? 'og.jpeg' : `api/og?title=${config.title}`)
 
     const description =

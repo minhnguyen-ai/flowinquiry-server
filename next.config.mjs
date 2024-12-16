@@ -16,7 +16,7 @@ const sep = path.sep === '/' ? '/' : '\\\\'
 const ALLOWED_SVG_REGEX = new RegExp(`components${sep}icons${sep}.+\\.svg$`)
 
 export default withNextra({
-  basePath: "/flexwork-docs",
+  basePath: "",
   reactStrictMode: true,
   output: 'export',
   images: {

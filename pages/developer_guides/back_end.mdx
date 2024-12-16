@@ -22,7 +22,7 @@ Access the latest source code for Flexwork's back-end at https://github.com/thef
 ### Folders organization
 
 <FileTree>
-  <FileTree.Folder name="flexwork-frontend" defaultOpen>
+  <FileTree.Folder name="flexwork-server" defaultOpen>
     <FileTree.Folder name="scripts" />
     <FileTree.Folder name="server" />
     <FileTree.Folder name="tools" />
@@ -64,7 +64,7 @@ You will need to run the following scripts:
 
 `scripts/init_git_hooks.sh`: Sets up a git hook to automatically format and check code logic each time you commit changes.
 
-`scripts/init_environments.sh`: Create a new .env.local file, which is used by the Flexwork server
+`scripts/create_secrets.sh`: Create secrets stored in the  `.env.local` file, which is used by the Flexwork server
 
 <Callout emoji="💡">
   You can run the `scripts/all.sh` script, which will check your environment settings and perform the necessary configurations, eliminating the need to run multiple scripts individually
@@ -74,7 +74,7 @@ You will need to run the following scripts:
 
 To use Flexwork's email features, such as sending activation emails to users or reminders about upcoming tasks, you'll need an SMTP account. You can configure this with providers like Gmail, Amazon SES, or any SMTP service. Please note that this email setup is intended for use in a local environment only.
 
-Run the script `scripts/smtp_config.sh`, it will ask you the STMP information, and then it writes all to the local file `.env.local`
+Run the script `scripts/mail_config.sh`, it will ask you the STMP information, and then it writes all to the local file `.env.local`
 
 ```bash
 ➜  flexwork-server git:(main) ✗ scripts/mail_config.sh

@@ -4,10 +4,6 @@ export default {
         title: "Home",
         type: "page"
     },
-    user_guides: {
-        title: "User Guides",
-        type: "page"
-    },
     developer_guides: {
         title: "Developer Guides",
         type: "page"
