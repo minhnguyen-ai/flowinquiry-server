@@ -163,7 +163,7 @@ public class UserService {
         user.setPassword(encryptedPassword);
         user.setResetKey(RandomUtil.generateResetKey());
         user.setResetDate(Instant.now());
-        user.setStatus(UserStatus.ACTIVE);
+        user.setStatus(UserStatus.PENDING);
 
         // Due to client when construct the authority, it passes the Authority object with the name
         // and descriptiveName have both actual value
@@ -172,10 +172,7 @@ public class UserService {
         if (userDTO.getAuthorities() != null) {
             Set<Authority> authorities =
                     userDTO.getAuthorities().stream()
-                            .map(
-                                    authorityDTO ->
-                                            authorityRepository.findByDescriptiveName(
-                                                    authorityDTO.getDescriptiveName()))
+                            .map(authorityRepository::findById)
                             .filter(Optional::isPresent)
                             .map(Optional::get)
                             .collect(Collectors.toSet());
@@ -202,7 +199,7 @@ public class UserService {
         if (userDTO.getAuthorities() != null) {
             managedAuthorities.clear();
             userDTO.getAuthorities().stream()
-                    .map(authorityDTO -> authorityRepository.findById(authorityDTO.getName()))
+                    .map(authorityRepository::findById)
                     .filter(Optional::isPresent)
                     .map(Optional::get)
                     .forEach(managedAuthorities::add);
