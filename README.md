@@ -1,10 +1,10 @@
-# Flexwork documentation
+# FlowInquiry documentation
 
-Visit the Flexwork public documentation site. Check it out [here](https://theflexwork.github.io/flexwork-docs)
+Visit the FlowInquiry public documentation site. Check it out [here](https://docs.flowinquiry.io)
 
 ## Development
 
-Run the command `pnpm dev` that launch the Flexwork site in watch mode
+Run the command `pnpm dev` that launch the FlowInquiry site in watch mode
 
 ```bash
 > next -p 4000

@@ -4,15 +4,15 @@ import {Callout, Tabs} from 'nextra/components'
 
 ## Build your own docker images
 
-You can build your own Docker images and deploy them anywhere, or use the pre-built Flexwork images available on [Docker Hub](https://hub.docker.com/u/theflexwork)
+You can build your own Docker images and deploy them anywhere, or use the pre-built FlowInquiry images available on [Docker Hub](https://hub.docker.com/u/flowinquiry)
 
 <Tabs items={['Front-end', 'Back-end']}>
     <Tabs.Tab>
-        To build and publish Docker images for the Flexwork front-end, use the Dockerfile in the root folder along with the `scripts/docker_deployment.sh` script.
+        To build and publish Docker images for the FlowInquiry front-end, use the Dockerfile in the root folder along with the `scripts/docker_deployment.sh` script.
         Use the argument `--tag $version` if you want to customize the docker image version
 
         ```bash
-        flexwork-frontend git:(main) scripts/docker_deployment.sh --tag 0.0.1
+        flowinquiry-frontend git:(main) scripts/docker_deployment.sh --tag 0.0.1
         Building Docker image...
         [+] Building 5.2s (22/22) FINISHED                                                                                                                                       docker:desktop-linux
         => [internal] load build definition from Dockerfile                                                                                                                                     0.0s
@@ -31,24 +31,24 @@ You can build your own Docker images and deploy them anywhere, or use the pre-bu
         ```
     </Tabs.Tab>
     <Tabs.Tab>
-        Flexwork backend uses Jib to build and deploy Docker images to the Docker repository. To change the Docker image
+        FlowInquiry backend uses Jib to build and deploy Docker images to the Docker repository. To change the Docker image
         version, edit the `projectVersion` attribute in the `gradle.properties` file.
 
         Open the terminal and navigate to the root folder. Use the command `./gradlew :server:jibDockerBuild` to build the Docker image, or `./gradlew :server:jib` to build and deploy it.
 
         ```bash
-        ➜  flexwork-server git:(main) ./gradlew :server:jibDockerBuild
+        ➜  flowinquiry-server git:(main) ./gradlew :server:jibDockerBuild
 
         > Task :server:jibDockerBuild
 
-        Containerizing application to Docker daemon as theflexwork/flexwork-server, theflexwork/flexwork-server, theflexwork/flexwork-server:0.0.1...
+        Containerizing application to Docker daemon as flowinquiry/flowinquiry-server, flowinquiry/flowinquiry-server, flowinquiry/flowinquiry-server:0.0.1...
         ...
 
         Got output:
 
         Container entrypoint set to [bash, -c, /entrypoint.sh]
 
-        Built image to Docker daemon as theflexwork/flexwork-server, theflexwork/flexwork-server, theflexwork/flexwork-server:0.0.1
+        Built image to Docker daemon as flowinquiry/flowinquiry-server, flowinquiry/flowinquiry-server, flowinquiry/flowinquiry-server:0.0.1
         Executing tasks:
         [==============================] 100.0% complete
 
@@ -61,30 +61,30 @@ You can build your own Docker images and deploy them anywhere, or use the pre-bu
 
 ## Multi-Platform Deployment
 
-Our dedicated [repository](https://github.com/theflexwork/flexwork-ops) provides all the resources needed for flexible deployment configurations. With both the frontend and backend packaged as
-Docker images, Flexwork is ready to run on any platform compatible with containerized solutions, such as Kubernetes, Docker Swarm, AWS, Azure, and more
+Our dedicated [repository](https://github.com/flowinquiry/flowinquiry-ops) provides all the resources needed for flexible deployment configurations. With both the frontend and backend packaged as
+Docker images, FlowInquiry is ready to run on any platform compatible with containerized solutions, such as Kubernetes, Docker Swarm, AWS, Azure, and more
 
 ### Docker Compose
 
-The Docker Compose example demonstrates how to quickly run Flexwork in a containerized environment, ideal for testing or local LAN use.
-For more details, explore the flexwork-docker folder in the [flexwork-ops]((https://github.com/theflexwork/flexwork-ops)) repository.
+The Docker Compose example demonstrates how to quickly run FlowInquiry in a containerized environment, ideal for testing or local LAN use.
+For more details, explore the flowinquiry-docker folder in the [flowinquiry-ops]((https://github.com/flowinquiry/flowinquiry-ops)) repository.
 
 ```mermaid
 flowchart LR
     Customer["Customer"] -- HTTPS --> Caddy["Caddy (Reverse Proxy)"]
 
-    subgraph Flexwork
+    subgraph FlowInquiry
         direction LR
-        Caddy -- HTTP --> Frontend["Flexwork Frontend"]
-        Frontend -- HTTP --> Backend["Flexwork Backend"]
+        Caddy -- HTTP --> Frontend["FlowInquiry Frontend"]
+        Frontend -- HTTP --> Backend["FlowInquiry Backend"]
     end
 ```
 
-The Flexwork Docker Compose setup uses [Caddy](https://caddyserver.com/) as a reverse proxy to serve HTTPS even for both localhost and LAN environments.
-Caddy is configured with a Caddyfile that supports the domains `localhost` and `local.flexwork.io`
+The FlowInquiry Docker Compose setup uses [Caddy](https://caddyserver.com/) as a reverse proxy to serve HTTPS even for both localhost and LAN environments.
+Caddy is configured with a Caddyfile that supports the domains `localhost` and `local.flowinquiry.io`
 
 ```
-local.flexwork.io, localhost {
+local.flowinquiry.io, localhost {
     @http {
         protocol http
     }
@@ -100,10 +100,10 @@ You can change the domain name to any name you prefer.
 If you use your custom domain in your local machine, remember to add it into the file `/etc/hosts`
 </Callout>
 
-Go to the folder `flexwork-docker`, and execute the scripts all.sh under the folder `scripts`
+Go to the folder `flowinquiry-docker`, and execute the scripts all.sh under the folder `scripts`
 
 ```bash
-➜  flexwork-docker git:(main) ✗ scripts/all.sh
+➜  flowinquiry-docker git:(main) ✗ scripts/all.sh
 Running frontend_config.sh...
 Environment variables have been written to .frontend.env
 frontend_config.sh succeeded.
@@ -117,8 +117,8 @@ Enter your SMTP port: <smtp port>
 Enter your username: <user email>
 Enter your password: <password>
 Does SMTP require STARTTLS (y/n)? y
-Please enter the email address that will be used as the sender for outgoing emails: noreply@theflexwork.io
-Please enter the base URL that will be used for the email template: https://local.flexwork.io
+Please enter the email address that will be used as the sender for outgoing emails: noreply@flowinquiry.io
+Please enter the base URL that will be used for the email template: https://local.flowinquiry.io
 Configuration has been saved to .env.local
 backend_mail_config.sh succeeded.
 ```
@@ -126,12 +126,12 @@ backend_mail_config.sh succeeded.
 then run the docker compose `docker compose -f services.yml up`
 
 ```bash
-➜  flexwork-docker git:(main) ✗ docker compose -f services.yml up
+➜  flowinquiry-docker git:(main) ✗ docker compose -f services.yml up
 [+] Running 5/4
- ✔ Container flexwork-postgresql-1                                                                                                                         Created                     0.0s
+ ✔ Container flowinquiry-postgresql-1                                                                                                                         Created                     0.0s
  ✔ Container caddy                                                                                                                                         Runnin...                   0.0s
- ✔ Container flexwork-front-end-1                                                                                                                          Recreated                   0.1s
- ✔ Container flexwork-back-end-1                                                                                                                           Recreated                   0.1s
+ ✔ Container flowinquiry-front-end-1                                                                                                                          Recreated                   0.1s
+ ✔ Container flowinquiry-back-end-1                                                                                                                           Recreated                   0.1s
  ! back-end The requested image's platform (linux/amd64) does not match the detected host platform (linux/arm64/v8) and no specific platform was requested                             0.0s
 Attaching to caddy, back-end-1, front-end-1, postgresql-1
 back-end-1    | The application will start in 0s...
@@ -146,45 +146,34 @@ back-end-1    | 03:46:11,368 |-INFO in ch.qos.logback.core.model.processor.Appen
 back-end-1    | 03:46:11,368 |-INFO in ch.qos.logback.core.model.processor.DefaultProcessor@31064f47 - End of configuration.
 back-end-1    | 03:46:11,368 |-INFO in org.springframework.boot.logging.logback.SpringBootJoranConfigurator@576dc710 - Registering current configuration as safe fallback point
 back-end-1    |
-back-end-1    |  ███████████ ████                                                          █████
-back-end-1    | ░░███░░░░░░█░░███                                                         ░░███
-back-end-1    |  ░███   █ ░  ░███   ██████  █████ █████ █████ ███ █████  ██████  ████████  ░███ █████
-back-end-1    |  ░███████    ░███  ███░░███░░███ ░░███ ░░███ ░███░░███  ███░░███░░███░░███ ░███░░███
-back-end-1    |  ░███░░░█    ░███ ░███████  ░░░█████░   ░███ ░███ ░███ ░███ ░███ ░███ ░░░  ░██████░
-back-end-1    |  ░███  ░     ░███ ░███░░░    ███░░░███  ░░███████████  ░███ ░███ ░███      ░███░░███
-back-end-1    |  █████       █████░░██████  █████ █████  ░░████░████   ░░██████  █████     ████ █████
-back-end-1    | ░░░░░       ░░░░░  ░░░░░░  ░░░░░ ░░░░░    ░░░░ ░░░░     ░░░░░░  ░░░░░     ░░░░ ░░░░░
-back-end-1    |
-back-end-1    |
-back-end-1    |
-back-end-1    | :: Flexwork 🤓  :: Running Spring Boot 3.3.5 :: Startup profile(s) prod ::
-back-end-1    | :: https://www.flexwork.io ::
+back-end-1    | :: FlowInquiry 🤓  :: Running Spring Boot 3.3.5 :: Startup profile(s) prod ::
+back-end-1    | :: https://www.flowinquiry.io ::
 
-back-end-1    | 2024-11-10T03:46:32.394Z  INFO 1 --- [  restartedMain] io.flexwork.FlexworkApp.logApplicationStartup:129 : ----------------------------------------------------------
-back-end-1    | 2024-11-10T03:46:32.395Z  INFO 1 --- [  restartedMain] io.flexwork.FlexworkApp.logApplicationStartup:130 :      Application 'flexApp' is running! Access URLs:
-back-end-1    | 2024-11-10T03:46:32.395Z  INFO 1 --- [  restartedMain] io.flexwork.FlexworkApp.logApplicationStartup:131 :      Local:          http://localhost:8080/
-back-end-1    | 2024-11-10T03:46:32.395Z  INFO 1 --- [  restartedMain] io.flexwork.FlexworkApp.logApplicationStartup:132 :      External:       http://172.19.0.5:8080/
-back-end-1    | 2024-11-10T03:46:32.396Z  INFO 1 --- [  restartedMain] io.flexwork.FlexworkApp.logApplicationStartup:133 :      Profile(s):     prod
+back-end-1    | 2024-11-10T03:46:32.394Z  INFO 1 --- [  restartedMain] io.flowinquiry.FlowInquiryApp.logApplicationStartup:129 : ----------------------------------------------------------
+back-end-1    | 2024-11-10T03:46:32.395Z  INFO 1 --- [  restartedMain] io.flowinquiry.FlowInquiryApp.logApplicationStartup:130 :      Application 'FlowInquiry' is running! Access URLs:
+back-end-1    | 2024-11-10T03:46:32.395Z  INFO 1 --- [  restartedMain] io.flowinquiry.FlowInquiryApp.logApplicationStartup:131 :      Local:          http://localhost:8080/
+back-end-1    | 2024-11-10T03:46:32.395Z  INFO 1 --- [  restartedMain] io.flowinquiry.FlowInquiryApp.logApplicationStartup:132 :      External:       http://172.19.0.5:8080/
+back-end-1    | 2024-11-10T03:46:32.396Z  INFO 1 --- [  restartedMain] io.flowinquiry.FlowInquiryApp.logApplicationStartup:133 :      Profile(s):     prod
 
 ```
 
-Open the browser, and access to the address https//localhost or https://local.flexwork.io (or your custom domain). Use the default the either following credentials:
+Open the browser, and access to the address https//localhost or https://local.flowinquiry.io (or your custom domain). Use the default the either following credentials:
 
 * Administrator:
 
-    * Username: admin@theflexwork.io
+    * Username: admin@flowinquiry.io
     * Password: admin
 
 * User:
-    * Username: user@theflexwork.io
-    * Password: user
+    * Username: user@flowinquiry.io
+    * Password: user1234
 
 #### Local HTTPS
 
 Caddy uses its local CA to issue certificates, which means that HTTP clients outside the container won’t automatically trust the TLS certificate served by Caddy.
 To resolve this, you may need to install Caddy's root CA certificate in your host machine’s trust store.
 
-The Caddy root CA certificate can be found at flexwork-docker/caddy/certificate-authority/root.crt. This file is only generated when you run the Flexwork stack
+The Caddy root CA certificate can be found at flowinquiry-docker/caddy/certificate-authority/root.crt. This file is only generated when you run the FlowInquiry stack
 with Caddy included. For detailed steps, refer to the Caddy documentation: [Local HTTPS with Docker](https://caddyserver.com/docs/running#local-https-with-docker)
 
 ### Docker Swarm
