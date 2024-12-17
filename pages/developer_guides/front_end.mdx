@@ -2,18 +2,18 @@ import { Callout, FileTree } from 'nextra/components'
 
 # Front-end
 
-Flexwork front-end uses [NextJs](https://nextjs.org/) framework to develop its UI. 
+flowinquiry front-end uses [NextJs](https://nextjs.org/) framework to develop its UI.
 
 ## Get the latest sources from GitHub
 
-Access the latest source code for Flexwork's front-end at https://github.com/theflexwork/flexwork-frontend
+Access the latest source code for flowinquiry's front-end at https://github.com/flowinquiry/flowinquiry-frontend
 
 ## Development
 
 ### Folders organization
 
 <FileTree>
-  <FileTree.Folder name="flexwork-frontend" defaultOpen>
+  <FileTree.Folder name="flowinquiry-frontend" defaultOpen>
     <FileTree.Folder name="public" />
     <FileTree.Folder name="scripts" />
     <FileTree.Folder name="src" />
@@ -22,14 +22,14 @@ Access the latest source code for Flexwork's front-end at https://github.com/the
 
 * `public` contains static assets, such as files and images, served by Next.js
 * `scripts` Includes useful scripts for validating environment settings, setting up project environment variables, and more
-* `src` the Flexwork's frontend source code
+* `src` the FlowInquiry's frontend source code
 
 #### Checking environments
 
-Flexwork's front-end requires Node and pnpm to be installed on your machine. You can run the valid_checks.sh script located in the scripts folder to verify if your machine is set up to work with Flexwork
+FlowInquiry's front-end requires Node and pnpm to be installed on your machine. You can run the valid_checks.sh script located in the scripts folder to verify if your machine is set up to work with FlowInquiry
 
 ```bash
-➜  flexwork-frontend git:(main) scripts/valid_checks.sh 
+➜  FlowInquiry-frontend git:(main) scripts/valid_checks.sh
 Running node_check.sh...
 Node.js version: 20.14.0
 Node.js version is 20.14.0, which is greater than or equal to 18.
@@ -38,7 +38,7 @@ Running pnpm_check.sh...
 pnpm is installed.
 pnpm version: 9.7.0
 pnpm_check.sh succeeded.
-Your environments settings satisfy Flexwork's conditions
+Your environments settings satisfy FlowInquiry's conditions
 ```
 
 #### Setup scripts
@@ -59,11 +59,11 @@ Open the terminal and run the command
 pnpm dev
 ```
 
-it will launch the process to start the Flexwork front-end at the default port `3000`
+it will launch the process to start the FlowInquiry front-end at the default port `3000`
 ```bash
-➜  flexwork-frontend git:(main) pnpm dev
+➜  flowinquiry-frontend git:(main) pnpm dev
 
-> frontend@0.1.0 dev ~/flexwork-frontend
+> frontend@0.1.0 dev ~/flowinquiry-frontend
 > next dev
 
   ▲ Next.js xx.x.xx
@@ -77,15 +77,15 @@ it will launch the process to start the Flexwork front-end at the default port `
 <Callout type="error" emoji="️🚫">
 Make sure you run the back-end server before access the front-end. Check the section
 [Run application](/developer_guides/back_end#run-application) to know how to start
-the Flexwork server
+the FlowInquiry server
 </Callout>
 
 Open the browser, and access to the address `http://localhost:3000`. Use the default
 the either following credentials:
 
 * Administrator:
-    * Username: admin@theflexwork.io
+    * Username: admin@flowinquiry.io
     * Password: admin
 * User:
-    * Username: user@theflexwork.io
+    * Username: user@flowinquiry.io
     * Password: user1234
