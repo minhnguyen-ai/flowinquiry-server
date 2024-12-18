@@ -27,25 +27,27 @@ const config: DocsThemeConfig = {
     const title = config.title + (route === '/' ? '' : ' - FlowInquiry')
 
     return (
-      <>
-        <title>{title}</title>
-        <meta property="og:title" content={title} />
-        <meta name="description" content={description} />
-        <meta property="og:description" content={description} />
-        <meta property="og:image" content={image} />
+        <>
+            <title>{title}</title>
+            <meta property="og:title" content={title}/>
+            <meta name="description" content={description}/>
+            <meta property="og:description" content={description}/>
+            <meta property="og:image" content={image}/>
 
-        <meta name="msapplication-TileColor" content="#fff" />
-        <meta httpEquiv="Content-Language" content="en" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:site:domain" content="flowinquiry" />
-        <meta name="twitter:url" content="https://flowinquiry.io" />
-        <meta name="apple-mobile-web-app-title" content="FlowInquiry" />
-        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
-      </>
+            <meta name="msapplication-TileColor" content="#fff"/>
+            <meta httpEquiv="Content-Language" content="en"/>
+            <meta name="twitter:card" content="summary_large_image"/>
+            <meta name="twitter:site:domain" content="flowinquiry"/>
+            <meta name="twitter:url" content="https://flowinquiry.io"/>
+            <meta name="apple-mobile-web-app-title" content="FlowInquiry"/>
+            <link rel="icon" href="/favicon.ico" type="image/x-icon"/>
+            <link rel="icon" href="/favicon.png" type="image/png"/>
+            <link rel="icon" href="/favicon.svg" type="image/svg+xml"/>
+        </>
     )
   },
-  feedback: {
-    content: 'Question? Give us feedback →',
+    feedback: {
+        content: 'Question? Give us feedback →',
     labels: 'feedback'
   },
   gitTimestamp: null,
