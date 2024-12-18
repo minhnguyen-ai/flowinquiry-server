@@ -16,6 +16,45 @@ FlowInquiry Client is the front-end application for the FlowInquiry platform, de
 
 4. Integration with FlowInquiry Server: Communicates with the back-end via REST APIs for real-time data synchronization and updates.
 
+## Screenshots
+
+<table>
+  <tr>
+    <td style="padding: 10px; text-align: center;">
+      <a href="assets/team_dashboard.png">
+        <img src="assets/team_dashboard_thumbnail.png" alt="Team Dashboard">
+      </a>
+    </td>
+    <td style="padding: 10px; text-align: center;">
+      <a href="assets/team_members.png">
+        <img src="assets/team_members_thumbnail.png" alt="Team Members">
+      </a>
+    </td>
+    <td style="padding: 10px; text-align: center;">
+      <a href="assets/ticket_view.png">
+        <img src="assets/ticket_view_thumbnail.png" alt="Ticket View">
+      </a>
+    </td>
+  </tr>
+  <tr>
+    <td style="padding: 10px; text-align: center;">
+      <a href="assets/user_view.png">
+        <img src="assets/user_view_thumbnail.png" alt="User View">
+      </a>
+    </td>
+    <td style="padding: 10px; text-align: center;">
+      <a href="assets/workflow_customization.png">
+        <img src="assets/workflow_customization_thumbnail.png" alt="Workflow Customization">
+      </a>
+    </td>
+    <td style="padding: 10px; text-align: center;">
+      <a href="assets/workspace_dashboard.png">
+        <img src="assets/workspace_dashboard_thumbnail.png" alt="Workspace Dashboard">
+      </a>
+    </td>
+  </tr>
+</table>
+
 ## Getting Started
 
 ### Prerequisites
@@ -63,7 +102,7 @@ pnpm dev
 
 ## Related Information
 
-- [FlowInquiry document](https://theflowinquiry.github.io/flowinquiry-docs): The centralized document for FlowInquiry products
+- [FlowInquiry document](https://docs.flowinquiry.io): The centralized document for FlowInquiry products
 - [FlowInquiry Server](https://github.com/flowinquiry/flowinquiry-server): Back-end services for FlowInquiry.
 - [FlowInquiry Client](https://github.com/flowinquiry/flowinquiry-frontend): Front-end application.
 - [FlowInquiry Ops](https://github.com/flowinquiry/flowinquiry-ops): Deployment and operational scripts.
