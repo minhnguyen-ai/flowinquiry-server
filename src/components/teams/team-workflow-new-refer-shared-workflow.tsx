@@ -25,9 +25,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
+  createWorkflowFromCloning,
   createWorkflowFromReference,
   getGlobalWorkflowHasNotLinkedWithTeam,
 } from "@/lib/actions/workflows.action";
+import { obfuscate } from "@/lib/endecode";
 import { WorkflowDTO } from "@/types/workflows";
 
 const workflowReferenceSchema = z.object({
@@ -41,7 +43,14 @@ const workflowReferenceSchema = z.object({
 
 type WorkflowReferenceFormValues = z.infer<typeof workflowReferenceSchema>;
 
-const NewTeamWorkflowReference = ({ teamId }: { teamId: number }) => {
+// isRefer is true if we create a new workflow refer from an existing one, otherwise we create a new workflow by cloning an existing one
+const NewTeamWorkflowReferFromSharedOne = ({
+  teamId,
+  isRefer,
+}: {
+  teamId: number;
+  isRefer: boolean;
+}) => {
   const router = useRouter();
   const [globalWorkflows, setGlobalWorkflows] = useState<WorkflowDTO[]>([]);
   useEffect(() => {
@@ -64,19 +73,38 @@ const NewTeamWorkflowReference = ({ teamId }: { teamId: number }) => {
   });
 
   const onSubmit = (values: WorkflowReferenceFormValues) => {
-    createWorkflowFromReference(teamId, values.referenceWorkflowId, {
-      name: values.name,
-      requestName: values.requestName,
-      description: values.description,
-      ownerId: teamId,
-    }).then((data) => {
-      router.push(`/portal/teams/${teamId}/workflows/${data.id}`);
-    });
+    if (isRefer) {
+      createWorkflowFromReference(teamId, values.referenceWorkflowId, {
+        name: values.name,
+        requestName: values.requestName,
+        description: values.description,
+        ownerId: teamId,
+      }).then((data) => {
+        router.push(
+          `/portal/teams/${obfuscate(teamId)}/workflows/${obfuscate(data.id)}`,
+        );
+      });
+    } else {
+      createWorkflowFromCloning(teamId, values.referenceWorkflowId, {
+        name: values.name,
+        requestName: values.requestName,
+        description: values.description,
+        ownerId: teamId,
+      }).then((data) => {
+        router.push(
+          `/portal/teams/${obfuscate(teamId)}/workflows/${obfuscate(data.id)}`,
+        );
+      });
+    }
   };
 
   return (
     <div className="p-6 border rounded-lg">
-      <h2 className="text-lg font-bold mb-4">Create Workflow from Reference</h2>
+      <h2 className="text-lg font-bold mb-4">
+        {isRefer
+          ? "Create Workflow from Reference"
+          : "Create Workflow by cloning"}
+      </h2>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <FormField
@@ -92,8 +120,8 @@ const NewTeamWorkflowReference = ({ teamId }: { teamId: number }) => {
                   <Select
                     onValueChange={(value) =>
                       field.onChange(parseInt(value, 10))
-                    } // Convert string to int
-                    value={field.value?.toString()} // Convert int to string
+                    }
+                    value={field.value?.toString()}
                   >
                     <SelectTrigger className="w-[20rem]">
                       <SelectValue placeholder="Select a workflow" />
@@ -115,20 +143,23 @@ const NewTeamWorkflowReference = ({ teamId }: { teamId: number }) => {
             )}
           />
 
-          <ExtInputField
-            form={form}
-            fieldName="name"
-            label="Workflow Name"
-            placeholder="Enter workflow name"
-            required
-          />
-          <ExtInputField
-            form={form}
-            fieldName="requestName"
-            label="Ticket type"
-            placeholder="Enter ticket type"
-            required
-          />
+          {/* Two-column layout for name and requestName */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <ExtInputField
+              form={form}
+              fieldName="name"
+              label="Workflow Name"
+              placeholder="Enter workflow name"
+              required
+            />
+            <ExtInputField
+              form={form}
+              fieldName="requestName"
+              label="Ticket Type"
+              placeholder="Enter ticket type"
+              required
+            />
+          </div>
 
           <ExtTextAreaField
             form={form}
@@ -147,4 +178,4 @@ const NewTeamWorkflowReference = ({ teamId }: { teamId: number }) => {
   );
 };
 
-export default NewTeamWorkflowReference;
+export default NewTeamWorkflowReferFromSharedOne;

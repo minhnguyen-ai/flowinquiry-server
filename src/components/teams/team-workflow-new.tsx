@@ -5,15 +5,14 @@ import React, { useState } from "react";
 import { Heading } from "@/components/heading";
 import { TeamAvatar } from "@/components/shared/avatar-display";
 import TeamNavLayout from "@/components/teams/team-nav";
-import NewTeamWorkflowClone from "@/components/teams/team-workflow-new-clone";
-import NewTeamWorkflowReference from "@/components/teams/team-workflow-new-reference";
-import NewTeamWorkflowFromScratch from "@/components/teams/team-workflow-new-scratch";
+import NewTeamWorkflowReferFromSharedOne from "@/components/teams/team-workflow-new-refer-shared-workflow";
 import { Button } from "@/components/ui/button";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import NewWorkflowFromScratch from "@/components/workflows/workflow-create-from-scratch";
 import { obfuscate } from "@/lib/endecode";
 import { BreadcrumbProvider } from "@/providers/breadcrumb-provider";
 import { useTeam } from "@/providers/team-provider";
@@ -21,7 +20,7 @@ import { useTeam } from "@/providers/team-provider";
 const TeamWorkflowNew = () => {
   const team = useTeam();
   const [selectedOption, setSelectedOption] = useState<
-    "scratch" | "reference" | "clone" | null
+    "scratch" | "clone" | null
   >(null);
 
   const breadcrumbItems = [
@@ -41,11 +40,14 @@ const TeamWorkflowNew = () => {
   const renderComponent = () => {
     switch (selectedOption) {
       case "scratch":
-        return <NewTeamWorkflowFromScratch />;
-      case "reference":
-        return <NewTeamWorkflowReference teamId={team.id!} />;
+        return <NewWorkflowFromScratch teamId={team.id!} />;
       case "clone":
-        return <NewTeamWorkflowClone />;
+        return (
+          <NewTeamWorkflowReferFromSharedOne
+            teamId={team.id!}
+            isRefer={false}
+          />
+        );
       default:
         return null;
     }
@@ -96,20 +98,6 @@ const TeamWorkflowNew = () => {
                   </Button>
                   <div className="text-sm text-gray-500">
                     Start building a new workflow from the ground up.
-                  </div>
-                </div>
-
-                {/* Reference Global Workflow */}
-                <div className="flex items-start">
-                  <Button
-                    onClick={() => setSelectedOption("reference")}
-                    variant="link"
-                    className="h-5"
-                  >
-                    Reference Global Workflow
-                  </Button>
-                  <div className="text-sm text-gray-500">
-                    Use a global workflow as a reference for your team.
                   </div>
                 </div>
 
