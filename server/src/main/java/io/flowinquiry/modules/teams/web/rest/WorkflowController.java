@@ -7,6 +7,7 @@ import io.flowinquiry.modules.teams.service.dto.WorkflowDTO;
 import io.flowinquiry.modules.teams.service.dto.WorkflowDetailedDTO;
 import io.flowinquiry.modules.teams.service.dto.WorkflowStateDTO;
 import io.flowinquiry.query.QueryDTO;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Optional;
@@ -38,12 +39,6 @@ public class WorkflowController {
         this.workflowTransitionService = workflowTransitionService;
     }
 
-    @PostMapping
-    public ResponseEntity<WorkflowDTO> createWorkflow(@RequestBody Workflow workflow) {
-        WorkflowDTO createdWorkflow = workflowService.createWorkflow(workflow);
-        return ResponseEntity.ok(createdWorkflow);
-    }
-
     @PostMapping("/search")
     public ResponseEntity<Page<WorkflowDTO>> findWorkflows(
             @Valid @RequestBody Optional<QueryDTO> queryDTO, Pageable pageable) {
@@ -71,12 +66,15 @@ public class WorkflowController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteWorkflow(@PathVariable Long id) {
+    public ResponseEntity<String> deleteWorkflow(@PathVariable Long id) {
         try {
             workflowService.deleteWorkflow(id);
             return ResponseEntity.noContent().build();
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.notFound().build();
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build(); // 404 Not Found
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("Workflow cannot be deleted: " + e.getMessage()); // 409 Conflict
         }
     }
 
