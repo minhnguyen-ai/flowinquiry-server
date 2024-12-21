@@ -1,4 +1,4 @@
-import {Callout, Tabs} from 'nextra/components'
+import { Callout, Tabs } from "nextra/components";
 
 # Deployment
 
@@ -57,6 +57,7 @@ You can build your own Docker images and deploy them anywhere, or use the pre-bu
 
         ```
     </Tabs.Tab>
+
 </Tabs>
 
 ## Multi-Platform Deployment
@@ -67,7 +68,7 @@ Docker images, FlowInquiry is ready to run on any platform compatible with conta
 ### Docker Compose
 
 The Docker Compose example demonstrates how to quickly run FlowInquiry in a containerized environment, ideal for testing or local LAN use.
-For more details, explore the flowinquiry-docker folder in the [flowinquiry-ops]((https://github.com/flowinquiry/flowinquiry-ops)) repository.
+For more details, explore the flowinquiry-docker folder in the [flowinquiry-ops](<(https://github.com/flowinquiry/flowinquiry-ops)>) repository.
 
 ```mermaid
 flowchart LR
@@ -95,9 +96,12 @@ local.flowinquiry.io, localhost {
     reverse_proxy /* front-end:3000
 }
 ```
+
 You can change the domain name to any name you prefer.
+
 <Callout type="info" emoji="ℹ️">
-If you use your custom domain in your local machine, remember to add it into the file `/etc/hosts`
+  If you use your custom domain in your local machine, remember to add it into
+  the file `/etc/hosts`
 </Callout>
 
 Go to the folder `flowinquiry-docker`, and execute the scripts all.sh under the folder `scripts`
@@ -159,14 +163,14 @@ back-end-1    | 2024-11-10T03:46:32.396Z  INFO 1 --- [  restartedMain] io.flowin
 
 Open the browser, and access to the address https//localhost or https://local.flowinquiry.io (or your custom domain). Use the default the either following credentials:
 
-* Administrator:
+- Administrator:
 
-    * Username: admin@flowinquiry.io
-    * Password: admin
+  - Username: admin@flowinquiry.io
+  - Password: admin
 
-* User:
-    * Username: user@flowinquiry.io
-    * Password: user1234
+- User:
+  - Username: user@flowinquiry.io
+  - Password: user1234
 
 #### Local HTTPS
 
@@ -176,6 +180,6 @@ To resolve this, you may need to install Caddy's root CA certificate in your hos
 The Caddy root CA certificate can be found at flowinquiry-docker/caddy/certificate-authority/root.crt. This file is only generated when you run the FlowInquiry stack
 with Caddy included. For detailed steps, refer to the Caddy documentation: [Local HTTPS with Docker](https://caddyserver.com/docs/running#local-https-with-docker)
 
-
 ### Kubernetes
+
 TBD
