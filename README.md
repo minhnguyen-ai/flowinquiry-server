@@ -16,4 +16,5 @@ Run the command `pnpm dev` that launch the FlowInquiry site in watch mode
    automatically enabled Fast Refresh for 4 custom loaders
  ✓ Ready in 930ms
 ```
- then open the browser to `http://localhost:4000`
+
+then open the browser to `http://localhost:4000`

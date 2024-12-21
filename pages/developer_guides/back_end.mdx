@@ -1,21 +1,20 @@
-import { Callout, FileTree, Tabs } from 'nextra/components'
+import { Callout, FileTree, Tabs } from "nextra/components";
 
 # Back-end
 
 FlowInquiry back-end is a spring boot application, and it has several components:
-* Spring Data
-* Spring REST
-* Spring Security
-* Hibernate
-* Liquibase
+
+- Spring Data
+- Spring REST
+- Spring Security
+- Hibernate
+- Liquibase
 
 FlowInquiry uses Gradle as its build tool and includes the Gradle wrapper in the distribution, so there's no need to install Gradle separately.
-
 
 ## Get the latest sources from GitHub
 
 Access the latest source code for FlowInquiry's back-end at https://github.com/flowinquiry/flowinquiry-server
-
 
 ## Development
 
@@ -29,9 +28,9 @@ Access the latest source code for FlowInquiry's back-end at https://github.com/f
   </FileTree.Folder>
 </FileTree>
 
-* `scripts` Includes useful scripts for validating environment settings, setting up project environment variables, and more
-* `server` the FlowInquiry server sources
-* `tools` extra tools for FlowInquiry server such as liquibase database migration scripts and more
+- `scripts` Includes useful scripts for validating environment settings, setting up project environment variables, and more
+- `server` the FlowInquiry server sources
+- `tools` extra tools for FlowInquiry server such as liquibase database migration scripts and more
 
 ### Checking environments
 
@@ -63,10 +62,12 @@ You will need to run the following scripts:
 
 `scripts/init_git_hooks.sh`: Sets up a git hook to automatically format and check code logic each time you commit changes.
 
-`scripts/create_secrets.sh`: Create secrets stored in the  `.env.local` file, which is used by the FlowInquiry server
+`scripts/create_secrets.sh`: Create secrets stored in the `.env.local` file, which is used by the FlowInquiry server
 
 <Callout emoji="💡">
-  You can run the `scripts/all.sh` script, which will check your environment settings and perform the necessary configurations, eliminating the need to run multiple scripts individually
+  You can run the `scripts/all.sh` script, which will check your environment
+  settings and perform the necessary configurations, eliminating the need to run
+  multiple scripts individually
 </Callout>
 
 #### Sending email
@@ -86,13 +87,19 @@ Please enter the email address that will be used as the sender for outgoing emai
 Please enter the base URL that will be used for the email template: http://localhost:3000
 Backup of .env.local created as .env.local.backup
 Configuration has been saved to .env.local
-````
+```
+
 <Callout type="info" emoji="ℹ️">
-    To use your Google credentials to send a test email, you cannot use your regular email password. Instead, you'll need to generate an App Password. For detailed instructions, see the guide at https://support.google.com/mail/answer/185833?hl=en
+  To use your Google credentials to send a test email, you cannot use your
+  regular email password. Instead, you'll need to generate an App Password. For
+  detailed instructions, see the guide at
+  https://support.google.com/mail/answer/185833?hl=en
 </Callout>
 
 <Callout emoji="💡">
-For setting up email in a production environment, please refer to our documentation [here](/production) or contact the FlowInquiry team for further assistance.
+  For setting up email in a production environment, please refer to our
+  documentation [here](/production) or contact the FlowInquiry team for further
+  assistance.
 </Callout>
 
 ### Run application
@@ -107,9 +114,9 @@ Ensure that Docker is installed on your machine, then run the command `docker co
 [+] Running 1/0
  ✔ Container flowinquiry-postgresql-1  Created                                                                                                                                                                        0.0s
 Attaching to postgresql-1
-postgresql-1  | 
+postgresql-1  |
 postgresql-1  | PostgreSQL Database directory appears to contain a database; Skipping initialization
-postgresql-1  | 
+postgresql-1  |
 postgresql-1  | UTC [1] LOG:  starting PostgreSQL 16.3 (Debian 16.3-1.pgdg120+1) on aarch64-unknown-linux-gnu, compiled by gcc (Debian 12.2.0-14) 12.2.0, 64-bit
 postgresql-1  | UTC [1] LOG:  listening on IPv4 address "0.0.0.0", port 5432
 postgresql-1  | UTC [1] LOG:  listening on IPv6 address "::", port 5432
@@ -119,10 +126,11 @@ postgresql-1  | UTC [1] LOG:  database system is ready to accept connections
 ```
 
 <Callout type="error" emoji="️🚫">
-Be sure to run the scripts/all.sh or scripts/create_secrets.sh script before starting the PostgreSQL database, as they will generate a new 
-PostgreSQL password and store it in the .env.local file, which the PostgreSQL container relies on.
+  Be sure to run the scripts/all.sh or scripts/create_secrets.sh script before
+  starting the PostgreSQL database, as they will generate a new PostgreSQL
+  password and store it in the .env.local file, which the PostgreSQL container
+  relies on.
 </Callout>
-
 
 #### Run flowinquiry server
 
@@ -152,18 +160,19 @@ ______ _             _____                  _
 
 :: FlowInquiry 🤓  :: Running Spring Boot 3.4.0 :: Startup profile(s) dev ::
 :: https://www.flowinquiry.io ::
-DEBUG 25048 --- [kground-preinit] org.jboss.logging.logProvider:164 : Logging Provider: org.jboss.logging.Slf4jLoggerProvider found via system property 
+DEBUG 25048 --- [kground-preinit] org.jboss.logging.logProvider:164 : Logging Provider: org.jboss.logging.Slf4jLoggerProvider found via system property
 DEBUG 50958 --- [  restartedMain] io.flowinquiry.FlowInquiryApp.logStarting:54 : Running with Spring Boot v3.4.0, Spring v6.2.0
 ```
 
 It may take some time before the server APIs are accessible on the default port `8080`
+
 </Tabs.Tab>
 <Tabs.Tab>
 You can import the FlowInquiry server into IntelliJ as a Gradle project. Once imported, run the `io.flowinquiry.FlowInquiryApp` class as a standalone Java application
 
-
 ![IntelliJ](/assets/flowinquiry_intellij.png)
 
 As similar than gradle command, it will take some time before the server APIs are accessible on the default port `8080`
+
 </Tabs.Tab>
 </Tabs>

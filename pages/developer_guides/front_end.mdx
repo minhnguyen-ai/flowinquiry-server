@@ -1,4 +1,4 @@
-import { Callout, FileTree } from 'nextra/components'
+import { Callout, FileTree } from "nextra/components";
 
 # Front-end
 
@@ -20,9 +20,9 @@ Access the latest source code for flowinquiry's front-end at https://github.com/
   </FileTree.Folder>
 </FileTree>
 
-* `public` contains static assets, such as files and images, served by Next.js
-* `scripts` Includes useful scripts for validating environment settings, setting up project environment variables, and more
-* `src` the FlowInquiry's frontend source code
+- `public` contains static assets, such as files and images, served by Next.js
+- `scripts` Includes useful scripts for validating environment settings, setting up project environment variables, and more
+- `src` the FlowInquiry's frontend source code
 
 #### Checking environments
 
@@ -44,22 +44,27 @@ Your environments settings satisfy FlowInquiry's conditions
 #### Setup scripts
 
 You will need to run the following scripts:
-* `scripts/init_git_hooks.sh`: Sets up a git hook to automatically format and check code logic each time you commit changes.
 
-* `scripts/init_environments.sh`: Create a new `.env.local` file, which is used by the Next.js application to read predefined environment variables
+- `scripts/init_git_hooks.sh`: Sets up a git hook to automatically format and check code logic each time you commit changes.
+
+- `scripts/init_environments.sh`: Create a new `.env.local` file, which is used by the Next.js application to read predefined environment variables
 
 <Callout emoji="💡">
-  You can run the `scripts/all.sh` script, which will check your environment settings and perform the necessary configurations, eliminating the need to run multiple scripts individually
+  You can run the `scripts/all.sh` script, which will check your environment
+  settings and perform the necessary configurations, eliminating the need to run
+  multiple scripts individually
 </Callout>
 
 #### Run in dev mode
 
 Open the terminal and run the command
+
 ```bash
 pnpm dev
 ```
 
 it will launch the process to start the FlowInquiry front-end at the default port `3000`
+
 ```bash
 ➜  flowinquiry-frontend git:(main) pnpm dev
 
@@ -75,17 +80,17 @@ it will launch the process to start the FlowInquiry front-end at the default por
 ```
 
 <Callout type="error" emoji="️🚫">
-Make sure you run the back-end server before access the front-end. Check the section
-[Run application](/developer_guides/back_end#run-application) to know how to start
-the FlowInquiry server
+  Make sure you run the back-end server before access the front-end. Check the
+  section [Run application](/developer_guides/back_end#run-application) to know
+  how to start the FlowInquiry server
 </Callout>
 
 Open the browser, and access to the address `http://localhost:3000`. Use the default
 the either following credentials:
 
-* Administrator:
-    * Username: admin@flowinquiry.io
-    * Password: admin
-* User:
-    * Username: user@flowinquiry.io
-    * Password: user1234
+- Administrator:
+  - Username: admin@flowinquiry.io
+  - Password: admin
+- User:
+  - Username: user@flowinquiry.io
+  - Password: user1234
