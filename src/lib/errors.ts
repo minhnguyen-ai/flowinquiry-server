@@ -1,5 +1,7 @@
+// HttpError definition
 export class HttpError extends Error {
   public status: number;
+  public handled: boolean;
 
   static BAD_REQUEST = 400;
   static UNAUTHORIZED = 401;
@@ -7,9 +9,10 @@ export class HttpError extends Error {
   static NOT_FOUND = 404;
   static INTERNAL_SERVER_ERROR = 500;
 
-  constructor(status: number, message: string) {
+  constructor(status: number, message: string, handled: boolean = false) {
     super(message);
     this.status = status;
+    this.handled = handled;
     Object.setPrototypeOf(this, HttpError.prototype);
   }
 }
@@ -18,47 +21,60 @@ export class HttpError extends Error {
 export const handleError = async (
   response: Response,
   url: string,
-): Promise<void> => {
-  let errorMessage = undefined;
+): Promise<HttpError> => {
+  let errorMessage = "An unexpected error occurred.";
+  let details: string | undefined;
+
   try {
-    // Check if there's a body to parse based on Content-Length or status
-    if (
-      response.headers.get("Content-Length") !== "0" &&
-      response.status !== 204
-    ) {
-      const errorDetails = await response.json(); // Attempt to parse JSON
-      errorMessage = errorDetails.message || errorMessage;
+    // Attempt to parse the response body for details
+    if (response.headers.get("content-type")?.includes("application/json")) {
+      const errorBody = await response.json();
+      details = errorBody.message || JSON.stringify(errorBody);
+    } else {
+      details = await response.text();
     }
-  } catch (error) {
-    errorMessage = "Failed to parse error details from response";
+  } catch {
+    // If parsing fails, fallback to response.statusText
+    details = response.statusText || "No additional details available.";
   }
 
+  // Customize the error message based on the status code
   switch (response.status) {
-    case HttpError.UNAUTHORIZED:
-      throw new HttpError(
-        HttpError.UNAUTHORIZED,
-        `Error at ${url}: ${errorMessage || "Unauthorized"}`,
-      );
     case HttpError.BAD_REQUEST:
-      throw new HttpError(
-        HttpError.BAD_REQUEST,
-        `Error at ${url}: ${errorMessage || "Bad request"}`,
-      );
-
+      errorMessage = "Bad request. Please check your input.";
+      break;
+    case HttpError.UNAUTHORIZED:
+      errorMessage = details || "Unauthorized access.";
+      break;
+    case HttpError.FORBIDDEN:
+      errorMessage =
+        "Forbidden. You do not have permission to perform this action.";
+      break;
     case HttpError.NOT_FOUND:
-      throw new HttpError(
-        HttpError.NOT_FOUND,
-        `Error at ${url}: ${errorMessage || "Not Found"}`,
-      );
+      errorMessage = "Resource not found. Please try again later.";
+      break;
     case HttpError.INTERNAL_SERVER_ERROR:
-      throw new HttpError(
-        HttpError.INTERNAL_SERVER_ERROR,
-        `Error at ${url}: ${errorMessage || "Internal Server Error"}`,
-      );
+      errorMessage = "Server error. Please try again later.";
+      break;
+    case 503:
+      errorMessage = "Service unavailable. Please try again later.";
+      break;
     default:
-      throw new HttpError(
-        response.status,
-        errorMessage || "An unknown error occurred",
-      );
+      errorMessage = `Unexpected error (status: ${response.status}).`;
+      break;
   }
+
+  // Append the details to the error message if available
+  // if (details) {
+  //   errorMessage += ` Details: ${details}`;
+  // }
+
+  // Log the error for debugging
+  console.error(`Error fetching ${url}:`, {
+    status: response.status,
+    errorMessage,
+    details,
+  });
+
+  return new HttpError(response.status, errorMessage, true);
 };
