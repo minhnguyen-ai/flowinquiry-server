@@ -30,6 +30,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { BASE_URL } from "@/lib/constants";
 
 export function UserNav() {
   const { data: session } = useSession();
@@ -49,7 +50,7 @@ export function UserNav() {
                     <AvatarImage
                       src={
                         session?.user?.imageUrl
-                          ? `/api/files/${session?.user?.imageUrl}`
+                          ? `${BASE_URL}/api/files/${session?.user?.imageUrl}`
                           : undefined
                       }
                       alt="Avatar"
@@ -101,7 +102,7 @@ export function UserNav() {
           <DropdownMenuSeparator />
           <DropdownMenuItem
             className="hover:cursor-pointer"
-            onClick={() => signOut()}
+            onClick={() => signOut({ redirectTo: BASE_URL, redirect: true })}
           >
             <LogOut className="w-4 h-4 mr-3 text-muted-foreground" />
             Sign out
@@ -110,12 +111,10 @@ export function UserNav() {
       </DropdownMenu>
       <DialogContent>
         <DialogHeader className="flex items-center space-x-4">
-          {/* Logo */}
           <div>
-            <AppLogo />
+            <AppLogo size={100} />
           </div>
 
-          {/* Title and Description */}
           <div>
             <DialogTitle className="text-2xl font-bold">
               FlowInquiry
@@ -128,6 +127,24 @@ export function UserNav() {
             </DialogDescription>
           </div>
         </DialogHeader>
+
+        {/* Footer */}
+        <div className="mt-2 flex justify-between items-center border-t pt-2">
+          {/* Copyright and Year */}
+          <div className="text-sm text-gray-500 dark:text-gray-400">
+            © {new Date().getFullYear()} FlowInquiry. All rights reserved.
+          </div>
+
+          {/* Website Link */}
+          <a
+            href="https://www.flowinquiry.io"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm font-medium text-blue-600 hover:underline dark:text-blue-400"
+          >
+            flowinquiry.io
+          </a>
+        </div>
       </DialogContent>
     </Dialog>
   );

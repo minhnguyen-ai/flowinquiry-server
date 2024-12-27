@@ -3,6 +3,7 @@ import NextAuth, { User } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 import apiAuthSignIn from "@/lib/auth";
+import { BASE_URL } from "@/lib/constants";
 
 export const { handlers, auth } = NextAuth({
   providers: [
@@ -18,12 +19,24 @@ export const { handlers, auth } = NextAuth({
         if (!credentials) {
           throw new Error("Invalid credentials");
         }
-        const user = await apiAuthSignIn(credentials);
-        return user;
+        return await apiAuthSignIn(credentials);
       },
     }),
   ],
   callbacks: {
+    async redirect({ url, baseUrl }) {
+      // Allows relative callback URLs
+      if (url.startsWith("/")) return `${baseUrl}${url}`;
+      // Works for the deployment model while API_URL is the front url of the reverse proxy
+      else if (
+        process.env.NODE_ENV === "production" &&
+        new URL(url).origin === BASE_URL
+      )
+        return url;
+      // Allows callback URLs on the same origin
+      else if (new URL(url).origin === baseUrl) return url;
+      return baseUrl;
+    },
     jwt({ token, account, user }) {
       if (user) {
         token.accessToken = user?.accessToken;
