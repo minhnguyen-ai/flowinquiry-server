@@ -34,10 +34,10 @@ You can build your own Docker images and deploy them anywhere, or use the pre-bu
         FlowInquiry backend uses Jib to build and deploy Docker images to the Docker repository. To change the Docker image
         version, edit the `projectVersion` attribute in the `gradle.properties` file.
 
-        Open the terminal and navigate to the root folder. Use the command `./gradlew :server:jibDockerBuild` to build the Docker image, or `./gradlew :server:jib` to build and deploy it.
+        Open the terminal and navigate to the root folder. Use the command `./gradlew :server:jibDockerBuild -Djib.dockerClient.executable=/path/to/docker` to build the Docker image, or `./gradlew :server:jib  -Djib.dockerClient.executable=/path/to/docker` to build and deploy it.
 
         ```bash
-        ➜  flowinquiry-server git:(main) ./gradlew :server:jibDockerBuild
+        ➜  flowinquiry-server git:(main) ./gradlew :server:jibDockerBuild -Djib.dockerClient.executable=/usr/local/bin/docker
 
         > Task :server:jibDockerBuild
 
@@ -86,13 +86,23 @@ Caddy is configured with a Caddyfile that supports the domains `localhost` and `
 
 ```
 local.flowinquiry.io, localhost {
+    # Redirect HTTP to HTTPS
     @http {
         protocol http
     }
     redir @http https://{host}{uri}
 
+    # Enable HTTPS with internal TLS
     tls internal
-    # Reverse proxy for the front-end
+
+    # Match and reverse proxy for API routes (except /api/auth)
+    @apiNotAuth {
+        path /api/*
+        not path /api/auth/*
+    }
+    reverse_proxy @apiNotAuth back-end:8080
+
+    # Reverse proxy all other requests to the front-end
     reverse_proxy /* front-end:3000
 }
 ```
