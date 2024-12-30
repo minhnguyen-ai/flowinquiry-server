@@ -26,7 +26,7 @@ const config: DocsThemeConfig = {
     const title = config.title + (route === "/" ? "" : " - FlowInquiry");
 
     return (
-      <head>
+      <>
         <title>{title}</title>
         <meta property="og:title" content={title} />
         <meta name="description" content={description} />
@@ -46,7 +46,7 @@ const config: DocsThemeConfig = {
         <link rel="icon" href="/favicon.ico" type="image/x-icon" />
         <link rel="icon" href="/favicon.png" type="image/png" />
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-      </head>
+      </>
     );
   },
   feedback: {
@@ -59,7 +59,7 @@ const config: DocsThemeConfig = {
     toggleButton: true,
   },
   footer: {
-    component: (
+    content: (
       <div className="flex w-full flex-col items-center sm:items-start">
         <div>
           <a
