@@ -35,7 +35,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import org.hibernate.annotations.BatchSize;
 
 /** A user. */
@@ -55,12 +54,6 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private Long id;
-
-    @JsonIgnore
-    @NotNull @Size(min = 60, max = 60)
-    @Column(name = "password_hash", length = 60, nullable = false)
-    @ToString.Exclude
-    private String password;
 
     @Size(max = 50)
     @Column(name = "first_name", length = 50)
@@ -136,6 +129,9 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
     @Column(name = "last_login_time")
     private LocalDateTime lastLoginTime;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<UserAuth> userAuths = new HashSet<>();
+
     @JsonIgnore
     @ManyToMany
     @BatchSize(size = 20)
@@ -172,5 +168,16 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
         if (isDeleted == null) {
             isDeleted = Boolean.FALSE;
         }
+    }
+
+    public String getPasswordHash(String authProvider) {
+        return this.userAuths.stream()
+                .filter(auth -> authProvider.equalsIgnoreCase(auth.getAuthProvider()))
+                .findFirst()
+                .map(UserAuth::getPasswordHash)
+                .orElseThrow(
+                        () ->
+                                new IllegalStateException(
+                                        authProvider + " authentication not found"));
     }
 }
