@@ -22,6 +22,7 @@ import {
   ExtInputField,
   SubmitButton,
 } from "@/components/ui/ext-form";
+import { FileUploader } from "@/components/ui/file-uploader";
 import {
   Form,
   FormControl,
@@ -30,6 +31,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { uploadAttachmentsForEntity } from "@/lib/actions/entity-attachments.action";
 import { createTeamRequest } from "@/lib/actions/teams-request.action";
 import { useError } from "@/providers/error-provider";
 import {
@@ -55,6 +57,7 @@ const NewRequestToTeamDialog: React.FC<NewRequestToTeamDialogProps> = ({
   workflow,
   onSaveSuccess,
 }) => {
+  const [files, setFiles] = React.useState<File[]>([]);
   const { data: session } = useSession();
   const { setError } = useError();
 
@@ -75,7 +78,10 @@ const NewRequestToTeamDialog: React.FC<NewRequestToTeamDialogProps> = ({
   }, [workflow, form]);
 
   const onSubmit = async (data: TeamRequestDTO) => {
-    await createTeamRequest(data, setError);
+    const savedTeamRequest = await createTeamRequest(data, setError);
+    if (savedTeamRequest?.id && files?.length > 0) {
+      uploadAttachmentsForEntity("Team_Request", savedTeamRequest.id, files);
+    }
     setOpen(false);
     onSaveSuccess();
   };
@@ -129,6 +135,15 @@ const NewRequestToTeamDialog: React.FC<NewRequestToTeamDialogProps> = ({
                         <FormMessage />
                       </FormItem>
                     )}
+                  />
+                </div>
+
+                <div className="col-span-1 sm:col-span-2">
+                  <FileUploader
+                    maxFileCount={8}
+                    maxSize={8 * 1024 * 1024}
+                    accept={{ "*/*": [] }}
+                    onValueChange={setFiles}
                   />
                 </div>
 

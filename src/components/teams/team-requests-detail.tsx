@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
+import AttachmentView from "@/components/shared/attachment-view";
 import AuditLogView from "@/components/shared/audit-log-view";
 import { UserAvatar } from "@/components/shared/avatar-display";
 import CommentsView from "@/components/shared/comments-view";
@@ -309,6 +310,16 @@ const TeamRequestDetailView = ({
                     },
                   ]}
                 />
+
+                {(teamRequest.numberAttachments ?? 0) > 0 && (
+                  <div className="w-full flex text-sm font-medium text-neutral-500 dark:text-neutral-400 gap-2">
+                    <span>Attachments</span>
+                    <AttachmentView
+                      entityType="Team_Request"
+                      entityId={teamRequest.id!}
+                    />
+                  </div>
+                )}
               </div>
               <Tabs
                 defaultValue="comments"
