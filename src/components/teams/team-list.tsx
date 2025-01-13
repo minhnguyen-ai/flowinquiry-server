@@ -14,11 +14,10 @@ import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 
 import { Heading } from "@/components/heading";
+import { TeamAvatar } from "@/components/shared/avatar-display";
 import { EntitiesDeleteDialog } from "@/components/shared/entity-delete-dialog";
 import LoadingPlaceHolder from "@/components/shared/loading-place-holder";
 import PaginationExt from "@/components/shared/pagination-ext";
-import DefaultTeamLogo from "@/components/teams/team-logo";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -38,7 +37,6 @@ import {
 import { useDebouncedCallback } from "@/hooks/use-debounced-callback";
 import { usePagePermission } from "@/hooks/use-page-permission";
 import { deleteTeams, searchTeams } from "@/lib/actions/teams.action";
-import { BASE_URL } from "@/lib/constants";
 import { obfuscate } from "@/lib/endecode";
 import { cn } from "@/lib/utils";
 import { useError } from "@/providers/error-provider";
@@ -202,19 +200,12 @@ export const TeamList = () => {
                   <TooltipProvider>
                     <Tooltip>
                       <TooltipTrigger asChild>
-                        <Avatar className="size-24 cursor-pointer">
-                          <AvatarImage
-                            src={
-                              team.logoUrl
-                                ? `${BASE_URL}/api/files/${team.logoUrl}`
-                                : undefined
-                            }
-                            alt="@flowinquiry"
-                          />
-                          <AvatarFallback>
-                            <DefaultTeamLogo />
-                          </AvatarFallback>
-                        </Avatar>
+                        <TeamAvatar
+                          size="w-24 h-24"
+                          className="cursor-pointer"
+                          key={team.id}
+                          imageUrl={team.logoUrl}
+                        />
                       </TooltipTrigger>
                       <TooltipContent>{team.slogan}</TooltipContent>
                     </Tooltip>

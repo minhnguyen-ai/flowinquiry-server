@@ -10,9 +10,9 @@ import { z } from "zod";
 
 import { Heading } from "@/components/heading";
 import { ImageCropper } from "@/components/image-cropper";
+import { UserAvatar } from "@/components/shared/avatar-display";
 import { CountrySelectField } from "@/components/shared/countries-select";
 import TimezoneSelect from "@/components/shared/timezones-select";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -32,7 +32,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import DefaultUserLogo from "@/components/users/user-logo";
 import { useImageCropper } from "@/hooks/use-image-cropper";
 import { useToast } from "@/hooks/use-toast";
 import {
@@ -40,7 +39,6 @@ import {
   findUserById,
   updateUser,
 } from "@/lib/actions/users.action";
-import { BASE_URL } from "@/lib/constants";
 import { useError } from "@/providers/error-provider";
 import { UserDTOSchema } from "@/types/users";
 
@@ -61,7 +59,6 @@ export const ProfileForm = () => {
   const router = useRouter();
   const { data: session } = useSession();
   const { toast } = useToast();
-
   const {
     selectedFile,
     setSelectedFile,
@@ -151,24 +148,15 @@ export const ProfileForm = () => {
                 setSelectedFile={setSelectedFile}
               />
             ) : (
-              <Avatar
-                {...getRootProps()}
-                className="size-36 cursor-pointer ring-offset-2 ring-2 ring-slate-200"
-              >
+              <>
                 <input {...getInputProps()} />
-                <AvatarImage
-                  src={
-                    session?.user?.imageUrl
-                      ? `${BASE_URL}/api/files/${session?.user?.imageUrl}`
-                      : ""
-                  }
-                  alt="@flowinquiry"
-                  className="object-cover"
+                <UserAvatar
+                  {...getRootProps()}
+                  size="w-36 h-36"
+                  className="cursor-pointer ring-offset-2 ring-2 ring-slate-200"
+                  imageUrl={session?.user?.imageUrl}
                 />
-                <AvatarFallback>
-                  <DefaultUserLogo />
-                </AvatarFallback>
-              </Avatar>
+              </>
             )}
             <Dialog
               open={isPasswordDialogOpen}

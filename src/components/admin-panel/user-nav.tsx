@@ -5,7 +5,7 @@ import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
 
 import AppLogo from "@/components/app-logo";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { UserAvatar } from "@/components/shared/avatar-display";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -46,26 +46,15 @@ export function UserNav() {
                   variant="outline"
                   className="relative h-8 w-8 rounded-full"
                 >
-                  <Avatar className="h-8 w-8">
-                    <AvatarImage
-                      src={
-                        session?.user?.imageUrl
-                          ? `${BASE_URL}/api/files/${session?.user?.imageUrl}`
-                          : undefined
-                      }
-                      alt="Avatar"
-                    />
-                    <AvatarFallback className="bg-transparent">
-                      {session?.user?.firstName?.charAt(0).toUpperCase()}
-                      {session?.user?.lastName?.charAt(0).toUpperCase()}
-                    </AvatarFallback>
-                  </Avatar>
+                  <UserAvatar
+                    imageUrl={session?.user?.imageUrl}
+                    size="h-8 w-8"
+                  />
                 </Button>
               </DropdownMenuTrigger>
             </TooltipTrigger>
             <TooltipContent side="bottom">
-              {session?.user?.firstName}
-              {session?.user?.lastName}
+              {session?.user?.firstName} {session?.user?.lastName}
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
