@@ -8,11 +8,12 @@ import io.flowinquiry.security.service.JwtService;
 import jakarta.validation.Valid;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,7 +27,7 @@ public class LoginController {
 
     private final JwtService jwtService;
 
-    private final AuthenticationManagerBuilder authenticationManagerBuilder;
+    private final AuthenticationManager appAuthenticationManager;
 
     private final UserService userService;
 
@@ -34,11 +35,11 @@ public class LoginController {
 
     public LoginController(
             JwtService jwtService,
-            AuthenticationManagerBuilder authenticationManagerBuilder,
+            @Qualifier("appAuthenticationManager") AuthenticationManager appAuthenticationManager,
             UserService userService,
             UserRepository userRepository) {
         this.jwtService = jwtService;
-        this.authenticationManagerBuilder = authenticationManagerBuilder;
+        this.appAuthenticationManager = appAuthenticationManager;
         this.userService = userService;
         this.userRepository = userRepository;
     }
@@ -48,8 +49,7 @@ public class LoginController {
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(loginVM.getEmail(), loginVM.getPassword());
 
-        Authentication authentication =
-                authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+        Authentication authentication = appAuthenticationManager.authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         UserDTO adminUserDTO =
