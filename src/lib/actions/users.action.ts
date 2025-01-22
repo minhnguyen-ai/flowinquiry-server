@@ -27,6 +27,25 @@ export async function searchUsers(
   );
 }
 
+export async function submitSocialToken(
+  provider: string,
+  accessToken: string,
+  setError?: (error: HttpError | string | null) => void,
+) {
+  return post<
+    { provider: string; socialToken: string },
+    { jwtToken: string; user: UserDTO }
+  >(
+    `/api/auth/social-login`,
+    {
+      provider: provider,
+      socialToken: accessToken, // Social token from NextAuth
+    },
+    setError,
+    SecurityMode.NOT_SECURE,
+  );
+}
+
 export const getUserPermissions = async (
   userId: number,
   setError?: (error: HttpError | string | null) => void,

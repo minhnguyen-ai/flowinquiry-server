@@ -3,8 +3,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react";
-import { useState } from "react";
+import { signIn, useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
@@ -17,7 +17,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
   FormControl,
@@ -27,6 +26,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
+import { ENABLE_SOCIAL_LOGIN } from "@/lib/constants";
 
 const formSchema = z.object({
   email: z
@@ -34,18 +35,17 @@ const formSchema = z.object({
     .email({ message: "Invalid email" })
     .min(1, { message: "Email is required" }),
   password: z.string().min(1, { message: "Password is required" }),
-  isRemembered: z.oboolean(),
 });
 
 const LoginForm = () => {
   const router = useRouter();
+  const { data: session, status } = useSession();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: "",
       password: "",
-      isRemembered: false,
     },
   });
 
@@ -64,24 +64,35 @@ const LoginForm = () => {
     }
   };
 
+  const handleGoogleSignIn = async () => {
+    const response = await signIn("google", { redirect: false });
+    if (response?.error) {
+      setErrorMessage("Google login failed. Please try again.");
+      return;
+    }
+  };
+
+  useEffect(() => {
+    if (status === "authenticated" && session?.accessToken) {
+      router.push("/portal");
+    }
+  }, [status, session, router]);
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
-      {/* App Logo */}
       <div className="mb-4 flex flex-col items-center">
         <AppLogo size={100} />
         <p className="mt-2 text-lg font-semibold text-gray-600 dark:text-gray-300">
-          Empowering Teams with Tailored Workflows
+          Your Partner in Keeping Customers Happy and Requests On Track
         </p>
       </div>
 
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle>Login</CardTitle>
-          <CardDescription>
-            Log into your account with your credentials
-          </CardDescription>
+          <CardDescription></CardDescription>
         </CardHeader>
-        <CardContent className="space-y-2">
+        <CardContent className="space-y-4">
           {/* Show error message */}
           {errorMessage && (
             <div className="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded">
@@ -134,30 +145,39 @@ const LoginForm = () => {
                 )}
               />
               <div className="flex flex-row justify-items-center">
-                <FormField
-                  control={form.control}
-                  name="isRemembered"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                      <FormControl>
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                      <div className="space-y-1 leading-none">
-                        <FormLabel>Remember me</FormLabel>
-                      </div>
-                    </FormItem>
-                  )}
-                />
-                <Button variant="link" className="py-0  h-auto">
+                <Button variant="link" className="py-0 h-auto">
                   <Link href="/forgot-password">Forgot password</Link>
                 </Button>
               </div>
               <Button className="w-full">Sign In</Button>
             </form>
           </Form>
+
+          {ENABLE_SOCIAL_LOGIN && (
+            <>
+              <div className="relative my-6">
+                <Separator />
+                <span className="absolute inset-0 flex justify-center -mt-3 text-sm bg-white dark:bg-gray-800 px-2 text-gray-500">
+                  Or
+                </span>
+              </div>
+
+              <div className="flex justify-center">
+                <Button
+                  variant="outline"
+                  className="w-full flex items-center justify-center space-x-2"
+                  onClick={handleGoogleSignIn}
+                >
+                  <img
+                    src="/google-logo.svg"
+                    alt="Google"
+                    className="h-5 w-5"
+                  />
+                  <span>Sign In with Google</span>
+                </Button>
+              </div>
+            </>
+          )}
         </CardContent>
       </Card>
     </div>
