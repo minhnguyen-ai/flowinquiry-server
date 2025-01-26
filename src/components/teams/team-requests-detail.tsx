@@ -11,6 +11,7 @@ import { UserAvatar } from "@/components/shared/avatar-display";
 import CommentsView from "@/components/shared/comments-view";
 import { NColumnsGrid } from "@/components/shared/n-columns-grid";
 import TeamNavLayout from "@/components/teams/team-nav";
+import TeamRequestHealthLevel from "@/components/teams/team-requests-health-level";
 import { PriorityDisplay } from "@/components/teams/team-requests-priority-display";
 import TeamRequestsTimelineHistory from "@/components/teams/team-requests-timeline-history";
 import { Badge } from "@/components/ui/badge";
@@ -179,6 +180,11 @@ const TeamRequestDetailView = ({
               <ChevronRight className="text-gray-400" />
             </Button>
           </div>
+          {teamRequest.conversationHealth?.healthLevel && (
+            <TeamRequestHealthLevel
+              currentLevel={teamRequest.conversationHealth.healthLevel}
+            />
+          )}
 
           <Card>
             <CardContent className="p-4 space-y-6">
