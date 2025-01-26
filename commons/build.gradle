@@ -8,6 +8,7 @@ group = 'io.flowinquiry'
 
 repositories {
     mavenCentral()
+
 }
 
 dependencyManagement {
@@ -18,8 +19,10 @@ dependencyManagement {
 
 dependencies {
     compileOnly(libs.lombok)
+    api(libs.bundles.caffeine.cache)
     api(libs.bundles.json)
     api(libs.bundles.shedlock)
+    api(libs.bundles.spring.ai)
     api(libs.dot.env)
     api(libs.j2html)
     api(libs.jclouds) {
@@ -37,17 +40,20 @@ dependencies {
     api("jakarta.annotation:jakarta.annotation-api")
     api("org.apache.commons:commons-lang3")
     api("org.hibernate.orm:hibernate-core")
+    api("org.hibernate.orm:hibernate-jcache")
     api("org.hibernate.validator:hibernate-validator")
     api("org.springframework.boot:spring-boot-starter-actuator")
     api("org.springframework.boot:spring-boot-starter-aop")
     api("org.springframework.boot:spring-boot-starter-data-jpa")
     api("org.springframework.boot:spring-boot-loader-tools")
+    api("org.springframework.boot:spring-boot-starter-cache")
     api("org.springframework.boot:spring-boot-starter-logging")
     api("org.springframework.boot:spring-boot-starter-mail")
     api("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
     api("org.springframework.boot:spring-boot-starter-security")
     api("org.springframework.boot:spring-boot-starter-thymeleaf")
     api("org.springframework.boot:spring-boot-starter-undertow")
+
     modules {
         module("org.springframework.boot:spring-boot-starter-tomcat") {
             replacedBy("org.springframework.boot:spring-boot-starter-undertow", "Use Undertow instead of Tomcat")
