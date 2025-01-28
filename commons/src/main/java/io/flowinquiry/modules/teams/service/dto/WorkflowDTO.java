@@ -21,7 +21,5 @@ public class WorkflowDTO {
     private Integer level1EscalationTimeout;
     private Integer level2EscalationTimeout;
     private Integer level3EscalationTimeout;
-    private Long parentWorkflowId;
-    private boolean clonedFromGlobal;
     private String tags;
 }

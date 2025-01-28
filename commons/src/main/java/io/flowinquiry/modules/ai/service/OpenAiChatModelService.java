@@ -1,7 +1,9 @@
 package io.flowinquiry.modules.ai.service;
 
+import org.springframework.ai.chat.model.ChatResponse;
+import org.springframework.ai.chat.model.Generation;
+import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.openai.OpenAiChatModel;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
@@ -9,7 +11,6 @@ import org.springframework.stereotype.Service;
 @ConditionalOnProperty(
         name = {"OPEN_AI_CHAT_MODEL", "OPEN_AI_API_KEY"},
         matchIfMissing = false)
-@ConditionalOnBean(OpenAiChatModel.class)
 public class OpenAiChatModelService implements ChatModelService {
 
     private final OpenAiChatModel openAiChatModel;
@@ -21,5 +22,12 @@ public class OpenAiChatModelService implements ChatModelService {
     @Override
     public String call(String input) {
         return openAiChatModel.call(input);
+    }
+
+    @Override
+    public String call(Prompt prompt) {
+        ChatResponse response = openAiChatModel.call(prompt);
+        Generation generation = response.getResult();
+        return (generation != null) ? generation.getOutput().getText() : "";
     }
 }
