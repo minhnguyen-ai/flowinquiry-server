@@ -1,11 +1,10 @@
 package io.flowinquiry.modules.collab.service;
 
-import io.flowinquiry.modules.collab.domain.Comment;
 import io.flowinquiry.modules.collab.domain.EntityType;
 import io.flowinquiry.modules.collab.repository.CommentRepository;
 import io.flowinquiry.modules.collab.service.dto.CommentDTO;
 import io.flowinquiry.modules.collab.service.mapper.CommentMapper;
-import io.flowinquiry.modules.teams.service.event.TeamRequestNewCommentEvent;
+import io.flowinquiry.modules.teams.service.event.TeamRequestCommentCreatedEvent;
 import java.util.List;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -34,14 +33,15 @@ public class CommentService {
         CommentDTO savedComment =
                 commentMapper.toDTO(commentRepository.save(commentMapper.toEntity(comment)));
         if (savedComment.getEntityType() == EntityType.Team_Request) {
-            eventPublisher.publishEvent(new TeamRequestNewCommentEvent(this, savedComment));
+            eventPublisher.publishEvent(new TeamRequestCommentCreatedEvent(this, savedComment));
         }
         return savedComment;
     }
 
-    public Comment getCommentById(Long id) {
+    public CommentDTO getCommentById(Long id) {
         return commentRepository
                 .findById(id)
+                .map(commentMapper::toDTO)
                 .orElseThrow(
                         () -> new IllegalArgumentException("Comment not found with id: " + id));
     }
