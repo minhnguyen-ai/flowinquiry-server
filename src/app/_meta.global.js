@@ -10,6 +10,8 @@ export default {
     items: {
       introduction: "Introduction",
       getting_started: "Get started",
+      workflow_management: "Workflow management",
+      working_with_requests: "Working with requests",
     },
   },
   developer_guides: {
