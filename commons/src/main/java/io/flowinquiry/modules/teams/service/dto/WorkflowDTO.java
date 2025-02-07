@@ -1,5 +1,6 @@
 package io.flowinquiry.modules.teams.service.dto;
 
+import io.flowinquiry.modules.audit.AuditEntityDTO;
 import io.flowinquiry.modules.teams.domain.WorkflowVisibility;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,7 +11,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-public class WorkflowDTO {
+public class WorkflowDTO extends AuditEntityDTO {
     private Long id;
     private String name;
     private String description;

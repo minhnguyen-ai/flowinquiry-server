@@ -1,6 +1,5 @@
 package io.flowinquiry.modules.teams.controller;
 
-import io.flowinquiry.modules.teams.domain.Workflow;
 import io.flowinquiry.modules.teams.service.WorkflowService;
 import io.flowinquiry.modules.teams.service.WorkflowTransitionService;
 import io.flowinquiry.modules.teams.service.dto.WorkflowDTO;
@@ -47,7 +46,7 @@ public class WorkflowController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Workflow> getWorkflowById(@PathVariable("id") Long id) {
+    public ResponseEntity<WorkflowDTO> getWorkflowById(@PathVariable("id") Long id) {
         return workflowService
                 .getWorkflowById(id)
                 .map(ResponseEntity::ok)

@@ -82,8 +82,8 @@ public class WorkflowService {
     }
 
     @Transactional(readOnly = true)
-    public Optional<Workflow> getWorkflowById(Long id) {
-        return workflowRepository.findById(id);
+    public Optional<WorkflowDTO> getWorkflowById(Long id) {
+        return workflowRepository.findById(id).map(workflowMapper::toDto);
     }
 
     @Transactional
@@ -96,7 +96,7 @@ public class WorkflowService {
                             return workflowMapper.toDto(workflowRepository.save(existingWorkflow));
                         })
                 .orElseThrow(
-                        () -> new IllegalArgumentException("Workflow not found with id: " + id));
+                        () -> new ResourceNotFoundException("Workflow not found with id: " + id));
     }
 
     /**
