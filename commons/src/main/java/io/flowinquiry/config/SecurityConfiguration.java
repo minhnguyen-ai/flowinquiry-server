@@ -6,6 +6,7 @@ import io.flowinquiry.modules.usermanagement.AuthoritiesConstants;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.ObjectPostProcessor;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -21,6 +22,12 @@ import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 @EnableMethodSecurity(securedEnabled = true)
 public class SecurityConfiguration {
 
+    private final ObjectPostProcessor<Object> objectPostProcessor; // ✅ Fix bean conflict
+
+    public SecurityConfiguration(ObjectPostProcessor<Object> objectPostProcessor) {
+        this.objectPostProcessor = objectPostProcessor;
+    }
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -35,6 +42,7 @@ public class SecurityConfiguration {
                         authz ->
                                 // prettier-ignore
                                 authz.requestMatchers(
+                                                mvc.pattern("/fiws/**"),
                                                 mvc.pattern(HttpMethod.POST, "/api/login"),
                                                 mvc.pattern(HttpMethod.POST, "/api/authenticate"),
                                                 mvc.pattern(HttpMethod.GET, "/api/authenticate"),
@@ -48,6 +56,8 @@ public class SecurityConfiguration {
                                         .hasAuthority(AuthoritiesConstants.ADMIN)
                                         .requestMatchers(mvc.pattern("/api/**"))
                                         .authenticated()
+                                        .requestMatchers("/fiws/**")
+                                        .authenticated() // ✅ Require authentication for WebSockets
                                         .requestMatchers(mvc.pattern("/management/**"))
                                         .hasAuthority(
                                                 AuthoritiesConstants.ADMIN)) // Enforces ROLE_ADMIN
