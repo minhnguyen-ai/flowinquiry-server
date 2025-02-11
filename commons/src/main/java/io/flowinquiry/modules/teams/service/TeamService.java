@@ -2,6 +2,7 @@ package io.flowinquiry.modules.teams.service;
 
 import static io.flowinquiry.query.QueryUtils.createSpecification;
 
+import io.flowinquiry.exceptions.ResourceNotFoundException;
 import io.flowinquiry.modules.teams.domain.Team;
 import io.flowinquiry.modules.teams.domain.TeamRole;
 import io.flowinquiry.modules.teams.repository.TeamRepository;
@@ -79,7 +80,7 @@ public class TeamService {
                         .findById(updatedTeam.getId())
                         .orElseThrow(
                                 () ->
-                                        new EntityNotFoundException(
+                                        new ResourceNotFoundException(
                                                 "Team not found with id: " + updatedTeam.getId()));
         teamMapper.updateFromDto(updatedTeam, existingTeam);
 
@@ -186,9 +187,8 @@ public class TeamService {
         if (user.getTeams().contains(team)) {
             user.getTeams().remove(team);
             userRepository.save(user);
+            eventPublisher.publishEvent(new RemoveUserOutOfTeamEvent(this, teamId, userId));
         }
-
-        eventPublisher.publishEvent(new RemoveUserOutOfTeamEvent(this, teamId, userId));
     }
 
     public String getUserRoleInTeam(Long userId, Long teamId) {
