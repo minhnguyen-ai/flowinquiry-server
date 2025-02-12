@@ -35,21 +35,22 @@ import {
   markNotificationsAsRead,
 } from "@/lib/actions/notifications.action";
 import { formatDateTime, formatDateTimeDistanceToNow } from "@/lib/datetime";
-import { cn } from "@/lib/utils";
 import { useError } from "@/providers/error-provider";
 import { NotificationDTO, NotificationType } from "@/types/commons";
+
+const LOCAL_STORAGE_KEY = "notifications";
 
 const NotificationsDropdown = () => {
   const { data: session } = useSession();
   const { setError } = useError();
   const { toast } = useToast();
 
-  const [notifications, setNotifications] = useState<NotificationDTO[]>([]);
+  const [notifications, setNotifications] = useState<NotificationDTO[]>(() => {
+    return JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || "[]");
+  });
 
-  // Load WebSocket notifications
   const { notifications: notificationsSocket } = useWebSocket();
 
-  // Load unread notifications from the database
   useEffect(() => {
     async function fetchNotifications() {
       if (!session?.user?.id) return;
@@ -58,61 +59,90 @@ const NotificationsDropdown = () => {
         Number(session.user.id),
         setError,
       );
-      setNotifications(notificationsData);
+
+      setNotifications((prev) => {
+        const merged = [
+          ...notificationsData,
+          ...prev.filter(
+            (n) => !notificationsData.some((dbN) => dbN.id === n.id),
+          ),
+        ];
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(merged));
+        return merged;
+      });
     }
 
     fetchNotifications();
   }, [session]);
 
-  // Merge WebSocket notifications + show toast alerts
   useEffect(() => {
     if (notificationsSocket.length > 0) {
       notificationsSocket.forEach((notification) => {
-        toast({
-          title: notification.content,
-        });
+        toast({ title: notification.content });
       });
 
-      // Merge WebSocket notifications while avoiding duplicates
-      setNotifications((prev) => [
-        ...notificationsSocket,
-        ...prev.filter(
-          (n) => !notificationsSocket.some((socketN) => socketN.id === n.id),
-        ),
-      ]);
+      setNotifications((prev) => {
+        const updated = [
+          ...notificationsSocket,
+          ...prev.filter(
+            (n) => !notificationsSocket.some((socketN) => socketN.id === n.id),
+          ),
+        ];
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
+        return updated;
+      });
     }
   }, [notificationsSocket]);
 
-  // Mark notification as read when clicked
-  const handleNotificationClick = async (notificationId: number) => {
-    await markNotificationsAsRead([notificationId], setError);
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        setNotifications(
+          JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || "[]"),
+        );
+      }
+    };
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () =>
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+  }, []);
 
-    setNotifications((prevNotifications) =>
-      prevNotifications.map((notification) =>
-        notification.id === notificationId
-          ? { ...notification, isRead: true }
-          : notification,
-      ),
-    );
-
-    // Remove the notification after a short delay
-    setTimeout(() => {
-      setNotifications((prevNotifications) =>
-        prevNotifications.filter(
-          (notification) => notification.id !== notificationId,
-        ),
-      );
-    }, 500);
-  };
-
-  // Mark all notifications as read
   const handleMarkAllRead = async () => {
-    const notificationIds = notifications
+    const validNotificationIds = notifications
       .map((n) => n.id)
       .filter((id): id is number => id !== null);
 
-    await markNotificationsAsRead(notificationIds, setError);
-    setNotifications([]); // Clear notifications from UI
+    if (validNotificationIds.length > 0) {
+      await markNotificationsAsRead(validNotificationIds, setError);
+    }
+
+    setNotifications([]);
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify([]));
+  };
+
+  const handleNotificationClick = async (
+    notificationId: number | null,
+    index: number,
+  ) => {
+    if (notificationId !== null) {
+      await markNotificationsAsRead([notificationId], setError);
+    }
+
+    setNotifications((prevNotifications) => {
+      const updated = prevNotifications.map((notification, i) =>
+        i === index ? { ...notification, isRead: true } : notification,
+      );
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
+      return updated;
+    });
+
+    setTimeout(() => {
+      setNotifications((prevNotifications) => {
+        const updated = prevNotifications.filter((_, i) => i !== index);
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
+        return updated;
+      });
+    }, 500);
   };
 
   const getNotificationIcon = (type: NotificationType) => {
@@ -148,14 +178,7 @@ const NotificationsDropdown = () => {
         <Button variant="outline" className="relative h-8 w-8 rounded-full">
           <BellDot className="animate-tada h-5 w-5" />
           {notifications.length > 0 && (
-            <div
-              className={cn(
-                "absolute top-[2px] right-[2px] translate-x-1/2 translate-y-[-50%]",
-                "w-5 h-5 text-[10px] rounded-full font-semibold flex items-center justify-center",
-                "bg-red-400 text-white",
-                "dark:bg-red-500 dark:text-white",
-              )}
-            >
+            <div className="absolute top-[2px] right-[2px] translate-x-1/2 translate-y-[-50%] w-5 h-5 text-[10px] rounded-full font-semibold flex items-center justify-center bg-red-400 text-white dark:bg-red-500 dark:text-white">
               {notifications.length}
             </div>
           )}
@@ -163,18 +186,13 @@ const NotificationsDropdown = () => {
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align="end"
-        className={cn(
-          "z-[999] mx-4 lg:w-[24rem] p-0",
-          "bg-[rgba(255,255,255,0.9)] dark:bg-[rgba(23,23,23,0.8)]",
-          "border border-[hsl(var(--border))] dark:border-[hsl(var(--border-dark))]",
-          "backdrop-blur-md backdrop-brightness-110 dark:backdrop-brightness-75 shadow-lg",
-        )}
+        className="z-[999] mx-4 lg:w-[24rem] p-0"
       >
         {notifications.length > 0 ? (
           <>
             <DropdownMenuLabel>
               <div className="flex justify-between px-2 py-2">
-                <div className="text-sm text-default-800 dark:text-default-200 font-medium">
+                <div className="text-sm font-medium">
                   Notifications ({notifications.length})
                 </div>
                 <Button
@@ -186,74 +204,43 @@ const NotificationsDropdown = () => {
                 </Button>
               </div>
             </DropdownMenuLabel>
-            <div className="max-h-[16rem] xl:max-h-[20rem] overflow-auto">
-              <ScrollArea className="h-full">
-                <AnimatePresence>
-                  {notifications.map((item: NotificationDTO) => (
-                    <motion.div
-                      key={item.id}
-                      initial={{ opacity: 1, y: 0 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -20 }}
-                      transition={{ duration: 0.5 }}
-                      className={cn(
-                        "border-t border-[hsl(var(--border))] dark:border-[hsl(var(--border-dark))]",
-                        item.isRead
-                          ? "bg-gray-100 dark:bg-gray-800"
-                          : "bg-white dark:bg-black",
-                      )}
+            <ScrollArea className="max-h-[20rem] overflow-y-auto">
+              <AnimatePresence>
+                {notifications.map((item, index) => (
+                  <motion.div
+                    key={index}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    <DropdownMenuItem
+                      className="cursor-pointer flex gap-3 items-start"
+                      onClick={() => handleNotificationClick(item.id, index)}
                     >
-                      <DropdownMenuItem
-                        onSelect={(e) => e.preventDefault()}
-                        className={cn(
-                          "flex gap-9 py-2 px-4 cursor-pointer group",
-                          "hover:bg-[hsl(var(--muted))] dark:hover:bg-[rgba(255,255,255,0.05)]",
-                        )}
-                        onClick={() => handleNotificationClick(item.id!)}
-                      >
-                        <div className="flex items-start gap-3 flex-1">
-                          {/* ✅ Wrap icon in a fixed-width div to prevent shifting */}
-                          <div className="w-6 flex items-center justify-center">
-                            {getNotificationIcon(item.type)}
-                          </div>
-
-                          {/* ✅ Wrap content and date inside the same flex container */}
-                          <div className="flex-1 flex flex-col gap-0.5 -mx-4">
-                            <div className="html-display">
-                              <TruncatedHtmlLabel
-                                htmlContent={item.content}
-                                wordLimit={400}
-                              />
-                            </div>
-                            <div className="text-sm text-gray-500 dark:text-gray-400">
-                              <Tooltip>
-                                <TooltipTrigger>
-                                  {formatDateTimeDistanceToNow(
-                                    new Date(item.createdAt),
-                                  )}
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                  <p>
-                                    {formatDateTime(new Date(item.createdAt))}
-                                  </p>
-                                </TooltipContent>
-                              </Tooltip>
-                            </div>
-                          </div>
-                        </div>
-                      </DropdownMenuItem>
-                    </motion.div>
-                  ))}
-                </AnimatePresence>
-              </ScrollArea>
-            </div>
+                      {getNotificationIcon(item.type)}
+                      <div className="flex-1 flex flex-col">
+                        <TruncatedHtmlLabel
+                          htmlContent={item.content}
+                          wordLimit={400}
+                        />
+                        <Tooltip>
+                          <TooltipTrigger className="w-auto text-left">
+                            {formatDateTimeDistanceToNow(
+                              new Date(item.createdAt),
+                            )}
+                          </TooltipTrigger>
+                          <TooltipContent side="right" align="start">
+                            <p>{formatDateTime(new Date(item.createdAt))}</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </div>
+                    </DropdownMenuItem>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </ScrollArea>
           </>
         ) : (
-          <div className="flex items-center justify-center p-4">
-            <p className="text-sm text-default-800 dark:text-default-200">
-              You have no notifications.
-            </p>
-          </div>
+          <div className="p-4 text-center text-sm">No new notifications.</div>
         )}
       </DropdownMenuContent>
     </DropdownMenu>
