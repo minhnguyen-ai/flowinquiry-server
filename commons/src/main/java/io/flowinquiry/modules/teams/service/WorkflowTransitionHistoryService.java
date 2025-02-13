@@ -1,8 +1,10 @@
 package io.flowinquiry.modules.teams.service;
 
 import static io.flowinquiry.modules.teams.domain.WorkflowTransitionHistoryStatus.Completed;
+import static io.flowinquiry.modules.teams.domain.WorkflowTransitionHistoryStatus.Escalated;
 import static io.flowinquiry.modules.teams.domain.WorkflowTransitionHistoryStatus.In_Progress;
 
+import io.flowinquiry.exceptions.ResourceNotFoundException;
 import io.flowinquiry.modules.teams.domain.TeamRequest;
 import io.flowinquiry.modules.teams.domain.WorkflowTransition;
 import io.flowinquiry.modules.teams.domain.WorkflowTransitionHistory;
@@ -11,6 +13,7 @@ import io.flowinquiry.modules.teams.repository.WorkflowTransitionHistoryReposito
 import io.flowinquiry.modules.teams.repository.WorkflowTransitionRepository;
 import io.flowinquiry.modules.teams.service.dto.TransitionItemCollectionDTO;
 import io.flowinquiry.modules.teams.service.mapper.WorkflowTransitionHistoryMapper;
+import jakarta.persistence.EntityNotFoundException;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Collections;
@@ -53,7 +56,7 @@ public class WorkflowTransitionHistoryService {
                         .findById(teamRequestId)
                         .orElseThrow(
                                 () ->
-                                        new IllegalArgumentException(
+                                        new ResourceNotFoundException(
                                                 "Team request not found: " + teamRequestId));
 
         WorkflowTransition transition =
@@ -62,14 +65,13 @@ public class WorkflowTransitionHistoryService {
                                 teamRequest.getWorkflow().getId(), fromStateId, toStateId)
                         .orElseThrow(
                                 () ->
-                                        new IllegalArgumentException(
+                                        new ResourceNotFoundException(
                                                 "Transition not found for the given states"));
 
         // Calculate SLA due date
         ZonedDateTime slaDueDate = null;
         if (transition.getSlaDuration() != null && transition.getSlaDuration() > 0) {
-            slaDueDate =
-                    ZonedDateTime.now(ZoneId.of("UTC")).plusSeconds(transition.getSlaDuration());
+            slaDueDate = ZonedDateTime.now(ZoneId.of("UTC")).plusHours(transition.getSlaDuration());
         }
 
         // Create and save the WorkflowTransitionHistory entry
@@ -98,5 +100,39 @@ public class WorkflowTransitionHistoryService {
         }
 
         return workflowTransitionHistoryMapper.toTicketHistoryDto(ticketId, histories);
+    }
+
+    @Transactional(readOnly = true)
+    public List<WorkflowTransitionHistory> getViolatingTransitions(long checkTimeInSeconds) {
+        ZonedDateTime checkTime = ZonedDateTime.now().plusSeconds(checkTimeInSeconds);
+        return workflowTransitionHistoryRepository.findViolatingTransitions(checkTime);
+    }
+
+    /**
+     * Retrieves workflow transitions that have already violated their SLA.
+     *
+     * @return A list of violated workflow transitions.
+     */
+    public List<WorkflowTransitionHistory> getViolatedTransitions() {
+        return workflowTransitionHistoryRepository.findViolatingTransitions(ZonedDateTime.now());
+    }
+
+    /**
+     * Updates the given workflow transition to 'Escalated' and persists it.
+     *
+     * @param transitionId The workflow transition history entry to escalate.
+     */
+    @Transactional
+    public void escalateTransition(Long transitionId) {
+        WorkflowTransitionHistory violatedTicket =
+                workflowTransitionHistoryRepository
+                        .findById(transitionId)
+                        .orElseThrow(
+                                () ->
+                                        new EntityNotFoundException(
+                                                "Transition not found: " + transitionId));
+
+        violatedTicket.setStatus(Escalated);
+        workflowTransitionHistoryRepository.save(violatedTicket);
     }
 }
