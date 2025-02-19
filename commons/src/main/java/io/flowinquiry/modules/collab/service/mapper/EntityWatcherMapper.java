@@ -1,4 +1,4 @@
-package io.flowinquiry.modules.fss.service.mapper;
+package io.flowinquiry.modules.collab.service.mapper;
 
 import io.flowinquiry.modules.collab.domain.EntityWatcher;
 import io.flowinquiry.modules.fss.service.dto.EntityWatcherDTO;
@@ -12,6 +12,7 @@ public interface EntityWatcherMapper {
 
     @Mapping(source = "watchUser.id", target = "watchUserId")
     @Mapping(target = "watchUserName", source = "watchUser", qualifiedByName = "userFullName")
+    @Mapping(target = "watcherImageUrl", source = "watchUser.imageUrl")
     EntityWatcherDTO toDTO(EntityWatcher entityWatcher);
 
     List<EntityWatcherDTO> toDTOList(List<EntityWatcher> entityWatchers);
