@@ -101,9 +101,16 @@ public interface TeamRequestRepository
                     + "u.id, CONCAT(u.firstName, ' ', u.lastName), COUNT(r.id)) "
                     + "FROM TeamRequest r "
                     + "LEFT JOIN User u ON r.assignUser.id = u.id "
-                    + "WHERE r.team.id = :teamId AND r.isCompleted = false AND r.isDeleted = false "
+                    + "WHERE r.team.id = :teamId "
+                    + "AND r.isCompleted = false "
+                    + "AND r.isDeleted = false "
+                    + "AND r.createdAt >= COALESCE(:fromDate, r.createdAt) "
+                    + "AND r.createdAt <= COALESCE(:toDate, r.createdAt) "
                     + "GROUP BY u.id, u.firstName, u.lastName")
-    List<TicketDistributionDTO> findTicketDistributionByTeamId(@Param("teamId") Long teamId);
+    List<TicketDistributionDTO> findTicketDistributionByTeamId(
+            @Param("teamId") Long teamId,
+            @Param("fromDate") Instant fromDate,
+            @Param("toDate") Instant toDate);
 
     @Query(
             "SELECT r FROM TeamRequest r "
@@ -117,10 +124,16 @@ public interface TeamRequestRepository
             "SELECT new io.flowinquiry.modules.teams.service.dto.PriorityDistributionDTO("
                     + "r.priority, COUNT(r.id)) "
                     + "FROM TeamRequest r "
-                    + "WHERE r.team.id = :teamId AND r.isCompleted = false AND r.isDeleted = false "
+                    + "WHERE r.team.id = :teamId "
+                    + "AND r.isCompleted = false "
+                    + "AND r.isDeleted = false "
+                    + "AND r.createdAt >= COALESCE(:fromDate, r.createdAt) "
+                    + "AND r.createdAt <= COALESCE(:toDate, r.createdAt) "
                     + "GROUP BY r.priority")
     List<PriorityDistributionDTO> findTicketPriorityDistributionByTeamId(
-            @Param("teamId") Long teamId);
+            @Param("teamId") Long teamId,
+            @Param("fromDate") Instant fromDate,
+            @Param("toDate") Instant toDate);
 
     @Query(
             "SELECT new io.flowinquiry.modules.usermanagement.service.dto.TicketStatisticsDTO("
@@ -128,8 +141,14 @@ public interface TeamRequestRepository
                     + "SUM(CASE WHEN tr.isCompleted = false THEN 1 ELSE 0 END), "
                     + "SUM(CASE WHEN tr.isCompleted = true THEN 1 ELSE 0 END)) "
                     + "FROM TeamRequest tr "
-                    + "WHERE tr.isDeleted = false AND tr.team.id = :teamId")
-    TicketStatisticsDTO getTicketStatisticsByTeamId(@Param("teamId") Long teamId);
+                    + "WHERE tr.isDeleted = false "
+                    + "AND tr.team.id = :teamId "
+                    + "AND tr.createdAt >= COALESCE(:fromDate, tr.createdAt) "
+                    + "AND tr.createdAt <= COALESCE(:toDate, tr.createdAt)")
+    TicketStatisticsDTO getTicketStatisticsByTeamId(
+            @Param("teamId") Long teamId,
+            @Param("fromDate") Instant fromDate,
+            @Param("toDate") Instant toDate);
 
     @Query(
             "SELECT r "
@@ -163,18 +182,24 @@ public interface TeamRequestRepository
             Pageable pageable);
 
     @Query(
-            "SELECT COUNT(r.id) "
-                    + "FROM TeamRequest r "
-                    + "JOIN WorkflowTransitionHistory h ON h.teamRequest.id = r.id "
-                    + "WHERE r.isDeleted = false "
-                    + "AND r.isCompleted = false "
-                    + "AND h.slaDueDate IS NOT NULL "
-                    + "AND h.slaDueDate < CURRENT_TIMESTAMP "
-                    + "AND h.status <> :status "
-                    + "AND r.team.id = :teamId")
+            """
+        SELECT COUNT(r.id)
+        FROM TeamRequest r
+        JOIN WorkflowTransitionHistory h ON h.teamRequest.id = r.id
+        WHERE r.isDeleted = false
+        AND r.isCompleted = false
+        AND h.slaDueDate IS NOT NULL
+        AND h.slaDueDate < CURRENT_TIMESTAMP
+        AND h.status <> :status
+        AND r.team.id = :teamId
+        AND h.slaDueDate >= COALESCE(:fromDate, h.slaDueDate)
+        AND h.slaDueDate <= COALESCE(:toDate, h.slaDueDate)
+    """)
     Long countOverdueTicketsByTeamId(
             @Param("teamId") Long teamId,
-            @Param("status") WorkflowTransitionHistoryStatus completedStatus);
+            @Param("status") WorkflowTransitionHistoryStatus completedStatus,
+            @Param("fromDate") Instant fromDate,
+            @Param("toDate") Instant toDate);
 
     @Query(
             "SELECT new io.flowinquiry.modules.teams.service.dto.TicketActionCountByDateDTO("
@@ -201,21 +226,25 @@ public interface TeamRequestRepository
 
     @Query(
             """
-        SELECT new io.flowinquiry.modules.teams.service.dto.TeamTicketPriorityDistributionDTO(
-            r.team.id,
-            r.team.name,
-            r.priority,
-            COUNT(r.id)
-        )
-        FROM TeamRequest r
-        JOIN UserTeam ut ON ut.team.id = r.team.id
-        WHERE ut.user.id = :userId
-        AND r.isDeleted = false
-        AND r.isCompleted = false
-        GROUP BY r.team.id, r.team.name, r.priority
-    """)
+            SELECT new io.flowinquiry.modules.teams.service.dto.TeamTicketPriorityDistributionDTO(
+                r.team.id,
+                r.team.name,
+                r.priority,
+                COUNT(r.id)
+            )
+            FROM TeamRequest r
+            JOIN UserTeam ut ON ut.team.id = r.team.id
+            WHERE ut.user.id = :userId
+            AND r.isDeleted = false
+            AND r.isCompleted = false
+            AND r.createdAt >= COALESCE(:fromDate, r.createdAt)
+            AND r.createdAt <= COALESCE(:toDate, r.createdAt)
+            GROUP BY r.team.id, r.team.name, r.priority
+            """)
     List<TeamTicketPriorityDistributionDTO> findPriorityDistributionByUserId(
-            @Param("userId") Long userId);
+            @Param("userId") Long userId,
+            @Param("fromDate") Instant fromDate,
+            @Param("toDate") Instant toDate);
 
     boolean existsByWorkflowIdAndIsDeletedFalse(Long workflowId);
 }

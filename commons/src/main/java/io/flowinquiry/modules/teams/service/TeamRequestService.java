@@ -286,8 +286,9 @@ public class TeamRequestService {
     }
 
     // Fetch ticket distribution by team member
-    public List<TicketDistributionDTO> getTicketDistribution(Long teamId) {
-        return teamRequestRepository.findTicketDistributionByTeamId(teamId);
+    public List<TicketDistributionDTO> getTicketDistribution(
+            Long teamId, Instant fromDate, Instant toDate) {
+        return teamRequestRepository.findTicketDistributionByTeamId(teamId, fromDate, toDate);
     }
 
     // Fetch unassigned tickets
@@ -298,12 +299,15 @@ public class TeamRequestService {
     }
 
     // Fetch ticket priority distribution
-    public List<PriorityDistributionDTO> getPriorityDistribution(Long teamId) {
-        return teamRequestRepository.findTicketPriorityDistributionByTeamId(teamId);
+    public List<PriorityDistributionDTO> getPriorityDistribution(
+            Long teamId, Instant fromDate, Instant toDate) {
+        return teamRequestRepository.findTicketPriorityDistributionByTeamId(
+                teamId, fromDate, toDate);
     }
 
-    public TicketStatisticsDTO getTicketStatisticsByTeamId(Long teamId) {
-        return teamRequestRepository.getTicketStatisticsByTeamId(teamId);
+    public TicketStatisticsDTO getTicketStatisticsByTeamId(
+            Long teamId, Instant fromDate, Instant toDate) {
+        return teamRequestRepository.getTicketStatisticsByTeamId(teamId, fromDate, toDate);
     }
 
     private Instant calculateEarliestSlaDueDate(Long workflowId, Long sourceStateId) {
@@ -334,7 +338,7 @@ public class TeamRequestService {
         }
 
         // Calculate the SLA due date for the earliest transition
-        return Instant.now().plus(earliestTransition.getSlaDuration(), ChronoUnit.MINUTES);
+        return Instant.now().plus(earliestTransition.getSlaDuration(), ChronoUnit.HOURS);
     }
 
     public Page<TeamRequestDTO> getOverdueTicketsByTeam(Long teamId, Pageable pageable) {
@@ -349,8 +353,9 @@ public class TeamRequestService {
                 .map(teamRequestMapper::toDto);
     }
 
-    public Long countOverdueTickets(Long teamId) {
-        return teamRequestRepository.countOverdueTicketsByTeamId(teamId, Completed);
+    public Long countOverdueTickets(
+            Long teamId, WorkflowTransitionHistoryStatus status, Instant fromDate, Instant toDate) {
+        return teamRequestRepository.countOverdueTicketsByTeamId(teamId, status, fromDate, toDate);
     }
 
     public List<TicketActionCountByDateDTO> getTicketCreationTimeSeries(Long teamId, int days) {
@@ -380,7 +385,8 @@ public class TeamRequestService {
         return ticketByDaySeries;
     }
 
-    public List<TeamTicketPriorityDistributionDTO> getPriorityDistributionForUser(Long userId) {
-        return teamRequestRepository.findPriorityDistributionByUserId(userId);
+    public List<TeamTicketPriorityDistributionDTO> getPriorityDistributionForUser(
+            Long userId, Instant fromDate, Instant toDate) {
+        return teamRequestRepository.findPriorityDistributionByUserId(userId, fromDate, toDate);
     }
 }
