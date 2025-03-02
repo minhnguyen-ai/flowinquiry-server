@@ -103,19 +103,16 @@ public class TeamRequestService {
 
     @Transactional
     public TeamRequestDTO createTeamRequest(TeamRequestDTO teamRequestDTO) {
-
-        Long workflowId = teamRequestDTO.getWorkflowId();
-        if (workflowId == null) {
-            throw new ResourceNotFoundException("No workflow id found");
-        }
         WorkflowState initialStateByWorkflowId =
-                workflowStateRepository.findInitialStateByWorkflowId(workflowId);
-        if (initialStateByWorkflowId == null) {
-            throw new ResourceNotFoundException(
-                    "No initial state found for workflow id " + workflowId);
-        }
+                workflowStateRepository
+                        .findById(teamRequestDTO.getCurrentStateId())
+                        .orElseThrow(
+                                () ->
+                                        new ResourceNotFoundException(
+                                                "Can not find workflow state "
+                                                        + teamRequestDTO.getWorkflowId()));
+
         teamRequestDTO.setIsNew(true);
-        teamRequestDTO.setCurrentStateId(initialStateByWorkflowId.getId());
         teamRequestDTO.setIsCompleted(false);
 
         TeamRequest teamRequest = teamRequestMapper.toEntity(teamRequestDTO);
@@ -395,5 +392,31 @@ public class TeamRequestService {
     public List<TeamTicketPriorityDistributionDTO> getPriorityDistributionForUser(
             Long userId, Instant fromDate, Instant toDate) {
         return teamRequestRepository.findPriorityDistributionByUserId(userId, fromDate, toDate);
+    }
+
+    @Transactional
+    public TeamRequestDTO updateTeamRequestState(Long requestId, Long newStateId) {
+        TeamRequest teamRequest =
+                teamRequestRepository
+                        .findById(requestId)
+                        .orElseThrow(
+                                () ->
+                                        new ResourceNotFoundException(
+                                                "Not find the request id " + requestId));
+
+        WorkflowState workflowState =
+                workflowStateRepository
+                        .findById(newStateId)
+                        .orElseThrow(
+                                () ->
+                                        new ResourceNotFoundException(
+                                                "Not find the new state id " + newStateId));
+
+        if (!Objects.equals(
+                teamRequest.getWorkflow().getId(), workflowState.getWorkflow().getId())) {
+            throw new IllegalArgumentException("Workflow id mismatch");
+        }
+        teamRequest.setCurrentState(workflowState);
+        return teamRequestMapper.toDto(teamRequestRepository.save(teamRequest));
     }
 }
