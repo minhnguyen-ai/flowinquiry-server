@@ -15,9 +15,15 @@ import {
 
 export const getWorkflowsByTeam = (
   teamId: number,
+  useForProject?: boolean,
   setError?: (error: HttpError | string | null) => void,
 ) => {
-  return get<Array<WorkflowDTO>>(`/api/workflows/teams/${teamId}`, setError);
+  const url =
+    useForProject !== undefined
+      ? `/api/workflows/teams/${teamId}?used_for_project=${useForProject}`
+      : `/api/workflows/teams/${teamId}`;
+
+  return get<Array<WorkflowDTO>>(url, setError);
 };
 
 export const getGlobalWorkflowHasNotLinkedWithTeam = (
@@ -38,6 +44,16 @@ export const getValidTargetStates = async (
 ) => {
   return get<Array<WorkflowStateDTO>>(
     `/api/workflows/${workflowId}/transitions?workflowStateId=${workflowStateId}&&includeSelf=${includeSelf}`,
+    setError,
+  );
+};
+
+export const getInitialStates = async (
+  workflowId: number,
+  setError?: (error: HttpError | string | null) => void,
+) => {
+  return get<Array<WorkflowStateDTO>>(
+    `/api/workflows/${workflowId}/initial-states`,
     setError,
   );
 };

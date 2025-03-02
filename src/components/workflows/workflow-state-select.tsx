@@ -16,7 +16,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { getValidTargetStates } from "@/lib/actions/workflows.action";
+import {
+  getInitialStates,
+  getValidTargetStates,
+} from "@/lib/actions/workflows.action";
 import { cn } from "@/lib/utils";
 import { useError } from "@/providers/error-provider";
 import { WorkflowStateDTO } from "@/types/workflows";
@@ -26,7 +29,7 @@ type WorkflowStateSelectProps = {
   name: string;
   label?: string;
   workflowId: number;
-  workflowStateId: number;
+  workflowStateId?: number;
   includeSelf?: boolean;
   required?: boolean;
 };
@@ -48,12 +51,19 @@ const WorkflowStateSelect = ({
     const loadWorkflowStates = async () => {
       setIsLoading(true);
       try {
-        const data = await getValidTargetStates(
-          workflowId,
-          workflowStateId,
-          includeSelf,
-          setError,
-        );
+        let data: WorkflowStateDTO[];
+
+        if (workflowStateId !== undefined) {
+          data = await getValidTargetStates(
+            workflowId,
+            workflowStateId,
+            includeSelf,
+            setError,
+          );
+        } else {
+          data = await getInitialStates(workflowId, setError);
+        }
+
         setWorkflowStates(data);
       } finally {
         setIsLoading(false);
@@ -65,24 +75,37 @@ const WorkflowStateSelect = ({
     }
   }, [workflowId, workflowStateId, includeSelf, setError]);
 
+  useEffect(() => {
+    if (workflowStates.length > 0) {
+      const currentValue = form.getValues(name);
+
+      // ✅ Ensure the Select component reflects the correct value
+      if (
+        !currentValue ||
+        !workflowStates.some((state) => state.id === currentValue)
+      ) {
+        const defaultState =
+          workflowStates.find((state) => state.id === workflowStateId) ||
+          workflowStates[0];
+
+        if (defaultState) {
+          form.setValue(name, defaultState.id, {
+            shouldValidate: true,
+            shouldDirty: true,
+          });
+        }
+      }
+    }
+  }, [workflowStates, workflowStateId, form, name]);
+
   return (
     <FormField
       control={form.control}
       name={name}
       render={({ field }) => {
-        // Set initial value dynamically if it doesn't exist
-        if (!field.value && workflowStates.length > 0) {
-          const initialState =
-            workflowStates.find((state) => state.id === workflowStateId) ||
-            workflowStates[0];
-          if (initialState) {
-            form.setValue(name, initialState.id, { shouldValidate: true });
-          }
-        }
-
-        const selectedStateName =
-          workflowStates.find((state) => state.id === field.value)?.stateName ||
-          "Select a state";
+        const selectedState = workflowStates.find(
+          (state) => state.id === field.value,
+        );
 
         return (
           <FormItem>
@@ -92,16 +115,16 @@ const WorkflowStateSelect = ({
             </FormLabel>
             <FormControl>
               <Select
-                // Convert the integer field value to a string for Select
-                value={field.value != null ? String(field.value) : undefined}
-                // Convert the selected string value back to an integer
+                value={field.value ? String(field.value) : ""}
                 onValueChange={(value) =>
                   field.onChange(value ? Number(value) : null)
                 }
                 disabled={isLoading || workflowStates.length === 0}
               >
                 <SelectTrigger className={cn("w-[16rem]")}>
-                  <SelectValue placeholder={selectedStateName} />
+                  <SelectValue
+                    placeholder={selectedState?.stateName || "Select a state"}
+                  />
                 </SelectTrigger>
                 <SelectContent>
                   {workflowStates.map((state) => (

@@ -2,22 +2,13 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSession } from "next-auth/react";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import * as z from "zod";
 
 import RichTextEditor from "@/components/shared/rich-text-editor";
 import { TeamRequestPrioritySelect } from "@/components/teams/team-requests-priority-select";
 import TicketChannelSelectField from "@/components/teams/team-ticket-channel-select";
 import TeamUserSelectField from "@/components/teams/team-users-select";
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import {
   DatePickerField,
   ExtInputField,
@@ -32,6 +23,12 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
 import WorkflowStateSelect from "@/components/workflows/workflow-state-select";
 import { uploadAttachmentsForEntity } from "@/lib/actions/entity-attachments.action";
 import { createTeamRequest } from "@/lib/actions/teams-request.action";
@@ -41,83 +38,100 @@ import {
   TeamRequestDTOSchema,
   TeamRequestPriority,
 } from "@/types/team-requests";
-import { TeamDTO } from "@/types/teams";
-import { WorkflowDTO } from "@/types/workflows";
+import { WorkflowStateDTO } from "@/types/workflows";
 
-type NewRequestToTeamDialogProps = {
-  open: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  teamEntity: TeamDTO;
-  workflow: WorkflowDTO | null;
-  onSaveSuccess: () => void;
-};
+export type TaskBoard = Record<string, TeamRequestDTO[]>;
 
-const NewRequestToTeamDialog: React.FC<NewRequestToTeamDialogProps> = ({
-  open,
-  setOpen,
-  teamEntity,
-  workflow,
-  onSaveSuccess,
+const TaskSheet = ({
+  isOpen,
+  setIsOpen,
+  selectedWorkflowState,
+  setTasks,
+  projectId,
+  projectWorkflowId,
+  teamId,
+}: {
+  isOpen: boolean;
+  setIsOpen: (open: boolean) => void;
+  selectedWorkflowState: WorkflowStateDTO | null;
+  setTasks: React.Dispatch<React.SetStateAction<TaskBoard>>;
+  projectId: number;
+  projectWorkflowId: number;
+  teamId: number;
 }) => {
-  const [files, setFiles] = React.useState<File[]>([]);
-  const { data: session } = useSession();
   const { setError } = useError();
+  const [files, setFiles] = useState<File[]>([]);
+  const { data: session } = useSession();
 
-  const form = useForm<z.infer<typeof TeamRequestDTOSchema>>({
+  // ✅ Initialize Form
+  const form = useForm({
     resolver: zodResolver(TeamRequestDTOSchema),
     defaultValues: {
-      teamId: teamEntity.id!,
-      priority: "Medium",
-      workflowId: workflow?.id !== undefined ? workflow.id : undefined,
-      requestUserId: Number(session?.user?.id ?? 0),
       requestTitle: "",
       requestDescription: "",
-      assignUserId: undefined,
+      priority: "Medium" as TeamRequestPriority,
+      assignUserId: null,
+      teamId: teamId,
+      projectId: projectId,
+      workflowId: projectWorkflowId,
+      currentStateId: selectedWorkflowState?.id ?? null,
+      requestUserId: Number(session?.user?.id ?? 0),
       estimatedCompletionDate: null,
       actualCompletionDate: null,
     },
   });
 
-  /** ✅ Reset form values when the dialog opens with a new workflow */
+  // ✅ Ensure default values persist when modal opens
   useEffect(() => {
-    if (open) {
+    if (isOpen) {
       form.reset({
-        teamId: teamEntity.id!,
-        priority: "Medium",
-        workflowId: workflow?.id !== undefined ? workflow.id : undefined,
-        requestUserId: Number(session?.user?.id ?? 0),
         requestTitle: "",
         requestDescription: "",
-        assignUserId: undefined,
+        priority: "Medium",
+        assignUserId: null,
+        teamId: teamId,
+        projectId: projectId,
+        workflowId: projectWorkflowId,
+        currentStateId: selectedWorkflowState?.id ?? null,
+        requestUserId: Number(session?.user?.id ?? 0),
         estimatedCompletionDate: null,
         actualCompletionDate: null,
       });
-      setFiles([]); // Reset file state
     }
-  }, [open, workflow, form, teamEntity.id, session]);
+  }, [isOpen, form, teamId, projectWorkflowId, selectedWorkflowState]);
 
+  // ✅ Handle Form Submission
   const onSubmit = async (data: TeamRequestDTO) => {
-    const savedTeamRequest = await createTeamRequest(data, setError);
-    if (savedTeamRequest?.id && files.length > 0) {
-      uploadAttachmentsForEntity("Team_Request", savedTeamRequest.id, files);
+    console.log(`Data submitted: ${JSON.stringify(data)}`);
+    if (!selectedWorkflowState) return;
+
+    const newTask = await createTeamRequest(data, setError);
+    if (newTask?.id && files.length > 0) {
+      await uploadAttachmentsForEntity("Team_Request", newTask.id, files);
     }
-    setOpen(false);
-    onSaveSuccess();
+
+    // ✅ Update Tasks State
+    setTasks((prev) => ({
+      ...prev,
+      [selectedWorkflowState.id!.toString()]: [
+        ...(prev[selectedWorkflowState.id!.toString()] || []),
+        newTask,
+      ],
+    }));
+
+    // Reset Form & Close Sheet
+    form.reset();
+    setIsOpen(false);
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="sm:max-w-[56rem] max-h-[90vh] p-4 sm:p-6 flex flex-col overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>
-            [{workflow?.requestName}]: Create a New Ticket Request
-          </DialogTitle>
-          <DialogDescription>
-            Submit a request to the team to get assistance or initiate a task.
-            Provide all necessary details to help the team understand and
-            address your request effectively.
-          </DialogDescription>
-        </DialogHeader>
+    <Sheet open={isOpen} onOpenChange={setIsOpen}>
+      <SheetContent side="right" className="w-[90vw] sm:w-[42rem] lg:w-[56rem]">
+        <SheetHeader>
+          <SheetTitle>
+            Add New Task to {selectedWorkflowState?.stateName}
+          </SheetTitle>
+        </SheetHeader>
 
         <Form {...form}>
           <form
@@ -126,15 +140,17 @@ const NewRequestToTeamDialog: React.FC<NewRequestToTeamDialogProps> = ({
           >
             <div className="flex-1 overflow-y-auto space-y-6">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                {/* ✅ Title Field */}
                 <div className="col-span-1 sm:col-span-2">
                   <ExtInputField
                     form={form}
                     fieldName="requestTitle"
                     label="Title"
-                    required={true}
+                    required
                   />
                 </div>
 
+                {/* ✅ Description Field */}
                 <div className="col-span-1 sm:col-span-2">
                   <FormField
                     control={form.control}
@@ -143,7 +159,7 @@ const NewRequestToTeamDialog: React.FC<NewRequestToTeamDialogProps> = ({
                       <FormItem>
                         <FormLabel>
                           Description{" "}
-                          <span className="text-destructive"> *</span>
+                          <span className="text-destructive">*</span>
                         </FormLabel>
                         <FormControl>
                           <RichTextEditor
@@ -157,15 +173,25 @@ const NewRequestToTeamDialog: React.FC<NewRequestToTeamDialogProps> = ({
                   />
                 </div>
 
+                {/* ✅ File Uploader */}
                 <div className="col-span-1 sm:col-span-2">
                   <FileUploader
                     maxFileCount={8}
                     maxSize={8 * 1024 * 1024}
-                    accept={{ "*/*": [] }}
+                    accept={{
+                      "application/pdf": [],
+                      "text/plain": [],
+                      "image/png": [],
+                      "image/jpeg": [],
+                      "image/jpg": [],
+                      "image/gif": [],
+                      "image/webp": [],
+                    }}
                     onValueChange={setFiles}
                   />
                 </div>
 
+                {/* ✅ Priority Select */}
                 <FormField
                   control={form.control}
                   name="priority"
@@ -189,7 +215,7 @@ const NewRequestToTeamDialog: React.FC<NewRequestToTeamDialogProps> = ({
                   form={form}
                   fieldName="assignUserId"
                   label="Assignee"
-                  teamId={teamEntity.id!}
+                  teamId={teamId}
                 />
 
                 <DatePickerField
@@ -205,33 +231,34 @@ const NewRequestToTeamDialog: React.FC<NewRequestToTeamDialogProps> = ({
                   label="Actual Completion Date"
                   placeholder="Select a date"
                 />
+
                 <TicketChannelSelectField form={form} />
+
                 <WorkflowStateSelect
                   form={form}
                   name="currentStateId"
                   label="State"
                   required
-                  workflowId={workflow?.id!}
-                  includeSelf
+                  workflowId={projectWorkflowId}
                 />
               </div>
             </div>
 
-            <div className="pt-4 flex justify-start gap-4">
+            <div className="pt-4 flex gap-4">
               <SubmitButton label="Save" labelWhileLoading="Saving ..." />
-              <Button
+              <button
                 type="button"
-                variant="outline"
-                onClick={() => setOpen(false)}
+                className="px-4 py-2 border rounded-md bg-gray-200 hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700"
+                onClick={() => setIsOpen(false)}
               >
                 Discard
-              </Button>
+              </button>
             </div>
           </form>
         </Form>
-      </DialogContent>
-    </Dialog>
+      </SheetContent>
+    </Sheet>
   );
 };
 
-export default NewRequestToTeamDialog;
+export default TaskSheet;
