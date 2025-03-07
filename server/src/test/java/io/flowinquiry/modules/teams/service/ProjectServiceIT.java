@@ -25,6 +25,7 @@ public class ProjectServiceIT {
                         .description("Project description")
                         .status(ProjectStatus.Active)
                         .teamId(1L)
+                        .createdBy(1L)
                         .build();
         ProjectDTO savedProject = projectService.createProject(projectDTO);
         savedProject =
