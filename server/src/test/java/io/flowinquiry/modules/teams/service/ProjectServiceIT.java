@@ -58,6 +58,7 @@ public class ProjectServiceIT {
                         .name("Sample project")
                         .description("Project description")
                         .status(ProjectStatus.Active)
+                        .createdBy(1L)
                         .teamId(1L)
                         .build();
         ProjectDTO savedProject = projectService.createProject(projectDTO);
@@ -74,6 +75,7 @@ public class ProjectServiceIT {
                         .name("Sample project")
                         .description("Project description")
                         .status(ProjectStatus.Active)
+                        .createdBy(1L)
                         .teamId(1L)
                         .build();
         ProjectDTO savedProject = projectService.createProject(projectDTO);
