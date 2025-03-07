@@ -8,9 +8,11 @@ import io.flowinquiry.modules.teams.domain.Team;
 import io.flowinquiry.modules.teams.repository.ProjectRepository;
 import io.flowinquiry.modules.teams.repository.TeamRepository;
 import io.flowinquiry.modules.teams.service.dto.ProjectDTO;
+import io.flowinquiry.modules.teams.service.event.NewProjectCreatedEvent;
 import io.flowinquiry.modules.teams.service.mapper.ProjectMapper;
 import io.flowinquiry.query.QueryDTO;
 import java.util.Optional;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -27,13 +29,17 @@ public class ProjectService {
 
     private final ProjectMapper projectMapper;
 
+    private final ApplicationEventPublisher eventPublisher;
+
     public ProjectService(
             TeamRepository teamRepository,
             ProjectRepository projectRepository,
-            ProjectMapper projectMapper) {
+            ProjectMapper projectMapper,
+            ApplicationEventPublisher eventPublisher) {
         this.teamRepository = teamRepository;
         this.projectRepository = projectRepository;
         this.projectMapper = projectMapper;
+        this.eventPublisher = eventPublisher;
     }
 
     public ProjectDTO createProject(ProjectDTO projectDTO) {
@@ -49,7 +55,9 @@ public class ProjectService {
                                                 "Team not found with ID: "
                                                         + projectDTO.getTeamId()));
         project.setTeam(team);
-        return projectMapper.toDto(projectRepository.save(project));
+        ProjectDTO savedProjectDTO = projectMapper.toDto(projectRepository.save(project));
+        eventPublisher.publishEvent(new NewProjectCreatedEvent(this, savedProjectDTO));
+        return savedProjectDTO;
     }
 
     public Optional<ProjectDTO> getProjectById(Long id) {
