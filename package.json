@@ -1,0 +1,36 @@
+{
+  "name": "flowinquiry",
+  "private": true,
+  "version": "0.0.1",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "devDependencies": {
+    "@eslint/js": "^9.23.0",
+    "auth": "^1.2.3",
+    "eslint": "^9.23.0",
+    "eslint-config-next": "^15.2.4",
+    "@eslint/compat": "^1.2.7",
+    "@typescript-eslint/parser": "^8.27.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "eslint-plugin-unused-imports": "^4.1.4",
+    "prettier": "3.4.2",
+    "turbo": "^2.4.4",
+    "globals": "^15.15.0"
+  },
+  "scripts": {
+    "dev": "turbo run dev",
+    "dev:frontend": "turbo run dev --filter=flowinquiry-frontend",
+    "dev:docs": "turbo run dev --filter=docs",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "postinstall": "tools/githooks/setup-pre-commit.sh",
+    "check-env": "tools/check-env.sh",
+    "setup:backend": "bash tools/setup/backend-env.sh",
+    "setup:frontend": "bash tools/setup/frontend-env.sh"
+  },
+  "packageManager": "pnpm@10.6.5+sha512.cdf928fca20832cd59ec53826492b7dc25dc524d4370b6b4adbf65803d32efaa6c1c88147c0ae4e8d579a6c9eec715757b50d4fa35eea179d868eada4ed043af"
+}

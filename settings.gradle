@@ -7,8 +7,8 @@ pluginManagement {
     }
 }
 
-rootProject.name = "flowinquiry-server"
-include 'server'
-include 'tools:liquibase'
-include 'commons'
+rootProject.name = "flowinquiry"
+include 'apps:backend:server'
+include 'apps:backend:tools:liquibase'
+include 'apps:backend:commons'
 

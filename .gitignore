@@ -158,3 +158,9 @@ Desktop.ini
 docker/volumes
 storage
 commons/build
+apps/backend/commons/build
+apps/backend/server/build
+apps/backend/buildSrc/build
+apps/frontend/.next
+apps/docs/.next
+.turbo
