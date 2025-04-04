@@ -18,7 +18,14 @@ FlowInquiry uses Gradle as its build tool and includes the Gradle wrapper in the
 
 ## Get the latest sources from GitHub
 
-Access the latest source code for FlowInquiry's back-end at https://github.com/flowinquiry/flowinquiry-server
+The source code for FlowInquiry’s backend is available at: https://github.com/flowinquiry/flowinquiry/tree/main/apps/backend
+
+You can also clone the repository to your local machine using the command below and navigate to the backend directory:
+
+```bash
+git clone https://github.com/flowinquiry/flowinquiry.git
+cd flowinquiry/apps/backend
+```
 
 ## Development
 
@@ -26,14 +33,12 @@ Access the latest source code for FlowInquiry's back-end at https://github.com/f
 
 <FileTree>
   <FileTree.Folder name="flowinquiry-server" defaultOpen>
-    <FileTree.Folder name="scripts" />
     <FileTree.Folder name="server" />
     <FileTree.Folder name="commons" />
     <FileTree.Folder name="tools" />
   </FileTree.Folder>
 </FileTree>
 
-- `scripts` Includes useful scripts for validating environment settings, setting up project environment variables, and more
 - `server` the FlowInquiry server sources
 - `commons` the common codebase for FlowInquiry backend
 - `tools` extra tools for FlowInquiry server such as liquibase database migration scripts and more
@@ -49,66 +54,58 @@ To run the FlowInquiry backend, users need to provide their input in the local c
     <Tabs.Tab>
         #### Checking environments
 
-        FlowInquiry backend requires Java, Docker is already installed. You can run the `valid_checks.sh` script located in the scripts folder to verify
-        if your machine is set up to work with FlowInquiry
+        FlowInquiry's front-end requires Node and pnpm to be installed on your machine. You can run the command `pnpm check-env` in the flowinquiry root folder to verify if your machine is set up to work with FlowInquiry
 
         ```bash
-        ➜  flowinquiry-server scripts/valid_checks.sh
-        Running java_check.sh...
-        Java Version Information:
-        openjdk version "21.0.5" 2024-10-15 LTS
-        OpenJDK Runtime Environment Temurin-21.0.5+11 (build 21.0.5+11-LTS)
-        OpenJDK 64-Bit Server VM Temurin-21.0.5+11 (build 21.0.5+11-LTS, mixed mode, sharing)
+        ➜  flowinquiry ✗ pnpm check-env
 
-        Java Vendor: Eclipse Adoptium
-        Java Runtime Environment: OpenJDK Runtime Environment
-        Java VM Name: OpenJDK 64-Bit Server VM
-        Java Home: /usr
-        Java version is 21, which is greater than or equal to 21.
-        java_check.sh succeeded.
-        Running docker_check.sh...
-        docker_check.sh succeeded.
-        Your environments settings satisfy FlowInquiry's conditions
+        > flowinquiry@0.0.1 check-env flowinquiry
+        > tools/check-env.sh
+
+        🔍 Starting environment check...
+
+        ⚙️  Backend Requirements
+
+        🔍 Checking Java version...
+        ✅ Java version 21 detected.
+
+        🔍 Checking Docker...
+        ✅ Docker is installed and running.
+
+        -----------------------------
+
+        🎨 Frontend Requirements
+
+        🔍 Checking Node.js version...
+        ✅ Node.js version v20.18.1 detected.
+
+        🔍 Checking pnpm version...
+        ✅ pnpm version: 10.6.5
+
+        =============================
+        📋 Summary
+        =============================
+        ✅ Backend environment is properly configured.
+
+        ✅ Frontend environment is properly configured.
+
+        🌱 All environment checks passed!
+
         ```
-        #### Setup scripts
 
-        You will need to run the following scripts:
-
-        `scripts/init_git_hooks.sh`: Sets up a git hook to automatically format and check code logic each time you commit changes.
-
-        `scripts/create_secrets.sh`: Create secrets stored in the `.env.local` file, which is used by the FlowInquiry server
-
-        <Callout emoji="💡">
-            You can run the `scripts/all.sh` script, which will check your environment
-            settings and perform the necessary configurations, eliminating the need to run
-            multiple scripts individually
-        </Callout>
-
-        #### Sending email
-
-        To use FlowInquiry's email features, such as sending activation emails to users or reminders about upcoming tasks, you'll need an SMTP account. You can configure this with providers like Gmail, Amazon SES, or any SMTP service. Please note that this email setup is intended for use in a local environment only.
-
-        Run the script `scripts/mail_config.sh`, it will ask you the STMP information, and then it writes all to the local file `.env.local`
+        then you run the command `pnpm setup:backend` in the flowinquiry's root folder to create a file `.env.local` in the folder `apps/backend`
 
         ```bash
-        ➜  flowinquiry-server git:(main) ✗ scripts/mail_config.sh
-        Enter your SMTP host: smtp.gmail.com
-        Enter your SMTP port: 587
-        Enter your username: username
-        Enter your password:  password
-        Does SMTP require STARTTLS (y/n)? y
-        Please enter the email address that will be used as the sender for outgoing emails: noreply@flowinquiry.io
-        Please enter the base URL that will be used for the email template: http://localhost:3000
-        Backup of .env.local created as .env.local.backup
-        Configuration has been saved to .env.local
-        ```
+        ➜  flowinquiry✗ pnpm setup:backend
 
-        <Callout type="info" emoji="ℹ️">
-            To use your Google credentials to send a test email, you cannot use your
-            regular email password. Instead, you'll need to generate an App Password. For
-            detailed instructions, see the guide at
-            https://support.google.com/mail/answer/185833?hl=en
-        </Callout>
+        > flowinquiry@0.0.1 setup:backend flowinquiry
+        > bash tools/setup/backend-env.sh
+
+        🔐 Creating .env.local for backend...
+        Enter your database password:
+        ✅ Sensitive data has been written to /apps/backend/.env.local with restricted permissions.
+        🌱 Environment check passed.
+        ````
         </Tabs.Tab>
         <Tabs.Tab>
             Rename the file `.env.local.example` to `.env.local`, and edit the file content per instructions inline
@@ -138,53 +135,6 @@ To run the FlowInquiry backend, users need to provide their input in the local c
             # to generate your own unique key, especially for production environments.
             # This key is critical for securing authentication and must be stored securely.
             JWT_BASE64_SECRET='alBEd1VVQWpuVkxrNEQ4YnFBZmtvUk1pU2NoQ0x2UG92SW00cUZZaGx4UmRzUEUyM0dWR01yQWxPUURud0sxRDNpeVZQY1NtNGNCTElsc25kUEg4TDlySGVt'
-
-            ################################################
-            # Email Configuration (Optional)
-            ################################################
-
-            # SMTP server address for sending emails. Example: smtp.gmail.com
-            spring.mail.host=
-
-            # Port number for SMTP communication. Typically 587 for TLS.
-            spring.mail.port=
-
-            # Ensure the SMTP server port is set correctly. Usually this value equals with spring.mail.port
-            spring.mail.properties.mail.smtp.port=
-
-            # Email address used for SMTP authentication.
-            spring.mail.username=
-
-            # Password or app-specific password for SMTP authentication.
-            # Sensitive information. Use environment variables or a secret manager.
-            spring.mail.password=
-
-            # Enables SMTP authentication. Value true/false
-            spring.mail.properties.mail.smtp.auth=
-
-            # The "from" address for outgoing emails.
-            flowinquiry.mail.from=
-
-            # Base URL for links in emails, such as password resets or verification emails.
-            flowinquiry.mail.base_url=
-
-            # Enables TLS for secure SMTP communication. Value true/false
-            spring.mail.properties.mail.smtp.starttls.enable=
-
-            # Ensures TLS is required for SMTP communication. Value true/false
-            spring.mail.properties.mail.smtp.starttls.required=
-
-            ################################################
-            # OpenAI Configuration (Optional)
-            ################################################
-
-            # API key for authenticating with OpenAI services.
-            # Critical for accessing OpenAI's APIs. Store it securely.
-            OPEN_AI_API_KEY=
-
-            # Specifies the OpenAI model to use for processing requests.
-            # Example: gpt-3.5-turbo.
-            OPEN_AI_CHAT_MODEL=
             ```
         </Tabs.Tab>
 
@@ -195,62 +145,91 @@ To run the FlowInquiry backend, users need to provide their input in the local c
 #### Run postgres database
 
 FlowInquiry uses PostgreSQL as its database and provides pre-configured PostgreSQL settings. You need to run the database before starting the FlowInquiry server.
-Ensure that Docker is installed on your machine, then run the command `docker compose -f docker/services.yml` up to start the database
+Ensure that Docker is installed on your machine, then run the command `pnpm docker:up` from the flowinquiry's root folder to start the database
 
 ```bash
-➜  flowinquiry-server git:(main) docker compose -f docker/services.yml up
-[+] Running 1/0
- ✔ Container flowinquiry-postgresql-1  Created                                                                                                                                                                        0.0s
-Attaching to postgresql-1
-postgresql-1  |
-postgresql-1  | PostgreSQL Database directory appears to contain a database; Skipping initialization
-postgresql-1  |
-postgresql-1  | UTC [1] LOG:  starting PostgreSQL 16.3 (Debian 16.3-1.pgdg120+1) on aarch64-unknown-linux-gnu, compiled by gcc (Debian 12.2.0-14) 12.2.0, 64-bit
-postgresql-1  | UTC [1] LOG:  listening on IPv4 address "0.0.0.0", port 5432
-postgresql-1  | UTC [1] LOG:  listening on IPv6 address "::", port 5432
-postgresql-1  | UTC [1] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
-postgresql-1  | UTC [1] LOG:  database system is ready to accept connections
+➜  flowinquiry ✗ pnpm docker:up
+
+> flowinquiry@0.0.1 docker:up flowinquiry
+> docker compose -f docker/services.yml up -d
+
+[+] Running 1/1
+ ✔ Container flowinquiry-postgresql-1  Started
 
 ```
 
 <Callout type="error" emoji="️🚫">
-  Be sure to run the scripts/all.sh or scripts/create_secrets.sh script before
-  starting the PostgreSQL database, as they will generate a new PostgreSQL
-  password and store it in the .env.local file, which the PostgreSQL container
-  relies on.
+  Make sure to create the `.env.local` file inside the `apps/backend` directory
+  before starting the PostgreSQL database. This file contains the PostgreSQL
+  password required by the PostgreSQL container to run properly.
 </Callout>
 
 #### Run flowinquiry server
 
 <Tabs items={['Gradle', 'IntelliJ']}>
     <Tabs.Tab>
-        From the root folder, run the command `./gradlew :server:bootRun`
+        From the root folder, run the command `pnpm dev:backend` in the flowinquiry's root folder
 
         ```bash
-        ➜  flowinquiry-server git:(main) ./gradlew :server:bootRun
-        Starting a Gradle Daemon, 1 incompatible Daemon could not be reused, use --status for details
+        ➜  flowinquiry✗ pnpm dev:backend
 
-        > Task :server:bootRun
-
-        :: FlowInquiry 🤓  :: Running Spring Boot 3.3.1 :: Startup profile(s) dev ::
-        :: https://www.flowinquiry.io ::
-
-        ______ _             _____                  _
-        |  ___| |           |_   _|                (_)
-        | |_  | | _____      _| | _ __   __ _ _   _ _ _ __ _   _
-        |  _| | |/ _ \ \ /\ / / || '_ \ / _` | | | | | '__| | | |
-        | |   | | (_) \ V  V /| || | | | (_| | |_| | | |  | |_| |
-        |_|   |_|\___/ \_/\_/\___/_| |_|\__, |\__,_|_|_|   \__, |
-                                           | |              __/ |
-                                           |_|             |___/
+        > flowinquiry@0.0.1 dev:backend flowinquiry
+        > ./gradlew :apps:backend:server:bootRun
 
 
+        > Task :apps:backend:server:bootRun
+        13:13:03.982 [main] INFO io.flowinquiry.FlowInquiryApp -- Loaded env variables from ./.env.local
+        13:13:03.984 [main] INFO io.flowinquiry.FlowInquiryApp -- Loaded env variables from ../.env.local
+        13:13:04.041 [restartedMain] INFO io.flowinquiry.FlowInquiryApp -- Loaded env variables from ./.env.local
+        13:13:04.041 [restartedMain] INFO io.flowinquiry.FlowInquiryApp -- Loaded env variables from ../.env.local
+            13:13:04,188 |-INFO in org.springframework.boot.logging.logback.SpringBootJoranConfigurator@143e03fe - Registering current configuration as safe fallback point
 
-        :: FlowInquiry 🤓  :: Running Spring Boot 3.4.0 :: Startup profile(s) dev ::
-        :: https://www.flowinquiry.io ::
-        DEBUG 25048 --- [kground-preinit] org.jboss.logging.logProvider:164 : Logging Provider: org.jboss.logging.Slf4jLoggerProvider found via system property
-        DEBUG 50958 --- [  restartedMain] io.flowinquiry.FlowInquiryApp.logStarting:54 : Running with Spring Boot v3.4.0, Spring v6.2.0
-        ```
+            ______ _             _____                  _
+            |  ___| |           |_   _|                (_)
+            | |_  | | _____      _| | _ __   __ _ _   _ _ _ __ _   _
+            |  _| | |/ _ \ \ /\ / / || '_ \ / _` | | | | | '__| | | |
+            | |   | | (_) \ V  V /| || | | | (_| | |_| | | |  | |_| |
+            \_|   |_|\___/ \_/\_/\___/_| |_|\__, |\__,_|_|_|   \__, |
+                                               | |              __/ |
+                                               |_|              |___/
+
+
+
+            :: FlowInquiry 🤓  :: Running Spring Boot 3.4.2 :: Startup profile(s) dev ::
+            :: https://www.flowinquiry.io ::
+
+            2025-04-04T13:13:04.218-07:00  INFO 23073 --- [  restartedMain] io.flowinquiry.FlowInquiryApp.logStarting:53 : Starting FlowInquiryApp using Java 21.0.5 with PID 23073
+            2025-04-04T13:13:04.219-07:00 DEBUG 23073 --- [  restartedMain] io.flowinquiry.FlowInquiryApp.logStarting:54 : Running with Spring Boot v3.4.2, Spring v6.2.2
+            2025-04-04T13:13:04.219-07:00  INFO 23073 --- [  restartedMain] io.flowinquiry.FlowInquiryApp.logStartupProfileInfo:658 : The following 1 profile is active: "dev"
+            2025-04-04T13:13:05.318-07:00  WARN 23073 --- [  restartedMain] io.undertow.websockets.jsr.handleDeployment:68 : UT026010: Buffer pool was not set on WebSocketDeploymentInfo, the default pool will be used
+            2025-04-04T13:13:05.400-07:00 DEBUG 23073 --- [  restartedMain] io.flowinquiry.config.WebConfigurer.corsFilter:90 : Registering CORS filter
+            2025-04-04T13:13:05.420-07:00  INFO 23073 --- [  restartedMain] io.flowinquiry.config.WebConfigurer.onStartup:44 : Web application configuration, using profiles: dev
+            2025-04-04T13:13:05.420-07:00  INFO 23073 --- [  restartedMain] io.flowinquiry.config.WebConfigurer.onStartup:49 : Web application fully configured
+            2025-04-04T13:13:05.996-07:00  WARN 23073 --- [  restartedMain] org.hibernate.mapping.RootClass.checkCompositeIdentifier:354 : HHH000038: Composite-id class does not override equals(): io.flowinquiry.modules.usermanagement.domain.UserAuthorityId
+            2025-04-04T13:13:05.997-07:00  WARN 23073 --- [  restartedMain] org.hibernate.mapping.RootClass.checkCompositeIdentifier:357 : HHH000039: Composite-id class does not override hashCode(): io.flowinquiry.modules.usermanagement.domain.UserAuthorityId
+            2025-04-04T13:13:06.449-07:00  INFO 23073 --- [  restartedMain] io.flowinquiry.db.service.LiquibaseService.updateLiquibaseSchema:35 : Going to create a schema flowinquiry
+            Database is up to date, no changesets to execute
+
+            UPDATE SUMMARY
+            Run:                          0
+            Previously run:              12
+            Filtered out:                13
+            -------------------------------
+            Total change sets:           25
+
+
+            FILTERED CHANGE SETS SUMMARY
+            Context mismatch:            13
+
+            2025-04-04T13:13:10.325-07:00  INFO 23073 --- [  restartedMain] io.flowinquiry.FlowInquiryApp.logStarted:59 : Started FlowInquiryApp in 6.283 seconds (process running for 6.437)
+            2025-04-04T13:13:10.327-07:00  INFO 23073 --- [  restartedMain] io.flowinquiry.health.JWTSetupChecker.run:32 : JWT secret found and ready to use
+            2025-04-04T13:13:10.327-07:00  INFO 23073 --- [  restartedMain] io.flowinquiry.FlowInquiryApp.logApplicationStartup:120 : ----------------------------------------------------------
+            2025-04-04T13:13:10.327-07:00  INFO 23073 --- [  restartedMain] io.flowinquiry.FlowInquiryApp.logApplicationStartup:121 :  Application 'FlowInquiry' is running! Access URLs:
+            2025-04-04T13:13:10.328-07:00  INFO 23073 --- [  restartedMain] io.flowinquiry.FlowInquiryApp.logApplicationStartup:122 :  Local:          http://localhost:8080/
+            2025-04-04T13:13:10.328-07:00  INFO 23073 --- [  restartedMain] io.flowinquiry.FlowInquiryApp.logApplicationStartup:123 :  External:       http://192.168.0.78:8080/
+            2025-04-04T13:13:10.328-07:00  INFO 23073 --- [  restartedMain] io.flowinquiry.FlowInquiryApp.logApplicationStartup:124 :  Profile(s):     dev
+
+            ```
 
         It may take some time before the server APIs are accessible on the default port `8080`
 

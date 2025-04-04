@@ -10,22 +10,28 @@ FlowInquiry front-end uses [NextJs](https://nextjs.org/) framework to develop it
 
 ## Get the latest sources from GitHub
 
-Access the latest source code for flowinquiry's front-end at https://github.com/flowinquiry/flowinquiry-frontend
+The source code for FlowInquiry’s front-end is available at:
+https://github.com/flowinquiry/flowinquiry/tree/main/apps/frontend
+
+You can also clone the repository to your local machine using the command below and navigate to the frontend directory:
+
+```bash
+git clone https://github.com/flowinquiry/flowinquiry.git
+cd flowinquiry/apps/front-end
+```
 
 ## Development
 
 ### Folders organization
 
 <FileTree>
-  <FileTree.Folder name="flowinquiry-frontend" defaultOpen>
+  <FileTree.Folder name="frontend" defaultOpen>
     <FileTree.Folder name="public" />
-    <FileTree.Folder name="scripts" />
     <FileTree.Folder name="src" />
   </FileTree.Folder>
 </FileTree>
 
 - `public` contains static assets, such as files and images, served by Next.js
-- `scripts` Includes useful scripts for validating environment settings, setting up project environment variables, and more
 - `src` the FlowInquiry's frontend source code
 
 ### Configure the application
@@ -39,28 +45,48 @@ To run the FlowInquiry frontend, users need to provide their input in the local 
     <Tabs.Tab>
     #### Checking environments
 
-    FlowInquiry's front-end requires Node and pnpm to be installed on your machine. You can run the valid_checks.sh script located in the scripts folder to verify if your machine is set up to work with FlowInquiry
+    FlowInquiry's front-end requires Node and pnpm to be installed on your machine. You can run the command `pnpm check-env` in the flowinquiry root folder to verify if your machine is set up to work with FlowInquiry
 
     ```bash
-    ➜  FlowInquiry-frontend git:(main) scripts/valid_checks.sh
-    Running node_check.sh...
-    Node.js version: 20.14.0
-    Node.js version is 20.14.0, which is greater than or equal to 18.
-    node_check.sh succeeded.
-    Running pnpm_check.sh...
-    pnpm is installed.
-    pnpm version: 9.7.0
-    pnpm_check.sh succeeded.
-    Your environments settings satisfy FlowInquiry's conditions
-    ```
+        ➜  flowinquiry ✗ pnpm check-env
+
+        > flowinquiry@0.0.1 check-env flowinquiry
+        > tools/check-env.sh
+
+        🔍 Starting environment check...
+
+        ⚙️  Backend Requirements
+
+        🔍 Checking Java version...
+        ✅ Java version 21 detected.
+
+        🔍 Checking Docker...
+        ✅ Docker is installed and running.
+
+        -----------------------------
+
+        🎨 Frontend Requirements
+
+        🔍 Checking Node.js version...
+        ✅ Node.js version v20.18.1 detected.
+
+        🔍 Checking pnpm version...
+        ✅ pnpm version: 10.6.5
+
+        =============================
+        📋 Summary
+        =============================
+        ✅ Backend environment is properly configured.
+
+        ✅ Frontend environment is properly configured.
+
+        🌱 All environment checks passed!
+
+        ```
 
     #### Setup scripts
 
-    You will need to run the following scripts:
-
-    - `scripts/init_git_hooks.sh`: Sets up a git hook to automatically format and check code logic each time you commit changes.
-
-    - `scripts/init_environments.sh`: Create a new `.env.local` file, which is used by the Next.js application to read predefined environment variables
+        Run the command `pnpm `
 
     <Callout emoji="💡">
         You can run the `scripts/all.sh` script, which will check your environment
@@ -91,26 +117,46 @@ To run the FlowInquiry frontend, users need to provide their input in the local 
 
 #### Run in dev mode
 
-Open the terminal and run the command
+Open the terminal and run the command `pnpm setup:frontend` in the flowinquiry's root folder
 
 ```bash
-pnpm dev
+➜  flowinquiry✗ pnpm setup:frontend
+
+> flowinquiry@0.0.1 setup:frontend flowinquiry
+> bash tools/setup/frontend-env.sh
+
+Creating an empty apps/frontend/.env.local...
+Enter the FlowInquiry back-end server URL address (e.g., http://localhost or http://localhost:8080): http://localhost:8080
+Appended output of auth secret to flowinquiry/apps/frontend/.env.local.
+Initialization complete.
 ```
 
-it will launch the process to start the FlowInquiry front-end at the default port `3000`
+then you launch the nextjs development server by running `pnpm dev:frontend` in the flowinquiry's root folder
+
+it will launch the process to start the FlowInquiry frontend development server at the default port `3000`
 
 ```bash
-➜  flowinquiry-frontend git:(main) pnpm dev
+➜  flowinquiry ✗ pnpm dev:frontend
+> flowinquiry@0.0.1 dev:frontend flowinquiry
+> turbo run dev --filter=flowinquiry-frontend
+turbo 2.4.4
 
-> frontend@0.1.0 dev ~/flowinquiry-frontend
-> next dev
-
-  ▲ Next.js xx.x.xx
-  - Local:        http://localhost:3000
-  - Environments: .env.local
-
- ✓ Starting...
- ✓ Ready in 1805ms
+• Packages in scope: flowinquiry-frontend
+• Running dev in 1 packages
+• Remote caching disabled
+flowinquiry-frontend:dev: cache bypass, force executing dd479309225827e8
+flowinquiry-frontend:dev:
+flowinquiry-frontend:dev:
+flowinquiry-frontend:dev: > flowinquiry-frontend@0.1.0 dev flowinquiry/apps/frontend
+flowinquiry-frontend:dev: > next dev
+flowinquiry-frontend:dev:
+flowinquiry-frontend:dev:    ▲ Next.js 15.2.4
+flowinquiry-frontend:dev:    - Local:        http://localhost:3000
+flowinquiry-frontend:dev:    - Network:      http://192.168.0.78:3000
+flowinquiry-frontend:dev:    - Environments: .env.local
+flowinquiry-frontend:dev:
+flowinquiry-frontend:dev:  ✓ Starting...
+flowinquiry-frontend:dev:  ✓ Ready in 12.1s
 ```
 
 <Callout type="error" emoji="️🚫">

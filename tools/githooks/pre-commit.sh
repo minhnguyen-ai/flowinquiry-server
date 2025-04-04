@@ -8,9 +8,9 @@ run_backend=false
 
 for file in $CHANGED_FILES; do
   if [[ $file == apps/frontend/* ]]; then
-    run_frontend=false
+    run_frontend=true
   elif [[ $file == apps/docs/* ]]; then
-    run_docs=false
+    run_docs=true
   elif [[ $file == apps/backend/* ]]; then
     run_backend=true
   fi
