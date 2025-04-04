@@ -1,0 +1,177 @@
+---
+description: Get started with FlowInquiry's front-end development using Next.js, TypeScript, and TailwindCSS. Learn how to set up the project, configure the environment, and contribute to the open-source platform seamlessly.
+---
+
+import { Callout, FileTree, Tabs } from "nextra/components";
+
+# Getting Started
+
+FlowInquiry front-end uses [NextJs](https://nextjs.org/) framework to develop its UI.
+
+## Get the latest sources from GitHub
+
+The source code for FlowInquiry’s front-end is available at:
+https://github.com/flowinquiry/flowinquiry/tree/main/apps/frontend
+
+You can also clone the repository to your local machine using the command below and navigate to the frontend directory:
+
+```bash
+git clone https://github.com/flowinquiry/flowinquiry.git
+cd flowinquiry/apps/front-end
+```
+
+## Development
+
+### Folders organization
+
+<FileTree>
+  <FileTree.Folder name="frontend" defaultOpen>
+    <FileTree.Folder name="public" />
+    <FileTree.Folder name="src" />
+  </FileTree.Folder>
+</FileTree>
+
+- `public` contains static assets, such as files and images, served by Next.js
+- `src` the FlowInquiry's frontend source code
+
+### Configure the application
+
+To run the FlowInquiry frontend, users need to provide their input in the local configuration file .env.local. FlowInquiry offers two options for creating this configuration file:
+
+- Using Bash Scripts: Users can run provided Bash scripts, which prompt for inputs, validate the information, and then automatically generate the configuration file.
+- Editing a Template Manually: A template configuration file (.env.local.example) is provided, allowing users to manually edit and create their .env.local file. This option is recommended for Windows users who cannot run Bash scripts.
+
+<Tabs items={['Creat config file by script', 'Edit config file manually']}>
+    <Tabs.Tab>
+    #### Checking environments
+
+    FlowInquiry's front-end requires Node and pnpm to be installed on your machine. You can run the command `pnpm check-env` in the flowinquiry root folder to verify if your machine is set up to work with FlowInquiry
+
+    ```bash
+        ➜  flowinquiry ✗ pnpm check-env
+
+        > flowinquiry@0.0.1 check-env flowinquiry
+        > tools/check-env.sh
+
+        🔍 Starting environment check...
+
+        ⚙️  Backend Requirements
+
+        🔍 Checking Java version...
+        ✅ Java version 21 detected.
+
+        🔍 Checking Docker...
+        ✅ Docker is installed and running.
+
+        -----------------------------
+
+        🎨 Frontend Requirements
+
+        🔍 Checking Node.js version...
+        ✅ Node.js version v20.18.1 detected.
+
+        🔍 Checking pnpm version...
+        ✅ pnpm version: 10.6.5
+
+        =============================
+        📋 Summary
+        =============================
+        ✅ Backend environment is properly configured.
+
+        ✅ Frontend environment is properly configured.
+
+        🌱 All environment checks passed!
+
+        ```
+
+    #### Setup scripts
+
+        Run the command `pnpm `
+
+    <Callout emoji="💡">
+        You can run the `scripts/all.sh` script, which will check your environment
+        settings and perform the necessary configurations, eliminating the need to run
+        multiple scripts individually
+    </Callout>
+    </Tabs.Tab>
+    <Tabs.Tab>
+        Rename `.env.local.example` to `.env.local` and update its content following the inline instructions
+        ```bash
+        # BACK_END_URL: The base URL of the backend API that the Next.js application communicates with.
+        # Typically used for server-side API calls in your application. Example: http://localhost:8080
+        BACK_END_URL=
+
+        # NEXT_PUBLIC_BASE_URL: A publicly exposed base URL for the backend API.
+        # Variables prefixed with NEXT_PUBLIC_ are exposed to the browser and used for client-side API calls.
+        # Example: http://localhost:8080
+        NEXT_PUBLIC_BASE_URL=
+
+        # AUTH_SECRET: A secret key used by the authentication library (`auth.js`) for securing tokens.
+        # This was automatically added by running `npx auth`.
+        # For production, it is recommended to use a securely generated key. Learn more: https://cli.authjs.dev
+        AUTH_SECRET=
+        ```
+    </Tabs.Tab>
+
+</Tabs>
+
+#### Run in dev mode
+
+Open the terminal and run the command `pnpm setup:frontend` in the flowinquiry's root folder
+
+```bash
+➜  flowinquiry✗ pnpm setup:frontend
+
+> flowinquiry@0.0.1 setup:frontend flowinquiry
+> bash tools/setup/frontend-env.sh
+
+Creating an empty apps/frontend/.env.local...
+Enter the FlowInquiry back-end server URL address (e.g., http://localhost or http://localhost:8080): http://localhost:8080
+Appended output of auth secret to flowinquiry/apps/frontend/.env.local.
+Initialization complete.
+```
+
+then you launch the nextjs development server by running `pnpm dev:frontend` in the flowinquiry's root folder
+
+it will launch the process to start the FlowInquiry frontend development server at the default port `3000`
+
+```bash
+➜  flowinquiry ✗ pnpm dev:frontend
+> flowinquiry@0.0.1 dev:frontend flowinquiry
+> turbo run dev --filter=flowinquiry-frontend
+turbo 2.4.4
+
+• Packages in scope: flowinquiry-frontend
+• Running dev in 1 packages
+• Remote caching disabled
+flowinquiry-frontend:dev: cache bypass, force executing dd479309225827e8
+flowinquiry-frontend:dev:
+flowinquiry-frontend:dev:
+flowinquiry-frontend:dev: > flowinquiry-frontend@0.1.0 dev flowinquiry/apps/frontend
+flowinquiry-frontend:dev: > next dev
+flowinquiry-frontend:dev:
+flowinquiry-frontend:dev:    ▲ Next.js 15.2.4
+flowinquiry-frontend:dev:    - Local:        http://localhost:3000
+flowinquiry-frontend:dev:    - Network:      http://192.168.0.78:3000
+flowinquiry-frontend:dev:    - Environments: .env.local
+flowinquiry-frontend:dev:
+flowinquiry-frontend:dev:  ✓ Starting...
+flowinquiry-frontend:dev:  ✓ Ready in 12.1s
+```
+
+<Callout type="error" emoji="️🚫">
+  Make sure you run the back-end server before access the front-end. Check the
+  section [Run
+  application](/developer_guides/backend/getting_started#run-application) to
+  know how to start the FlowInquiry server
+</Callout>
+
+Open the browser, and access to the address `http://localhost:3000`. Use the default
+the either following credentials:
+
+- Administrator:
+  - Username: admin@flowinquiry.io
+  - Password: admin
+- User:
+  - Username: user@flowinquiry.io
+  - Password: user1234

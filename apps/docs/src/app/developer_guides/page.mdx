@@ -1,0 +1,46 @@
+---
+description: Discover the programming languages and development tools powering FlowInquiry. Built with Java, TypeScript, Python, and AI-driven automation, FlowInquiry leverages modern frameworks, databases, and cloud-native technologies for seamless ticket management and workflow customization
+---
+
+import { Callout, Tabs } from "nextra/components";
+
+# Programming languages and Development tools
+
+FlowInquiry is an application consisting of two components: a front-end and a back-end. Each component can be hosted on a separate service. To run the FlowInquiry application, both the front-end and back-end must be deployed properly.
+
+The developer guidelines provide foundational knowledge for those contributing to the FlowInquiry codebase. If you encounter issues with the FlowInquiry codebase and the documentation doesn't resolve them, feel free to raise an issue in our GitHub repository.
+
+FlowInquiry's source code is primarily written in Java, TypeScript, and Python, making it platform-independent. However, some setup scripts are written in Bash and are supported only in Bash-enabled environments like macOS and Linux. If you're using Windows, you can enable Bash support through one of the following options:
+
+- Windows Subsystem for Linux (WSL)
+- Cygwin
+- Linux Virtual Machine
+
+<Callout type="info" emoji="ℹ️">
+  Alternatively, Windows users can bypass the setup scripts by directly editing
+  the .env.local.example file provided in each repository of the front-end and
+  back-end. Additionally, we include detailed instruction guidelines for both
+  the front-end and back-end setup in their respective sections to assist with
+  manual configuration. However, please note that this approach skips the
+  environment pre-checks performed by the setup scripts.
+</Callout>
+
+## Development tools
+
+We strive to use the best tools to enhance our team's productivity. Below are the tools we use in our development process
+
+<Tabs items={['Common', 'Front-end', 'Back-end']}>
+    <Tabs.Tab>
+        **Docker**: We use Docker to run external components like the PostgreSQL database and to build Docker images for FlowInquiry's front-end and back-end
+    </Tabs.Tab>
+    <Tabs.Tab>
+        **Visual Studio Code**: Most of our developers use Visual Studio Code for working with TypeScript, Node.js, and any tasks related to scripts or text files.
+
+        **Intellij Ultimate**: A few developers on our team find they are more productive using IntelliJ IDEA for Next.js/React projects. While comparing Visual Studio Code to IntelliJ IDEA isn't entirely fair, we've found that refactoring front-end code is significantly more efficient with IntelliJ Ultimate.
+
+    </Tabs.Tab>
+    <Tabs.Tab>
+        **Intellij**: you could develop the FlowInquiry back-end by using IntelliJ Community or IntelliJ Ultimate.
+    </Tabs.Tab>
+
+</Tabs>
