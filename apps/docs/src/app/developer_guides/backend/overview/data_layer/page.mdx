@@ -1,0 +1,48 @@
+---
+description: Dive into the application's data layer to learn how it's structured and how to configure the second level cache
+---
+
+# Data layer
+
+## Second level caching
+
+The data layer uses Hibernate as the ORM framework. By default, Hibernate provides first-level caching at the entity level. In this application, second-level caching is also enabled, with Caffeine configured as the default cache provider.
+
+### Redis
+
+Redis can be configured as a distributed second-level cache provider for Hibernate. To enable Redis as the Hibernate second-level cache provider in the application, set the following property:
+
+```
+flowinquiry.hibernate.second_level_cache.provider=redis
+```
+
+When Redis is used as hibernate second level provider, the following configurations can also be set:
+
+- `flowinquiry.hibernate.second-level-cache.redis.idleConnectionTimeout=10000`
+  - Default value: 10000
+- `flowinquiry.hibernate.second-level-cache.redis.connectTimeout=10000`
+  - Default value: 10000
+- `flowinquiry.hibernate.second-level-cache.redis.timeout=3000`
+  - Default value: 3000
+- `flowinquiry.hibernate.second-level-cache.redis.retryAttempts=3`
+  - Default value: 3
+- `flowinquiry.hibernate.second-level-cache.redis.retryInterval=1500`
+  - Default value: 1400
+- `flowinquiry.hibernate.second-level-cache.redis.subscriptionsPerConnection=5`
+  - Default value: 5
+- `flowinquiry.hibernate.second-level-cache.redis.address=redis://${REDIS_HOST:localhost}:${REDIS_PORT:6379}`
+  - Default value: redis://localhost:6379
+  - `REDIS_HOST` env variable can also be set to change the host name
+  - `REDIS_PORT` env variable can also be set to change the port number
+- `flowinquiry.hibernate.second-level-cache.redis.subscriptionConnectionMinimumIdleSize=1`
+  - Default value: 1
+- `flowinquiry.hibernate.second-level-cache.redis.subscriptionConnectionPoolSize=50`
+  - Default value: 50
+- `flowinquiry.hibernate.second-level-cache.redis.connectionMinimumIdleSize=10`
+  - Default value: 10
+- `flowinquiry.hibernate.second-level-cache.redis.connectionPoolSize=64`
+  - Default value: 64
+- `flowinquiry.hibernate.second-level-cache.redis.database=0`
+  - Default value: 0
+- `flowinquiry.hibernate.second-level-cache.redis.dnsMonitoringInterval=5000`
+  - Default value: 5000
