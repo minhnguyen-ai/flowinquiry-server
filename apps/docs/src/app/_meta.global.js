@@ -27,9 +27,9 @@ export default {
           overview: {
             title: "Overview",
             items: {
-                high_level_architect: "High-level architect",
-                data_layer: "Data Layer"
-            }
+              high_level_architect: "High-level architect",
+              data_layer: "Data Layer",
+            },
           },
           database_migration: "Database migration",
           integration_testing: "Integration Testing", //added the integrating section
