@@ -4,7 +4,7 @@ import { TeamRequestPriority } from "@/types/team-requests";
 
 export const TeamDTOSchema = z.object({
   id: z.number().nullish(),
-  name: z.string().default(""),
+  name: z.string(),
   logoUrl: z.string().nullish(),
   slogan: z.string().nullish(),
   description: z.string().nullish(),
@@ -14,7 +14,9 @@ export const TeamDTOSchema = z.object({
 
 export type TeamDTO = z.infer<typeof TeamDTOSchema>;
 
-export type TeamRole = "Manager" | "Member" | "Guest" | "None";
+export const TeamRoleSchema = z.enum(["manager", "member", "guest", "none"]);
+
+export type TeamRole = z.infer<typeof TeamRoleSchema>;
 
 export interface TransitionItemDTO {
   fromState: string;
@@ -42,3 +44,17 @@ export interface TeamTicketPriorityDistributionDTO {
   priority: TeamRequestPriority;
   count: number;
 }
+
+export const UserWithTeamRoleDTOSchema = z.object({
+  id: z.number().nullable().optional(),
+  email: z.string().email().nullable().optional(),
+  firstName: z.string().nullable().optional(),
+  lastName: z.string().nullable().optional(),
+  timezone: z.string().nullable().optional(),
+  imageUrl: z.string().nullable().optional(),
+  title: z.string().nullable().optional(),
+  teamId: z.number().nullable().optional(),
+  teamRole: TeamRoleSchema.nullable().optional(),
+});
+
+export type UserWithTeamRoleDTO = z.infer<typeof UserWithTeamRoleDTOSchema>;

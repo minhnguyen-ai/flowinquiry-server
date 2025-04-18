@@ -7,18 +7,18 @@
     "packages/*"
   ],
   "devDependencies": {
-    "@eslint/js": "^9.23.0",
+    "@eslint/compat": "^1.2.8",
+    "@eslint/js": "^9.24.0",
+    "@typescript-eslint/parser": "^8.30.1",
     "auth": "^1.2.3",
-    "eslint": "^9.23.0",
-    "eslint-config-next": "^15.2.4",
-    "@eslint/compat": "^1.2.7",
-    "@typescript-eslint/parser": "^8.27.0",
+    "eslint": "^9.24.0",
+    "eslint-config-next": "^15.3.1",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "eslint-plugin-unused-imports": "^4.1.4",
+    "globals": "^15.15.0",
     "prettier": "3.4.2",
-    "turbo": "^2.4.4",
-    "globals": "^15.15.0"
+    "turbo": "^2.5.0"
   },
   "scripts": {
     "dev": "turbo run dev",
@@ -30,8 +30,8 @@
     "test": "turbo run test",
     "postinstall": "tools/githooks/setup-pre-commit.sh",
     "check-env": "tools/check-env.sh",
-    "setup:backend": "bash tools/setup/backend-env.sh",
-    "setup:frontend": "bash tools/setup/frontend-env.sh",
+    "setup:backend": "tools/setup/backend-env.sh",
+    "setup:frontend": "tools/setup/frontend-env.sh",
     "docker:up": "docker compose -f docker/services.yml up -d",
     "docker:down": "docker compose -f docker/services.yml down",
     "build:frontend": "turbo run build --filter=flowinquiry-frontend",

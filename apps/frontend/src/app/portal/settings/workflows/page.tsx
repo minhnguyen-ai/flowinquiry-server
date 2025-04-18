@@ -2,10 +2,10 @@ import React from "react";
 
 import { SimpleContentView } from "@/components/admin-panel/simple-content-view";
 import WorkflowsView from "@/components/workflows/workflow-list";
-import { useAppClientTranslations } from "@/hooks/use-translations";
+import { getAppTranslations } from "@/lib/translation";
 
-const Page = () => {
-  const t = useAppClientTranslations();
+const Page = async () => {
+  const t = await getAppTranslations("en");
 
   const breadcrumbItems = [
     { title: t.common.navigation("dashboard"), link: "/portal" },
