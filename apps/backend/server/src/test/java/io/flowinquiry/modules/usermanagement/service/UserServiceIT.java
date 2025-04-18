@@ -185,16 +185,17 @@ class UserServiceIT {
                 userService.getResourcesWithPermissionsByUserId(user.getId());
 
         // Assert - verify results
-        assertThat(result).hasSize(5);
+        assertThat(result).hasSize(6);
 
         // Check specific permissions
         assertThat(result)
                 .extracting("resourceName", "permission")
                 .containsExactlyInAnyOrder(
-                        Tuple.tuple("Teams", "ACCESS"),
-                        Tuple.tuple("Authorities", "ACCESS"),
-                        Tuple.tuple("Organizations", "ACCESS"),
-                        Tuple.tuple("Users", "ACCESS"),
-                        Tuple.tuple("Workflows", "ACCESS"));
+                        Tuple.tuple("teams", "ACCESS"),
+                        Tuple.tuple("authorities", "ACCESS"),
+                        Tuple.tuple("organizations", "ACCESS"),
+                        Tuple.tuple("users", "ACCESS"),
+                        Tuple.tuple("workflows", "ACCESS"),
+                        Tuple.tuple("mail", "ACCESS"));
     }
 }

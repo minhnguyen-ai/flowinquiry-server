@@ -55,6 +55,9 @@ jobs:
       - name: Build with Gradle Wrapper
         run: ./gradlew :apps:backend:build
 
+      - name: Run integration tests with Gradle Wrapper
+        run: ./gradlew :apps:backend:integrationTest
+
       - name: Publish to GitHub Packages
         if: github.event.pull_request.head.repo.full_name == github.repository
         run: ./gradlew publish
