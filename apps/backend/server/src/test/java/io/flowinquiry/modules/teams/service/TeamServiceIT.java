@@ -1,5 +1,8 @@
 package io.flowinquiry.modules.teams.service;
 
+import static io.flowinquiry.modules.teams.service.TeamService.ROLE_GUEST;
+import static io.flowinquiry.modules.teams.service.TeamService.ROLE_MANAGER;
+import static io.flowinquiry.modules.teams.service.TeamService.ROLE_MEMBER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -106,7 +109,7 @@ public class TeamServiceIT {
     @Test
     void shouldGetUsersByTeamSuccessfully() {
         assertThat(teamService.getUsersByTeam(1L)).hasSize(12);
-        teamService.addUsersToTeam(List.of(13L, 14L), "Member", 1L);
+        teamService.addUsersToTeam(List.of(13L, 14L), ROLE_MEMBER, 1L);
 
         List<UserWithTeamRoleDTO> usersByTeam = teamService.getUsersByTeam(1L);
 
@@ -158,9 +161,9 @@ public class TeamServiceIT {
 
     @Test
     void shouldReturnCorrectUserRoleInTeam() {
-        assertThat(teamService.getUserRoleInTeam(1L, 1L)).isEqualTo("Guest");
-        assertThat(teamService.getUserRoleInTeam(3L, 1L)).isEqualTo("Member");
-        assertThat(teamService.getUserRoleInTeam(7L, 1L)).isEqualTo("Manager");
-        assertThat(teamService.getUserRoleInTeam(15L, 1L)).isEqualTo("Guest");
+        assertThat(teamService.getUserRoleInTeam(1L, 1L)).isEqualTo(ROLE_GUEST);
+        assertThat(teamService.getUserRoleInTeam(3L, 1L)).isEqualTo(ROLE_MEMBER);
+        assertThat(teamService.getUserRoleInTeam(7L, 1L)).isEqualTo(ROLE_MANAGER);
+        assertThat(teamService.getUserRoleInTeam(15L, 1L)).isEqualTo(ROLE_GUEST);
     }
 }

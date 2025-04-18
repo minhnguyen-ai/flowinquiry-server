@@ -58,7 +58,7 @@ public interface TeamRepository extends JpaRepository<Team, Long>, JpaSpecificat
     List<UserWithTeamRoleDTO> findUsersByTeamId(@Param("teamId") Long teamId);
 
     /**
-     * Return the team role of user, return default value is 'Guest'
+     * Return the team role of user, return default value is 'guest'
      *
      * @param userId
      * @param teamId
@@ -70,7 +70,7 @@ public interface TeamRepository extends JpaRepository<Team, Long>, JpaSpecificat
     })
     @Query(
             """
-           SELECT COALESCE(ut.role.name, 'Guest')
+           SELECT COALESCE(ut.role.name, 'guest')
            FROM UserTeam ut
            WHERE ut.user.id = :userId
              AND ut.team.id = :teamId

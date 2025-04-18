@@ -36,6 +36,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class TeamService {
 
+    static final String ROLE_GUEST = "guest";
+
+    static final String ROLE_MEMBER = "member";
+
+    static final String ROLE_MANAGER = "manager";
+
     private final TeamRepository teamRepository;
 
     private final UserRepository userRepository;
@@ -193,7 +199,7 @@ public class TeamService {
 
     public String getUserRoleInTeam(Long userId, Long teamId) {
         String role = teamRepository.findUserRoleInTeam(userId, teamId);
-        return (StringUtils.isNotEmpty(role)) ? role : "Guest";
+        return (StringUtils.isNotEmpty(role)) ? role : ROLE_GUEST;
     }
 
     @Transactional(readOnly = true)

@@ -1,6 +1,6 @@
 setting_key;setting_value;setting_type;setting_group;description;updated_at
 mail.host;;string;email;SMTP server hostname;
-mail.port;;int;email;SMTP server port;
+mail.port;587;int;email;SMTP server port;
 mail.username;;string;email;SMTP account username;
 mail.password;[encrypted]abc123;secret:aes256;email;SMTP account password (encrypted);
 mail.protocol;smtp;string;email;Mail transport protocol (smtp/smtps);
