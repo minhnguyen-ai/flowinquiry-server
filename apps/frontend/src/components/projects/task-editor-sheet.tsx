@@ -5,6 +5,8 @@ import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
+import { EpicFormField } from "@/components/projects/epic-form-field";
+import { IterationFormField } from "@/components/projects/iteration-form-field";
 import RichTextEditor from "@/components/shared/rich-text-editor";
 import { TeamRequestPrioritySelect } from "@/components/teams/team-requests-priority-select";
 import TicketChannelSelectField from "@/components/teams/team-ticket-channel-select";
@@ -271,14 +273,16 @@ const TaskEditorSheet = ({
                     <DatePickerField
                       form={form}
                       fieldName="actualCompletionDate"
-                      label="Actual Completion Date"
+                      label={t.teams.tickets.form.base(
+                        "actual_completion_date",
+                      )}
                       placeholder={t.common.misc("date_select_place_holder")}
                     />
 
                     <TicketChannelSelectField form={form} />
 
                     {/* Modified workflow state field to capture state name changes */}
-                    <FormItem className="mb-16">
+                    <FormItem>
                       <FormLabel>
                         {t.teams.tickets.form.base("state")}{" "}
                         <span className="text-destructive">*</span>
@@ -292,6 +296,20 @@ const TaskEditorSheet = ({
                       </FormControl>
                       <FormMessage />
                     </FormItem>
+
+                    <IterationFormField
+                      form={form}
+                      projectId={projectId}
+                      name="iterationId"
+                      label={t.teams.tickets.form.base("iteration")}
+                    />
+
+                    <EpicFormField
+                      form={form}
+                      projectId={projectId}
+                      name="epicId"
+                      label={t.teams.tickets.form.base("epic")}
+                    />
                   </div>
                 </div>
               </div>

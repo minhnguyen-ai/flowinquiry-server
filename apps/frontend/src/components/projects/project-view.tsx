@@ -12,8 +12,8 @@ import React, { useCallback, useEffect, useState } from "react";
 
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import ProjectEditDialog from "@/components/projects/project-edit-dialog";
-import CreateEpicDialog from "@/components/projects/project-epic-dialog";
-import CreateIterationDialog from "@/components/projects/project-iteration-dialog";
+import { ProjectEpicDialog } from "@/components/projects/project-epic-dialog";
+import ProjectIterationDialog from "@/components/projects/project-iteration-dialog";
 import StateColumn from "@/components/projects/state-column";
 import TaskBlock from "@/components/projects/task-block";
 import TaskDetailSheet from "@/components/projects/task-detail-sheet";
@@ -84,11 +84,6 @@ export const ProjectView = ({ projectId }: { projectId: number }) => {
   );
   const [selectedEpic, setSelectedEpic] = useState<number | null>(null);
 
-  // State for dialogs
-  const [isCreateIterationDialogOpen, setIsCreateIterationDialogOpen] =
-    useState(false);
-  const [isCreateEpicDialogOpen, setIsCreateEpicDialogOpen] = useState(false);
-
   // State for filtered tasks
   const [filteredTasks, setFilteredTasks] = useState<TaskBoard>({});
 
@@ -107,6 +102,15 @@ export const ProjectView = ({ projectId }: { projectId: number }) => {
   const [isDragging, setIsDragging] = useState(false);
   // Track the time when drag starts
   const [dragStartTime, setDragStartTime] = useState<number | null>(null);
+
+  // Update state variables in the ProjectView component
+  // (Keep the existing isCreateIterationDialogOpen but rename it for clarity)
+  const [isIterationDialogOpen, setIsIterationDialogOpen] = useState(false);
+  const [selectedIterationForEdit, setSelectedIterationForEdit] =
+    useState<ProjectIterationDTO | null>(null);
+  const [isEpicDialogOpen, setIsEpicDialogOpen] = useState(false);
+  const [selectedEpicForEdit, setSelectedEpicForEdit] =
+    useState<ProjectEpicDTO | null>(null);
 
   // Function to fetch iterations
   const fetchIterations = useCallback(async () => {
@@ -233,7 +237,8 @@ export const ProjectView = ({ projectId }: { projectId: number }) => {
 
   // Handler for adding a new iteration
   const handleAddNewIteration = () => {
-    setIsCreateIterationDialogOpen(true);
+    setSelectedIterationForEdit(null); // Ensure no iteration is selected for edit
+    setIsIterationDialogOpen(true);
   };
 
   // Handler for saving a new iteration
@@ -241,22 +246,43 @@ export const ProjectView = ({ projectId }: { projectId: number }) => {
     // Refresh iterations list after creating a new one
     await fetchIterations();
 
-    // Close the dialog
-    setIsCreateIterationDialogOpen(false);
+    // Close the dialog and reset selected iteration
+    setIsIterationDialogOpen(false);
+    setSelectedIterationForEdit(null);
+  };
+
+  // Add new handler for editing an iteration
+  const handleEditIteration = (iterationId: number) => {
+    const iterationToEdit = iterations.find((i) => i.id === iterationId);
+    if (iterationToEdit) {
+      setSelectedIterationForEdit(iterationToEdit);
+      setIsIterationDialogOpen(true);
+    }
   };
 
   // Handler for adding a new epic
   const handleAddNewEpic = () => {
-    setIsCreateEpicDialogOpen(true);
+    setSelectedEpicForEdit(null); // Ensure no epic is selected for edit
+    setIsEpicDialogOpen(true);
   };
 
-  // Handler for saving a new epic
-  const handleSaveEpic = async (createdEpic: ProjectEpicDTO) => {
-    // Refresh epics list after creating a new one
+  // handler for editing an epic
+  const handleEditEpic = (epicId: number) => {
+    const epicToEdit = epics.find((e) => e.id === epicId);
+    if (epicToEdit) {
+      setSelectedEpicForEdit(epicToEdit);
+      setIsEpicDialogOpen(true);
+    }
+  };
+
+  // handler for saving an epic (works for both create and edit)
+  const handleSaveEpic = async (epic: ProjectEpicDTO) => {
+    // Refresh epics list after creating/editing
     await fetchEpics();
 
-    // Close the dialog
-    setIsCreateEpicDialogOpen(false);
+    // Close the dialog and reset selected epic
+    setIsEpicDialogOpen(false);
+    setSelectedEpicForEdit(null);
   };
 
   // Handler for updating task details, including state changes
@@ -529,7 +555,7 @@ export const ProjectView = ({ projectId }: { projectId: number }) => {
   return (
     <div className="p-6 h-screen flex flex-col">
       {loading ? (
-        <p className="text-lg font-semibold">Loading project...</p>
+        <p className="text-lg font-semibold">{t.common.misc("loading_data")}</p>
       ) : project ? (
         <>
           <Breadcrumbs items={breadcrumbItems} />
@@ -768,14 +794,12 @@ export const ProjectView = ({ projectId }: { projectId: number }) => {
                         ).toLocaleDateString()}
                       </div>
                     </div>
+                    {/*// Update the Edit Iteration button in the Active Filters section*/}
                     <Button
                       variant="secondary"
                       size="sm"
                       className="h-8 gap-1 self-start"
-                      onClick={() => {
-                        // TODO: Implement edit iteration functionality
-                        console.log("Edit iteration", selectedIteration);
-                      }}
+                      onClick={() => handleEditIteration(selectedIteration)}
                     >
                       <Edit className="h-4 w-4" />
                       {t.teams.projects.view("edit_iteration")}
@@ -804,6 +828,7 @@ export const ProjectView = ({ projectId }: { projectId: number }) => {
                         {epics.find((e) => e.id === selectedEpic)?.description}
                       </div>
                     </div>
+                    {/*// Update the Edit Epic button in the Active Filters section*/}
                     <Button
                       variant="outline"
                       size="sm"
@@ -812,10 +837,7 @@ export const ProjectView = ({ projectId }: { projectId: number }) => {
                         borderColor: getEpicColor(selectedEpic),
                         color: getEpicColor(selectedEpic),
                       }}
-                      onClick={() => {
-                        // TODO: Implement edit epic functionality
-                        console.log("Edit epic", selectedEpic);
-                      }}
+                      onClick={() => handleEditEpic(selectedEpic)}
                     >
                       <Edit className="h-4 w-4" />
                       {t.teams.projects.view("edit_epic")}
@@ -904,22 +926,30 @@ export const ProjectView = ({ projectId }: { projectId: number }) => {
         }}
       />
 
-      {/* Create Iteration Dialog */}
-      <CreateIterationDialog
-        open={isCreateIterationDialogOpen}
-        onOpenChange={setIsCreateIterationDialogOpen}
+      {/* Iteration Dialog (Create/Edit) */}
+      <ProjectIterationDialog
+        open={isIterationDialogOpen}
+        onOpenChange={setIsIterationDialogOpen}
         onSave={handleSaveIteration}
-        onCancel={() => setIsCreateIterationDialogOpen(false)}
+        onCancel={() => {
+          setIsIterationDialogOpen(false);
+          setSelectedIterationForEdit(null);
+        }}
         projectId={projectId}
+        iteration={selectedIterationForEdit}
       />
 
-      {/* Create Epic Dialog */}
-      <CreateEpicDialog
-        open={isCreateEpicDialogOpen}
-        onOpenChange={setIsCreateEpicDialogOpen}
+      {/* Epic Dialog (Create/Edit) */}
+      <ProjectEpicDialog
+        open={isEpicDialogOpen}
+        onOpenChange={setIsEpicDialogOpen}
         onSave={handleSaveEpic}
-        onCancel={() => setIsCreateEpicDialogOpen(false)}
+        onCancel={() => {
+          setIsEpicDialogOpen(false);
+          setSelectedEpicForEdit(null);
+        }}
         projectId={projectId}
+        epic={selectedEpicForEdit}
       />
     </div>
   );

@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
@@ -15,7 +15,6 @@ import { DatePickerField } from "@/components/ui/ext-form";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -23,71 +22,95 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useToast } from "@/components/ui/use-toast";
 import { useAppClientTranslations } from "@/hooks/use-translations";
-import { createProjectIteration } from "@/lib/actions/project-iteration.action";
+import {
+  createProjectIteration,
+  updateProjectIteration,
+} from "@/lib/actions/project-iteration.action";
 import { useError } from "@/providers/error-provider";
 import {
   ProjectIterationDTO,
   ProjectIterationDTOSchema,
 } from "@/types/projects";
 
-interface CreateIterationDialogProps {
+interface ProjectIterationDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onSave?: (iteration: ProjectIterationDTO) => void;
   onCancel?: () => void;
   projectId: number;
+  iteration?: ProjectIterationDTO | null; // Optional iteration for edit mode
 }
 
-export function CreateIterationDialog({
+export function ProjectIterationDialog({
   open,
   onOpenChange,
   onSave,
   onCancel,
   projectId,
-}: CreateIterationDialogProps) {
+  iteration,
+}: ProjectIterationDialogProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { setError } = useError();
-  const { toast } = useToast();
   const t = useAppClientTranslations();
+
+  // Determine if we're in edit mode
+  const isEditMode = !!iteration?.id;
 
   // Initialize form with the ProjectIterationDTOSchema
   const form = useForm<ProjectIterationDTO>({
     resolver: zodResolver(ProjectIterationDTOSchema),
     defaultValues: {
-      projectId,
-      name: "",
-      description: "",
-      startDate: new Date(),
-      endDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000), // Default to 2 weeks
-      totalTickets: 0,
+      id: iteration?.id,
+      projectId: projectId,
+      name: iteration?.name || "",
+      description: iteration?.description || "",
+      startDate: iteration?.startDate
+        ? new Date(iteration.startDate)
+        : new Date(),
+      endDate: iteration?.endDate
+        ? new Date(iteration.endDate)
+        : new Date(Date.now() + 14 * 24 * 60 * 60 * 1000), // Default to 2 weeks
+      totalTickets: iteration?.totalTickets || 0,
     },
   });
 
-  // Reset form when dialog opens/closes
-  useState(() => {
+  // Reset form when dialog opens/closes or iteration changes
+  useEffect(() => {
     if (open) {
       form.reset({
-        projectId,
-        name: "",
-        description: "",
-        startDate: new Date(),
-        endDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000),
-        totalTickets: 0,
+        id: iteration?.id,
+        projectId: projectId,
+        name: iteration?.name || "",
+        description: iteration?.description || "",
+        startDate: iteration?.startDate
+          ? new Date(iteration.startDate)
+          : new Date(),
+        endDate: iteration?.endDate
+          ? new Date(iteration.endDate)
+          : new Date(Date.now() + 14 * 24 * 60 * 60 * 1000),
+        totalTickets: iteration?.totalTickets || 0,
       });
     }
-  });
+  }, [open, iteration, projectId, form]);
 
   const handleSubmit = async (values: ProjectIterationDTO) => {
     setIsSubmitting(true);
     try {
-      const createdIteration = await createProjectIteration(values, setError);
+      let result: ProjectIterationDTO;
+
+      if (isEditMode && iteration?.id) {
+        // Update existing iteration
+        result = await updateProjectIteration(iteration.id, values, setError);
+      } else {
+        // Create new iteration
+        result = await createProjectIteration(values, setError);
+      }
 
       onOpenChange(false);
 
       if (onSave) {
-        onSave(createdIteration);
+        onSave(result);
       }
     } finally {
       setIsSubmitting(false);
@@ -96,11 +119,17 @@ export function CreateIterationDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[500px]">
+      <DialogContent className="sm:max-w-[60rem]">
         <DialogHeader>
-          <DialogTitle>Create New Iteration</DialogTitle>
+          <DialogTitle>
+            {isEditMode
+              ? t.teams.projects.iteration("edit_dialog_title")
+              : t.teams.projects.iteration("create_dialog_title")}
+          </DialogTitle>
           <DialogDescription>
-            Add a new iteration to organize your tasks into sprints or phases.
+            {isEditMode
+              ? t.teams.projects.iteration("edit_dialog_description")
+              : t.teams.projects.iteration("create_dialog_description")}
           </DialogDescription>
         </DialogHeader>
 
@@ -114,13 +143,17 @@ export function CreateIterationDialog({
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel>
+                    {t.teams.projects.iteration("form.name")}
+                  </FormLabel>
                   <FormControl>
-                    <Input placeholder="Sprint 1" {...field} />
+                    <Input
+                      placeholder={t.teams.projects.iteration(
+                        "form.name_place_holder",
+                      )}
+                      {...field}
+                    />
                   </FormControl>
-                  <FormDescription>
-                    A short, descriptive name for this iteration.
-                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -130,14 +163,14 @@ export function CreateIterationDialog({
               <DatePickerField
                 form={form}
                 fieldName="startDate"
-                label="Start date"
+                label={t.teams.projects.iteration("form.start_date")}
                 placeholder={t.common.misc("date_select_place_holder")}
               />
 
               <DatePickerField
                 form={form}
                 fieldName="endDate"
-                label="End date"
+                label={t.teams.projects.iteration("form.end_date")}
                 placeholder={t.common.misc("date_select_place_holder")}
               />
             </div>
@@ -147,17 +180,18 @@ export function CreateIterationDialog({
               name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Description</FormLabel>
+                  <FormLabel>
+                    {t.teams.projects.iteration("form.description")}
+                  </FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="Brief description of this iteration's goals"
+                      placeholder={t.teams.projects.iteration(
+                        "form.description_place_holder",
+                      )}
                       {...field}
                       rows={3}
                     />
                   </FormControl>
-                  <FormDescription>
-                    Optional: Provide additional context for this iteration.
-                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -170,10 +204,16 @@ export function CreateIterationDialog({
                 onClick={onCancel}
                 disabled={isSubmitting}
               >
-                Cancel
+                {t.common.buttons("cancel")}
               </Button>
               <Button type="submit" disabled={isSubmitting}>
-                {isSubmitting ? "Creating..." : "Create Iteration"}
+                {isSubmitting
+                  ? isEditMode
+                    ? t.common.buttons("saving")
+                    : t.common.buttons("creating")
+                  : isEditMode
+                    ? t.common.buttons("save_changes")
+                    : t.teams.projects.iteration("form.create_iteration")}
               </Button>
             </DialogFooter>
           </form>
@@ -183,4 +223,4 @@ export function CreateIterationDialog({
   );
 }
 
-export default CreateIterationDialog;
+export default ProjectIterationDialog;
