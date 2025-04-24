@@ -8,8 +8,8 @@ export const ProjectSchema = z.object({
   description: z.string().optional(),
   teamId: z.number().int().positive(),
   status: z.enum(["Active", "Closed", "Cancelled"]),
-  startDate: z.date().optional(),
-  endDate: z.date().optional(),
+  startDate: z.string().optional().nullable(),
+  endDate: z.string().optional().nullable(),
   createdBy: z.number().int().positive().optional(),
   createdAt: z.string().datetime().optional(),
   modifiedBy: z.number().int().positive().optional(),
@@ -23,8 +23,8 @@ export const ProjectIterationDTOSchema = z.object({
   projectId: z.number(),
   name: z.string(),
   description: z.string().optional(),
-  startDate: z.date().nullish(),
-  endDate: z.date().nullish(),
+  startDate: z.string().optional().nullable(),
+  endDate: z.string().optional().nullable(),
   totalTickets: z.number().optional(),
 });
 
@@ -35,8 +35,8 @@ export const ProjectEpicDTOSchema = z.object({
   projectId: z.number(),
   name: z.string(),
   description: z.string().optional(),
-  startDate: z.date().nullish(),
-  endDate: z.date().nullish(),
+  startDate: z.string().optional().nullable(),
+  endDate: z.string().optional().nullable(),
   totalTickets: z.number().optional(),
 });
 
