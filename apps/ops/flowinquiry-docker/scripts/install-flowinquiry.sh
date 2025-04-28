@@ -77,6 +77,24 @@ download_file() {
     fi
 }
 
+# Function to get IP address across platforms
+get_ip_address() {
+  case "$(uname -s)" in
+    Linux*)
+      hostname -I | awk '{print $1}'
+      ;;
+    Darwin*) # macOS
+      ipconfig getifaddr $(route -n get default | grep interface | awk '{print $2}')
+      ;;
+    MINGW*|MSYS*|CYGWIN*) # Windows with Git Bash or similar
+      ipconfig | grep -A 5 "Wireless\|Ethernet" | grep "IPv4" | head -1 | awk '{print $NF}'
+      ;;
+    *)
+      echo "127.0.0.1" # Fallback to localhost
+      ;;
+  esac
+}
+
 echo "📥 Downloading necessary files..."
 # List of scripts to download
 SCRIPT_FILES=(
@@ -91,9 +109,10 @@ for file in "${SCRIPT_FILES[@]}"; do
 done
 
 # Download config files
-#download_file "$RAW_BASE_URL/Caddyfile" "$INSTALL_DIR/Caddyfile"
-#download_file "$RAW_BASE_URL/services_http.yml" "$INSTALL_DIR/services_http.yml"
-#download_file "$RAW_BASE_URL/services_https.yml" "$INSTALL_DIR/services_https.yml"
+download_file "$RAW_BASE_URL/Caddyfile_http" "$INSTALL_DIR/Caddyfile_http"
+download_file "$RAW_BASE_URL/Caddyfile_https" "$INSTALL_DIR/Caddyfile_https"
+download_file "$RAW_BASE_URL/services_http.yml" "$INSTALL_DIR/services_http.yml"
+download_file "$RAW_BASE_URL/services_https.yml" "$INSTALL_DIR/services_https.yml"
 
 echo "🔧 Making scripts executable..."
 chmod +x "$SCRIPTS_DIR/"*.sh
@@ -121,8 +140,12 @@ else
     echo "⚠️ Setting up without SSL (HTTP only)"
     services_file="$INSTALL_DIR/services_http.yml"
     echo "🐳 Starting services with Docker Compose..."
-    # Get the local IP address
-    export HOST_IP=$(hostname -I | awk '{print $1}')
+    # Get and export the host IP
+    export HOST_IP=$(get_ip_address)
+
+    # Print the IP for confirmation
+    echo "Using host IP address: $HOST_IP"
+    echo "Your service will be available at: http://$HOST_IP:1234"
 
     # Print the IP for confirmation
     echo "Using host IP address: $HOST_IP"
