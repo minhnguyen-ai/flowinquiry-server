@@ -35,7 +35,7 @@ update_or_add() {
 update_or_add "POSTGRES_PASSWORD" "$db_password" "$output_file"
 
 # Generate a random alphanumeric string with a length of 50
-random_string=$(LC_CTYPE=C tr -dc 'a-zA-Z0-9' < /dev/urandom | fold -w 90 | head -n 1)
+random_string=$(openssl rand -base64 68 | tr -dc 'a-zA-Z0-9' | head -c 90)
 
 # Encode the random string in Base64 format
 encoded_string=$(echo -n "$random_string" | base64 | tr -d '\r\n')
