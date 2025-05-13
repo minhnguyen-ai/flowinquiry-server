@@ -215,16 +215,3 @@ Read the full guide: [How to Contribute to FlowInquiry](https://docs.flowinquiry
 Thanks to all the contributors! 🙌  
 
 [![Contributors](https://contrib.rocks/image?repo=flowinquiry/flowinquiry-server)](https://github.com/flowinquiry/flowinquiry-server/graphs/contributors)
-
-## Project Statistics
-![Alt](https://repobeats.axiom.co/api/embed/a4b95deb1b8371f68316459561be3df65e4e0e89.svg "Repobeats analytics image")
-
-## Star History
-
-<a href="https://www.star-history.com/#flowinquiry/flowinquiry&Date">
- <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=flowinquiry/flowinquiry&type=Date&theme=dark" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=flowinquiry/flowinquiry&type=Date" />
-   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=flowinquiry/flowinquiry&type=Date" />
- </picture>
-</a>
