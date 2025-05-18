@@ -4,7 +4,7 @@ import io.flowinquiry.modules.collab.domain.EntityType;
 import io.flowinquiry.modules.collab.repository.CommentRepository;
 import io.flowinquiry.modules.collab.service.dto.CommentDTO;
 import io.flowinquiry.modules.collab.service.mapper.CommentMapper;
-import io.flowinquiry.modules.teams.service.event.TeamRequestCommentCreatedEvent;
+import io.flowinquiry.modules.teams.service.event.TicketCommentCreatedEvent;
 import java.util.List;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -32,8 +32,8 @@ public class CommentService {
     public CommentDTO saveComment(CommentDTO comment) {
         CommentDTO savedComment =
                 commentMapper.toDTO(commentRepository.save(commentMapper.toEntity(comment)));
-        if (savedComment.getEntityType() == EntityType.Team_Request) {
-            eventPublisher.publishEvent(new TeamRequestCommentCreatedEvent(this, savedComment));
+        if (savedComment.getEntityType() == EntityType.Ticket) {
+            eventPublisher.publishEvent(new TicketCommentCreatedEvent(this, savedComment));
         }
         return savedComment;
     }
