@@ -70,6 +70,7 @@ export const ExtInputField = ({
                 placeholder={placeholder}
                 {...field}
                 className={className} // Apply custom classes here
+                testId={props.testId}
               />
             }
           </FormControl>
@@ -86,6 +87,7 @@ export const ExtTextAreaField = ({
   label,
   placeholder,
   required,
+  testId,
 }: ExtInputProps & UiAttributes) => {
   return (
     <div className="md:col-span-2">
@@ -99,7 +101,7 @@ export const ExtTextAreaField = ({
               {required && <span className="text-destructive"> *</span>}
             </FormLabel>
             <FormControl>
-              <Textarea placeholder={placeholder} {...field} />
+              <Textarea placeholder={placeholder} {...field} testId={testId} />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -112,13 +114,19 @@ export const ExtTextAreaField = ({
 interface SubmitButtonProps {
   label: string;
   labelWhileLoading: string;
+  testId?: string;
 }
 
 export const SubmitButton = ({
   label,
   labelWhileLoading,
+  testId,
 }: SubmitButtonProps) => {
-  return <Button type="submit">{label}</Button>;
+  return (
+    <Button type="submit" testId={testId}>
+      {label}
+    </Button>
+  );
 };
 
 type DatePickerFieldProps = {
@@ -128,6 +136,7 @@ type DatePickerFieldProps = {
   description?: string;
   placeholder?: string;
   dateSelectionMode?: DateSelectionMode;
+  testId?: string;
 };
 
 type DateSelectionMode = "past" | "future" | "any";
@@ -142,6 +151,7 @@ export const DatePickerField: React.FC<
   placeholder = "Pick a date",
   dateSelectionMode = "any",
   required = false,
+  testId,
 }) => {
   const clearText = useAppClientTranslations().common.buttons("clear");
   return (
@@ -164,6 +174,7 @@ export const DatePickerField: React.FC<
                       "w-[240px] pl-3 text-left font-normal",
                       !field.value && "text-muted-foreground",
                     )}
+                    testId={testId}
                   >
                     {field.value ? (
                       format(field.value, "PPP")
