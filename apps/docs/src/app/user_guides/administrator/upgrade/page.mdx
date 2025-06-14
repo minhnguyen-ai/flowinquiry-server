@@ -1,0 +1,47 @@
+---
+description: Learn how to upgrade FlowInquiry to the latest version. Follow our simple step-by-step guide to keep your installation up to date with the newest features, performance improvements, and security patches.
+---
+
+# How to Update FlowInquiry
+
+## Docker
+
+If you installed and are running FlowInquiry using Docker, follow these steps to upgrade to the latest version.
+
+### Steps to Update
+
+1. Shutdown your current FlowInquiry instance
+
+```
+docker compose down
+```
+
+2. Download and run the update script
+
+Option 1: Using `wget`
+
+```
+wget -O install-flowinquiry.sh https://raw.githubusercontent.com/flowinquiry/flowinquiry/refs/heads/main/apps/ops/flowinquiry-docker/scripts/install-flowinquiry.sh && chmod +x install-flowinquiry.sh && ./install-flowinquiry.sh
+```
+
+Option 2: Using `curl`
+
+```
+curl -sSL https://raw.githubusercontent.com/flowinquiry/flowinquiry/refs/heads/main/apps/ops/flowinquiry-docker/scripts/install-flowinquiry.sh -o install-flowinquiry.sh && chmod +x install-flowinquiry.sh && ./install-flowinquiry.sh
+```
+
+3. Done
+
+The script will:
+
+- Pull the latest setup scripts
+
+- Fetch the latest Docker Compose files
+
+- Prepare everything for the updated version
+
+- Run the FlowInquiry edition
+
+## Kubernetes
+
+TBD
