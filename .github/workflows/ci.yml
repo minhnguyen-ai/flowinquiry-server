@@ -9,6 +9,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
   pages: write
   id-token: write
 
@@ -65,8 +66,9 @@ jobs:
         with:
           reports: apps/backend/server/build/reports/jacoco/test/jacocoTestReport.xml
           targetdir: coveragereport
-          reporttypes: MarkdownDeltaSummary
-          historydir: hist
+          reporttypes: Html;MarkdownSummary
+          classfilters: '+*'
+          filefilters: '+*'
 
       - name: Upload coverage report artifact
         uses: actions/upload-artifact@v4
@@ -76,14 +78,25 @@ jobs:
       - name: Show contents of coverage report folder
         run: ls -la coveragereport
 
-      - name: Add comment to PR
-        if: github.event_name == 'pull_request'
-        run: gh pr comment ${{ github.event.pull_request.number }} --body-file coveragereport/MarkdownSummaryGithub.md
-        env:
-          GH_TOKEN: ${{ secrets.GH_PR_COMMENT_PAT }}
+      - name: Trim summary (remove class/package breakdown)
+        run: |
+          awk '
+            BEGIN { inSummary = 0 }
+            /^# Summary/ { inSummary = 1; print "# ✅ JaCoCo Backend Test Coverage Summary"; next }
+            inSummary && /^$/ { print; exit }
+            inSummary { print }
+          ' coveragereport/Summary.md > coveragereport/TrimmedSummary.md
 
+      - name: Add or update PR comment (Coverage Report)
+        if: github.event_name == 'pull_request'
+        uses: marocchino/sticky-pull-request-comment@v2.9.2
+        with:
+          header: coverage-report
+          path: coveragereport/TrimmedSummary.md
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PR_COMMENT_PAT }}
       - name: Publish coverage in build summary
-        run: cat coveragereport/MarkdownSummaryGithub.md >> $GITHUB_STEP_SUMMARY
+        run: cat coveragereport/TrimmedSummary.md >> $GITHUB_STEP_SUMMARY
         shell: bash
 
   frontend:
@@ -140,7 +153,5 @@ jobs:
     needs: [ detect-changes ]
     if: needs.detect-changes.outputs.backend == 'true' || needs.detect-changes.outputs.frontend == 'true'
     uses: ./.github/workflows/playwright.yml
-    secrets:
-      pr_comment_pat: ${{ secrets.GH_PR_COMMENT_PAT }}
 
 
