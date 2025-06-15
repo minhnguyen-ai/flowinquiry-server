@@ -64,49 +64,27 @@ jobs:
         uses: danielpalme/ReportGenerator-GitHub-Action@5.4.7
         with:
           reports: apps/backend/server/build/reports/jacoco/test/jacocoTestReport.xml
-          targetdir: coverage-report
-          reporttypes: MarkdownSummary
-      - name: Format Coverage Summary with Emojis
-        run: |
-          awk '
-          BEGIN {
-            print "### 📊 Code Coverage Summary\n"
-            print "| Module | Line | Branch | Status |"
-            print "|--------|------|--------|--------|"
-          }
-          /^|/ && $0 !~ /Module/ && $0 !~ /---/ {
-            gsub(/[%|]/,"")
-            module = $1
-            line = $2 + 0
-            branch = $3 + 0
-            emoji = (line >= 80 && branch >= 80) ? "✅" : "❌"
-            if (module == "Total") {
-              module = "**Total**"
-              line = "**" line "%**"
-              branch = "**" branch "%**"
-            } else {
-              line = line "%"
-              branch = branch "%"
-            }
-            printf("| %s | %s | %s | %s |\n", module, line, branch, emoji)
-          }
-          ' coverage-report/Summary.md > coverage-report/SummaryFormatted.md  
+          targetdir: coveragereport
+          reporttypes: MarkdownDeltaSummary
+          historydir: hist
 
-      - name: Comment Coverage Summary on PR
-        if: github.event_name == 'pull_request'
-        uses: marocchino/sticky-pull-request-comment@v2.9.2
+      - name: Upload coverage report artifact
+        uses: actions/upload-artifact@v4
         with:
-          header: coverage
-          path: coverage-report/SummaryFormatted.md
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_PR_COMMENT_PAT }}
+          name: CoverageReport
+          path: coveragereport
+      - name: Show contents of coverage report folder
+        run: ls -la coveragereport
 
-      - name: Publish to GitHub Packages
-        if: github.event.pull_request.head.repo.full_name == github.repository
-        run: ./gradlew publish
+      - name: Add comment to PR
+        if: github.event_name == 'pull_request'
+        run: gh pr comment ${{ github.event.pull_request.number }} --body-file coveragereport/MarkdownSummaryGithub.md
         env:
-          GITHUB_ACTOR: ${{ github.actor }}
-          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_PR_COMMENT_PAT }}
+
+      - name: Publish coverage in build summary
+        run: cat coveragereport/MarkdownSummaryGithub.md >> $GITHUB_STEP_SUMMARY
+        shell: bash
 
   frontend:
     needs: detect-changes
