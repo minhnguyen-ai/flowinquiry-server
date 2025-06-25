@@ -51,7 +51,9 @@ export function CollapseMenuButton({
 }: CollapseMenuButtonProps) {
   const pathname = usePathname();
   const isSubmenuActive = submenus.some((submenu) =>
-    submenu.active === undefined ? submenu.href === pathname : submenu.active,
+    submenu.active === undefined
+      ? pathname.startsWith(submenu.href)
+      : submenu.active,
   );
   const [isCollapsed, setIsCollapsed] = useState<boolean>(isSubmenuActive);
 
@@ -66,7 +68,7 @@ export function CollapseMenuButton({
         asChild
       >
         <Button
-          variant={isSubmenuActive ? "secondary" : "ghost"}
+          variant={!isSubmenuActive && active ? "default" : "ghost"}
           className="w-full justify-start h-10"
         >
           <div className="w-full items-center flex justify-between">
@@ -106,8 +108,8 @@ export function CollapseMenuButton({
           <Button
             key={index}
             variant={
-              (active === undefined && pathname === href) || active
-                ? "secondary"
+              (active === undefined && pathname.startsWith(href)) || active
+                ? "default"
                 : "ghost"
             }
             className="w-full justify-start h-10 mb-1"
@@ -139,7 +141,7 @@ export function CollapseMenuButton({
           <TooltipTrigger asChild>
             <DropdownMenuTrigger asChild>
               <Button
-                variant={isSubmenuActive ? "secondary" : "ghost"}
+                variant={!isSubmenuActive && active ? "default" : "ghost"}
                 className="flex justify-center h-10 mb-1 px-3 w-auto"
               >
                 <Icon size={18} />
@@ -166,8 +168,9 @@ export function CollapseMenuButton({
           <DropdownMenuItem key={index} asChild>
             <Link
               className={`cursor-pointer ${
-                ((active === undefined && pathname === href) || active) &&
-                "bg-secondary"
+                ((active === undefined && pathname.startsWith(href)) ||
+                  active) &&
+                "bg-primary text-primary-foreground"
               }`}
               href={href}
             >
