@@ -12,7 +12,7 @@
     "playwright:install": "playwright install"
   },
   "dependencies": {
-    "@auth/core": "^0.39.1",
+    "@auth/core": "^0.40.0",
     "@dagrejs/dagre": "^1.1.5",
     "@dnd-kit/accessibility": "^3.1.1",
     "@dnd-kit/core": "^6.3.1",
@@ -77,11 +77,11 @@
     "input-otp": "^1.4.2",
     "install": "^0.13.0",
     "lowlight": "^3.3.0",
-    "lucide-react": "^0.519.0",
+    "lucide-react": "^0.523.0",
     "nanoid": "^5.1.5",
     "next": "^15.3.4",
     "next-auth": "5.0.0-beta.25",
-    "next-intl": "^4.3.0",
+    "next-intl": "^4.3.1",
     "next-runtime-env": "^3.3.0",
     "next-themes": "^0.4.6",
     "nuqs": "^2.4.3",
@@ -100,14 +100,14 @@
     "tailwindcss-animate": "^1.0.7",
     "vaul": "^1.1.2",
     "zod": "^3.25.67",
-    "zustand": "^5.0.5"
+    "zustand": "^5.0.6"
   },
   "devDependencies": {
-    "@eslint/compat": "^1.3.0",
+    "@eslint/compat": "^1.3.1",
     "@eslint/js": "^9.29.0",
     "@playwright/test": "^1.53.1",
-    "@tailwindcss/postcss": "^4.1.10",
-    "@types/node": "^24.0.3",
+    "@tailwindcss/postcss": "^4.1.11",
+    "@types/node": "^24.0.4",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
     "@types/sanitize-html": "^2.16.0",
@@ -121,9 +121,9 @@
     "eslint-plugin-unused-imports": "^4.1.4",
     "globals": "^16.2.0",
     "postcss": "^8.5.6",
-    "prettier": "^3.6.0",
+    "prettier": "^3.6.1",
     "qs": "^6.14.0",
-    "tailwindcss": "^4.1.10",
+    "tailwindcss": "^4.1.11",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.35.0"
   },
