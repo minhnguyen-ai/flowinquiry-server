@@ -6,7 +6,7 @@ import {
   put,
 } from "@/lib/actions/commons.action";
 import { HttpError } from "@/lib/errors";
-import { ProjectDTO } from "@/types/projects";
+import { ProjectDTO, ProjectSettingDTO } from "@/types/projects";
 import { Pagination, QueryDTO } from "@/types/query";
 import { WorkflowDetailDTO } from "@/types/workflows";
 
@@ -72,3 +72,25 @@ export async function deleteProject(
 ) {
   return deleteExec(`/api/projects/${projectId}`, setError);
 }
+
+export const findProjectSettingsById = (
+  projectId: number,
+  setError?: (error: HttpError | string | null) => void,
+) => {
+  return get<ProjectSettingDTO>(
+    `/api/project-settings/project/${projectId}`,
+    setError,
+  );
+};
+
+export const updateProjectSettings = (
+  projectId: number,
+  settings: ProjectSettingDTO,
+  setError?: (error: HttpError | string | null) => void,
+) => {
+  return put<ProjectSettingDTO, ProjectSettingDTO>(
+    `/api/project-settings/project/${projectId}`,
+    settings,
+    setError,
+  );
+};

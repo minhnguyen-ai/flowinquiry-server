@@ -4,6 +4,7 @@ import static io.flowinquiry.modules.teams.domain.EstimationUnit.STORY_POINTS;
 
 import io.flowinquiry.exceptions.ResourceNotFoundException;
 import io.flowinquiry.modules.teams.domain.ProjectSetting;
+import io.flowinquiry.modules.teams.domain.TicketPriority;
 import io.flowinquiry.modules.teams.repository.ProjectRepository;
 import io.flowinquiry.modules.teams.repository.ProjectSettingRepository;
 import io.flowinquiry.modules.teams.service.dto.ProjectSettingDTO;
@@ -36,9 +37,17 @@ public class ProjectSettingService {
     }
 
     @Transactional
-    public ProjectSettingDTO update(Long id, ProjectSettingDTO dto) {
+    public ProjectSettingDTO updateByProjectId(Long projectId, ProjectSettingDTO dto) {
+        // Ensure the project exists
+        if (!projectRepository.existsById(projectId)) {
+            throw new ResourceNotFoundException("Project not found");
+        }
+
+        // Set the project ID in the DTO
+        dto.setProjectId(projectId);
+
         return projectSettingRepository
-                .findById(id)
+                .findByProjectId(projectId)
                 .map(
                         existing -> {
                             projectSettingMapper.updateEntity(dto, existing);
@@ -62,7 +71,7 @@ public class ProjectSettingService {
         ProjectSettingDTO defaultDto = new ProjectSettingDTO();
         defaultDto.setProjectId(projectId);
         defaultDto.setSprintLengthDays(14);
-        defaultDto.setDefaultPriority(3); // Medium
+        defaultDto.setDefaultPriority(TicketPriority.Low); // Medium
         defaultDto.setEstimationUnit(STORY_POINTS);
         defaultDto.setEnableEstimation(true);
         defaultDto.setIntegrationSettings(null);
