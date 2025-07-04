@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { addDays, subDays } from "date-fns";
 import React, { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -29,6 +30,7 @@ import {
 } from "@/lib/actions/project-iteration.action";
 import { useError } from "@/providers/error-provider";
 import {
+  ProjectDTO,
   ProjectIterationDTO,
   ProjectIterationDTOSchema,
 } from "@/types/projects";
@@ -38,7 +40,7 @@ interface ProjectIterationDialogProps {
   onOpenChange: (open: boolean) => void;
   onSave?: (iteration: ProjectIterationDTO) => void;
   onCancel?: () => void;
-  projectId: number;
+  project: ProjectDTO;
   iteration?: ProjectIterationDTO | null; // Optional iteration for edit mode
 }
 
@@ -47,10 +49,14 @@ export function ProjectIterationDialog({
   onOpenChange,
   onSave,
   onCancel,
-  projectId,
+  project,
   iteration,
 }: ProjectIterationDialogProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [lastChangedField, setLastChangedField] = useState<
+    "startDate" | "endDate" | null
+  >(null);
+  const [isCalculating, setIsCalculating] = useState(false); // Flag to prevent infinite loops
   const { setError } = useError();
   const t = useAppClientTranslations();
 
@@ -62,7 +68,7 @@ export function ProjectIterationDialog({
     resolver: zodResolver(ProjectIterationDTOSchema),
     defaultValues: {
       id: iteration?.id,
-      projectId: projectId,
+      projectId: project?.id,
       name: iteration?.name || "",
       description: iteration?.description || "",
       startDate: iteration?.startDate,
@@ -76,15 +82,101 @@ export function ProjectIterationDialog({
     if (open) {
       form.reset({
         id: iteration?.id,
-        projectId: projectId,
+        projectId: project.id,
         name: iteration?.name || "",
         description: iteration?.description || "",
         startDate: iteration?.startDate,
         endDate: iteration?.endDate,
         totalTickets: iteration?.totalTickets || 0,
       });
+
+      // Reset lastChangedField to avoid triggering calculations based on previous state
+      setLastChangedField(null);
+      setIsCalculating(false);
     }
-  }, [open, iteration, projectId, form]);
+  }, [open, iteration, project, form]);
+
+  // Watch for changes to startDate and endDate
+  const startDate = useWatch({
+    control: form.control,
+    name: "startDate",
+  });
+
+  const endDate = useWatch({
+    control: form.control,
+    name: "endDate",
+  });
+
+  // Track changes to startDate and endDate
+  const [prevStartDate, setPrevStartDate] = useState(startDate);
+  const [prevEndDate, setPrevEndDate] = useState(endDate);
+
+  useEffect(() => {
+    // Only update if this is a user change, not a programmatic one
+    if (
+      !form.formState.isSubmitting &&
+      !isCalculating &&
+      startDate !== prevStartDate
+    ) {
+      setLastChangedField("startDate");
+    }
+    setPrevStartDate(startDate);
+  }, [startDate, form.formState.isSubmitting, isCalculating, prevStartDate]);
+
+  useEffect(() => {
+    // Only update if this is a user change, not a programmatic one
+    if (
+      !form.formState.isSubmitting &&
+      !isCalculating &&
+      endDate !== prevEndDate
+    ) {
+      setLastChangedField("endDate");
+    }
+    setPrevEndDate(endDate);
+  }, [endDate, form.formState.isSubmitting, isCalculating, prevEndDate]);
+
+  // Calculate endDate when startDate changes or calculate startDate when endDate changes
+  useEffect(() => {
+    // Skip if project settings are not available or sprintLengthDays is not set or if we're already calculating
+    if (!project?.projectSetting?.sprintLengthDays || isCalculating) return;
+
+    const sprintLengthDays = project.projectSetting.sprintLengthDays;
+
+    // If startDate was changed and is valid, calculate endDate
+    if (lastChangedField === "startDate" && startDate) {
+      setIsCalculating(true); // Set flag to prevent infinite loops
+
+      try {
+        const startDateObj = new Date(startDate);
+        const calculatedEndDate = addDays(startDateObj, sprintLengthDays - 1); // -1 because the start day is included
+
+        form.setValue("endDate", calculatedEndDate.toISOString(), {
+          shouldValidate: true,
+          shouldDirty: true,
+        });
+      } finally {
+        // Reset the flag immediately after the form value is set
+        setIsCalculating(false);
+      }
+    }
+    // If endDate was changed and is valid, calculate startDate
+    else if (lastChangedField === "endDate" && endDate) {
+      setIsCalculating(true); // Set flag to prevent infinite loops
+
+      try {
+        const endDateObj = new Date(endDate);
+        const calculatedStartDate = subDays(endDateObj, sprintLengthDays - 1); // -1 because the end day is included
+
+        form.setValue("startDate", calculatedStartDate.toISOString(), {
+          shouldValidate: true,
+          shouldDirty: true,
+        });
+      } finally {
+        // Reset the flag immediately after the form value is set
+        setIsCalculating(false);
+      }
+    }
+  }, [startDate, endDate, lastChangedField, project, form, isCalculating]);
 
   const handleSubmit = async (values: ProjectIterationDTO) => {
     setIsSubmitting(true);
