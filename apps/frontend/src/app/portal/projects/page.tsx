@@ -1,4 +1,8 @@
+import React from "react";
+
 import { ContentLayout } from "@/components/admin-panel/content-layout";
+import { Breadcrumbs } from "@/components/breadcrumbs";
+import ProjectListView from "@/components/projects/project-list-view";
 import { getAppTranslations } from "@/lib/translation";
 
 const Page = async () => {
@@ -11,7 +15,8 @@ const Page = async () => {
 
   return (
     <ContentLayout title="Projects">
-      <h1 className="text-2xl mb-4">{t.common.navigation("dashboard")}</h1>
+      <Breadcrumbs items={breadcrumbItems} />
+      <ProjectListView />
     </ContentLayout>
   );
 };
