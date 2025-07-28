@@ -1,6 +1,7 @@
 package io.flowinquiry.modules.usermanagement.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.flowinquiry.tenant.domain.TenantScopedEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -31,7 +32,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserAuth {
+public class UserAuth extends TenantScopedEntity {
 
     public static final String UP_AUTH_PROVIDER = "UsernameAndPassword";
 

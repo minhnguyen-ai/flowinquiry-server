@@ -1,21 +1,27 @@
-package io.flowinquiry.modules.usermanagement.controller;
+package io.flowinquiry.it;
+
+import static java.util.stream.Collectors.*;
 
 import io.flowinquiry.modules.usermanagement.AuthoritiesConstants;
 import io.flowinquiry.modules.usermanagement.domain.Authority;
 import io.flowinquiry.modules.usermanagement.domain.User;
 import io.flowinquiry.modules.usermanagement.domain.UserAuth;
 import io.flowinquiry.modules.usermanagement.domain.UserStatus;
-import io.flowinquiry.modules.usermanagement.service.dto.FwUserDetails;
+import io.flowinquiry.security.SecurityUtils;
+import io.flowinquiry.security.domain.FwUserDetails;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.HashSet;
 import java.util.Set;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import java.util.UUID;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.security.test.context.support.WithSecurityContext;
 import org.springframework.security.test.context.support.WithSecurityContextFactory;
 
@@ -27,6 +33,7 @@ import org.springframework.security.test.context.support.WithSecurityContextFact
 @Retention(RetentionPolicy.RUNTIME)
 @WithSecurityContext(factory = WithMockFwUser.Factory.class)
 public @interface WithMockFwUser {
+
     /**
      * The user ID to use for the authenticated user. Defaults to 1L, which should be a valid user
      * ID in the test database.
@@ -34,7 +41,9 @@ public @interface WithMockFwUser {
     long userId() default 1L;
 
     /** The username to use for the authenticated user. Defaults to "admin". */
-    String username() default "admin";
+    String username() default "admin@flowinquiry.io";
+
+    String tenantIdAsString() default "00000000-0000-0000-0000-000000000001";
 
     /** The authorities to grant to the authenticated user. Defaults to ROLE_ADMIN. */
     String[] authorities() default {AuthoritiesConstants.ADMIN};
@@ -49,6 +58,7 @@ public @interface WithMockFwUser {
             user.setId(annotation.userId());
             user.setEmail(annotation.username());
             user.setStatus(UserStatus.ACTIVE);
+            user.setTenantId(UUID.fromString(annotation.tenantIdAsString()));
 
             // Set up authorities
             Set<Authority> authorities = new HashSet<>();
@@ -70,9 +80,21 @@ public @interface WithMockFwUser {
             // Create FwUserDetails from the User object
             FwUserDetails principal = new FwUserDetails(user);
 
-            Authentication auth =
-                    new UsernamePasswordAuthenticationToken(
-                            principal, "password", principal.getAuthorities());
+            // Create a JWT token with claims
+            Jwt jwt =
+                    Jwt.withTokenValue("mock-token")
+                            .header("alg", "HS512")
+                            .subject(principal.getUsername())
+                            .claim(SecurityUtils.TENANT_ID, user.getTenantId())
+                            .claim(SecurityUtils.USER_ID, user.getId())
+                            .claim(
+                                    SecurityUtils.AUTHORITIES_KEY,
+                                    principal.getAuthorities().stream()
+                                            .map(GrantedAuthority::getAuthority)
+                                            .collect(joining(" ")))
+                            .build();
+
+            Authentication auth = new JwtAuthenticationToken(jwt, principal.getAuthorities());
             context.setAuthentication(auth);
             return context;
         }

@@ -1,5 +1,6 @@
 package io.flowinquiry.modules.teams.domain;
 
+import io.flowinquiry.tenant.domain.TenantScopedEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -27,7 +28,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class WorkflowState {
+public class WorkflowState extends TenantScopedEntity {
 
     @EqualsAndHashCode.Include
     @Id

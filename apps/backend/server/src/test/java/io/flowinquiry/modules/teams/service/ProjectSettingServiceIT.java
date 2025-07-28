@@ -3,12 +3,11 @@ package io.flowinquiry.modules.teams.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import io.flowinquiry.IntegrationTest;
 import io.flowinquiry.exceptions.ResourceNotFoundException;
+import io.flowinquiry.it.IntegrationTest;
 import io.flowinquiry.modules.teams.domain.EstimationUnit;
 import io.flowinquiry.modules.teams.domain.ProjectStatus;
 import io.flowinquiry.modules.teams.domain.TicketPriority;
-import io.flowinquiry.modules.teams.repository.ProjectRepository;
 import io.flowinquiry.modules.teams.service.dto.ProjectDTO;
 import io.flowinquiry.modules.teams.service.dto.ProjectSettingDTO;
 import java.util.HashMap;
@@ -23,8 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProjectSettingServiceIT {
 
     @Autowired private ProjectSettingService projectSettingService;
-
-    @Autowired private ProjectRepository projectRepository;
 
     @Autowired private ProjectService projectService;
 

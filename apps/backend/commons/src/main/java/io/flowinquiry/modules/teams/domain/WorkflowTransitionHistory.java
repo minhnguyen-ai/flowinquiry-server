@@ -1,5 +1,6 @@
 package io.flowinquiry.modules.teams.domain;
 
+import io.flowinquiry.tenant.domain.TenantScopedEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -29,7 +30,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class WorkflowTransitionHistory {
+public class WorkflowTransitionHistory extends TenantScopedEntity {
 
     @EqualsAndHashCode.Include
     @Id

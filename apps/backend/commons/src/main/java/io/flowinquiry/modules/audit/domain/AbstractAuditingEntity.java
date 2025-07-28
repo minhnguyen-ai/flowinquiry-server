@@ -1,6 +1,5 @@
 package io.flowinquiry.modules.audit.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.flowinquiry.modules.usermanagement.domain.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
@@ -8,14 +7,10 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MappedSuperclass;
-import java.io.Serializable;
 import java.time.Instant;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -25,31 +20,11 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
  * by, last modified by attributes.
  */
 @MappedSuperclass
+@EntityListeners(AuditingEntityListener.class)
 @SuperBuilder
 @NoArgsConstructor
-@EntityListeners(AuditingEntityListener.class)
-@JsonIgnoreProperties(
-        value = {"createdBy", "createdAt", "modifiedBy", "modifiedAt"},
-        allowGetters = true)
 @Data
-public abstract class AbstractAuditingEntity<T> implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-
-    public abstract T getId();
-
-    @CreatedBy
-    @Column(name = "created_by", updatable = false)
-    private Long createdBy;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "created_by", insertable = false, updatable = false)
-    private User createdByUser;
-
-    @CreatedDate
-    @Builder.Default
-    @Column(name = "created_at", updatable = false)
-    private Instant createdAt = Instant.now();
+public abstract class AbstractAuditingEntity<T> extends AbstractCreationAuditingEntity<T> {
 
     @LastModifiedBy
     @Column(name = "modified_by")
@@ -60,7 +35,6 @@ public abstract class AbstractAuditingEntity<T> implements Serializable {
     private User modifiedByUser;
 
     @LastModifiedDate
-    @Builder.Default
     @Column(name = "modified_at")
-    private Instant modifiedAt = Instant.now();
+    private Instant modifiedAt;
 }

@@ -1,7 +1,7 @@
 package io.flowinquiry.modules.teams.domain;
 
-import io.flowinquiry.modules.audit.domain.AbstractAuditingEntity;
 import io.flowinquiry.modules.usermanagement.domain.User;
+import io.flowinquiry.tenant.domain.TenantScopedAuditingEntity;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ import org.hibernate.annotations.Formula;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Ticket extends AbstractAuditingEntity<Long> {
+public class Ticket extends TenantScopedAuditingEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

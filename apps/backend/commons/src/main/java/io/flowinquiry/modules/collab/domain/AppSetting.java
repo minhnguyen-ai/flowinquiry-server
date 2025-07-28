@@ -1,5 +1,6 @@
 package io.flowinquiry.modules.collab.domain;
 
+import io.flowinquiry.tenant.domain.TenantScopedEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -21,7 +22,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AppSetting {
+public class AppSetting extends TenantScopedEntity {
     @Id
     @Column(name = "setting_key", length = 100, nullable = false)
     private String key;

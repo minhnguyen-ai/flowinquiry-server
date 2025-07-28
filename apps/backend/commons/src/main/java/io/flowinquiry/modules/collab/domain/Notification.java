@@ -1,7 +1,7 @@
 package io.flowinquiry.modules.collab.domain;
 
-import io.flowinquiry.modules.audit.domain.AbstractAuditingEntity;
 import io.flowinquiry.modules.usermanagement.domain.User;
+import io.flowinquiry.tenant.domain.TenantScopedCreationAuditingEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -29,7 +29,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Notification extends AbstractAuditingEntity<Long> {
+public class Notification extends TenantScopedCreationAuditingEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

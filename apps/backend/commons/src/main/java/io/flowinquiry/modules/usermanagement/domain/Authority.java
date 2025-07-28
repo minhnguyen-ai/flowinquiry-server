@@ -1,6 +1,7 @@
 package io.flowinquiry.modules.usermanagement.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import io.flowinquiry.tenant.domain.TenantScopedAuditingEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -9,7 +10,6 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import java.io.Serializable;
 import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,9 +31,12 @@ import org.hibernate.annotations.Formula;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Authority implements Serializable {
+public class Authority extends TenantScopedAuditingEntity<String> {
 
-    private static final long serialVersionUID = 1L;
+    @Override
+    public String getId() {
+        return name;
+    }
 
     @EqualsAndHashCode.Include
     @NotNull @Size(max = 50) @Id

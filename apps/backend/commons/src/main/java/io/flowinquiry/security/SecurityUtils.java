@@ -2,8 +2,8 @@ package io.flowinquiry.security;
 
 import io.flowinquiry.modules.usermanagement.AuthoritiesConstants;
 import io.flowinquiry.modules.usermanagement.domain.User;
-import io.flowinquiry.modules.usermanagement.service.dto.FwUserDetails;
 import io.flowinquiry.modules.usermanagement.service.dto.UserKey;
+import io.flowinquiry.security.domain.FwUserDetails;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -21,6 +21,8 @@ public final class SecurityUtils {
     public static final MacAlgorithm JWT_ALGORITHM = MacAlgorithm.HS512;
 
     public static final String AUTHORITIES_KEY = "auth";
+
+    public static final String TENANT_ID = "tenantId";
 
     public static final String USER_ID = "userId";
 
@@ -46,13 +48,16 @@ public final class SecurityUtils {
         if (authentication == null) {
             return null;
         } else if (authentication.getPrincipal() instanceof FwUserDetails springSecurityUser) {
-            return new UserKey(springSecurityUser.getUserId(), springSecurityUser.getUsername());
+            return new UserKey(
+                    springSecurityUser.getUserId(),
+                    springSecurityUser.getUsername(),
+                    springSecurityUser.getTenantId());
         } else if (authentication.getPrincipal() instanceof Jwt jwt) {
-            return new UserKey(jwt.getClaim(USER_ID), jwt.getSubject());
-        } else if (authentication.getPrincipal() instanceof UserDetails springSecurityUser) {
-            return new UserKey(-1L, springSecurityUser.getUsername());
-        } else if (authentication.getPrincipal() instanceof String s) {
-            return new UserKey(-1L, s);
+            return new UserKey(jwt.getClaim(USER_ID), jwt.getSubject(), jwt.getClaim(TENANT_ID));
+        } else if (authentication.getPrincipal() instanceof UserDetails) {
+            return null;
+        } else if (authentication.getPrincipal() instanceof String) {
+            return null;
         } else {
             throw new IllegalArgumentException(
                     "Can not extract principal from "

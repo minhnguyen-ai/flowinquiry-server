@@ -1,5 +1,6 @@
 package io.flowinquiry.modules.teams.domain;
 
+import io.flowinquiry.tenant.domain.TenantScopedAuditingEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -26,7 +27,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Organization {
+public class Organization extends TenantScopedAuditingEntity<Long> {
 
     @EqualsAndHashCode.Include
     @Id

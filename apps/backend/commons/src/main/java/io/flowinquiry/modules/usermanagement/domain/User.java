@@ -1,9 +1,9 @@
 package io.flowinquiry.modules.usermanagement.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import io.flowinquiry.modules.audit.domain.AbstractAuditingEntity;
 import io.flowinquiry.modules.collab.domain.EntityWatcher;
 import io.flowinquiry.modules.teams.domain.Team;
+import io.flowinquiry.tenant.domain.TenantScopedAuditingEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -23,7 +23,6 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.io.Serial;
-import java.io.Serializable;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
@@ -47,7 +46,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class User extends AbstractAuditingEntity<Long> implements Serializable {
+public class User extends TenantScopedAuditingEntity<Long> {
 
     @Serial private static final long serialVersionUID = 1L;
 

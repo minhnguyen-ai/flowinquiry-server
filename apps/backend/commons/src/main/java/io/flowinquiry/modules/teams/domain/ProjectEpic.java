@@ -1,6 +1,6 @@
 package io.flowinquiry.modules.teams.domain;
 
-import io.flowinquiry.modules.audit.domain.AbstractAuditingEntity;
+import io.flowinquiry.tenant.domain.TenantScopedAuditingEntity;
 import jakarta.persistence.*;
 import java.time.Instant;
 import lombok.Getter;
@@ -13,7 +13,7 @@ import org.hibernate.annotations.Formula;
 @Getter
 @Setter
 @NoArgsConstructor
-public class ProjectEpic extends AbstractAuditingEntity<Long> {
+public class ProjectEpic extends TenantScopedAuditingEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

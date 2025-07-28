@@ -1,5 +1,6 @@
 package io.flowinquiry.modules.usermanagement.domain;
 
+import io.flowinquiry.tenant.domain.TenantScopedEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
@@ -8,6 +9,7 @@ import jakarta.persistence.IdClass;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -27,7 +29,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "fw_authority_resource_permission")
 @IdClass(AuthorityResourcePermissionId.class) // Composite key class
-public class AuthorityResourcePermission {
+public class AuthorityResourcePermission extends TenantScopedEntity {
     @EqualsAndHashCode.Include
     @Id
     @Column(name = "authority_name")
@@ -51,9 +53,10 @@ public class AuthorityResourcePermission {
     private Resource resource;
 
     public AuthorityResourcePermission(
-            String authorityName, String resourceName, int permissionCode) {
+            String authorityName, String resourceName, int permissionCode, UUID tenantId) {
         this.authorityName = authorityName;
         this.resourceName = resourceName;
         this.permission = Permission.fromCode(permissionCode);
+        setTenantId(tenantId);
     }
 }

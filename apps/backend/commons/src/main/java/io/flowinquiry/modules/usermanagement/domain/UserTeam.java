@@ -2,6 +2,7 @@ package io.flowinquiry.modules.usermanagement.domain;
 
 import io.flowinquiry.modules.teams.domain.Team;
 import io.flowinquiry.modules.teams.domain.TeamRole;
+import io.flowinquiry.tenant.domain.TenantScopedEntity;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -9,11 +10,11 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -23,10 +24,10 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Getter
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserTeam {
+public class UserTeam extends TenantScopedEntity {
     @EqualsAndHashCode.Include @EmbeddedId private UserTeamId id;
 
     @ManyToOne

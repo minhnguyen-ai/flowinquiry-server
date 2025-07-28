@@ -1,6 +1,6 @@
 package io.flowinquiry.modules.teams.domain;
 
-import io.flowinquiry.modules.audit.domain.AbstractAuditingEntity;
+import io.flowinquiry.tenant.domain.TenantScopedAuditingEntity;
 import io.hypersistence.utils.hibernate.type.json.JsonBinaryType;
 import jakarta.persistence.*;
 import java.util.Map;
@@ -20,7 +20,7 @@ import org.hibernate.type.SqlTypes;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProjectSetting extends AbstractAuditingEntity<Long> {
+public class ProjectSetting extends TenantScopedAuditingEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

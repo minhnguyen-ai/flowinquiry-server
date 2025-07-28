@@ -1,6 +1,6 @@
 package io.flowinquiry.modules.teams.domain;
 
-import io.flowinquiry.modules.audit.domain.AbstractAuditingEntity;
+import io.flowinquiry.tenant.domain.TenantScopedAuditingEntity;
 import jakarta.persistence.*;
 import java.time.Instant;
 import lombok.AllArgsConstructor;
@@ -16,7 +16,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Project extends AbstractAuditingEntity<Long> {
+public class Project extends TenantScopedAuditingEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,5 +1,6 @@
 package io.flowinquiry.modules.teams.domain;
 
+import io.flowinquiry.tenant.domain.TenantScopedEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -26,7 +27,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "fw_workflow_transition")
-public class WorkflowTransition {
+public class WorkflowTransition extends TenantScopedEntity {
 
     @EqualsAndHashCode.Include
     @Id

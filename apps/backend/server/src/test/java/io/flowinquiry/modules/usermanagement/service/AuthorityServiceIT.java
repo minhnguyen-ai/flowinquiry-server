@@ -3,7 +3,7 @@ package io.flowinquiry.modules.usermanagement.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
-import io.flowinquiry.IntegrationTest;
+import io.flowinquiry.it.IntegrationTest;
 import io.flowinquiry.modules.usermanagement.domain.Authority;
 import io.flowinquiry.modules.usermanagement.domain.User;
 import io.flowinquiry.modules.usermanagement.repository.AuthorityRepository;
@@ -249,7 +249,7 @@ class AuthorityServiceIT {
         userIds.add(adminUser.getId());
         authorityService.addUsersToAuthority(userIds, TEST_AUTHORITY_NAME);
 
-        // Find all users by authority
+        //         Find all users by authority
         Pageable pageable = PageRequest.of(0, 10);
         Page<UserDTO> users =
                 authorityService.findAllUsersByAuthority(TEST_AUTHORITY_NAME, pageable);

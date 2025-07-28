@@ -12,15 +12,14 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import javax.imageio.ImageIO;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
+@Slf4j
 public class LocalFileStorageService implements StorageService {
-
-    private static final Logger LOG = LoggerFactory.getLogger(LocalFileStorageService.class);
 
     private final String rootDirectory;
 
@@ -30,7 +29,7 @@ public class LocalFileStorageService implements StorageService {
         File storageDir = new File(rootDirectory);
         if (!storageDir.exists()) {
             storageDir.mkdirs();
-            LOG.info("Created storage folder : {}", storageDir.getAbsolutePath());
+            log.info("Created storage folder : {}", storageDir.getAbsolutePath());
         }
     }
 
@@ -52,7 +51,7 @@ public class LocalFileStorageService implements StorageService {
                 outputStream.write(buffer, 0, bytesRead);
             }
         }
-        LOG.debug(
+        log.debug(
                 "Save container {} blob {} to file {} successfully",
                 containerName,
                 fileName,
@@ -84,7 +83,7 @@ public class LocalFileStorageService implements StorageService {
             ImageIO.write(image, "png", outputStream);
         }
 
-        LOG.debug(
+        log.debug(
                 "Converted and saved container {} blob {} as PNG to file {} successfully",
                 containerName,
                 pngFileName,
@@ -118,6 +117,8 @@ public class LocalFileStorageService implements StorageService {
 
     @Override
     public void deleteFile(String objectPath) throws Exception {
-        Files.deleteIfExists(Paths.get(rootDirectory, objectPath));
+        if (!StringUtils.isEmpty(objectPath)) {
+            Files.deleteIfExists(Paths.get(rootDirectory, objectPath));
+        }
     }
 }

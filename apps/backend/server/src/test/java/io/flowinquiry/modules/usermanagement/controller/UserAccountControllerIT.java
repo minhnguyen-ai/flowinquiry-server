@@ -9,7 +9,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.flowinquiry.IntegrationTest;
+import io.flowinquiry.it.IntegrationTest;
+import io.flowinquiry.it.WithMockFwUser;
+import io.flowinquiry.it.WithTestTenant;
 import io.flowinquiry.modules.shared.Constants;
 import io.flowinquiry.modules.usermanagement.AuthoritiesConstants;
 import io.flowinquiry.modules.usermanagement.domain.User;
@@ -25,6 +27,7 @@ import java.time.Instant;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Stream;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.AfterEach;
@@ -36,13 +39,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 /** Integration tests for the {@link UserAccountController} REST controller. */
 @AutoConfigureMockMvc
 @IntegrationTest
+@WithTestTenant
 class UserAccountControllerIT {
 
     static final String TEST_USER_LOGIN_EMAIL = "test@localhost.io";
@@ -84,7 +87,7 @@ class UserAccountControllerIT {
     }
 
     @Test
-    @WithMockUser(TEST_USER_LOGIN_EMAIL)
+    @WithMockFwUser(username = TEST_USER_LOGIN_EMAIL)
     void testAuthenticatedUser() throws Exception {
         restAccountMockMvc
                 .perform(
@@ -96,7 +99,7 @@ class UserAccountControllerIT {
     }
 
     @Test
-    @WithMockUser(TEST_USER_LOGIN_EMAIL)
+    @WithMockFwUser(username = TEST_USER_LOGIN_EMAIL)
     void testGetExistingAccount() throws Exception {
 
         UserDTO user = new UserDTO();
@@ -171,6 +174,9 @@ class UserAccountControllerIT {
         restAccountMockMvc
                 .perform(
                         post("/api/register")
+                                .header(
+                                        "X-Tenant-ID",
+                                        UUID.fromString("00000000-0000-0000-0000-000000000001"))
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(om.writeValueAsBytes(invalidUser)))
                 .andExpect(status().isCreated());
@@ -273,6 +279,9 @@ class UserAccountControllerIT {
         restAccountMockMvc
                 .perform(
                         post("/api/register")
+                                .header(
+                                        "X-Tenant-ID",
+                                        UUID.fromString("00000000-0000-0000-0000-000000000001"))
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(om.writeValueAsBytes(userWithUpperCaseEmail)))
                 .andExpect(status().isCreated());
@@ -365,7 +374,7 @@ class UserAccountControllerIT {
 
     @Test
     @Transactional
-    @WithMockUser("save-account@example.com")
+    @WithMockFwUser(username = "save-account@example.com")
     void testSaveAccountWithExistingEmail() throws Exception {
         User user = new User();
         user.setEmail("save-account@example.com");
@@ -407,7 +416,7 @@ class UserAccountControllerIT {
 
     @Test
     @Transactional
-    @WithMockUser("save-invalid-email@example.com")
+    @WithMockFwUser(username = "save-invalid-email@example.com")
     void testSaveInvalidEmail() throws Exception {
         User user = new User();
         user.setEmail("save-invalid-email@example.com");
@@ -438,7 +447,7 @@ class UserAccountControllerIT {
 
     @Test
     @Transactional
-    @WithMockUser("save-existing-email@example.com")
+    @WithMockFwUser
     void testSaveExistingEmail() throws Exception {
         User user = new User();
         user.setEmail("save-existing-email@example.com");
@@ -473,7 +482,7 @@ class UserAccountControllerIT {
 
     @Test
     @Transactional
-    @WithMockUser("save-existing-email-and-login@example.com")
+    @WithMockFwUser(username = "save-existing-email-and-login@example.com")
     void testSaveExistingEmailAndLogin() throws Exception {
         User user = new User();
         user.setEmail("save-existing-email-and-login@example.com");
@@ -507,7 +516,7 @@ class UserAccountControllerIT {
 
     @Test
     @Transactional
-    @WithMockUser("change-password-wrong-existing-password@example.com")
+    @WithMockFwUser
     void testChangePasswordWrongExistingPassword() throws Exception {
         User user = new User();
         String currentPassword = RandomStringUtils.randomAlphanumeric(60);
@@ -543,7 +552,7 @@ class UserAccountControllerIT {
 
     @Test
     @Transactional
-    @WithMockUser("change-password@example.com")
+    @WithMockFwUser(username = "change-password@example.com")
     void testChangePassword() throws Exception {
         User user = new User();
         String currentPassword = RandomStringUtils.randomAlphanumeric(60);
@@ -572,7 +581,7 @@ class UserAccountControllerIT {
 
     @Test
     @Transactional
-    @WithMockUser("change-password-too-small@example.com")
+    @WithMockFwUser
     void testChangePasswordTooSmall() throws Exception {
         User user = new User();
         String currentPassword = RandomStringUtils.randomAlphanumeric(60);
@@ -603,7 +612,7 @@ class UserAccountControllerIT {
 
     @Test
     @Transactional
-    @WithMockUser("change-password-too-long@example.com")
+    @WithMockFwUser
     void testChangePasswordTooLong() throws Exception {
         User user = new User();
         String currentPassword = RandomStringUtils.randomAlphanumeric(60);
@@ -634,7 +643,7 @@ class UserAccountControllerIT {
 
     @Test
     @Transactional
-    @WithMockUser("change-password-empty@example.com")
+    @WithMockFwUser
     void testChangePasswordEmpty() throws Exception {
         User user = new User();
         String currentPassword = RandomStringUtils.randomAlphanumeric(60);

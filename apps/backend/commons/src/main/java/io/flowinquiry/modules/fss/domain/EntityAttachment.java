@@ -1,5 +1,6 @@
 package io.flowinquiry.modules.fss.domain;
 
+import io.flowinquiry.tenant.domain.TenantScopedCreationAuditingEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -30,7 +31,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class EntityAttachment {
+public class EntityAttachment extends TenantScopedCreationAuditingEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

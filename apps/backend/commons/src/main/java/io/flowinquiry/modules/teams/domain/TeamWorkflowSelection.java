@@ -1,5 +1,6 @@
 package io.flowinquiry.modules.teams.domain;
 
+import io.flowinquiry.tenant.domain.TenantScopedEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,7 +24,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class TeamWorkflowSelection {
+public class TeamWorkflowSelection extends TenantScopedEntity {
 
     @EqualsAndHashCode.Include
     @Id

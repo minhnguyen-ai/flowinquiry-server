@@ -1,6 +1,7 @@
 package io.flowinquiry.modules.collab.domain;
 
 import io.flowinquiry.modules.usermanagement.domain.User;
+import io.flowinquiry.tenant.domain.TenantScopedEntity;
 import jakarta.persistence.*;
 import java.time.Instant;
 import lombok.AllArgsConstructor;
@@ -22,7 +23,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
         name = "fw_entity_watchers",
         indexes =
                 @Index(name = "idx_entity_watchers_entity", columnList = "entity_type, entity_id"))
-public class EntityWatcher {
+public class EntityWatcher extends TenantScopedEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

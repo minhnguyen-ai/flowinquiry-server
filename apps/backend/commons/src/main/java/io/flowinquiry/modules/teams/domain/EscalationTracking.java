@@ -1,6 +1,7 @@
 package io.flowinquiry.modules.teams.domain;
 
 import io.flowinquiry.modules.usermanagement.domain.User;
+import io.flowinquiry.tenant.domain.TenantScopedEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -17,7 +18,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "fw_escalation_tracking")
-public class EscalationTracking {
+public class EscalationTracking extends TenantScopedEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

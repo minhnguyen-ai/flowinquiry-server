@@ -1,6 +1,6 @@
 package io.flowinquiry.modules.teams.domain;
 
-import io.flowinquiry.modules.audit.domain.AbstractAuditingEntity;
+import io.flowinquiry.tenant.domain.TenantScopedAuditingEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -32,7 +32,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Workflow extends AbstractAuditingEntity<Long> {
+public class Workflow extends TenantScopedAuditingEntity<Long> {
 
     @EqualsAndHashCode.Include
     @Id

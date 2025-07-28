@@ -1,6 +1,6 @@
 package io.flowinquiry.modules.collab.domain;
 
-import io.flowinquiry.modules.audit.domain.AbstractAuditingEntity;
+import io.flowinquiry.tenant.domain.TenantScopedAuditingEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -25,7 +25,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Comment extends AbstractAuditingEntity<Long> {
+public class Comment extends TenantScopedAuditingEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
