@@ -42,5 +42,5 @@
     "docker:deploy": "sh -c './gradlew :apps:backend:server:jib -Djib.dockerClient.executable=/usr/local/bin/docker && tools/build-frontend-image.sh $TAG'",
     "generate-docs": "redocly build-docs http://localhost:8080/v3/api-docs.yaml --config .redocly.yaml -o apps/docs/public/api-docs/index.html"
   },
-  "packageManager": "pnpm@10.12.3"
+  "packageManager": "pnpm@10.17.1"
 }
